@@ -15,7 +15,7 @@ public class AuditService : IAuditService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Audit> CreateAuditAsync(CreateAuditRequest request)
+    public async Task<AuditResponse> CreateAuditAsync(CreateAuditRequest request)
     {
         var templates = await _unitOfWork.Templates.GetAllAsync();
         var filteredTemplates = templates
@@ -38,12 +38,15 @@ public class AuditService : IAuditService
 
         await _unitOfWork.Audits.AddAsync(audit);
         await _unitOfWork.SaveChangesAsync();
-        return audit;
+
+        var saved = await _unitOfWork.Audits.GetByIdWithItemsAsync(audit.Id);
+        return AuditResponse.FromEntity(saved!);
     }
 
-    public async Task<Audit?> GetAuditAsync(string id)
+    public async Task<AuditResponse?> GetAuditAsync(string id)
     {
-        return await _unitOfWork.Audits.GetByIdWithItemsAsync(id);
+        var audit = await _unitOfWork.Audits.GetByIdWithItemsAsync(id);
+        return audit == null ? null : AuditResponse.FromEntity(audit);
     }
 
     public async Task SaveAuditItemAsync(string auditId, int templateId, AuditItemUpdate update)
