@@ -133,4 +133,21 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
             RecentAudits = recent
         };
     }
+
+    public async Task<IEnumerable<Audit>> GetRecentAsync(int picId, bool isAdmin, int limit = 100)
+    {
+        var query = _context.Audits
+            .Include(a => a.Tenant)
+            .Include(a => a.Pic)
+            .Include(a => a.Items)
+            .AsQueryable();
+
+        if (!isAdmin)
+            query = query.Where(a => a.PicId == picId);
+
+        return await query
+            .OrderByDescending(a => a.CreatedAt)
+            .Take(limit)
+            .ToListAsync();
+    }
 }

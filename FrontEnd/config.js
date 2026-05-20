@@ -215,6 +215,7 @@ const ApiClient = {
     },
 
     audits: {
+        getAll:     ()              => ApiClient.get(AppConfig.ENDPOINTS.AUDITS),
         create:     (data)          => ApiClient.post(AppConfig.ENDPOINTS.AUDITS, data),
         getById:    (id)            => ApiClient.get(AppConfig.ENDPOINTS.AUDIT_BY_ID(id)),
         updateItem: (id, tplId, data) =>

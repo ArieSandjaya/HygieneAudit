@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using HygieneAudit.Application.DTOs;
 using HygieneAudit.Application.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,15 @@ public class AuditsController : ControllerBase
     public AuditsController(IAuditService auditService)
     {
         _auditService = auditService;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult> GetAll()
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var isAdmin = User.IsInRole("Admin") || User.IsInRole("SuperAdmin");
+        var audits = await _auditService.GetAuditsAsync(userId, isAdmin);
+        return Ok(audits);
     }
 
     [HttpPost]

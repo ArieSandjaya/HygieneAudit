@@ -49,6 +49,12 @@ public class AuditService : IAuditService
         return audit == null ? null : AuditResponse.FromEntity(audit);
     }
 
+    public async Task<IEnumerable<AuditResponse>> GetAuditsAsync(int picId, bool isAdmin)
+    {
+        var audits = await _unitOfWork.Audits.GetRecentAsync(picId, isAdmin);
+        return audits.Select(AuditResponse.FromEntity);
+    }
+
     public async Task SaveAuditItemAsync(string auditId, int templateId, AuditItemUpdate update)
     {
         var audit = await _unitOfWork.Audits.GetByIdWithItemsAsync(auditId);

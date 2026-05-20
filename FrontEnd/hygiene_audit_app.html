@@ -3240,7 +3240,30 @@
             document.getElementById('navAdmin').style.display = isAdmin ? 'flex' : 'none';
 
             try { Store.tenants = await ApiClient.tenants.getAll(); } catch {}
-            Store.audits = await getAuditsOffline().catch(() => []);
+
+            // Load audits from API (works in incognito); fall back to IndexedDB if offline
+            try {
+                const apiAudits = await ApiClient.audits.getAll();
+                Store.audits = apiAudits.map(a => ({
+                    ...a,
+                    items: (a.items || []).map(item => ({
+                        ...item,
+                        status: item.status || null,
+                        note:   item.note  || '',
+                        photos: item.photos || [],
+                    })),
+                    categories: (() => {
+                        const cats = {};
+                        (a.items || []).forEach(item => {
+                            if (!cats[item.category]) cats[item.category] = [];
+                            cats[item.category].push(item);
+                        });
+                        return cats;
+                    })(),
+                }));
+            } catch {
+                Store.audits = await getAuditsOffline().catch(() => []);
+            }
 
             initDashboard();
             showToast(`Selamat datang, ${user.name}!`);

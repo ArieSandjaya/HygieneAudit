@@ -40,7 +40,7 @@ public class AuditResponse
         PicId = audit.PicId,
         PicName = audit.Pic?.Name ?? string.Empty,
         IsGas = audit.IsGas,
-        Status = audit.Status.ToString(),
+        Status = audit.Status.ToString().ToUpper(),
         CreatedAt = audit.CreatedAt,
         CompletedAt = audit.CompletedAt,
         Items = audit.Items.Select(AuditItemResponse.FromEntity).ToList()
@@ -63,7 +63,7 @@ public class AuditItemResponse
         TemplateId = item.TemplateId,
         Category = item.Category,
         Name = item.Name,
-        Status = item.Status?.ToString(),
+        Status = item.Status?.ToString().ToUpper(),
         Note = item.Note,
         Photos = item.Photos.Select(p => p.PhotoUrl).ToList()
     };
