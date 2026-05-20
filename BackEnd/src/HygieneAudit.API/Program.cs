@@ -156,8 +156,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseCors("PWA");
+app.UseCors("PWA");           // Must be before UseHttpsRedirection so CORS headers
+app.UseHttpsRedirection();    // are set on OPTIONS preflight before any redirect.
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseRateLimiter();
