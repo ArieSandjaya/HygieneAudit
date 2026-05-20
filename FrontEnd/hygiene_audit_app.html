@@ -2129,6 +2129,16 @@
                 <p>Login untuk memulai audit</p>
             </div>
 
+            <!-- Server status indicator -->
+            <div id="serverStatus" style="
+                display:flex; align-items:center; gap:8px;
+                padding:10px 14px; border-radius:10px; margin-bottom:18px;
+                font-size:13px; font-weight:600;
+                background:var(--gray-100); color:var(--gray-500);">
+                <span id="serverStatusDot" style="width:9px;height:9px;border-radius:50%;background:var(--gray-300);flex-shrink:0;"></span>
+                <span id="serverStatusText">Memeriksa koneksi server...</span>
+            </div>
+
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label class="form-label">Username</label>
@@ -4313,11 +4323,43 @@
             Store.audits.push(demoAudit);
         }
 
+        // ─── Server status indicator ──────────────────────────────────────────
+        async function checkServerStatus() {
+            const dot  = document.getElementById('serverStatusDot');
+            const text = document.getElementById('serverStatusText');
+            if (!dot || !text) return;
+
+            const isFile = location.protocol === 'file:';
+            if (isFile) {
+                dot.style.background  = '#f59e0b';
+                text.textContent = `⚠️ Buka via web server, bukan file://  (gunakan: npx serve FrontEnd)`;
+                document.getElementById('serverStatus').style.background = '#fef3c7';
+                document.getElementById('serverStatus').style.color = '#92400e';
+                return;
+            }
+
+            const ok = await ApiClient.ping();
+            if (ok) {
+                dot.style.background  = '#22c55e';
+                text.textContent = `Server terhubung — ${AppConfig.API_BASE_URL}`;
+                document.getElementById('serverStatus').style.background = '#f0fdf4';
+                document.getElementById('serverStatus').style.color = '#166534';
+            } else {
+                dot.style.background  = '#ef4444';
+                text.textContent = `Server tidak ditemukan di ${AppConfig.API_BASE_URL} — jalankan: dotnet run`;
+                document.getElementById('serverStatus').style.background = '#fef2f2';
+                document.getElementById('serverStatus').style.color = '#991b1b';
+            }
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
             await initIndexedDB().catch(console.error);
             SyncManager.init();
             NotificationManager.init();
+
+            // Check backend reachability and show status on login page
+            checkServerStatus();
 
             // Restore session if JWT is still valid
             if (ApiClient.isAuthenticated()) {

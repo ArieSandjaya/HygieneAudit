@@ -128,7 +128,40 @@ const ApiClient = {
             if (err.name === 'AbortError') {
                 throw new Error('Request timeout. Periksa koneksi Anda.');
             }
+            // TypeError = network-level failure: server not running, CORS preflight blocked,
+            // or HTML opened via file:// (browsers block fetch from null origin to localhost).
+            if (err instanceof TypeError) {
+                const isFileProtocol = location.protocol === 'file:';
+                if (isFileProtocol) {
+                    throw new Error(
+                        'HTML dibuka via file://. Buka menggunakan web server lokal ' +
+                        '(contoh: "npx serve FrontEnd" atau Live Server di VS Code).'
+                    );
+                }
+                throw new Error(
+                    `Tidak dapat terhubung ke backend (${AppConfig.API_BASE_URL}). ` +
+                    'Pastikan server sudah berjalan: cd BackEnd && dotnet run'
+                );
+            }
             throw err;
+        }
+    },
+
+    // Quick reachability check — resolves true/false, never throws
+    async ping() {
+        try {
+            const ctrl = new AbortController();
+            setTimeout(() => ctrl.abort(), 5000);
+            const res = await fetch(AppConfig.API_BASE_URL + '/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: '', password: '' }),
+                signal: ctrl.signal,
+            });
+            // Any HTTP response (even 401/400) means the server is up
+            return res.status !== 0;
+        } catch {
+            return false;
         }
     },
 
