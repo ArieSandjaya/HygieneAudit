@@ -24,6 +24,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
     {
         return await _context.Audits
             .Include(a => a.Items)
+                .ThenInclude(i => i.Photos)
             .Where(a => a.TenantId == tenantId)
             .OrderByDescending(a => a.Date)
             .ToListAsync();
@@ -40,6 +41,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
             .Include(a => a.Items)
+                .ThenInclude(i => i.Photos)
             .Where(a => latestIds.Contains(a.Id))
             .OrderByDescending(a => a.Date)
             .ToListAsync();
@@ -51,6 +53,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
             .Include(a => a.Items)
+                .ThenInclude(i => i.Photos)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(status) && status != "all")
@@ -140,6 +143,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
             .Include(a => a.Items)
+                .ThenInclude(i => i.Photos)
             .AsQueryable();
 
         if (!isAdmin)
