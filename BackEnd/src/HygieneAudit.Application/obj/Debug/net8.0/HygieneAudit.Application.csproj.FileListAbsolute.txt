@@ -1,0 +1,15 @@
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\obj\Debug\net8.0\HygieneAudit.Application.GeneratedMSBuildEditorConfig.editorconfig
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\obj\Debug\net8.0\HygieneAudit.Application.AssemblyInfoInputs.cache
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\obj\Debug\net8.0\HygieneAudit.Application.AssemblyInfo.cs
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\obj\Debug\net8.0\HygieneAudit.Application.csproj.CoreCompileInputs.cache
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\obj\Debug\net8.0\HygieneAudit.Application.csproj.AssemblyReference.cache
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\bin\Debug\net8.0\HygieneAudit.Application.deps.json
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\bin\Debug\net8.0\HygieneAudit.Application.dll
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\bin\Debug\net8.0\HygieneAudit.Application.pdb
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\bin\Debug\net8.0\HygieneAudit.Domain.dll
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\bin\Debug\net8.0\HygieneAudit.Domain.pdb
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\obj\Debug\net8.0\HygieneA.01DDE777.Up2Date
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\obj\Debug\net8.0\HygieneAudit.Application.dll
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\obj\Debug\net8.0\refint\HygieneAudit.Application.dll
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\obj\Debug\net8.0\HygieneAudit.Application.pdb
+F:\CIH\HygieneAudit\src\HygieneAudit.Application\obj\Debug\net8.0\ref\HygieneAudit.Application.dll
