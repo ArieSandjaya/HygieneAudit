@@ -134,6 +134,27 @@ builder.Services.AddRateLimiter(options =>
 
 var app = builder.Build();
 
+// Global exception → JSON error response
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next();
+    }
+    catch (HygieneAudit.Application.Exceptions.ValidationException ex)
+    {
+        context.Response.StatusCode = 400;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(new { message = ex.Message });
+    }
+    catch (HygieneAudit.Application.Exceptions.NotFoundException ex)
+    {
+        context.Response.StatusCode = 404;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(new { message = ex.Message });
+    }
+});
+
 // Security Headers Middleware
 app.Use(async (context, next) =>
 {
