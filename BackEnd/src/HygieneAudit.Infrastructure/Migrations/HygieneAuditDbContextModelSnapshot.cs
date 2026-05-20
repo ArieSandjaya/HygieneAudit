@@ -558,7 +558,7 @@ namespace HygieneAudit.Infrastructure.Migrations
                             CreatedAt = new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7573),
                             IsActive = true,
                             Name = "Administrator",
-                            PasswordHash = "$2a$11$vGQn8U.h1TkckZt8Onm1zOQ3YhZ2Z3Z4Z5Z6Z7Z8Z9Z0Z1Z2Z3Z4Z5Z",
+                            PasswordHash = "$2a$11$MlU7tuaJIbKYYSzk4nnE/ubbS8sqVdhcwPN523z4ZlSs6o6fVBLDO",
                             Role = 1,
                             Username = "admin"
                         },
@@ -568,7 +568,7 @@ namespace HygieneAudit.Infrastructure.Migrations
                             CreatedAt = new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7578),
                             IsActive = true,
                             Name = "Budi Santoso",
-                            PasswordHash = "$2a$11$vGQn8U.h1TkckZt8Onm1zOQ3YhZ2Z3Z4Z5Z6Z7Z8Z9Z0Z1Z2Z3Z4Z5Z",
+                            PasswordHash = "$2a$11$K7YLnOyngILPisuPnBSD.ObjSwl9hgAYjqH9C5Mh8ZuSsGPGU4njK",
                             Role = 0,
                             Username = "auditor1"
                         },
@@ -578,7 +578,7 @@ namespace HygieneAudit.Infrastructure.Migrations
                             CreatedAt = new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7580),
                             IsActive = true,
                             Name = "Dewi Kusuma",
-                            PasswordHash = "$2a$11$vGQn8U.h1TkckZt8Onm1zOQ3YhZ2Z3Z4Z5Z6Z7Z8Z9Z0Z1Z2Z3Z4Z5Z",
+                            PasswordHash = "$2a$11$K7YLnOyngILPisuPnBSD.ObjSwl9hgAYjqH9C5Mh8ZuSsGPGU4njK",
                             Role = 0,
                             Username = "auditor2"
                         });

@@ -212,9 +212,9 @@ namespace HygieneAudit.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsActive", "Name", "PasswordHash", "Role", "Username" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7573), true, "Administrator", "$2a$11$vGQn8U.h1TkckZt8Onm1zOQ3YhZ2Z3Z4Z5Z6Z7Z8Z9Z0Z1Z2Z3Z4Z5Z", 1, "admin" },
-                    { 2, new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7578), true, "Budi Santoso", "$2a$11$vGQn8U.h1TkckZt8Onm1zOQ3YhZ2Z3Z4Z5Z6Z7Z8Z9Z0Z1Z2Z3Z4Z5Z", 0, "auditor1" },
-                    { 3, new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7580), true, "Dewi Kusuma", "$2a$11$vGQn8U.h1TkckZt8Onm1zOQ3YhZ2Z3Z4Z5Z6Z7Z8Z9Z0Z1Z2Z3Z4Z5Z", 0, "auditor2" }
+                    { 1, new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7573), true, "Administrator", "$2a$11$MlU7tuaJIbKYYSzk4nnE/ubbS8sqVdhcwPN523z4ZlSs6o6fVBLDO", 1, "admin" },
+                    { 2, new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7578), true, "Budi Santoso", "$2a$11$K7YLnOyngILPisuPnBSD.ObjSwl9hgAYjqH9C5Mh8ZuSsGPGU4njK", 0, "auditor1" },
+                    { 3, new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7580), true, "Dewi Kusuma", "$2a$11$K7YLnOyngILPisuPnBSD.ObjSwl9hgAYjqH9C5Mh8ZuSsGPGU4njK", 0, "auditor2" }
                 });
 
             migrationBuilder.CreateIndex(
