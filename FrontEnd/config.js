@@ -141,7 +141,17 @@ const ApiClient = {
 
     saveSession(authResponse) {
         localStorage.setItem(AppConfig.TOKEN_STORAGE_KEY, authResponse.token);
+
+        // Decode user ID from JWT payload (NameIdentifier claim)
+        let userId = null;
+        try {
+            const payload = JSON.parse(atob(authResponse.token.split('.')[1]));
+            const idClaim = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
+            userId = payload[idClaim] ? parseInt(payload[idClaim]) : null;
+        } catch {}
+
         localStorage.setItem(AppConfig.USER_STORAGE_KEY, JSON.stringify({
+            id:        userId,
             name:      authResponse.name,
             role:      authResponse.role,
             expiresAt: authResponse.expiresAt,
