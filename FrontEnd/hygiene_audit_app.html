@@ -3369,16 +3369,16 @@
                     const tenant = Store.tenants.find(t => t.id === audit.tenantId);
 
                     return `
-                        <div class="audit-card" onclick="viewAuditDetail('${audit.id}')">
+                        <div class="audit-card" onclick="${audit.status === 'DRAFT' ? `resumeAudit('${audit.id}')` : `viewAuditDetail('${audit.id}')`}">
                             <div class="audit-card-header">
                                 <div>
                                     <div class="audit-card-title">${tenant?.name || 'Unknown Tenant'}</div>
                                     <div class="audit-card-subtitle">${formatDate(audit.date)} • PIC: ${audit.picName}</div>
                                 </div>
-                                <span class="status-badge ${audit.status.toLowerCase()}">${audit.status}</span>
+                                <span class="status-badge ${audit.status.toLowerCase()}">${audit.status === 'DRAFT' ? '✏️ DRAFT' : audit.status}</span>
                             </div>
                             <div class="audit-card-footer">
-                                <span class="audit-meta">${totalItems} item diperiksa</span>
+                                <span class="audit-meta">${audit.status === 'DRAFT' ? 'Ketuk untuk melanjutkan' : `${totalItems} item diperiksa`}</span>
                                 <div class="pass-rate">
                                     <div class="rate-bar"><div class="fill" style="width: ${passRate}%"></div></div>
                                     <span>${passRate}% Pass</span>
@@ -3569,7 +3569,33 @@
             }
         }
 
-        // ========== CHECKLIST PAGE ==========
+        async function resumeAudit(auditId) {
+            showLoading();
+            try {
+                const audit = await ApiClient.audits.getById(auditId);
+                const items = (audit.items || []).map(item => ({
+                    ...item,
+                    status: normalizeStatus(item.status),
+                    note:   item.note  || '',
+                    photos: (item.photos || []).map(p => p.photoUrl || p)
+                }));
+                const categories = {};
+                items.forEach(item => {
+                    if (!categories[item.category]) categories[item.category] = [];
+                    categories[item.category].push(item);
+                });
+                Store.currentAudit = { ...audit, items, categories, status: 'DRAFT' };
+                await saveAuditOffline(Store.currentAudit);
+                renderChecklist();
+                navigateTo('checklist');
+            } catch (err) {
+                showToast('Gagal memuat audit: ' + err.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+
         function renderChecklist() {
             const audit = Store.currentAudit;
             if (!audit) return;
@@ -3907,15 +3933,16 @@
                                 const dotClass = passRate >= 90 ? 'pass' : passRate >= 70 ? 'mixed' : 'fail';
 
                                 return `
-                                    <div class="timeline-item" onclick="viewAuditDetail('${audit.id}')">
-                                        <div class="timeline-dot ${dotClass}"></div>
+                                    <div class="timeline-item" onclick="${audit.status === 'DRAFT' ? `resumeAudit('${audit.id}')` : `viewAuditDetail('${audit.id}')`}">
+                                        <div class="timeline-dot ${audit.status === 'DRAFT' ? 'mixed' : dotClass}"></div>
                                         <div class="timeline-content">
-                                            <div class="timeline-date">${formatDate(audit.date)}</div>
+                                            <div class="timeline-date">${formatDate(audit.date)} ${audit.status === 'DRAFT' ? '<span style="font-size:11px;color:var(--warning);">✏️ Draft</span>' : ''}</div>
                                             <div class="timeline-pic">PIC: ${audit.picName}</div>
                                             <div class="timeline-result">
-                                                <span class="result-badge ${passRate >= 90 ? 'good' : 'bad'}">
-                                                    ${passRate}% Pass
-                                                </span>
+                                                ${audit.status === 'DRAFT'
+                                                    ? `<span class="result-badge" style="background:var(--warning);color:#fff;">Lanjutkan</span>`
+                                                    : `<span class="result-badge ${passRate >= 90 ? 'good' : 'bad'}">${passRate}% Pass</span>`
+                                                }
                                                 <span style="font-size: 12px; color: var(--gray-400);">
                                                     ${failItems} fail / ${totalItems} item
                                                 </span>
@@ -3973,7 +4000,8 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                        ${audit.status === 'DRAFT' ? `<button class="btn btn-sm btn-warning" onclick="resumeAudit('${auditId}')">✏️ Lanjutkan Audit</button>` : ''}
                         <button class="btn btn-sm btn-primary" onclick="exportCurrentAuditToPDF()">📄 Export PDF</button>
                         <button class="btn btn-sm btn-success" onclick="exportCurrentAuditToExcel()">📊 Export Excel</button>
                     </div>
