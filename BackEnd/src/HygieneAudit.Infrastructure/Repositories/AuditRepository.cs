@@ -56,8 +56,9 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
                 .ThenInclude(i => i.Photos)
             .AsQueryable();
 
-        if (!string.IsNullOrEmpty(status) && status != "all")
-            query = query.Where(a => a.Status.ToString() == status);
+        if (!string.IsNullOrEmpty(status) && status != "all" &&
+            Enum.TryParse<AuditStatus>(status, ignoreCase: true, out var auditStatus))
+            query = query.Where(a => a.Status == auditStatus);
 
         if (!string.IsNullOrEmpty(type) && type != "all")
         {
