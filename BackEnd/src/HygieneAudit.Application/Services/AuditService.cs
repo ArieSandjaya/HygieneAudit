@@ -71,6 +71,14 @@ public class AuditService : IAuditService
         };
         item.Note = update.Note;
 
+        if (update.Photos != null)
+        {
+            var existing = item.Photos.ToList();
+            foreach (var p in existing) item.Photos.Remove(p);
+            foreach (var url in update.Photos)
+                item.Photos.Add(new AuditItemPhoto { PhotoUrl = url });
+        }
+
         await _unitOfWork.SaveChangesAsync();
     }
 

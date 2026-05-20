@@ -3792,25 +3792,51 @@
             const item = Store.currentAudit.items.find(i => i.templateId === templateId);
             if (!item) return;
 
-            Array.from(files).forEach(file => {
+            const readFile = f => new Promise((res, rej) => {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    item.photos.push(e.target.result);
-                    renderChecklist();
-                    showToast('Foto berhasil ditambahkan');
-                };
-                reader.readAsDataURL(file);
+                reader.onload  = e => res(e.target.result);
+                reader.onerror = rej;
+                reader.readAsDataURL(f);
+            });
+
+            Promise.all(Array.from(files).map(readFile)).then(async dataUrls => {
+                dataUrls.forEach(url => item.photos.push(url));
+                renderChecklist();
+                showToast('Foto berhasil ditambahkan');
+                try {
+                    await ApiClient.audits.updateItem(Store.currentAudit.id, templateId, {
+                        status: toApiStatus(item.status),
+                        note:   item.note || null,
+                        photos: item.photos,
+                    });
+                } catch {
+                    SyncManager.queueForSync('update_item', {
+                        auditId: Store.currentAudit.id, templateId,
+                        status: item.status, note: item.note, photos: item.photos,
+                    });
+                }
             });
 
             input.value = '';
         }
 
-        function removePhoto(templateId, index) {
+        async function removePhoto(templateId, index) {
             const item = Store.currentAudit.items.find(i => i.templateId === templateId);
-            if (item) {
-                item.photos.splice(index, 1);
-                renderChecklist();
-                showToast('Foto dihapus');
+            if (!item) return;
+            item.photos.splice(index, 1);
+            renderChecklist();
+            showToast('Foto dihapus');
+            try {
+                await ApiClient.audits.updateItem(Store.currentAudit.id, templateId, {
+                    status: toApiStatus(item.status),
+                    note:   item.note || null,
+                    photos: item.photos,
+                });
+            } catch {
+                SyncManager.queueForSync('update_item', {
+                    auditId: Store.currentAudit.id, templateId,
+                    status: item.status, note: item.note, photos: item.photos,
+                });
             }
         }
 

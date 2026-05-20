@@ -43,6 +43,7 @@ public class AuditsController : ControllerBase
     }
 
     [HttpPut("{id}/items/{templateId}")]
+    [RequestSizeLimit(52_428_800)] // 50 MB — accommodates base64 photos
     public async Task<IActionResult> UpdateItem(string id, int templateId, [FromBody] AuditItemUpdate update)
     {
         await _auditService.SaveAuditItemAsync(id, templateId, update);
