@@ -138,10 +138,10 @@ public class AuditService : IAuditService
             rows.Add(new ExcelReportRow
             {
                 No = no++,
-                TenantName = audit.Tenant.Name,
-                UsesGas = audit.Tenant.UsesGas,
+                TenantName = audit.Tenant?.Name ?? string.Empty,
+                UsesGas = audit.Tenant?.UsesGas ?? false,
                 Date = audit.Date,
-                PicName = audit.Pic.Name,
+                PicName = audit.Pic?.Name ?? string.Empty,
                 Status = audit.Status.ToString(),
                 TotalItems = total,
                 PassItems = pass,

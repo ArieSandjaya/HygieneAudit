@@ -2699,24 +2699,38 @@
                     return;
                 }
 
-                // Simulate API sync (replace with actual API calls)
+                const markSynced = (item) => new Promise((resolve, reject) => {
+                    const tx    = db.transaction(['syncQueue'], 'readwrite');
+                    const store = tx.objectStore('syncQueue');
+                    item.synced = true;
+                    const req   = store.put(item);
+                    req.onsuccess = () => resolve();
+                    req.onerror   = () => reject(req.error);
+                });
+
+                let syncedCount = 0;
                 for (const item of unsynced) {
-                    // Here you would call your .NET 8 API
-                    // await fetch('/api/sync', { method: 'POST', body: JSON.stringify(item) });
-
-                    // Mark as synced
-                    await new Promise((resolve, reject) => {
-                        const transaction = db.transaction(['syncQueue'], 'readwrite');
-                        const store = transaction.objectStore('syncQueue');
-                        item.synced = true;
-                        const request = store.put(item);
-
-                        request.onsuccess = () => resolve();
-                        request.onerror = () => reject(request.error);
-                    });
+                    try {
+                        if (item.action === 'SAVE_DRAFT' && item.data?.id) {
+                            await ApiClient.audits.saveDraft(item.data.id);
+                        } else {
+                            // Generic fallback — forward to /api/sync for server-side processing
+                            await ApiClient.sync.push([{
+                                action:     item.action,
+                                entityType: 'audit',
+                                entityId:   String(item.data?.id || ''),
+                                payload:    JSON.stringify(item.data),
+                                timestamp:  item.timestamp || new Date().toISOString(),
+                                isSynced:   false,
+                                retryCount: 0,
+                            }]);
+                        }
+                        await markSynced(item);
+                        syncedCount++;
+                    } catch { /* leave unsynced, retry next time */ }
                 }
 
-                showToast(`${unsynced.length} item berhasil disinkronkan!`);
+                showToast(`${syncedCount} item berhasil disinkronkan!`);
                 updateSyncStatus('online');
             } catch (error) {
                 showToast('Gagal sinkronisasi: ' + error.message, 'error');
