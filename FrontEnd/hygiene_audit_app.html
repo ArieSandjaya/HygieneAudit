@@ -3583,10 +3583,7 @@
 
             for (const [category, items] of Object.entries(categories)) {
                 const categoryIcon = getCategoryIcon(category);
-                const checkedCount = items.filter(item => {
-                    const auditItem = audit.items.find(i => i.templateId === item.id);
-                    return auditItem && auditItem.status !== null;
-                }).length;
+                const checkedCount = items.filter(item => item.status !== null).length;
 
                 totalItems += items.length;
                 checkedItems += checkedCount;
@@ -3601,8 +3598,7 @@
                             <span class="category-progress">${checkedCount}/${items.length}</span>
                         </div>
                         <div class="category-items">
-                            ${items.map(template => {
-                                const item = audit.items.find(i => i.templateId === template.id);
+                            ${items.map(item => {
                                 const isPass = item.status === 'PASS';
                                 const isFail = item.status === 'FAIL';
                                 const noteRequired = isFail;
