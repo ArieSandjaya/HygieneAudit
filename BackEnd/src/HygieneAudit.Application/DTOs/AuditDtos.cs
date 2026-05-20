@@ -12,7 +12,7 @@ public class CreateAuditRequest
 
 public class AuditItemUpdate
 {
-    public AuditItemStatus? Status { get; set; }
+    public string? Status { get; set; }   // "Pass" / "Fail" / null
     public string? Note { get; set; }
     public List<string>? Photos { get; set; }
 }

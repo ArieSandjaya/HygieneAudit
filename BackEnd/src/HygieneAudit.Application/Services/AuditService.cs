@@ -57,7 +57,12 @@ public class AuditService : IAuditService
         var item = audit.Items.FirstOrDefault(i => i.TemplateId == templateId);
         if (item == null) throw new NotFoundException("Item not found");
 
-        item.Status = update.Status;
+        item.Status = update.Status?.ToLowerInvariant() switch
+        {
+            "pass" => AuditItemStatus.Pass,
+            "fail" => AuditItemStatus.Fail,
+            _      => (AuditItemStatus?)null
+        };
         item.Note = update.Note;
 
         await _unitOfWork.SaveChangesAsync();
