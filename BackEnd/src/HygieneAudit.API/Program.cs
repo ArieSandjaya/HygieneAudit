@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using HygieneAudit.Application.Services;
 using HygieneAudit.Domain.Interfaces;
 using HygieneAudit.Infrastructure.Data;
@@ -11,7 +12,9 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
