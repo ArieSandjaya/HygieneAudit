@@ -1,35 +1,37 @@
+using System.Threading.Tasks;
+using System.Web.Http;
 using HygieneAudit.Application.Services;
 using HygieneAudit.Domain.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
-namespace HygieneAudit.API.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-[Authorize]
-public class TenantsController : ControllerBase
+namespace HygieneAudit.API.Controllers
 {
-    private readonly IAuditService _auditService;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public TenantsController(IAuditService auditService, IUnitOfWork unitOfWork)
+    [RoutePrefix("api/tenants")]
+    [Authorize]
+    public class TenantsController : ApiController
     {
-        _auditService = auditService;
-        _unitOfWork = unitOfWork;
-    }
+        private readonly IAuditService _auditService;
+        private readonly IUnitOfWork _unitOfWork;
 
-    [HttpGet]
-    public async Task<ActionResult> GetAll()
-    {
-        var tenants = await _unitOfWork.Tenants.GetActiveAsync();
-        return Ok(tenants);
-    }
+        public TenantsController(IAuditService auditService, IUnitOfWork unitOfWork)
+        {
+            _auditService = auditService;
+            _unitOfWork = unitOfWork;
+        }
 
-    [HttpGet("{id}/history")]
-    public async Task<ActionResult> GetHistory(int id)
-    {
-        var history = await _auditService.GetTenantHistoryAsync(id);
-        return Ok(history);
+        [HttpGet]
+        [Route("")]
+        public async Task<IHttpActionResult> GetAll()
+        {
+            var tenants = await _unitOfWork.Tenants.GetActiveAsync();
+            return Ok(tenants);
+        }
+
+        [HttpGet]
+        [Route("{id}/history")]
+        public async Task<IHttpActionResult> GetHistory(int id)
+        {
+            var history = await _auditService.GetTenantHistoryAsync(id);
+            return Ok(history);
+        }
     }
 }

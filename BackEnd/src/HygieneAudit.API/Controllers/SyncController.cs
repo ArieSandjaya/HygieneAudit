@@ -1,84 +1,97 @@
-using System.Text.Json;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Http;
 using HygieneAudit.Application.DTOs;
 using HygieneAudit.Application.Services;
 using HygieneAudit.Domain.Entities;
 using HygieneAudit.Domain.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
-namespace HygieneAudit.API.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-[Authorize]
-[RequestSizeLimit(52_428_800)]
-public class SyncController : ControllerBase
+namespace HygieneAudit.API.Controllers
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IAuditService _auditService;
-    private static readonly JsonSerializerOptions _jsonOpts =
-        new() { PropertyNameCaseInsensitive = true };
-
-    public SyncController(IUnitOfWork unitOfWork, IAuditService auditService)
+    [RoutePrefix("api/sync")]
+    [Authorize]
+    public class SyncController : ApiController
     {
-        _unitOfWork   = unitOfWork;
-        _auditService = auditService;
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Sync([FromBody] List<SyncQueueItem> items)
-    {
-        int processed = 0;
-
-        foreach (var item in items)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuditService _auditService;
+        private static readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
-            try
-            {
-                await ProcessItem(item);
-                item.IsSynced     = true;
-                item.ErrorMessage = null;
-                processed++;
-            }
-            catch (Exception ex)
-            {
-                item.IsSynced     = false;
-                item.ErrorMessage = ex.Message;
-            }
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
 
-            await _unitOfWork.SyncQueue.AddAsync(item);
+        public SyncController(IUnitOfWork unitOfWork, IAuditService auditService)
+        {
+            _unitOfWork = unitOfWork;
+            _auditService = auditService;
         }
 
-        await _unitOfWork.SaveChangesAsync();
-        return Ok(new { processed, total = items.Count });
-    }
-
-    private async Task ProcessItem(SyncQueueItem item)
-    {
-        if (string.IsNullOrEmpty(item.Payload)) return;
-
-        switch (item.Action?.ToLower())
+        [HttpPost]
+        [Route("")]
+        public async Task<IHttpActionResult> Sync([FromBody] List<SyncQueueItem> items)
         {
-            case "update_item":
+            int processed = 0;
+
+            foreach (var item in items)
             {
-                var d = JsonSerializer.Deserialize<UpdateItemPayload>(item.Payload, _jsonOpts);
-                if (d?.AuditId != null)
-                    await _auditService.SaveAuditItemAsync(
-                        d.AuditId, d.TemplateId,
-                        new AuditItemUpdate { Status = d.Status, Note = d.Note, Photos = d.Photos });
-                break;
+                try
+                {
+                    await ProcessItem(item);
+                    item.IsSynced = true;
+                    item.ErrorMessage = null;
+                    processed++;
+                }
+                catch (Exception ex)
+                {
+                    item.IsSynced = false;
+                    item.ErrorMessage = ex.Message;
+                }
+
+                await _unitOfWork.SyncQueue.AddAsync(item);
             }
-            case "save_draft":
+
+            await _unitOfWork.SaveChangesAsync();
+            return Ok(new { processed, total = items.Count });
+        }
+
+        private async Task ProcessItem(SyncQueueItem item)
+        {
+            if (string.IsNullOrEmpty(item.Payload)) return;
+
+            switch (item.Action?.ToLower())
             {
-                var d = JsonSerializer.Deserialize<DraftPayload>(item.Payload, _jsonOpts);
-                if (d?.Id != null) await _auditService.SaveDraftAsync(d.Id);
-                break;
+                case "update_item":
+                {
+                    var d = JsonConvert.DeserializeObject<UpdateItemPayload>(item.Payload, _jsonSettings);
+                    if (d?.AuditId != null)
+                        await _auditService.SaveAuditItemAsync(
+                            d.AuditId, d.TemplateId,
+                            new AuditItemUpdate { Status = d.Status, Note = d.Note, Photos = d.Photos });
+                    break;
+                }
+                case "save_draft":
+                {
+                    var d = JsonConvert.DeserializeObject<DraftPayload>(item.Payload, _jsonSettings);
+                    if (d?.Id != null) await _auditService.SaveDraftAsync(d.Id);
+                    break;
+                }
             }
         }
+    }
+
+    internal class UpdateItemPayload
+    {
+        public string? AuditId { get; set; }
+        public int TemplateId { get; set; }
+        public string? Status { get; set; }
+        public string? Note { get; set; }
+        public List<string>? Photos { get; set; }
+    }
+
+    internal class DraftPayload
+    {
+        public string? Id { get; set; }
     }
 }
-
-file-scoped internal record UpdateItemPayload(
-    string AuditId, int TemplateId,
-    string? Status, string? Note, List<string>? Photos);
-
-file-scoped internal record DraftPayload(string Id);

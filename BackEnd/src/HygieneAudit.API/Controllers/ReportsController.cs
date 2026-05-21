@@ -1,42 +1,55 @@
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Web.Http;
 using HygieneAudit.Application.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
-namespace HygieneAudit.API.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-[Authorize(Roles = "Admin,SuperAdmin")]
-public class ReportsController : ControllerBase
+namespace HygieneAudit.API.Controllers
 {
-    private readonly IAuditService _auditService;
-
-    public ReportsController(IAuditService auditService)
+    [RoutePrefix("api/reports")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
+    public class ReportsController : ApiController
     {
-        _auditService = auditService;
-    }
+        private readonly IAuditService _auditService;
 
-    [HttpGet("latest-per-tenant")]
-    public async Task<ActionResult> GetLatestPerTenant(
-        [FromQuery] string? status = "all",
-        [FromQuery] string? type = "all",
-        [FromQuery] string? search = "")
-    {
-        var report = await _auditService.GetExcelReportAsync(status, type, search);
-        return Ok(report);
-    }
+        public ReportsController(IAuditService auditService)
+        {
+            _auditService = auditService;
+        }
 
-    [HttpGet("export-excel")]
-    public async Task<IActionResult> ExportExcel(
-        [FromQuery] string? status = "all",
-        [FromQuery] string? type = "all",
-        [FromQuery] string? search = "")
-    {
-        var report = await _auditService.GetExcelReportAsync(status, type, search);
-        var excelBytes = await _auditService.ExportExcelAsync(report);
+        [HttpGet]
+        [Route("latest-per-tenant")]
+        public async Task<IHttpActionResult> GetLatestPerTenant(
+            [FromUri] string status = "all",
+            [FromUri] string type = "all",
+            [FromUri] string search = "")
+        {
+            var report = await _auditService.GetExcelReportAsync(status, type, search);
+            return Ok(report);
+        }
 
-        return File(excelBytes, 
-            "text/csv",
-            $"Report_Audit_Hygiene_{DateTime.Now:yyyy-MM-dd}.csv");
+        [HttpGet]
+        [Route("export-excel")]
+        public async Task<HttpResponseMessage> ExportExcel(
+            [FromUri] string status = "all",
+            [FromUri] string type = "all",
+            [FromUri] string search = "")
+        {
+            var report = await _auditService.GetExcelReportAsync(status, type, search);
+            var csvBytes = await _auditService.ExportExcelAsync(report);
+
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(csvBytes)
+            };
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = $"Report_Audit_Hygiene_{DateTime.Now:yyyy-MM-dd}.csv"
+            };
+            return response;
+        }
     }
 }
