@@ -6,7 +6,6 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -31,8 +30,8 @@ namespace HygieneAudit.API.Filters
                 {
                     var principal = ValidateToken(authHeader.Parameter);
                     Thread.CurrentPrincipal = principal;
-                    if (HttpContext.Current != null)
-                        HttpContext.Current.User = principal;
+                    // Thread.CurrentPrincipal is what Web API 2 [Authorize] reads;
+                    // HttpContext.Current.User is not reliable inside the OWIN pipeline.
                 }
                 catch
                 {
