@@ -772,6 +772,19 @@
           }
         }
       },
+      "Microsoft.Owin.FileSystems/4.2.2": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Microsoft.Owin.FileSystems.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.FileSystems.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.Owin.Host.HttpListener/4.2.2": {
         "type": "package",
         "dependencies": {
@@ -835,6 +848,24 @@
           "Microsoft.Owin.Host.HttpListener": "4.2.2",
           "Microsoft.Owin.Hosting": "4.2.2",
           "Owin": "1.0.0"
+        }
+      },
+      "Microsoft.Owin.StaticFiles/4.2.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "4.2.2",
+          "Microsoft.Owin.FileSystems": "4.2.2",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.StaticFiles.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.StaticFiles.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Newtonsoft.Json/13.0.3": {
@@ -2009,6 +2040,19 @@
           }
         }
       },
+      "Microsoft.Owin.FileSystems/4.2.2": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Microsoft.Owin.FileSystems.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.FileSystems.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.Owin.Host.HttpListener/4.2.2": {
         "type": "package",
         "dependencies": {
@@ -2072,6 +2116,24 @@
           "Microsoft.Owin.Host.HttpListener": "4.2.2",
           "Microsoft.Owin.Hosting": "4.2.2",
           "Owin": "1.0.0"
+        }
+      },
+      "Microsoft.Owin.StaticFiles/4.2.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "4.2.2",
+          "Microsoft.Owin.FileSystems": "4.2.2",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.StaticFiles.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.StaticFiles.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Newtonsoft.Json/13.0.3": {
@@ -3299,6 +3361,20 @@
         "microsoft.owin.diagnostics.nuspec"
       ]
     },
+    "Microsoft.Owin.FileSystems/4.2.2": {
+      "sha512": "GDYA+V0xJkqdp5lRehCJ3vT8Fp1OjmKLvKibEvYTgwg41CtUXduo5xKpsfnZ2IYCszUSrGJ8OdUKtoFc7mpMcw==",
+      "type": "package",
+      "path": "microsoft.owin.filesystems/4.2.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "lib/net45/Microsoft.Owin.FileSystems.dll",
+        "lib/net45/Microsoft.Owin.FileSystems.xml",
+        "microsoft.owin.filesystems.4.2.2.nupkg.sha512",
+        "microsoft.owin.filesystems.nuspec"
+      ]
+    },
     "Microsoft.Owin.Host.HttpListener/4.2.2": {
       "sha512": "Kl1A0sBzfMD3qvX6XcGU0FopN6POFFRpIEQnKIAbvsShadIG9/UxgDdHVlX/IzFHXwIHfY59Ae4RGDVKYNvIqQ==",
       "type": "package",
@@ -3352,6 +3428,20 @@
         "README.md",
         "microsoft.owin.selfhost.4.2.2.nupkg.sha512",
         "microsoft.owin.selfhost.nuspec"
+      ]
+    },
+    "Microsoft.Owin.StaticFiles/4.2.2": {
+      "sha512": "yRflUgZxWRMUap4QqDjev9q3tY9eGh6JETYKTD5UaVxbggRRfxhQ65QH/8vo6Wc9rSAlPIrLtd21EFfv83lxvQ==",
+      "type": "package",
+      "path": "microsoft.owin.staticfiles/4.2.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "lib/net45/Microsoft.Owin.StaticFiles.dll",
+        "lib/net45/Microsoft.Owin.StaticFiles.xml",
+        "microsoft.owin.staticfiles.4.2.2.nupkg.sha512",
+        "microsoft.owin.staticfiles.nuspec"
       ]
     },
     "Newtonsoft.Json/13.0.3": {
@@ -4233,6 +4323,7 @@
       "Microsoft.Owin.Cors >= 4.2.2",
       "Microsoft.Owin.Host.SystemWeb >= 4.2.2",
       "Microsoft.Owin.SelfHost >= 4.2.2",
+      "Microsoft.Owin.StaticFiles >= 4.2.2",
       "Newtonsoft.Json >= 13.0.3",
       "System.IdentityModel.Tokens.Jwt >= 7.1.2"
     ]
@@ -4330,6 +4421,10 @@
             "version": "[4.2.2, )"
           },
           "Microsoft.Owin.SelfHost": {
+            "target": "Package",
+            "version": "[4.2.2, )"
+          },
+          "Microsoft.Owin.StaticFiles": {
             "target": "Package",
             "version": "[4.2.2, )"
           },
