@@ -146,7 +146,7 @@ public class AuditService : IAuditService
         };
     }
 
-    public async Task<byte[]> ExportExcelAsync(ExcelReportDto report)
+    public Task<byte[]> ExportExcelAsync(ExcelReportDto report)
     {
         var csv = new System.Text.StringBuilder();
         csv.AppendLine("No,Tenant,Type,Tanggal,PIC,Status,Pass Rate,Total,Pass,Fail,Catatan");
@@ -158,6 +158,6 @@ public class AuditService : IAuditService
 
         csv.AppendLine($",TOTAL / RATA-RATA,,,,,{report.Summary.AveragePassRate}%,{report.Summary.TotalItems},{report.Summary.TotalPass},{report.Summary.TotalFail},{report.Summary.TenantCount} Tenant");
 
-        return System.Text.Encoding.UTF8.GetBytes(csv.ToString());
+        return Task.FromResult(System.Text.Encoding.UTF8.GetBytes(csv.ToString()));
     }
 }
