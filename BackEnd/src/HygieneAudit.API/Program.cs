@@ -156,7 +156,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseCors("PWA");
 app.UseAuthentication();
 app.UseAuthorization();
