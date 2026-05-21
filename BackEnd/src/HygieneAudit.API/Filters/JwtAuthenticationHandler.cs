@@ -30,8 +30,7 @@ namespace HygieneAudit.API.Filters
                 {
                     var principal = ValidateToken(authHeader.Parameter);
                     Thread.CurrentPrincipal = principal;
-                    // Thread.CurrentPrincipal is what Web API 2 [Authorize] reads;
-                    // HttpContext.Current.User is not reliable inside the OWIN pipeline.
+                    request.GetRequestContext().Principal = principal;
                 }
                 catch
                 {
