@@ -9,3 +9,15 @@ F:\CIH\HygieneAudit\src\HygieneAudit.Domain\obj\Debug\net8.0\HygieneAudit.Domain
 F:\CIH\HygieneAudit\src\HygieneAudit.Domain\obj\Debug\net8.0\refint\HygieneAudit.Domain.dll
 F:\CIH\HygieneAudit\src\HygieneAudit.Domain\obj\Debug\net8.0\HygieneAudit.Domain.pdb
 F:\CIH\HygieneAudit\src\HygieneAudit.Domain\obj\Debug\net8.0\ref\HygieneAudit.Domain.dll
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.Domain\bin\Debug\net8.0\HygieneAudit.Domain.deps.json
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.Domain\bin\Debug\net8.0\HygieneAudit.Domain.dll
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.Domain\bin\Debug\net8.0\HygieneAudit.Domain.pdb
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.Domain\obj\Debug\net8.0\HygieneAudit.Domain.GeneratedMSBuildEditorConfig.editorconfig
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.Domain\obj\Debug\net8.0\HygieneAudit.Domain.AssemblyInfoInputs.cache
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.Domain\obj\Debug\net8.0\HygieneAudit.Domain.AssemblyInfo.cs
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.Domain\obj\Debug\net8.0\HygieneAudit.Domain.csproj.CoreCompileInputs.cache
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.Domain\obj\Debug\net8.0\HygieneAudit.Domain.sourcelink.json
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.Domain\obj\Debug\net8.0\HygieneAudit.Domain.dll
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.Domain\obj\Debug\net8.0\refint\HygieneAudit.Domain.dll
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.Domain\obj\Debug\net8.0\HygieneAudit.Domain.pdb
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.Domain\obj\Debug\net8.0\ref\HygieneAudit.Domain.dll

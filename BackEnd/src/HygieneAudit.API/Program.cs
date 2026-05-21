@@ -10,8 +10,8 @@ namespace HygieneAudit.API
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false)
-                .AddJsonFile("appsettings.Production.json", optional: true)
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile("appsettings.Production.json", optional: false)
                 .Build();
 
             var port = configuration["Server:Port"] ?? "5000";
