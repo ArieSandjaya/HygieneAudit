@@ -1,52 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "F:\\CIH\\HygieneAudit\\BackEnd\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\middleware\\securitymiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\middleware\\securitymiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\controllers\\tenantscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\controllers\\tenantscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\attributes\\validationattributes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\attributes\\validationattributes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\wwwroot\\config.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\wwwroot\\config.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\wwwroot\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\wwwroot\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -54,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -67,149 +22,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ValidationAttributes.cs",
-              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Attributes\\ValidationAttributes.cs",
-              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\Attributes\\ValidationAttributes.cs",
-              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Attributes\\ValidationAttributes.cs",
-              "RelativeToolTip": "src\\HygieneAudit.API\\Attributes\\ValidationAttributes.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-21T03:55:37.105Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "appsettings.Production.json",
-              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\appsettings.Production.json",
-              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\appsettings.Production.json",
-              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\appsettings.Production.json",
-              "RelativeToolTip": "src\\HygieneAudit.API\\appsettings.Production.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-05-21T03:54:54.725Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "SecurityMiddleware.cs",
-              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Middleware\\SecurityMiddleware.cs",
-              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\Middleware\\SecurityMiddleware.cs",
-              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Middleware\\SecurityMiddleware.cs",
-              "RelativeToolTip": "src\\HygieneAudit.API\\Middleware\\SecurityMiddleware.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAsAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-21T03:50:21.469Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\Controllers\\AuthController.cs",
-              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "src\\HygieneAudit.API\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABYAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-21T03:49:22.634Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Startup.cs",
-              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Startup.cs",
-              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\Startup.cs",
-              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Startup.cs",
-              "RelativeToolTip": "src\\HygieneAudit.API\\Startup.cs",
-              "ViewState": "AgIAAGwAAAAAAAAAAAAcwH0AAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-21T03:37:17.572Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "TenantsController.cs",
-              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Controllers\\TenantsController.cs",
-              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\Controllers\\TenantsController.cs",
-              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Controllers\\TenantsController.cs",
-              "RelativeToolTip": "src\\HygieneAudit.API\\Controllers\\TenantsController.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAABkAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-21T03:39:32.112Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "config.js",
-              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\wwwroot\\config.js",
-              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\wwwroot\\config.js",
-              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\wwwroot\\config.js",
-              "RelativeToolTip": "src\\HygieneAudit.API\\wwwroot\\config.js",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAACgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-05-21T03:51:33.947Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Program.cs",
-              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Program.cs",
-              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\Program.cs",
-              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Program.cs",
-              "RelativeToolTip": "src\\HygieneAudit.API\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-21T03:54:42.22Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "index.html",
-              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\wwwroot\\index.html",
-              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\wwwroot\\index.html",
-              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\wwwroot\\index.html",
-              "RelativeToolTip": "src\\HygieneAudit.API\\wwwroot\\index.html",
-              "ViewState": "AgIAADEGAAAAAAAAAAAvwEIGAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2026-05-21T03:51:21.294Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\appsettings.json",
-              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\appsettings.json",
-              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\appsettings.json",
-              "RelativeToolTip": "src\\HygieneAudit.API\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-05-21T03:37:14.291Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Web.config",
-              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Web.config",
-              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\Web.config",
-              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\Web.config",
-              "RelativeToolTip": "src\\HygieneAudit.API\\Web.config",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2026-05-21T03:37:11.774Z",
-              "EditorCaption": ""
             }
           ]
         }
