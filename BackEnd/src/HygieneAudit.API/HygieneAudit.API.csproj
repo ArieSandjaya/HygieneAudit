@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net481</TargetFramework>
+    <OutputType>Exe</OutputType>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -10,10 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- ASP.NET Web API 2 + OWIN for IIS hosting -->
+    <!-- ASP.NET Web API 2 + OWIN for IIS and self-host -->
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.3.0" />
     <PackageReference Include="Microsoft.Owin" Version="4.2.2" />
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin.SelfHost" Version="4.2.2" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.3.0" />
     <PackageReference Include="Microsoft.Owin.Cors" Version="4.2.2" />
     <!-- Dependency Injection -->

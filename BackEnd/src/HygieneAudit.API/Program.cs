@@ -1,3 +1,28 @@
-// Application startup is handled by OWIN via Startup.cs.
-// See Startup.cs for configuration and [assembly: OwinStartup] attribute.
-namespace HygieneAudit.API { }
+using System;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Owin.Hosting;
+
+namespace HygieneAudit.API
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false)
+                .AddJsonFile("appsettings.Production.json", optional: true)
+                .Build();
+
+            var port = configuration["Server:Port"] ?? "5000";
+            var url = $"http://localhost:{port}";
+
+            using (WebApp.Start<Startup>(url))
+            {
+                Console.WriteLine($"HygieneAudit API running on {url}");
+                Console.WriteLine("Press Enter to stop...");
+                Console.ReadLine();
+            }
+        }
+    }
+}
