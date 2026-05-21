@@ -1,0 +1,4889 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Hygiene Audit">
+    <title>Hygiene Audit App</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSHlnaWVuZSBBdWRpdCBBcHAiLCJzaG9ydF9uYW1lIjoiSHlnaWVuZUF1ZGl0Iiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZmZmZmYiLCJ0aGVtZV9jb2xvciI6IiMyNTYzZWIiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1qQXdJaUJvWldsbmFIUTlJakl3TUNJZ2RtbGxkMEp2ZUQwaU1DQXdJREl3TUNBeU1EQWlJSGh0YkcwaUlqZzROREl5TURBd01EQWlJSGh0Ykc1aGJXVWlPbHRkSWlCbWFXeHNQU0lqWm1abVptWm1JaUIyYVdWM0FtOTdQQzlpYkhWemJEc2dabWxzWkQwaUkyWm1abVptWmlJSE53WVdOb1BTSWlJSEJoWTJ0bFpDQm9iMnhrWlhJOUlqMGlkSEpoYm5ObWIzSnRjeUlnZDJsa2JHbHVaRDBpTUM0d0xqQWlJR0p2YjNRaU9pQWlJbjA9Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9LHsic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTWpBd0lpQm9aV2xuYUhROUlqSXdNQ0lnZJ1bWxkMEp2ZUQwaU1DQXdJREl3TUNBeU1EQWlJSGh0YkcwaUlqZzROREl5TURBd01EQWlJSGh0Ykc1aGJXVWlPbHRkSWlCbWFXeHNQU0lqWm1abVptWm1JaUIyYVdWM0FtOTdQQzlpYkhWemJEc2dabWxzWkQwaUkyWm1abVptWmlJSE53WVdOb1BTSWlJSEJoWTJ0bFpDQm9iMnhrWlhJOUlqMGlkSEpoYm5ObWIzSnRjeUlnZDJsa2JHbHVaRDBpTUM0d0xqQWlJR0p2YjNRaU9pQWlJbjA9Iiwic2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ========== LOGIN PAGE ========== */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo .icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 40px;
+        }
+
+        .login-logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+
+        .login-logo p {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.2s;
+            background: var(--gray-50);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:active {
+            background: var(--primary-dark);
+            transform: scale(0.98);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-sm {
+            padding: 10px 16px;
+            font-size: 14px;
+            width: auto;
+        }
+
+        /* ========== APP LAYOUT ========== */
+        .app-container {
+            display: none;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .app-container.active {
+            display: block;
+        }
+
+        /* Header */
+        .app-header {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .app-header h1 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .header-btn:active {
+            background: var(--gray-200);
+            transform: scale(0.95);
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: var(--gray-100);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .user-badge .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: none;
+            color: var(--gray-400);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item .icon {
+            font-size: 24px;
+        }
+
+        .nav-item .label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* ========== PAGES ========== */
+        .page {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== DASHBOARD ========== */
+        .dashboard-header {
+            margin-bottom: 24px;
+        }
+
+        .dashboard-header h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .dashboard-header p {
+            color: var(--gray-500);
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-100);
+        }
+
+        .stat-card .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .stat-card .stat-label {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .stat-card.primary .stat-icon { background: #dbeafe; }
+        .stat-card.success .stat-icon { background: #dcfce7; }
+        .stat-card.warning .stat-icon { background: #fef3c7; }
+        .stat-card.danger .stat-icon { background: #fee2e2; }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-title a {
+            font-size: 13px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Recent Audits */
+        .audit-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .audit-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-100);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .audit-card:active {
+            transform: scale(0.98);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .audit-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .audit-card-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--gray-800);
+        }
+
+        .audit-card-subtitle {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-badge.completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-badge.draft {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .audit-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .audit-meta {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .pass-rate {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .pass-rate .rate-bar {
+            width: 60px;
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .pass-rate .rate-bar .fill {
+            height: 100%;
+            background: var(--success);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* ========== AUDIT FORM ========== */
+        .form-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-100);
+        }
+
+        .form-section-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--gray-500);
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        select.form-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .toggle-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 32px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gray-300);
+            border-radius: 32px;
+            transition: 0.3s;
+        }
+
+        .toggle-slider:before {
+            content: "";
+            position: absolute;
+            height: 24px;
+            width: 24px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background: var(--primary);
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(28px);
+        }
+
+        .toggle-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            min-width: 80px;
+        }
+
+        /* ========== CHECKLIST PAGE ========== */
+        .checklist-container {
+            padding: 0;
+        }
+
+        .category-section {
+            margin-bottom: 16px;
+        }
+
+        .category-header {
+            background: var(--gray-100);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .category-header.collapsed {
+            border-radius: 12px;
+        }
+
+        .category-header:active {
+            background: var(--gray-200);
+        }
+
+        .category-title {
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-title .icon {
+            font-size: 20px;
+        }
+
+        .category-progress {
+            font-size: 13px;
+            color: var(--gray-500);
+            font-weight: 600;
+        }
+
+        .category-items {
+            background: white;
+            border-radius: 0 0 12px 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .checklist-item {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-100);
+            transition: all 0.2s;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .checklist-item-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-800);
+            flex: 1;
+            padding-right: 12px;
+        }
+
+        .status-toggle {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .status-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 3px solid var(--gray-200);
+            background: white;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .status-btn.pass {
+            border-color: var(--success);
+            background: #dcfce7;
+        }
+
+        .status-btn.fail {
+            border-color: var(--danger);
+            background: #fee2e2;
+        }
+
+        .status-btn:active {
+            transform: scale(0.9);
+        }
+
+        .checklist-item-note {
+            margin-top: 12px;
+        }
+
+        .note-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .note-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .note-input.required {
+            border-color: var(--danger);
+            background: #fef2f2;
+        }
+
+        .note-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-500);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .note-label .required-mark {
+            color: var(--danger);
+        }
+
+        /* Photos */
+        .photo-section {
+            margin-top: 16px;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .photo-thumb {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            background: var(--gray-100);
+            cursor: pointer;
+        }
+
+        .photo-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-thumb .remove-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .photo-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px dashed var(--gray-300);
+            border-radius: 10px;
+            background: var(--gray-50);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+            color: var(--gray-600);
+            font-weight: 600;
+        }
+
+        .photo-btn:active {
+            background: var(--gray-100);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .photo-btn .icon {
+            font-size: 24px;
+        }
+
+        /* Hidden file input */
+        .hidden-input {
+            display: none;
+        }
+
+        /* ========== HISTORY PAGE ========== */
+        .history-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .filter-chip {
+            padding: 10px 18px;
+            border-radius: 20px;
+            border: 2px solid var(--gray-200);
+            background: white;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-600);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-chip:active {
+            transform: scale(0.95);
+        }
+
+        .tenant-history-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-100);
+        }
+
+        .tenant-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .tenant-name {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .tenant-type {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .tenant-type.gas {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .tenant-type.non-gas {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .history-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: var(--gray-50);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .timeline-item:active {
+            background: var(--gray-100);
+            transform: scale(0.98);
+        }
+
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        .timeline-dot.pass { background: var(--success); }
+        .timeline-dot.fail { background: var(--danger); }
+        .timeline-dot.mixed { background: var(--warning); }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-date {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-700);
+        }
+
+        .timeline-pic {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+
+        .timeline-result {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .result-badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .result-badge.good {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .result-badge.bad {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* ========== ADMIN PANEL ========== */
+        .admin-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .admin-table th {
+            font-weight: 700;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .action-btn.edit {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
+        .action-btn.delete {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gray-100);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Photo Viewer */
+        .photo-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .photo-viewer.active {
+            display: flex;
+        }
+
+        .photo-viewer img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+        }
+
+        .photo-viewer .close-viewer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .toast {
+            padding: 14px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: var(--shadow-lg);
+            animation: toastIn 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+        .toast.info { background: var(--primary); }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state .icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: var(--gray-400);
+        }
+
+        /* Progress Bar */
+        .overall-progress {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .progress-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gray-700);
+        }
+
+        .progress-value {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Submit Button Fixed */
+        .submit-bar {
+            position: fixed;
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 16px 20px;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            gap: 12px;
+            z-index: 50;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        }
+
+        .submit-bar .btn {
+            flex: 1;
+        }
+
+        /* Scrollbar hide */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 4000;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Install Prompt */
+        .install-prompt {
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-lg);
+            z-index: 500;
+            display: none;
+            border: 2px solid var(--primary);
+        }
+
+        .install-prompt.active {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .install-prompt h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .install-prompt p {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-bottom: 12px;
+        }
+
+        .install-prompt .btn {
+            margin-top: 8px;
+        }
+
+        .install-steps {
+            background: var(--gray-50);
+            border-radius: 10px;
+            padding: 12px;
+            margin: 12px 0;
+        }
+
+        .install-steps li {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin: 6px 0;
+            padding-left: 8px;
+        }
+    
+        /* ========== EXPORT FEATURE ========== */
+        .export-menu {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: var(--shadow-lg);
+            z-index: 200;
+            display: none;
+            min-width: 200px;
+        }
+
+        .export-menu.active {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        .export-btn {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: var(--gray-50);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            transition: all 0.2s;
+        }
+
+        .export-btn:last-child {
+            margin-bottom: 0;
+        }
+
+        .export-btn:hover {
+            background: var(--gray-100);
+        }
+
+        .export-btn:active {
+            transform: scale(0.98);
+        }
+
+        .fab-button {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            z-index: 150;
+            transition: all 0.2s;
+        }
+
+        .fab-button:active {
+            transform: scale(0.9);
+        }
+
+        /* ========== OFFLINE SYNC ========== */
+        .sync-status {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 14px 18px;
+            box-shadow: var(--shadow-md);
+            z-index: 90;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid var(--warning);
+        }
+
+        .sync-status.active {
+            display: flex;
+            animation: slideDown 0.3s ease;
+        }
+
+        .sync-status.online {
+            border-left-color: var(--success);
+        }
+
+        .sync-status.offline {
+            border-left-color: var(--danger);
+        }
+
+        .sync-status.syncing {
+            border-left-color: var(--warning);
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .sync-icon {
+            font-size: 20px;
+        }
+
+        .sync-text {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .sync-action {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* ========== PUSH NOTIFICATION ========== */
+        .notification-permission {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-lg);
+            z-index: 250;
+            display: none;
+            color: white;
+        }
+
+        .notification-permission.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .notification-permission h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification-permission p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .notification-actions .btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .btn-white {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-transparent {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        /* Notification Badge */
+        .nav-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        /* ========== TENANT HISTORY PREVIEW ========== */
+        .tenant-history-preview {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-100);
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tenant-history-preview.active {
+            display: block;
+        }
+
+        .tenant-history-preview .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .tenant-history-preview .preview-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tenant-history-preview .preview-subtitle {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+
+        .tenant-history-preview .history-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .tenant-history-preview .history-stat {
+            background: var(--gray-50);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .tenant-history-preview .history-stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .tenant-history-preview .history-stat-label {
+            font-size: 11px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .tenant-history-preview .trend-chart {
+            background: var(--gray-50);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .tenant-history-preview .trend-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-600);
+            margin-bottom: 12px;
+        }
+
+        .tenant-history-preview .trend-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 80px;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .tenant-history-preview .trend-bar-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tenant-history-preview .trend-bar {
+            width: 100%;
+            min-height: 4px;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease;
+            position: relative;
+        }
+
+        .tenant-history-preview .trend-bar.pass {
+            background: linear-gradient(to top, var(--success), #86efac);
+        }
+
+        .tenant-history-preview .trend-bar.fail {
+            background: linear-gradient(to top, var(--danger), #fca5a5);
+        }
+
+        .tenant-history-preview .trend-bar-label {
+            font-size: 10px;
+            color: var(--gray-500);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .tenant-history-preview .trend-bar-value {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--gray-700);
+        }
+
+        .tenant-history-preview .recent-audits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tenant-history-preview .recent-audit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--gray-50);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tenant-history-preview .recent-audit-item:hover {
+            background: var(--gray-100);
+        }
+
+        .tenant-history-preview .recent-audit-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .tenant-history-preview .recent-audit-info {
+            flex: 1;
+        }
+
+        .tenant-history-preview .recent-audit-date {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-700);
+        }
+
+        .tenant-history-preview .recent-audit-pic {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .tenant-history-preview .recent-audit-rate {
+            font-size: 14px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+
+        .tenant-history-preview .recent-audit-rate.good {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .tenant-history-preview .recent-audit-rate.bad {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .tenant-history-preview .no-history {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray-500);
+        }
+
+        .tenant-history-preview .no-history .icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        .tenant-history-preview .no-history p {
+            font-size: 14px;
+        }
+
+        /* Tenant select with history indicator */
+        .tenant-select-wrapper {
+            position: relative;
+        }
+
+        .tenant-history-badge {
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            display: none;
+        }
+
+        .tenant-history-badge.active {
+            display: block;
+        }
+
+        /* ========== EXCEL REPORT ========== */
+        .excel-report-container {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+
+        .excel-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .excel-toolbar-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .excel-toolbar-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .excel-btn {
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .excel-btn.export {
+            background: #217346;
+            color: white;
+        }
+
+        .excel-btn.export:active {
+            background: #1a5c38;
+            transform: scale(0.98);
+        }
+
+        .excel-btn.filter {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .excel-table-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+        }
+
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 800px;
+        }
+
+        .excel-table thead {
+            background: #217346;
+            color: white;
+        }
+
+        .excel-table th {
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border-right: 1px solid rgba(255,255,255,0.1);
+            white-space: nowrap;
+        }
+
+        .excel-table th:last-child {
+            border-right: none;
+        }
+
+        .excel-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--gray-100);
+            border-right: 1px solid var(--gray-100);
+            vertical-align: top;
+        }
+
+        .excel-table td:last-child {
+            border-right: none;
+        }
+
+        .excel-table tbody tr:hover {
+            background: #f0f9ff;
+        }
+
+        .excel-table tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .excel-table tbody tr:nth-child(even):hover {
+            background: #f0f9ff;
+        }
+
+        .excel-cell-tenant {
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+
+        .excel-cell-type {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .excel-cell-type.gas {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .excel-cell-type.non-gas {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .excel-cell-date {
+            color: var(--gray-600);
+            font-size: 12px;
+        }
+
+        .excel-cell-pic {
+            color: var(--gray-600);
+            font-size: 12px;
+        }
+
+        .excel-cell-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .excel-cell-status.completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .excel-cell-status.draft {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .excel-cell-rate {
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .excel-cell-rate.good {
+            color: #166534;
+        }
+
+        .excel-cell-rate.warning {
+            color: #92400e;
+        }
+
+        .excel-cell-rate.bad {
+            color: #991b1b;
+        }
+
+        .excel-cell-items {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .excel-cell-fail {
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        .excel-cell-note {
+            font-size: 12px;
+            color: var(--gray-500);
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .excel-cell-note:hover {
+            white-space: normal;
+            overflow: visible;
+        }
+
+        .excel-progress-bar {
+            width: 80px;
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .excel-progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .excel-progress-fill.good {
+            background: var(--success);
+        }
+
+        .excel-progress-fill.warning {
+            background: var(--warning);
+        }
+
+        .excel-progress-fill.bad {
+            background: var(--danger);
+        }
+
+        .excel-summary-row {
+            background: #f3f4f6 !important;
+            font-weight: 700;
+        }
+
+        .excel-summary-row td {
+            border-top: 2px solid var(--gray-300);
+            color: var(--gray-800);
+        }
+
+        .excel-filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .excel-filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .excel-filter-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-500);
+        }
+
+        .excel-filter-input {
+            padding: 10px 14px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--gray-50);
+            min-width: 150px;
+        }
+
+        .excel-filter-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .excel-empty-report {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .excel-empty-report .icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .excel-empty-report h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+
+        .excel-empty-report p {
+            font-size: 14px;
+            color: var(--gray-400);
+        }
+
+        .excel-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .excel-badge.fail {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .excel-badge.pass {
+            background: #dcfce7;
+            color: #166534;
+        }
+</style>
+
+    <!-- CDN Libraries for Export and Offline -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p style="color: var(--gray-600); font-weight: 600;">Memuat...</p>
+    </div>
+
+    <!-- Photo Viewer -->
+    <div class="photo-viewer" id="photoViewer" onclick="closePhotoViewer()">
+        <button class="close-viewer">&times;</button>
+        <img id="viewerImage" src="" alt="Photo">
+    </div>
+
+    <!-- Install Prompt -->
+    <div class="install-prompt" id="installPrompt">
+        <h4>📱 Install Aplikasi</h4>
+        <p>Tambahkan ke Home Screen untuk akses lebih cepat</p>
+        <div class="install-steps" id="installSteps">
+            <!-- Dynamic content based on platform -->
+        </div>
+        <button class="btn btn-secondary" onclick="dismissInstall()" style="width: 100%;">Nanti Saja</button>
+    </div>
+
+    <!-- ========== LOGIN PAGE ========== -->
+    <div class="login-container" id="loginPage">
+        <div class="login-card">
+            <div class="login-logo">
+                <div class="icon">📋</div>
+                <h1>Hygiene Audit</h1>
+                <p>Login untuk memulai audit</p>
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="loginUsername" placeholder="Masukkan username" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="loginPassword" placeholder="Masukkan password" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <span>🔐</span> Login
+                </button>
+            </form>
+
+            <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--gray-400);">
+                Hubungi admin untuk pembuatan akun
+            </p>
+        </div>
+    </div>
+
+    <!-- ========== MAIN APP ========== -->
+    <div class="app-container" id="appContainer">
+
+        <!-- App Header -->
+        <div class="app-header" id="appHeader">
+            <h1 id="pageTitle">Dashboard</h1>
+            <div class="header-actions">
+                <div class="user-badge" id="userBadge">
+                    <div class="avatar" id="userAvatar">A</div>
+                    <span id="userName">Admin</span>
+                </div>
+                <button class="header-btn" onclick="logout()" title="Logout">🚪</button>
+            </div>
+        </div>
+
+        <!-- ========== DASHBOARD PAGE ========== -->
+        <div class="page active" id="pageDashboard">
+            <div class="dashboard-header">
+                <h2>Selamat Datang, <span id="dashboardUserName">Admin</span>! 👋</h2>
+                <p id="dashboardDate">Senin, 15 Mei 2026</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value" id="statTotal">0</div>
+                    <div class="stat-label">Total Audit</div>
+                </div>
+                <div class="stat-card success">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-value" id="statCompleted">0</div>
+                    <div class="stat-label">Selesai</div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-value" id="statDraft">0</div>
+                    <div class="stat-label">Draft</div>
+                </div>
+                <div class="stat-card danger">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-value" id="statFail">0</div>
+                    <div class="stat-label">Item Fail</div>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <span>Audit Terbaru</span>
+                <a href="#" onclick="navigateTo('newAudit')">+ Audit Baru</a>
+            </div>
+
+            <div class="audit-list" id="recentAudits">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+
+        <!-- ========== NEW AUDIT PAGE ========== -->
+        <div class="page" id="pageNewAudit">
+            <div class="form-section">
+                <div class="form-section-title">Informasi Audit</div>
+
+                <div class="form-group">
+                    <label class="form-label">Tanggal Audit</label>
+                    <input type="date" class="form-input" id="auditDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nama Tenant</label>
+                    <div class="tenant-select-wrapper">
+                        <select class="form-input" id="auditTenant" required>
+                            <option value="">Pilih Tenant</option>
+                        </select>
+                        <span class="tenant-history-badge" id="tenantHistoryBadge">0 audit</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">PIC (Person In Charge)</label>
+                    <select class="form-input" id="auditPIC" required>
+                        <option value="">Pilih PIC</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <div class="toggle-group">
+                        <span class="toggle-label">Tenant Menggunakan Gas?</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="auditGas" onchange="updateGasLabel()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span class="toggle-value" id="gasLabel">Non-Gas</span>
+                    </div>
+                </div>
+            </div>
+
+            
+        <!-- Tenant History Preview (shows after tenant selection) -->
+        <div class="tenant-history-preview" id="tenantHistoryPreview">
+            <div class="preview-header">
+                <div>
+                    <div class="preview-title">
+                        <span>📜</span>
+                        <span>Riwayat Audit Tenant</span>
+                    </div>
+                    <div class="preview-subtitle" id="previewTenantSubtitle">3 audit ditemukan</div>
+                </div>
+                <span class="tenant-type" id="previewTenantType">🔥 Gas</span>
+            </div>
+
+            <div class="history-stats" id="previewHistoryStats">
+                <div class="history-stat">
+                    <div class="history-stat-value" id="previewTotalAudits">3</div>
+                    <div class="history-stat-label">Total Audit</div>
+                </div>
+                <div class="history-stat">
+                    <div class="history-stat-value" id="previewAvgPass">85%</div>
+                    <div class="history-stat-label">Rata-rata Pass</div>
+                </div>
+                <div class="history-stat">
+                    <div class="history-stat-value" id="previewLastAudit">10 hari</div>
+                    <div class="history-stat-label">Audit Terakhir</div>
+                </div>
+            </div>
+
+            <div class="trend-chart">
+                <div class="trend-title">📊 Trend Pass Rate (6 Audit Terakhir)</div>
+                <div class="trend-bars" id="previewTrendBars">
+                    <!-- Dynamic trend bars -->
+                </div>
+            </div>
+
+            <div class="recent-audits-list" id="previewRecentAudits">
+                <!-- Dynamic recent audit items -->
+            </div>
+        </div>
+
+            <button class="btn btn-primary" onclick="startAudit()" style="margin-bottom: 100px;">
+                <span>🚀</span> Mulai Audit
+            </button>
+        </div>
+
+        <!-- ========== CHECKLIST PAGE ========== -->
+        <div class="page checklist-container" id="pageChecklist">
+            <div class="overall-progress" id="overallProgress">
+                <div class="progress-header">
+                    <span class="progress-title">Progress Audit</span>
+                    <span class="progress-value" id="progressText">0/0</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="checklistContainer">
+                <!-- Dynamic checklist categories -->
+            </div>
+
+            <!-- Submit Bar -->
+            <div class="submit-bar">
+                <button class="btn btn-secondary" onclick="saveDraft()">💾 Simpan Draft</button>
+                <button class="btn btn-success" onclick="submitAudit()">✅ Selesai Audit</button>
+            </div>
+        </div>
+
+        <!-- ========== HISTORY PAGE ========== -->
+        <div class="page" id="pageHistory">
+            <div class="history-filters">
+                <button class="filter-chip active" onclick="filterHistory('all')">Semua</button>
+                <button class="filter-chip" onclick="filterHistory('completed')">Selesai</button>
+                <button class="filter-chip" onclick="filterHistory('draft')">Draft</button>
+            </div>
+
+            <div id="historyContainer">
+                <!-- Dynamic history -->
+            </div>
+        </div>
+
+        <!-- ========== ADMIN PAGE ========== -->
+        <div class="page" id="pageAdmin">
+            <div class="admin-section">
+                <div class="section-title">
+                    <span>Manajemen User</span>
+                    <button class="btn btn-sm btn-primary" onclick="showUserModal()">+ Tambah</button>
+                </div>
+
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Nama</th>
+                            <th>Role</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <!-- Dynamic -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="admin-section">
+                <div class="section-title">
+                    <span>Template Checklist</span>
+                    <button class="btn btn-sm btn-primary" onclick="showTemplateModal()">+ Tambah</button>
+                </div>
+
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Kategori</th>
+                            <th>Kegiatan</th>
+                            <th>Gas Only</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="templatesTable">
+                        <!-- Dynamic -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="admin-section">
+                <div class="section-title">
+                    <span>Master Tenant</span>
+                    <button class="btn btn-sm btn-primary" onclick="showTenantModal()">+ Tambah</button>
+                </div>
+
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Tenant</th>
+                            <th>Tipe</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tenantsTable">
+                        <!-- Dynamic -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========== AUDIT DETAIL PAGE ========== -->
+        <div class="page" id="pageAuditDetail">
+            <div id="auditDetailContent">
+                <!-- Dynamic detail -->
+            </div>
+        </div>
+
+        
+            <!-- Excel Report Section -->
+            <div class="admin-section">
+                <div class="section-title">
+                    <span>📊 Reporting Audit (Excel View)</span>
+                    <button class="btn btn-sm btn-primary" onclick="generateExcelReport()">🔄 Refresh</button>
+                </div>
+
+                <div class="excel-filter-bar">
+                    <div class="excel-filter-group">
+                        <label class="excel-filter-label">Filter Status</label>
+                        <select class="excel-filter-input" id="reportFilterStatus" onchange="filterExcelReport()">
+                            <option value="all">Semua Status</option>
+                            <option value="COMPLETED">Selesai</option>
+                            <option value="DRAFT">Draft</option>
+                        </select>
+                    </div>
+                    <div class="excel-filter-group">
+                        <label class="excel-filter-label">Filter Type</label>
+                        <select class="excel-filter-input" id="reportFilterType" onchange="filterExcelReport()">
+                            <option value="all">Semua Type</option>
+                            <option value="gas">Gas</option>
+                            <option value="non-gas">Non-Gas</option>
+                        </select>
+                    </div>
+                    <div class="excel-filter-group">
+                        <label class="excel-filter-label">Cari Tenant</label>
+                        <input type="text" class="excel-filter-input" id="reportSearchTenant" placeholder="Nama tenant..." onkeyup="filterExcelReport()">
+                    </div>
+                </div>
+
+                <div class="excel-report-container" id="excelReportContainer">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav" id="bottomNav">
+            <button class="nav-item active" onclick="navigateTo('dashboard')">
+                <span class="icon">📊</span>
+                <span class="label">Dashboard</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('newAudit')">
+                <span class="icon">➕</span>
+                <span class="label">Audit</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('history')">
+                <span class="icon">📜</span>
+                <span class="label">History</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('admin')" id="navAdmin" style="display:none;">
+                <span class="icon">⚙️</span>
+                <span class="label">Admin</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== MODALS ========== -->
+
+    <!-- User Modal -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Tambah User</h3>
+                <button class="modal-close" onclick="closeModal('userModal')">&times;</button>
+            </div>
+            <form onsubmit="saveUser(event)">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="newUsername" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap</label>
+                    <input type="text" class="form-input" id="newFullName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-input" id="newRole" required>
+                        <option value="auditor">Auditor</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Template Modal -->
+    <div class="modal-overlay" id="templateModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Tambah Template Checklist</h3>
+                <button class="modal-close" onclick="closeModal('templateModal')">&times;</button>
+            </div>
+            <form onsubmit="saveTemplate(event)">
+                <div class="form-group">
+                    <label class="form-label">Kategori</label>
+                    <input type="text" class="form-input" id="newCategory" placeholder="Contoh: LIFE SAFETY" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nama Kegiatan</label>
+                    <input type="text" class="form-input" id="newActivity" placeholder="Contoh: Kondisi Pipa Gas" required>
+                </div>
+                <div class="form-group">
+                    <div class="toggle-group">
+                        <span class="toggle-label">Hanya untuk Tenant Gas?</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="newGasOnly">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tenant Modal -->
+    <div class="modal-overlay" id="tenantModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Tambah Tenant</h3>
+                <button class="modal-close" onclick="closeModal('tenantModal')">&times;</button>
+            </div>
+            <form onsubmit="saveTenant(event)">
+                <div class="form-group">
+                    <label class="form-label">Nama Tenant</label>
+                    <input type="text" class="form-input" id="newTenantName" required>
+                </div>
+                <div class="form-group">
+                    <div class="toggle-group">
+                        <span class="toggle-label">Menggunakan Gas?</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="newTenantGas">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+
+    
+    <script>
+        // ========== DATA STORE (Simulating Backend) ==========
+        const Store = {
+            users: [
+                { id: 1, username: 'admin', password: 'admin123', name: 'Administrator', role: 'admin' },
+                { id: 2, username: 'auditor1', password: 'audit123', name: 'Budi Santoso', role: 'auditor' },
+                { id: 3, username: 'auditor2', password: 'audit123', name: 'Dewi Kusuma', role: 'auditor' }
+            ],
+            tenants: [
+                { id: 1, name: 'Teras by Plataran', usesGas: true },
+                { id: 2, name: 'Starbucks Coffee', usesGas: true },
+                { id: 3, name: 'Gramedia Bookstore', usesGas: false },
+                { id: 4, name: 'H&M Fashion', usesGas: false },
+                { id: 5, name: 'Sushi Tei', usesGas: true }
+            ],
+            checklistTemplates: [
+                { id: 1, category: 'LIFE SAFETY', name: 'Kondisi Pipa Gas di Area Tenant', requiresGas: true },
+                { id: 2, category: 'LIFE SAFETY', name: 'Interkoneksi Gas dengan Exhaust Fan', requiresGas: true },
+                { id: 3, category: 'LIFE SAFETY', name: 'Sensor Kebocoran Gas', requiresGas: true },
+                { id: 4, category: 'LIFE SAFETY', name: 'Penutup Otomatis (Solenoid Valve)', requiresGas: true },
+                { id: 5, category: 'LIFE SAFETY', name: 'Alarm Warning System', requiresGas: false },
+                { id: 6, category: 'LIFE SAFETY', name: 'Sprinkler, Smoke/Heat Detector', requiresGas: false },
+                { id: 7, category: 'LIFE SAFETY', name: 'Alat Pemadam Api Ringan (APAR)', requiresGas: false },
+                { id: 8, category: 'LIFE SAFETY', name: 'Fire Suppression System', requiresGas: false },
+                { id: 9, category: 'LIFE SAFETY', name: 'Lampu Emergency', requiresGas: false },
+                { id: 10, category: 'LIFE SAFETY', name: 'Signage Exit', requiresGas: false },
+                { id: 11, category: 'LIFE SAFETY', name: 'Kotak P3K/First Aid', requiresGas: false },
+                { id: 12, category: 'SIRKULASI UDARA', name: 'Ducting & Filter Hood', requiresGas: true },
+                { id: 13, category: 'INSTALASI PIPA AIR BERSIH', name: 'Pipa Supply', requiresGas: false },
+                { id: 14, category: 'SALURAN PEMBUANGAN', name: 'Gutter & Floor Drain', requiresGas: false },
+                { id: 15, category: 'SALURAN PEMBUANGAN', name: 'Grease Trap', requiresGas: true },
+                { id: 16, category: 'SALURAN PEMBUANGAN', name: 'Pemilahan Minyak Bekas', requiresGas: true },
+                { id: 17, category: 'INSTALASI LISTRIK', name: 'Instalasi Listrik', requiresGas: false },
+                { id: 18, category: 'INSTALASI LISTRIK', name: 'Panel Listrik', requiresGas: false },
+                { id: 19, category: 'INSTALASI LISTRIK', name: 'Penerangan Area Kitchen', requiresGas: true },
+                { id: 20, category: 'KEBERSIHAN AREA', name: 'Kebersihan', requiresGas: false },
+                { id: 21, category: 'KEBERSIHAN AREA', name: 'Kerapihan', requiresGas: false },
+                { id: 22, category: 'KEBERSIHAN AREA', name: 'Sampah', requiresGas: false },
+                { id: 23, category: 'KEBERSIHAN AREA', name: 'General Cleaning', requiresGas: false },
+                { id: 24, category: 'PEST CONTROL', name: 'Vendor Pest Control', requiresGas: false },
+                { id: 25, category: 'PEST CONTROL', name: 'Tidak Ada Celah (Dinding/Ceiling)', requiresGas: false },
+                { id: 26, category: 'PERSONAL HYGIENE', name: 'Personal Hygiene SOP', requiresGas: false },
+                { id: 27, category: 'SERTIFIKASI', name: 'Sertifikasi Hygiene', requiresGas: false }
+            ],
+            audits: [],
+            currentUser: null,
+            currentAudit: null
+        };
+
+        // ========== INDEXEDDB OFFLINE STORAGE ==========
+        const DB_NAME = 'HygieneAuditDB';
+        const DB_VERSION = 1;
+        let db = null;
+
+        async function initIndexedDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+
+                request.onupgradeneeded = (event) => {
+                    const database = event.target.result;
+
+                    // Store for audits
+                    if (!database.objectStoreNames.contains('audits')) {
+                        const auditStore = database.createObjectStore('audits', { keyPath: 'id' });
+                        auditStore.createIndex('tenantId', 'tenantId', { unique: false });
+                        auditStore.createIndex('status', 'status', { unique: false });
+                        auditStore.createIndex('date', 'date', { unique: false });
+                    }
+
+                    // Store for sync queue
+                    if (!database.objectStoreNames.contains('syncQueue')) {
+                        const syncStore = database.createObjectStore('syncQueue', { keyPath: 'id', autoIncrement: true });
+                        syncStore.createIndex('timestamp', 'timestamp', { unique: false });
+                        syncStore.createIndex('synced', 'synced', { unique: false });
+                    }
+
+                    // Store for offline photos
+                    if (!database.objectStoreNames.contains('photos')) {
+                        database.createObjectStore('photos', { keyPath: 'id' });
+                    }
+                };
+            });
+        }
+
+        async function saveAuditOffline(audit) {
+            if (!db) await initIndexedDB();
+
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['audits'], 'readwrite');
+                const store = transaction.objectStore('audits');
+                const request = store.put(audit);
+
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function getAuditsOffline() {
+            if (!db) await initIndexedDB();
+
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['audits'], 'readonly');
+                const store = transaction.objectStore('audits');
+                const request = store.getAll();
+
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function addToSyncQueue(action, data) {
+            if (!db) await initIndexedDB();
+
+            const syncItem = {
+                action: action,
+                data: data,
+                timestamp: Date.now(),
+                synced: false
+            };
+
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['syncQueue'], 'readwrite');
+                const store = transaction.objectStore('syncQueue');
+                const request = store.add(syncItem);
+
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function syncData() {
+            if (!db) await initIndexedDB();
+            if (!navigator.onLine) {
+                showToast('Tidak ada koneksi internet. Sinkronisasi ditunda.', 'info');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                // Get unsynced items
+                const unsynced = await new Promise((resolve, reject) => {
+                    const transaction = db.transaction(['syncQueue'], 'readonly');
+                    const store = transaction.objectStore('syncQueue');
+                    const index = store.index('synced');
+                    const request = index.getAll(false);
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+
+                if (unsynced.length === 0) {
+                    showToast('Semua data sudah tersinkronisasi!');
+                    hideLoading();
+                    return;
+                }
+
+                // Simulate API sync (replace with actual API calls)
+                for (const item of unsynced) {
+                    // Here you would call your .NET 8 API
+                    // await fetch('/api/sync', { method: 'POST', body: JSON.stringify(item) });
+
+                    // Mark as synced
+                    await new Promise((resolve, reject) => {
+                        const transaction = db.transaction(['syncQueue'], 'readwrite');
+                        const store = transaction.objectStore('syncQueue');
+                        item.synced = true;
+                        const request = store.put(item);
+
+                        request.onsuccess = () => resolve();
+                        request.onerror = () => reject(request.error);
+                    });
+                }
+
+                showToast(`${unsynced.length} item berhasil disinkronkan!`);
+                updateSyncStatus('online');
+            } catch (error) {
+                showToast('Gagal sinkronisasi: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // ========== NETWORK STATUS ==========
+        function updateSyncStatus(status) {
+            const statusEl = document.getElementById('syncStatus');
+            const textEl = document.getElementById('syncText');
+
+            statusEl.className = 'sync-status active ' + status;
+
+            if (status === 'online') {
+                textEl.textContent = 'Online';
+                setTimeout(() => statusEl.classList.remove('active'), 3000);
+            } else if (status === 'offline') {
+                textEl.textContent = 'Offline - Menyimpan lokal';
+            } else if (status === 'syncing') {
+                textEl.textContent = 'Sinkronisasi...';
+            }
+        }
+
+        window.addEventListener('online', () => {
+            updateSyncStatus('online');
+            showToast('Koneksi internet tersedia!', 'success');
+            syncData(); // Auto sync when back online
+        });
+
+        window.addEventListener('offline', () => {
+            updateSyncStatus('offline');
+            showToast('Koneksi internet terputus. Data disimpan lokal.', 'error');
+        });
+
+        // ========== PUSH NOTIFICATION ==========
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                showToast('Browser tidak mendukung notifikasi', 'error');
+                return;
+            }
+
+            // Check if iOS and not standalone
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                                window.navigator.standalone === true;
+
+            if (isIOS && !isStandalone) {
+                showToast('Silakan install aplikasi terlebih dahulu (Add to Home Screen)', 'info');
+                showInstallPrompt();
+                return;
+            }
+
+            const permission = await Notification.requestPermission();
+
+            if (permission === 'granted') {
+                document.getElementById('notifPermission').classList.remove('active');
+                showToast('Notifikasi diaktifkan!');
+
+                // Register service worker for push
+                if ('serviceWorker' in navigator) {
+                    const registration = await navigator.serviceWorker.ready;
+
+                    // Subscribe to push (requires VAPID keys from server)
+                    try {
+                        const subscription = await registration.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            applicationServerKey: urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY')
+                        });
+
+                        // Send subscription to server
+                        // await fetch('/api/push/subscribe', { method: 'POST', body: JSON.stringify(subscription) });
+
+                        console.log('Push subscription:', subscription);
+                    } catch (e) {
+                        console.log('Push subscription failed:', e);
+                    }
+                }
+            } else {
+                showToast('Izin notifikasi ditolak', 'error');
+            }
+        }
+
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding)
+                .replace(/\-/g, '+')
+                .replace(/_/g, '/');
+
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+
+        function showNotification(title, options = {}) {
+            if (Notification.permission === 'granted') {
+                navigator.serviceWorker.ready.then(registration => {
+                    registration.showNotification(title, {
+                        body: options.body || '',
+                        icon: '/icon-192x192.png',
+                        badge: '/badge-72x72.png',
+                        tag: options.tag || 'default',
+                        requireInteraction: options.requireInteraction || false,
+                        actions: options.actions || []
+                    });
+                });
+            }
+        }
+
+        // ========== EXPORT FUNCTIONS ==========
+        function toggleExportMenu() {
+            const menu = document.getElementById('exportMenu');
+            menu.classList.toggle('active');
+        }
+
+        async function exportToPDF() {
+            const audit = Store.currentAudit || Store.audits[Store.audits.length - 1];
+            if (!audit) {
+                showToast('Tidak ada data audit untuk diexport!', 'error');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Header
+                doc.setFontSize(20);
+                doc.text('HYGIENE AUDIT REPORT', 105, 20, { align: 'center' });
+
+                doc.setFontSize(12);
+                const tenant = Store.tenants.find(t => t.id === audit.tenantId);
+                doc.text(`Tenant: ${tenant?.name || 'Unknown'}`, 20, 40);
+                doc.text(`Tanggal: ${audit.date}`, 20, 50);
+                doc.text(`PIC: ${audit.picName}`, 20, 60);
+                doc.text(`Status: ${audit.status}`, 20, 70);
+
+                // Summary
+                const totalItems = audit.items?.length || 0;
+                const passItems = audit.items?.filter(i => i.status === 'PASS').length || 0;
+                const failItems = audit.items?.filter(i => i.status === 'FAIL').length || 0;
+
+                doc.text(`Total Items: ${totalItems}`, 20, 85);
+                doc.text(`Pass: ${passItems}`, 20, 95);
+                doc.text(`Fail: ${failItems}`, 20, 105);
+
+                // Table
+                const tableData = audit.items?.map(item => [
+                    item.name,
+                    item.status === 'PASS' ? '✓ PASS' : item.status === 'FAIL' ? '✗ FAIL' : '-',
+                    item.note || '-'
+                ]) || [];
+
+                doc.autoTable({
+                    startY: 120,
+                    head: [['Item', 'Status', 'Catatan']],
+                    body: tableData,
+                    theme: 'grid',
+                    headStyles: {
+                        fillColor: [37, 99, 235],
+                        textColor: 255,
+                        fontStyle: 'bold'
+                    },
+                    alternateRowStyles: {
+                        fillColor: [249, 250, 251]
+                    },
+                    columnStyles: {
+                        0: { cellWidth: 80 },
+                        1: { cellWidth: 30 },
+                        2: { cellWidth: 'auto' }
+                    }
+                });
+
+                // Save
+                doc.save(`Audit_${tenant?.name || 'Unknown'}_${audit.date}.pdf`);
+                showToast('PDF berhasil diexport!');
+            } catch (error) {
+                showToast('Gagal export PDF: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+                document.getElementById('exportMenu').classList.remove('active');
+            }
+        }
+
+        async function exportToExcel() {
+            const audit = Store.currentAudit || Store.audits[Store.audits.length - 1];
+            if (!audit) {
+                showToast('Tidak ada data audit untuk diexport!', 'error');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const tenant = Store.tenants.find(t => t.id === audit.tenantId);
+
+                // Prepare data
+                const auditData = audit.items?.map((item, index) => ({
+                    'No': index + 1,
+                    'Kategori': item.category,
+                    'Item Pemeriksaan': item.name,
+                    'Status': item.status || 'Belum Dicek',
+                    'Catatan': item.note || '-',
+                    'Jumlah Foto': item.photos?.length || 0
+                })) || [];
+
+                // Create workbook
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.json_to_sheet(auditData);
+
+                // Add header info
+                XLSX.utils.sheet_add_aoa(ws, [
+                    ['HYGIENE AUDIT REPORT'],
+                    ['Tenant:', tenant?.name || 'Unknown'],
+                    ['Tanggal:', audit.date],
+                    ['PIC:', audit.picName],
+                    ['Status:', audit.status],
+                    []
+                ], { origin: 'A1' });
+
+                // Adjust column widths
+                ws['!cols'] = [
+                    { wch: 5 },   // No
+                    { wch: 20 },  // Kategori
+                    { wch: 40 },  // Item
+                    { wch: 15 },  // Status
+                    { wch: 30 },  // Catatan
+                    { wch: 12 }   // Foto
+                ];
+
+                XLSX.utils.book_append_sheet(wb, ws, 'Audit Report');
+
+                // Save
+                XLSX.writeFile(wb, `Audit_${tenant?.name || 'Unknown'}_${audit.date}.xlsx`);
+                showToast('Excel berhasil diexport!');
+            } catch (error) {
+                showToast('Gagal export Excel: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+                document.getElementById('exportMenu').classList.remove('active');
+            }
+        }
+
+        // ========== PWA INSTALL PROMPT ==========
+        let deferredPrompt = null;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        function showInstallPrompt() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                                window.navigator.standalone === true;
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isAndroid = /Android/.test(navigator.userAgent);
+            const promptShown = localStorage.getItem('installPromptShown');
+
+            if (isStandalone || promptShown) return;
+
+            const prompt = document.getElementById('installPrompt');
+            const steps = document.getElementById('installSteps');
+
+            if (isIOS) {
+                steps.innerHTML = `
+                    <ol style="padding-left: 20px;">
+                        <li>Buka Safari (browser bawaan iPhone)</li>
+                        <li>Tap tombol <strong>Share</strong> (kotak dengan panah ke atas)</li>
+                        <li>Scroll ke bawah, tap <strong>Add to Home Screen</strong></li>
+                        <li>Tap <strong>Add</strong> di pojok kanan atas</li>
+                    </ol>
+                `;
+            } else if (isAndroid) {
+                if (deferredPrompt) {
+                    steps.innerHTML = `<p style="text-align: center;">Tap tombol di bawah untuk install</p>`;
+                    const btn = document.createElement('button');
+                    btn.className = 'btn btn-primary';
+                    btn.innerHTML = '📲 Install Sekarang';
+                    btn.onclick = () => {
+                        deferredPrompt.prompt();
+                        deferredPrompt.userChoice.then((choice) => {
+                            if (choice.outcome === 'accepted') {
+                                localStorage.setItem('installPromptShown', 'true');
+                                showToast('Aplikasi berhasil diinstall!');
+                            }
+                            deferredPrompt = null;
+                            dismissInstall();
+                        });
+                    };
+                    steps.appendChild(btn);
+                } else {
+                    steps.innerHTML = `
+                        <ol style="padding-left: 20px;">
+                            <li>Tap tombol <strong>Menu</strong> (3 titik) di Chrome</li>
+                            <li>Pilih <strong>Add to Home Screen</strong></li>
+                            <li>Tap <strong>Install</strong></li>
+                        </ol>
+                    `;
+                }
+            } else {
+                // Desktop
+                steps.innerHTML = `
+                    <ol style="padding-left: 20px;">
+                        <li>Click icon <strong>Install</strong> di address bar Chrome/Edge</li>
+                        <li>Atau click Menu → Install this site as an app</li>
+                    </ol>
+                `;
+            }
+
+            prompt.classList.add('active');
+        }
+
+        function dismissInstall() {
+            document.getElementById('installPrompt').classList.remove('active');
+            localStorage.setItem('installPromptShown', 'true');
+        }
+
+        // ========== UTILITY FUNCTIONS ==========
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function showLoading() {
+            document.getElementById('loadingOverlay').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('id-ID', options);
+        }
+
+        function generateId(prefix) {
+            return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
+        }
+
+        // ========== AUTHENTICATION ==========
+        async function handleLogin(e) {
+            e.preventDefault();
+            showLoading();
+
+            
+        // ========== EXPORT FEATURES ==========
+        function toggleExportMenu() {
+            const menu = document.getElementById('exportMenu');
+            menu.classList.toggle('active');
+        }
+
+        function exportPDF() {
+            if (!Store.currentAudit && !Store.audits.length) {
+                showToast('Tidak ada data untuk export!', 'error');
+                return;
+            }
+
+            const audit = Store.currentAudit || Store.audits[Store.audits.length - 1];
+            const tenant = Store.tenants.find(t => t.id === audit.tenantId);
+
+            let htmlContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Audit Report - ${tenant?.name || 'Unknown'}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+                        .header { text-align: center; border-bottom: 3px solid #2563eb; padding-bottom: 20px; margin-bottom: 30px; }
+                        .header h1 { color: #2563eb; margin: 0; }
+                        .header p { color: #666; margin: 5px 0; }
+                        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; background: #f9fafb; padding: 20px; border-radius: 8px; }
+                        .info-item { display: flex; justify-content: space-between; }
+                        .info-label { font-weight: bold; color: #666; }
+                        .category { margin-bottom: 25px; }
+                        .category-title { background: #2563eb; color: white; padding: 10px 15px; font-weight: bold; border-radius: 5px; margin-bottom: 10px; }
+                        .item { border: 1px solid #e5e7eb; padding: 15px; margin-bottom: 8px; border-radius: 5px; }
+                        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+                        .item-name { font-weight: 600; }
+                        .status { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+                        .status.pass { background: #dcfce7; color: #166534; }
+                        .status.fail { background: #fee2e2; color: #991b1b; }
+                        .note { background: #f9fafb; padding: 10px; border-radius: 5px; font-size: 13px; color: #666; margin-top: 8px; }
+                        .summary { background: #f9fafb; padding: 20px; border-radius: 8px; margin-top: 30px; }
+                        .summary h3 { margin-top: 0; color: #2563eb; }
+                        .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; }
+                        .summary-item { padding: 15px; background: white; border-radius: 5px; }
+                        .summary-value { font-size: 24px; font-weight: bold; }
+                        .summary-label { font-size: 12px; color: #666; margin-top: 5px; }
+                        .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #999; font-size: 12px; }
+                        @media print {
+                            body { margin: 20px; }
+                            .no-print { display: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>📋 Hygiene Audit Report</h1>
+                        <p>${tenant?.name || 'Unknown Tenant'}</p>
+                        <p>${formatDate(audit.date)}</p>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">PIC:</span>
+                            <span>${audit.picName}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span>
+                            <span>${audit.status}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Type:</span>
+                            <span>${audit.isGas ? '🔥 Gas' : '⚡ Non-Gas'}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Total Items:</span>
+                            <span>${audit.items?.length || 0}</span>
+                        </div>
+                    </div>
+            `;
+
+            // Group by category
+            const categories = {};
+            audit.items?.forEach(item => {
+                if (!categories[item.category]) categories[item.category] = [];
+                categories[item.category].push(item);
+            });
+
+            for (const [category, items] of Object.entries(categories)) {
+                htmlContent += `
+                    <div class="category">
+                        <div class="category-title">${category}</div>
+                        ${items.map(item => `
+                            <div class="item">
+                                <div class="item-header">
+                                    <span class="item-name">${item.name}</span>
+                                    <span class="status ${item.status?.toLowerCase()}">${item.status || 'UNCHECKED'}</span>
+                                </div>
+                                ${item.note ? `<div class="note">📝 ${item.note}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            const passCount = audit.items?.filter(i => i.status === 'PASS').length || 0;
+            const failCount = audit.items?.filter(i => i.status === 'FAIL').length || 0;
+            const passRate = audit.items?.length > 0 ? Math.round((passCount / audit.items.length) * 100) : 0;
+
+            htmlContent += `
+                    <div class="summary">
+                        <h3>📊 Summary</h3>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="summary-value" style="color: #22c55e;">${passCount}</div>
+                                <div class="summary-label">Pass</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-value" style="color: #ef4444;">${failCount}</div>
+                                <div class="summary-label">Fail</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-value" style="color: #2563eb;">${passRate}%</div>
+                                <div class="summary-label">Pass Rate</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="footer">
+                        Generated by Hygiene Audit App | ${new Date().toLocaleString('id-ID')}
+                    </div>
+
+                    <div class="no-print" style="text-align: center; margin-top: 30px;">
+                        <button onclick="window.print()" style="padding: 12px 24px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px;">
+                            🖨️ Print / Save as PDF
+                        </button>
+                    </div>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Audit_${tenant?.name?.replace(/\s+/g, '_')}_${audit.date}.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            document.getElementById('exportMenu').classList.remove('active');
+            showToast('Report berhasil diexport! Buka file dan Print → Save as PDF');
+        }
+
+        function exportExcel() {
+            if (!Store.currentAudit && !Store.audits.length) {
+                showToast('Tidak ada data untuk export!', 'error');
+                return;
+            }
+
+            const audit = Store.currentAudit || Store.audits[Store.audits.length - 1];
+            const tenant = Store.tenants.find(t => t.id === audit.tenantId);
+
+            let csvContent = 'data:text/csv;charset=utf-8,﻿'; // BOM for Excel UTF-8
+            csvContent += 'Hygiene Audit Report\n';
+            csvContent += `Tenant,${tenant?.name || 'Unknown'}\n`;
+            csvContent += `Date,${audit.date}\n`;
+            csvContent += `PIC,${audit.picName}\n`;
+            csvContent += `Status,${audit.status}\n`;
+            csvContent += `Type,${audit.isGas ? 'Gas' : 'Non-Gas'}\n\n`;
+
+            csvContent += 'Category,Item,Status,Note\n';
+
+            audit.items?.forEach(item => {
+                const note = item.note ? item.note.replace(/,/g, ';').replace(/\n/g, ' ') : '';
+                csvContent += `"${item.category}","${item.name}","${item.status || 'UNCHECKED'}","${note}"\n`;
+            });
+
+            csvContent += `\nSummary\n`;
+            csvContent += `Total Items,${audit.items?.length || 0}\n`;
+            csvContent += `Pass,${audit.items?.filter(i => i.status === 'PASS').length || 0}\n`;
+            csvContent += `Fail,${audit.items?.filter(i => i.status === 'FAIL').length || 0}\n`;
+            csvContent += `Pass Rate,${audit.items?.length > 0 ? Math.round((audit.items.filter(i => i.status === 'PASS').length / audit.items.length) * 100) : 0}%\n`;
+
+            const encodedUri = encodeURI(csvContent);
+            const a = document.createElement('a');
+            a.href = encodedUri;
+            a.download = `Audit_${tenant?.name?.replace(/\s+/g, '_')}_${audit.date}.csv`;
+            a.click();
+
+            document.getElementById('exportMenu').classList.remove('active');
+            showToast('Excel (CSV) berhasil diexport!');
+        }
+
+        function shareAudit() {
+            if (!Store.currentAudit && !Store.audits.length) {
+                showToast('Tidak ada data untuk share!', 'error');
+                return;
+            }
+
+            const audit = Store.currentAudit || Store.audits[Store.audits.length - 1];
+            const tenant = Store.tenants.find(t => t.id === audit.tenantId);
+            const passRate = audit.items?.length > 0 ? Math.round((audit.items.filter(i => i.status === 'PASS').length / audit.items.length) * 100) : 0;
+
+            const shareText = `📋 Hygiene Audit Report\n\n🏢 ${tenant?.name || 'Unknown'}\n📅 ${formatDate(audit.date)}\n👤 PIC: ${audit.picName}\n\n✅ Pass Rate: ${passRate}%\n📊 Total: ${audit.items?.length || 0} items\n\nGenerated by Hygiene Audit App`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Hygiene Audit Report',
+                    text: shareText
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    showToast('Report disalin ke clipboard!');
+                });
+            }
+
+            document.getElementById('exportMenu').classList.remove('active');
+        }
+
+        // ========== OFFLINE SYNC ==========
+        const SyncManager = {
+            isOnline: navigator.onLine,
+            pendingSync: [],
+
+            init() {
+                window.addEventListener('online', () => this.handleOnline());
+                window.addEventListener('offline', () => this.handleOffline());
+                this.loadPendingSync();
+                this.updateUI();
+
+                // Auto-sync every 5 minutes if online
+                setInterval(() => {
+                    if (this.isOnline && this.pendingSync.length > 0) {
+                        this.sync();
+                    }
+                }, 300000);
+            },
+
+            handleOnline() {
+                this.isOnline = true;
+                this.updateUI();
+                showToast('🌐 Koneksi internet tersedia!', 'success');
+
+                if (this.pendingSync.length > 0) {
+                    setTimeout(() => this.sync(), 2000);
+                }
+            },
+
+            handleOffline() {
+                this.isOnline = false;
+                this.updateUI();
+                showToast('📴 Mode offline aktif. Data disimpan lokal.', 'info');
+            },
+
+            updateUI() {
+                const status = document.getElementById('syncStatus');
+                const icon = document.getElementById('syncIcon');
+                const text = document.getElementById('syncText');
+                const action = document.getElementById('syncAction');
+
+                if (!this.isOnline) {
+                    status.className = 'sync-status offline active';
+                    icon.textContent = '📴';
+                    text.textContent = `Offline • ${this.pendingSync.length} pending`;
+                    action.textContent = 'Queue';
+                    action.style.display = 'none';
+                } else if (this.pendingSync.length > 0) {
+                    status.className = 'sync-status syncing active';
+                    icon.textContent = '🔄';
+                    text.textContent = `${this.pendingSync.length} item menunggu sync`;
+                    action.textContent = 'Sync';
+                    action.style.display = 'block';
+                } else {
+                    status.className = 'sync-status online active';
+                    icon.textContent = '☁️';
+                    text.textContent = 'Tersinkronisasi';
+                    action.style.display = 'none';
+                    setTimeout(() => status.classList.remove('active'), 3000);
+                }
+            },
+
+            queueForSync(type, data) {
+                const item = {
+                    id: generateId('SYNC'),
+                    type: type,
+                    data: data,
+                    timestamp: new Date().toISOString(),
+                    retries: 0
+                };
+                this.pendingSync.push(item);
+                this.savePendingSync();
+                this.updateUI();
+
+                if (this.isOnline) {
+                    this.sync();
+                }
+            },
+
+            async sync() {
+                if (!this.isOnline || this.pendingSync.length === 0) return;
+
+                const status = document.getElementById('syncStatus');
+                const icon = document.getElementById('syncIcon');
+                icon.textContent = '⏳';
+
+                showLoading();
+
+                // Simulate API sync
+                for (let i = this.pendingSync.length - 1; i >= 0; i--) {
+                    const item = this.pendingSync[i];
+
+                    try {
+                        // Simulate API call
+                        await this.simulateApiCall(item);
+                        this.pendingSync.splice(i, 1);
+                    } catch (err) {
+                        item.retries++;
+                        if (item.retries >= 3) {
+                            showToast(`Gagal sync: ${item.type}`, 'error');
+                        }
+                    }
+                }
+
+                this.savePendingSync();
+                this.updateUI();
+                hideLoading();
+
+                if (this.pendingSync.length === 0) {
+                    showToast('✅ Semua data tersinkronisasi!');
+                }
+            },
+
+            simulateApiCall(item) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        // 90% success rate simulation
+                        if (Math.random() > 0.1) {
+                            resolve({ success: true });
+                        } else {
+                            reject(new Error('Network error'));
+                        }
+                    }, 1000);
+                });
+            },
+
+            savePendingSync() {
+                localStorage.setItem('pendingSync', JSON.stringify(this.pendingSync));
+            },
+
+            loadPendingSync() {
+                const saved = localStorage.getItem('pendingSync');
+                if (saved) {
+                    this.pendingSync = JSON.parse(saved);
+                }
+            }
+        };
+
+        function manualSync() {
+            SyncManager.sync();
+        }
+
+        // ========== PUSH NOTIFICATION ==========
+        const NotificationManager = {
+            permission: 'default',
+
+            init() {
+                if ('Notification' in window) {
+                    this.permission = Notification.permission;
+
+                    if (this.permission === 'default') {
+                        setTimeout(() => {
+                            document.getElementById('notifPermission').classList.add('active');
+                        }, 5000);
+                    }
+                }
+
+                // Show notification badge on history if there are completed audits
+                this.updateBadge();
+            },
+
+            async requestPermission() {
+                if (!('Notification' in window)) {
+                    showToast('Browser tidak mendukung notifikasi', 'error');
+                    return;
+                }
+
+                const permission = await Notification.requestPermission();
+                this.permission = permission;
+
+                if (permission === 'granted') {
+                    showToast('🔔 Notifikasi diaktifkan!');
+                    this.showWelcomeNotification();
+                } else {
+                    showToast('Notifikasi ditolak', 'error');
+                }
+
+                document.getElementById('notifPermission').classList.remove('active');
+            },
+
+            showWelcomeNotification() {
+                if (this.permission === 'granted') {
+                    new Notification('Hygiene Audit App', {
+                        body: 'Notifikasi berhasil diaktifkan! Anda akan menerima update audit.',
+                        icon: '📋',
+                        badge: '📋'
+                    });
+                }
+            },
+
+            notifyAuditComplete(audit) {
+                if (this.permission !== 'granted') return;
+
+                const tenant = Store.tenants.find(t => t.id === audit.tenantId);
+                const failCount = audit.items?.filter(i => i.status === 'FAIL').length || 0;
+
+                new Notification('✅ Audit Selesai', {
+                    body: `Audit ${tenant?.name} selesai! ${failCount} item FAIL.`,
+                    icon: '📋'
+                });
+            },
+
+            notifyItemFail(item, tenantName) {
+                if (this.permission !== 'granted') return;
+
+                new Notification('⚠️ Item FAIL', {
+                    body: `${item.name} di ${tenantName} memerlukan perhatian!`,
+                    icon: '⚠️'
+                });
+            },
+
+            notifyReminder() {
+                if (this.permission !== 'granted') return;
+
+                new Notification('📅 Reminder Audit', {
+                    body: 'Jadwal audit bulanan akan segera dimulai. Siapkan checklist!',
+                    icon: '📅'
+                });
+            },
+
+            updateBadge() {
+                const completedCount = Store.audits.filter(a => a.status === 'COMPLETED').length;
+                const historyNav = document.querySelectorAll('.nav-item')[2];
+
+                if (completedCount > 0) {
+                    let badge = historyNav.querySelector('.nav-badge');
+                    if (!badge) {
+                        badge = document.createElement('span');
+                        badge.className = 'nav-badge';
+                        historyNav.appendChild(badge);
+                    }
+                    badge.textContent = completedCount > 99 ? '99+' : completedCount;
+                }
+            }
+        };
+
+        function requestNotification() {
+            NotificationManager.requestPermission();
+        }
+
+        function dismissNotification() {
+            document.getElementById('notifPermission').classList.remove('active');
+            localStorage.setItem('notifDismissed', 'true');
+        }
+
+        // Initialize IndexedDB on login
+            await initIndexedDB();
+
+            setTimeout(() => {
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+
+                const user = Store.users.find(u => u.username === username && u.password === password);
+
+                if (user) {
+                    Store.currentUser = user;
+                    document.getElementById('loginPage').style.display = 'none';
+                    document.getElementById('appContainer').classList.add('active');
+                    document.getElementById('userName').textContent = user.name;
+                    document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+                    document.getElementById('dashboardUserName').textContent = user.name;
+                    document.getElementById('dashboardDate').textContent = formatDate(new Date());
+
+                    // Show admin nav if admin
+                    if (user.role === 'admin') {
+                        document.getElementById('navAdmin').style.display = 'flex';
+                    }
+
+                    initDashboard();
+                    showToast(`Selamat datang, ${user.name}!`);
+
+                    // Show install prompt after login
+                    setTimeout(showInstallPrompt, 2000);
+
+                    // Show notification permission prompt
+                    if ('Notification' in window && Notification.permission === 'default') {
+                        setTimeout(() => {
+                            document.getElementById('notifPermission').classList.add('active');
+                        }, 3000);
+                    }
+
+                    // Check network status
+                    if (!navigator.onLine) {
+                        updateSyncStatus('offline');
+                    }
+                } else {
+                    showToast('Username atau password salah!', 'error');
+                }
+
+                hideLoading();
+            }, 500);
+        }
+
+        function logout() {
+            Store.currentUser = null;
+            Store.currentAudit = null;
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('appContainer').classList.remove('active');
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('navAdmin').style.display = 'none';
+            document.getElementById('notifPermission').classList.remove('active');
+            showToast('Berhasil logout');
+        }
+
+        // ========== NAVIGATION ==========
+        function navigateTo(page) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            // Show target page
+            const pageMap = {
+                'dashboard': 'pageDashboard',
+                'newAudit': 'pageNewAudit',
+                'history': 'pageHistory',
+                'admin': 'pageAdmin',
+                'checklist': 'pageChecklist',
+                'auditDetail': 'pageAuditDetail'
+            };
+
+            document.getElementById(pageMap[page]).classList.add('active');
+
+            // Update nav
+            const navMap = {
+                'dashboard': 0,
+                'newAudit': 1,
+                'history': 2,
+                'admin': 3
+            };
+
+            if (navMap[page] !== undefined) {
+                document.querySelectorAll('.nav-item')[navMap[page]]?.classList.add('active');
+            }
+
+            // Update header title
+            const titles = {
+                'dashboard': 'Dashboard',
+                'newAudit': 'Audit Baru',
+                'history': 'History Audit',
+                'admin': 'Admin Panel',
+                'checklist': 'Detail Audit',
+                'auditDetail': 'Detail Hasil Audit'
+            };
+            document.getElementById('pageTitle').textContent = titles[page] || 'Hygiene Audit';
+
+            // Page-specific init
+            if (page === 'dashboard') initDashboard();
+            if (page === 'newAudit') initNewAudit();
+            if (page === 'history') initHistory();
+            if (page === 'admin') initAdmin();
+        }
+
+        // ========== DASHBOARD ==========
+        function initDashboard() {
+            const audits = Store.audits;
+            document.getElementById('statTotal').textContent = audits.length;
+            document.getElementById('statCompleted').textContent = audits.filter(a => a.status === 'COMPLETED').length;
+            document.getElementById('statDraft').textContent = audits.filter(a => a.status === 'DRAFT').length;
+
+            const failItems = audits.reduce((acc, audit) => {
+                return acc + (audit.items?.filter(i => i.status === 'FAIL').length || 0);
+            }, 0);
+            document.getElementById('statFail').textContent = failItems;
+
+            // Recent audits
+            const recentList = document.getElementById('recentAudits');
+            const recent = [...audits].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5);
+
+            if (recent.length === 0) {
+                recentList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📋</div>
+                        <h3>Belum ada audit</h3>
+                        <p>Mulai audit pertama Anda sekarang</p>
+                    </div>
+                `;
+            } else {
+                recentList.innerHTML = recent.map(audit => {
+                    const totalItems = audit.items?.length || 0;
+                    const passItems = audit.items?.filter(i => i.status === 'PASS').length || 0;
+                    const passRate = totalItems > 0 ? Math.round((passItems / totalItems) * 100) : 0;
+                    const tenant = Store.tenants.find(t => t.id === audit.tenantId);
+
+                    return `
+                        <div class="audit-card" onclick="viewAuditDetail('${audit.id}')">
+                            <div class="audit-card-header">
+                                <div>
+                                    <div class="audit-card-title">${tenant?.name || 'Unknown Tenant'}</div>
+                                    <div class="audit-card-subtitle">${formatDate(audit.date)} • PIC: ${audit.picName}</div>
+                                </div>
+                                <span class="status-badge ${audit.status.toLowerCase()}">${audit.status}</span>
+                            </div>
+                            <div class="audit-card-footer">
+                                <span class="audit-meta">${totalItems} item diperiksa</span>
+                                <div class="pass-rate">
+                                    <div class="rate-bar"><div class="fill" style="width: ${passRate}%"></div></div>
+                                    <span>${passRate}% Pass</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // ========== NEW AUDIT ==========
+        
+        // ========== TENANT HISTORY PREVIEW ==========
+        function onTenantSelect() {
+            const tenantId = parseInt(document.getElementById('auditTenant').value);
+            if (!tenantId) {
+                document.getElementById('tenantHistoryPreview').classList.remove('active');
+                document.getElementById('tenantHistoryBadge').classList.remove('active');
+                return;
+            }
+
+            const tenant = Store.tenants.find(t => t.id === tenantId);
+            if (!tenant) return;
+
+            // Update tenant type display
+            document.getElementById('previewTenantType').textContent = tenant.usesGas ? '🔥 Gas' : '⚡ Non-Gas';
+            document.getElementById('previewTenantType').className = `tenant-type ${tenant.usesGas ? 'gas' : 'non-gas'}`;
+
+            // Get audit history for this tenant
+            const tenantAudits = Store.audits.filter(a => a.tenantId === tenantId)
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Update history badge on select
+            const badge = document.getElementById('tenantHistoryBadge');
+            if (tenantAudits.length > 0) {
+                badge.textContent = `${tenantAudits.length} audit`;
+                badge.classList.add('active');
+            } else {
+                badge.classList.remove('active');
+            }
+
+            // Show preview section
+            const preview = document.getElementById('tenantHistoryPreview');
+
+            if (tenantAudits.length === 0) {
+                // No history
+                preview.querySelector('.preview-subtitle').textContent = 'Belum pernah diaudit';
+                preview.querySelector('.history-stats').style.display = 'none';
+                preview.querySelector('.trend-chart').style.display = 'none';
+                preview.querySelector('.recent-audits-list').innerHTML = `
+                    <div class="no-history">
+                        <div class="icon">📭</div>
+                        <p>Tenant ini belum memiliki riwayat audit</p>
+                    </div>
+                `;
+                preview.classList.add('active');
+                return;
+            }
+
+            // Show stats
+            preview.querySelector('.history-stats').style.display = 'grid';
+            preview.querySelector('.trend-chart').style.display = 'block';
+
+            // Update stats
+            document.getElementById('previewTotalAudits').textContent = tenantAudits.length;
+
+            const avgPass = tenantAudits.reduce((acc, audit) => {
+                const total = audit.items?.length || 0;
+                const pass = audit.items?.filter(i => i.status === 'PASS').length || 0;
+                return acc + (total > 0 ? (pass / total) * 100 : 0);
+            }, 0) / tenantAudits.length;
+            document.getElementById('previewAvgPass').textContent = `${Math.round(avgPass)}%`;
+
+            const lastAudit = tenantAudits[0];
+            const daysSince = Math.floor((new Date() - new Date(lastAudit.date)) / (1000 * 60 * 60 * 24));
+            document.getElementById('previewLastAudit').textContent = daysSince === 0 ? 'Hari ini' : 
+                daysSince === 1 ? 'Kemarin' : `${daysSince} hari`;
+
+            preview.querySelector('.preview-subtitle').textContent = `${tenantAudits.length} audit ditemukan`;
+
+            // Render trend chart (last 6 audits)
+            renderTrendChart(tenantAudits.slice(0, 6).reverse());
+
+            // Render recent audits list
+            renderRecentAuditsList(tenantAudits.slice(0, 5));
+
+            preview.classList.add('active');
+        }
+
+        function renderTrendChart(audits) {
+            const container = document.getElementById('previewTrendBars');
+
+            if (audits.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: var(--gray-400); font-size: 12px;">Tidak cukup data</div>';
+                return;
+            }
+
+            const maxRate = 100;
+
+            container.innerHTML = audits.map((audit, index) => {
+                const total = audit.items?.length || 0;
+                const pass = audit.items?.filter(i => i.status === 'PASS').length || 0;
+                const rate = total > 0 ? Math.round((pass / total) * 100) : 0;
+                const height = Math.max((rate / maxRate) * 60, 4);
+                const isPass = rate >= 70;
+                const date = new Date(audit.date);
+                const monthLabel = date.toLocaleDateString('id-ID', { month: 'short' });
+                const dayLabel = date.getDate();
+
+                return `
+                    <div class="trend-bar-wrapper">
+                        <div class="trend-bar ${isPass ? 'pass' : 'fail'}" style="height: ${height}px;">
+                            <span class="trend-bar-value">${rate}%</span>
+                        </div>
+                        <span class="trend-bar-label">${dayLabel} ${monthLabel}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderRecentAuditsList(audits) {
+            const container = document.getElementById('previewRecentAudits');
+
+            container.innerHTML = audits.map(audit => {
+                const total = audit.items?.length || 0;
+                const pass = audit.items?.filter(i => i.status === 'PASS').length || 0;
+                const rate = total > 0 ? Math.round((pass / total) * 100) : 0;
+                const isGood = rate >= 70;
+                const dotClass = rate >= 90 ? 'pass' : rate >= 70 ? 'mixed' : 'fail';
+                const dotColor = rate >= 90 ? 'var(--success)' : rate >= 70 ? 'var(--warning)' : 'var(--danger)';
+
+                return `
+                    <div class="recent-audit-item" onclick="viewAuditDetail('${audit.id}')">
+                        <div class="recent-audit-dot" style="background: ${dotColor};"></div>
+                        <div class="recent-audit-info">
+                            <div class="recent-audit-date">${formatDate(audit.date)}</div>
+                            <div class="recent-audit-pic">PIC: ${audit.picName} • ${total} item</div>
+                        </div>
+                        <div class="recent-audit-rate ${isGood ? 'good' : 'bad'}">${rate}%</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function initNewAudit() {
+            // Set default date
+            document.getElementById('auditDate').valueAsDate = new Date();
+
+            // Populate tenant dropdown with onchange handler
+            const tenantSelect = document.getElementById('auditTenant');
+            tenantSelect.innerHTML = '<option value="">Pilih Tenant</option>' + 
+                Store.tenants.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+            tenantSelect.onchange = onTenantSelect;
+
+            // Populate PIC dropdown
+            const picSelect = document.getElementById('auditPIC');
+            picSelect.innerHTML = '<option value="">Pilih PIC</option>' + 
+                Store.users.filter(u => u.role === 'auditor').map(u => 
+                    `<option value="${u.id}">${u.name}</option>`
+                ).join('');
+
+            // Reset history preview
+            document.getElementById('tenantHistoryPreview').classList.remove('active');
+            document.getElementById('tenantHistoryBadge').classList.remove('active');
+        }
+
+        function updateGasLabel() {
+            const isGas = document.getElementById('auditGas').checked;
+            document.getElementById('gasLabel').textContent = isGas ? 'Gas' : 'Non-Gas';
+        }
+
+        async function startAudit() {
+            const date = document.getElementById('auditDate').value;
+            const tenantId = parseInt(document.getElementById('auditTenant').value);
+            const picId = parseInt(document.getElementById('auditPIC').value);
+            const isGas = document.getElementById('auditGas').checked;
+
+            if (!date || !tenantId || !picId) {
+                showToast('Mohon lengkapi semua field!', 'error');
+                return;
+            }
+
+            const tenant = Store.tenants.find(t => t.id === tenantId);
+            const pic = Store.users.find(u => u.id === picId);
+
+            // Filter checklist based on gas type
+            const templates = Store.checklistTemplates.filter(t => 
+                !t.requiresGas || (t.requiresGas && isGas)
+            );
+
+            // Group by category
+            const categories = {};
+            templates.forEach(t => {
+                if (!categories[t.category]) categories[t.category] = [];
+                categories[t.category].push(t);
+            });
+
+            Store.currentAudit = {
+                id: generateId('AUD'),
+                date: date,
+                tenantId: tenantId,
+                tenantName: tenant.name,
+                picId: picId,
+                picName: pic.name,
+                isGas: isGas,
+                status: 'DRAFT',
+                createdAt: new Date().toISOString(),
+                items: templates.map(t => ({
+                    templateId: t.id,
+                    category: t.category,
+                    name: t.name,
+                    status: null,
+                    note: '',
+                    photos: []
+                })),
+                categories: categories
+            };
+
+            renderChecklist();
+            navigateTo('checklist');
+            showToast('Audit dimulai! Silakan isi checklist.');
+        }
+
+        // ========== CHECKLIST PAGE ==========
+        function renderChecklist() {
+            const audit = Store.currentAudit;
+            if (!audit) return;
+
+            const container = document.getElementById('checklistContainer');
+            const categories = audit.categories;
+
+            let html = '';
+            let totalItems = 0;
+            let checkedItems = 0;
+
+            for (const [category, items] of Object.entries(categories)) {
+                const categoryIcon = getCategoryIcon(category);
+                const checkedCount = items.filter(item => {
+                    const auditItem = audit.items.find(i => i.templateId === item.id);
+                    return auditItem && auditItem.status !== null;
+                }).length;
+
+                totalItems += items.length;
+                checkedItems += checkedCount;
+
+                html += `
+                    <div class="category-section">
+                        <div class="category-header" onclick="toggleCategory(this)">
+                            <div class="category-title">
+                                <span class="icon">${categoryIcon}</span>
+                                <span>${category}</span>
+                            </div>
+                            <span class="category-progress">${checkedCount}/${items.length}</span>
+                        </div>
+                        <div class="category-items">
+                            ${items.map(template => {
+                                const item = audit.items.find(i => i.templateId === template.id);
+                                const isPass = item.status === 'PASS';
+                                const isFail = item.status === 'FAIL';
+                                const noteRequired = isFail;
+
+                                return `
+                                    <div class="checklist-item" data-item-id="${item.templateId}">
+                                        <div class="checklist-item-header">
+                                            <div class="checklist-item-name">${item.name}</div>
+                                            <div class="status-toggle">
+                                                <button class="status-btn ${isPass ? 'pass' : ''}" 
+                                                        onclick="setItemStatus(${item.templateId}, 'PASS')"
+                                                        title="Pass">😊</button>
+                                                <button class="status-btn ${isFail ? 'fail' : ''}" 
+                                                        onclick="setItemStatus(${item.templateId}, 'FAIL')"
+                                                        title="Fail">😡</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="checklist-item-note">
+                                            <div class="note-label">
+                                                Catatan ${noteRequired ? '<span class="required-mark">*</span>' : ''}
+                                            </div>
+                                            <textarea class="note-input ${noteRequired ? 'required' : ''}" 
+                                                      placeholder="Tambahkan catatan..."
+                                                      onchange="updateNote(${item.templateId}, this.value)"
+                                                      rows="2">${item.note}</textarea>
+                                        </div>
+
+                                        <div class="photo-section">
+                                            <div class="photo-grid" id="photoGrid-${item.templateId}">
+                                                ${item.photos.map((photo, idx) => `
+                                                    <div class="photo-thumb" onclick="viewPhoto('${photo}')">
+                                                        <img src="${photo}" alt="Evidence">
+                                                        <button class="remove-btn" onclick="event.stopPropagation(); removePhoto(${item.templateId}, ${idx})">&times;</button>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                            <div class="photo-actions">
+                                                <button class="photo-btn" onclick="triggerCamera(${item.templateId})">
+                                                    <span class="icon">📷</span>
+                                                    <span>Kamera</span>
+                                                </button>
+                                                <button class="photo-btn" onclick="triggerGallery(${item.templateId})">
+                                                    <span class="icon">🖼️</span>
+                                                    <span>Galeri</span>
+                                                </button>
+                                            </div>
+                                            <input type="file" class="hidden-input" id="camera-${item.templateId}" 
+                                                   accept="image/*" capture="environment" onchange="handlePhoto(${item.templateId}, this)">
+                                            <input type="file" class="hidden-input" id="gallery-${item.templateId}" 
+                                                   accept="image/*" multiple onchange="handlePhoto(${item.templateId}, this)">
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+
+            // Update progress
+            document.getElementById('progressText').textContent = `${checkedItems}/${totalItems}`;
+            document.getElementById('progressFill').style.width = totalItems > 0 ? `${(checkedItems/totalItems)*100}%` : '0%';
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                'LIFE SAFETY': '🔥',
+                'SIRKULASI UDARA': '💨',
+                'INSTALASI PIPA AIR BERSIH': '💧',
+                'SALURAN PEMBUANGAN': '🚰',
+                'INSTALASI LISTRIK': '⚡',
+                'KEBERSIHAN AREA': '🧹',
+                'PEST CONTROL': '🐜',
+                'PERSONAL HYGIENE': '🧼',
+                'SERTIFIKASI': '📜'
+            };
+            return icons[category] || '📋';
+        }
+
+        function toggleCategory(header) {
+            header.classList.toggle('collapsed');
+            const items = header.nextElementSibling;
+            items.style.display = items.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function setItemStatus(templateId, status) {
+            const item = Store.currentAudit.items.find(i => i.templateId === templateId);
+            if (!item) return;
+
+            item.status = status;
+            renderChecklist();
+        }
+
+        function updateNote(templateId, value) {
+            const item = Store.currentAudit.items.find(i => i.templateId === templateId);
+            if (item) item.note = value;
+        }
+
+        // ========== PHOTO HANDLING ==========
+        function triggerCamera(templateId) {
+            document.getElementById(`camera-${templateId}`).click();
+        }
+
+        function triggerGallery(templateId) {
+            document.getElementById(`gallery-${templateId}`).click();
+        }
+
+        function handlePhoto(templateId, input) {
+            const files = input.files;
+            if (!files.length) return;
+
+            const item = Store.currentAudit.items.find(i => i.templateId === templateId);
+            if (!item) return;
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    item.photos.push(e.target.result);
+                    renderChecklist();
+                    showToast('Foto berhasil ditambahkan');
+                };
+                reader.readAsDataURL(file);
+            });
+
+            input.value = '';
+        }
+
+        function removePhoto(templateId, index) {
+            const item = Store.currentAudit.items.find(i => i.templateId === templateId);
+            if (item) {
+                item.photos.splice(index, 1);
+                renderChecklist();
+                showToast('Foto dihapus');
+            }
+        }
+
+        function viewPhoto(src) {
+            document.getElementById('viewerImage').src = src;
+            document.getElementById('photoViewer').classList.add('active');
+        }
+
+        function closePhotoViewer() {
+            document.getElementById('photoViewer').classList.remove('active');
+        }
+
+        // ========== SAVE & SUBMIT ==========
+        async function saveDraft() {
+            if (!Store.currentAudit) return;
+
+            Store.currentAudit.status = 'DRAFT';
+            Store.currentAudit.updatedAt = new Date().toISOString();
+
+            // Save to IndexedDB for offline
+            await saveAuditOffline(Store.currentAudit);
+
+            // Add to sync queue
+            await addToSyncQueue('SAVE_AUDIT', Store.currentAudit);
+
+            // Save or update in memory
+            const existingIndex = Store.audits.findIndex(a => a.id === Store.currentAudit.id);
+            if (existingIndex >= 0) {
+                Store.audits[existingIndex] = Store.currentAudit;
+            } else {
+                Store.audits.push(Store.currentAudit);
+            }
+
+            showToast('Draft berhasil disimpan!');
+
+            // Show notification
+            showNotification('Draft Tersimpan', {
+                body: `Audit ${Store.currentAudit.tenantName} telah disimpan sebagai draft`,
+                tag: 'draft-saved'
+            });
+
+            navigateTo('dashboard');
+        }
+
+        async function submitAudit() {
+            if (!Store.currentAudit) return;
+
+            // Validation
+            const unchecked = Store.currentAudit.items.filter(i => i.status === null);
+            if (unchecked.length > 0) {
+                showToast(`Masih ada ${unchecked.length} item yang belum dicek!`, 'error');
+                return;
+            }
+
+            // Check required notes for FAIL
+            const failWithoutNote = Store.currentAudit.items.filter(i => i.status === 'FAIL' && !i.note.trim());
+            if (failWithoutNote.length > 0) {
+                showToast('Catatan wajib diisi untuk item dengan status FAIL!', 'error');
+                return;
+            }
+
+            Store.currentAudit.status = 'COMPLETED';
+            Store.currentAudit.completedAt = new Date().toISOString();
+
+            // Save to IndexedDB
+            await saveAuditOffline(Store.currentAudit);
+
+            // Add to sync queue
+            await addToSyncQueue('SUBMIT_AUDIT', Store.currentAudit);
+
+            const existingIndex = Store.audits.findIndex(a => a.id === Store.currentAudit.id);
+            if (existingIndex >= 0) {
+                Store.audits[existingIndex] = Store.currentAudit;
+            } else {
+                Store.audits.push(Store.currentAudit);
+            }
+
+            // Show notification
+            showNotification('Audit Selesai! 🎉', {
+                body: `Audit ${Store.currentAudit.tenantName} telah berhasil diselesaikan`,
+                tag: 'audit-completed',
+                requireInteraction: true
+            });
+
+            const completedAudit = Store.audits.find(a => a.id === Store.currentAudit.id);
+            Store.currentAudit = null;
+
+            // Trigger notifications
+            NotificationManager.notifyAuditComplete(completedAudit);
+            NotificationManager.updateBadge();
+
+            // Queue for sync
+            SyncManager.queueForSync('audit_complete', completedAudit);
+
+            showToast('Audit berhasil diselesaikan! 🎉');
+            navigateTo('dashboard');
+        }
+
+        // ========== HISTORY ==========
+        let historyFilter = 'all';
+
+        function initHistory() {
+            renderHistory();
+        }
+
+        function filterHistory(filter) {
+            historyFilter = filter;
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('historyContainer');
+            let audits = Store.audits;
+
+            if (historyFilter !== 'all') {
+                audits = audits.filter(a => a.status.toLowerCase() === historyFilter);
+            }
+
+            // Group by tenant
+            const tenantGroups = {};
+            audits.forEach(audit => {
+                if (!tenantGroups[audit.tenantId]) {
+                    tenantGroups[audit.tenantId] = {
+                        tenant: Store.tenants.find(t => t.id === audit.tenantId),
+                        audits: []
+                    };
+                }
+                tenantGroups[audit.tenantId].audits.push(audit);
+            });
+
+            if (Object.keys(tenantGroups).length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📜</div>
+                        <h3>Belum ada history</h3>
+                        <p>Audit yang telah dilakukan akan muncul di sini</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = Object.values(tenantGroups).map(group => {
+                const sortedAudits = group.audits.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                return `
+                    <div class="tenant-history-card">
+                        <div class="tenant-history-header">
+                            <span class="tenant-name">${group.tenant?.name || 'Unknown'}</span>
+                            <span class="tenant-type ${group.tenant?.usesGas ? 'gas' : 'non-gas'}">
+                                ${group.tenant?.usesGas ? '🔥 Gas' : '⚡ Non-Gas'}
+                            </span>
+                        </div>
+                        <div class="history-timeline">
+                            ${sortedAudits.map(audit => {
+                                const totalItems = audit.items?.length || 0;
+                                const failItems = audit.items?.filter(i => i.status === 'FAIL').length || 0;
+                                const passRate = totalItems > 0 ? Math.round(((totalItems - failItems) / totalItems) * 100) : 0;
+                                const dotClass = passRate >= 90 ? 'pass' : passRate >= 70 ? 'mixed' : 'fail';
+
+                                return `
+                                    <div class="timeline-item" onclick="viewAuditDetail('${audit.id}')">
+                                        <div class="timeline-dot ${dotClass}"></div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-date">${formatDate(audit.date)}</div>
+                                            <div class="timeline-pic">PIC: ${audit.picName}</div>
+                                            <div class="timeline-result">
+                                                <span class="result-badge ${passRate >= 90 ? 'good' : 'bad'}">
+                                                    ${passRate}% Pass
+                                                </span>
+                                                <span style="font-size: 12px; color: var(--gray-400);">
+                                                    ${failItems} fail / ${totalItems} item
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ========== AUDIT DETAIL ==========
+        function viewAuditDetail(auditId) {
+            const audit = Store.audits.find(a => a.id === auditId);
+            if (!audit) return;
+
+            const tenant = Store.tenants.find(t => t.id === audit.tenantId);
+            const totalItems = audit.items?.length || 0;
+            const passItems = audit.items?.filter(i => i.status === 'PASS').length || 0;
+            const failItems = audit.items?.filter(i => i.status === 'FAIL').length || 0;
+            const passRate = totalItems > 0 ? Math.round((passItems / totalItems) * 100) : 0;
+
+            // Group items by category
+            const categories = {};
+            audit.items?.forEach(item => {
+                if (!categories[item.category]) categories[item.category] = [];
+                categories[item.category].push(item);
+            });
+
+            let html = `
+                <div class="form-section">
+                    <div class="audit-card-header" style="margin-bottom: 20px;">
+                        <div>
+                            <div class="audit-card-title">${tenant?.name || 'Unknown'}</div>
+                            <div class="audit-card-subtitle">${formatDate(audit.date)} • PIC: ${audit.picName}</div>
+                        </div>
+                        <span class="status-badge ${audit.status.toLowerCase()}">${audit.status}</span>
+                    </div>
+
+                    <div class="stats-grid" style="margin-bottom: 20px;">
+                        <div class="stat-card success">
+                            <div class="stat-value" style="font-size: 24px;">${passItems}</div>
+                            <div class="stat-label">Pass</div>
+                        </div>
+                        <div class="stat-card danger">
+                            <div class="stat-value" style="font-size: 24px;">${failItems}</div>
+                            <div class="stat-label">Fail</div>
+                        </div>
+                        <div class="stat-card primary">
+                            <div class="stat-value" style="font-size: 24px;">${passRate}%</div>
+                            <div class="stat-label">Pass Rate</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button class="btn btn-sm btn-primary" onclick="exportCurrentAuditToPDF()">📄 Export PDF</button>
+                        <button class="btn btn-sm btn-success" onclick="exportCurrentAuditToExcel()">📊 Export Excel</button>
+                    </div>
+                </div>
+            `;
+
+            for (const [category, items] of Object.entries(categories)) {
+                const categoryIcon = getCategoryIcon(category);
+                html += `
+                    <div class="form-section">
+                        <div class="form-section-title">${categoryIcon} ${category}</div>
+                        ${items.map(item => `
+                            <div class="checklist-item" style="padding: 16px 0; border-bottom: 1px solid var(--gray-100);">
+                                <div class="checklist-item-header">
+                                    <div class="checklist-item-name">${item.name}</div>
+                                    <span style="font-size: 24px;">${item.status === 'PASS' ? '😊' : '😡'}</span>
+                                </div>
+                                ${item.note ? `<p style="margin-top: 8px; font-size: 13px; color: var(--gray-600); background: var(--gray-50); padding: 10px; border-radius: 8px;">📝 ${item.note}</p>` : ''}
+                                ${item.photos.length > 0 ? `
+                                    <div class="photo-grid" style="margin-top: 10px; grid-template-columns: repeat(4, 1fr);">
+                                        ${item.photos.map(photo => `
+                                            <div class="photo-thumb" onclick="viewPhoto('${photo}')">
+                                                <img src="${photo}" alt="Evidence">
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            document.getElementById('auditDetailContent').innerHTML = html;
+            navigateTo('auditDetail');
+        }
+
+        // Export from detail view
+        async function exportCurrentAuditToPDF() {
+            const auditId = Store.audits[Store.audits.length - 1]?.id;
+            if (auditId) {
+                Store.currentAudit = Store.audits.find(a => a.id === auditId);
+                await exportToPDF();
+            }
+        }
+
+        async function exportCurrentAuditToExcel() {
+            const auditId = Store.audits[Store.audits.length - 1]?.id;
+            if (auditId) {
+                Store.currentAudit = Store.audits.find(a => a.id === auditId);
+                await exportToExcel();
+            }
+        }
+
+        // ========== ADMIN PANEL ==========
+        
+        // ========== EXCEL REPORT ==========
+        function generateExcelReport() {
+            const container = document.getElementById('excelReportContainer');
+
+            // Get all audits grouped by tenant (only latest per tenant)
+            const latestAudits = [];
+            const tenantIds = [...new Set(Store.audits.map(a => a.tenantId))];
+
+            tenantIds.forEach(tenantId => {
+                const tenantAudits = Store.audits
+                    .filter(a => a.tenantId === tenantId)
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                if (tenantAudits.length > 0) {
+                    latestAudits.push(tenantAudits[0]);
+                }
+            });
+
+            if (latestAudits.length === 0) {
+                container.innerHTML = `
+                    <div class="excel-empty-report">
+                        <div class="icon">📊</div>
+                        <h3>Belum ada data audit</h3>
+                        <p>Silakan lakukan audit terlebih dahulu untuk melihat reporting</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by date (newest first)
+            latestAudits.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Store for filtering
+            Store.excelReportData = latestAudits;
+
+            renderExcelTable(latestAudits);
+        }
+
+        function renderExcelTable(audits) {
+            const container = document.getElementById('excelReportContainer');
+
+            // Calculate totals
+            const totalItems = audits.reduce((acc, a) => acc + (a.items?.length || 0), 0);
+            const totalPass = audits.reduce((acc, a) => acc + (a.items?.filter(i => i.status === 'PASS').length || 0), 0);
+            const totalFail = audits.reduce((acc, a) => acc + (a.items?.filter(i => i.status === 'FAIL').length || 0), 0);
+            const avgRate = audits.length > 0 ? Math.round((totalPass / totalItems) * 100) : 0;
+
+            let html = `
+                <div class="excel-toolbar">
+                    <div class="excel-toolbar-title">
+                        <span>📊</span>
+                        <span>Hasil Audit Terakhir per Tenant</span>
+                    </div>
+                    <div class="excel-toolbar-actions">
+                        <button class="excel-btn filter" onclick="resetExcelFilters()">
+                            <span>🔄</span> Reset Filter
+                        </button>
+                        <button class="excel-btn export" onclick="exportExcelReport()">
+                            <span>📥</span> Export CSV
+                        </button>
+                    </div>
+                </div>
+
+                <div class="excel-table-wrapper">
+                    <table class="excel-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Tenant</th>
+                                <th>Type</th>
+                                <th>Tanggal Audit</th>
+                                <th>PIC</th>
+                                <th>Status</th>
+                                <th>Pass Rate</th>
+                                <th>Total Items</th>
+                                <th>Pass</th>
+                                <th>Fail</th>
+                                <th>Catatan Penting</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            audits.forEach((audit, index) => {
+                const tenant = Store.tenants.find(t => t.id === audit.tenantId);
+                const total = audit.items?.length || 0;
+                const pass = audit.items?.filter(i => i.status === 'PASS').length || 0;
+                const fail = audit.items?.filter(i => i.status === 'FAIL').length || 0);
+                const rate = total > 0 ? Math.round((pass / total) * 100) : 0;
+                const rateClass = rate >= 90 ? 'good' : rate >= 70 ? 'warning' : 'bad';
+
+                // Get important notes (FAIL items with notes)
+                const failNotes = audit.items?.filter(i => i.status === 'FAIL' && i.note)
+                    .map(i => i.note).join('; ') || '-';
+
+                html += `
+                    <tr onclick="viewAuditDetail('${audit.id}')" style="cursor: pointer;">
+                        <td>${index + 1}</td>
+                        <td class="excel-cell-tenant">${tenant?.name || 'Unknown'}</td>
+                        <td>
+                            <span class="excel-cell-type ${tenant?.usesGas ? 'gas' : 'non-gas'}">
+                                ${tenant?.usesGas ? '🔥 Gas' : '⚡ Non-Gas'}
+                            </span>
+                        </td>
+                        <td class="excel-cell-date">${audit.date}</td>
+                        <td class="excel-cell-pic">${audit.picName}</td>
+                        <td>
+                            <span class="excel-cell-status ${audit.status.toLowerCase()}">
+                                ${audit.status === 'COMPLETED' ? '✅' : '📝'} ${audit.status}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="excel-progress-bar">
+                                <div class="excel-progress-fill ${rateClass}" style="width: ${rate}%"></div>
+                            </div>
+                            <span class="excel-cell-rate ${rateClass}">${rate}%</span>
+                        </td>
+                        <td class="excel-cell-items">${total}</td>
+                        <td class="excel-cell-items">${pass}</td>
+                        <td class="excel-cell-fail">${fail}</td>
+                        <td class="excel-cell-note" title="${failNotes}">${failNotes}</td>
+                    </tr>
+                `;
+            });
+
+            // Summary row
+            html += `
+                        <tr class="excel-summary-row">
+                            <td colspan="6" style="text-align: right;">TOTAL / RATA-RATA</td>
+                            <td>
+                                <div class="excel-progress-bar">
+                                    <div class="excel-progress-fill ${avgRate >= 90 ? 'good' : avgRate >= 70 ? 'warning' : 'bad'}" style="width: ${avgRate}%"></div>
+                                </div>
+                                <span class="excel-cell-rate ${avgRate >= 90 ? 'good' : avgRate >= 70 ? 'warning' : 'bad'}">${avgRate}%</span>
+                            </td>
+                            <td>${totalItems}</td>
+                            <td>${totalPass}</td>
+                            <td class="excel-cell-fail">${totalFail}</td>
+                            <td>${audits.length} Tenant</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function filterExcelReport() {
+            if (!Store.excelReportData) return;
+
+            const statusFilter = document.getElementById('reportFilterStatus').value;
+            const typeFilter = document.getElementById('reportFilterType').value;
+            const searchQuery = document.getElementById('reportSearchTenant').value.toLowerCase();
+
+            let filtered = Store.excelReportData;
+
+            // Filter by status
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(a => a.status === statusFilter);
+            }
+
+            // Filter by type
+            if (typeFilter !== 'all') {
+                filtered = filtered.filter(a => {
+                    const tenant = Store.tenants.find(t => t.id === a.tenantId);
+                    return typeFilter === 'gas' ? tenant?.usesGas : !tenant?.usesGas;
+                });
+            }
+
+            // Filter by search
+            if (searchQuery) {
+                filtered = filtered.filter(a => {
+                    const tenant = Store.tenants.find(t => t.id === a.tenantId);
+                    return tenant?.name.toLowerCase().includes(searchQuery);
+                });
+            }
+
+            renderExcelTable(filtered);
+        }
+
+        function resetExcelFilters() {
+            document.getElementById('reportFilterStatus').value = 'all';
+            document.getElementById('reportFilterType').value = 'all';
+            document.getElementById('reportSearchTenant').value = '';
+            filterExcelReport();
+        }
+
+        function exportExcelReport() {
+            if (!Store.excelReportData || Store.excelReportData.length === 0) {
+                showToast('Tidak ada data untuk export!', 'error');
+                return;
+            }
+
+            const statusFilter = document.getElementById('reportFilterStatus').value;
+            const typeFilter = document.getElementById('reportFilterType').value;
+            const searchQuery = document.getElementById('reportSearchTenant').value.toLowerCase();
+
+            let filtered = Store.excelReportData;
+
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(a => a.status === statusFilter);
+            }
+            if (typeFilter !== 'all') {
+                filtered = filtered.filter(a => {
+                    const tenant = Store.tenants.find(t => t.id === a.tenantId);
+                    return typeFilter === 'gas' ? tenant?.usesGas : !tenant?.usesGas;
+                });
+            }
+            if (searchQuery) {
+                filtered = filtered.filter(a => {
+                    const tenant = Store.tenants.find(t => t.id === a.tenantId);
+                    return tenant?.name.toLowerCase().includes(searchQuery);
+                });
+            }
+
+            // Generate CSV
+            let csvContent = 'data:text/csv;charset=utf-8,﻿';
+            csvContent += 'LAPORAN AUDIT HYGIENE - HASIL TERAKHIR PER TENANT\n';
+            csvContent += `Generated,${new Date().toLocaleString('id-ID')}\n\n`;
+
+            csvContent += 'No,Tenant,Type,Tanggal Audit,PIC,Status,Pass Rate (%),Total Items,Pass,Fail,Catatan Penting\n';
+
+            filtered.forEach((audit, index) => {
+                const tenant = Store.tenants.find(t => t.id === audit.tenantId);
+                const total = audit.items?.length || 0;
+                const pass = audit.items?.filter(i => i.status === 'PASS').length || 0;
+                const fail = audit.items?.filter(i => i.status === 'FAIL').length || 0;
+                const rate = total > 0 ? Math.round((pass / total) * 100) : 0;
+                const failNotes = audit.items?.filter(i => i.status === 'FAIL' && i.note)
+                    .map(i => i.note.replace(/,/g, ';').replace(/\n/g, ' ')).join('; ') || '-';
+
+                csvContent += `${index + 1},`;
+                csvContent += `"${tenant?.name || 'Unknown'}",`;
+                csvContent += `${tenant?.usesGas ? 'Gas' : 'Non-Gas'},`;
+                csvContent += `${audit.date},`;
+                csvContent += `"${audit.picName}",`;
+                csvContent += `${audit.status},`;
+                csvContent += `${rate},`;
+                csvContent += `${total},`;
+                csvContent += `${pass},`;
+                csvContent += `${fail},`;
+                csvContent += `"${failNotes}"\n`;
+            });
+
+            // Add summary
+            const totalItems = filtered.reduce((acc, a) => acc + (a.items?.length || 0), 0);
+            const totalPass = filtered.reduce((acc, a) => acc + (a.items?.filter(i => i.status === 'PASS').length || 0), 0);
+            const totalFail = filtered.reduce((acc, a) => acc + (a.items?.filter(i => i.status === 'FAIL').length || 0), 0);
+            const avgRate = totalItems > 0 ? Math.round((totalPass / totalItems) * 100) : 0;
+
+            csvContent += `\nTOTAL / RATA-RATA,,,,,,${avgRate},${totalItems},${totalPass},${totalFail},${filtered.length} Tenant\n`;
+
+            const encodedUri = encodeURI(csvContent);
+            const a = document.createElement('a');
+            a.href = encodedUri;
+            a.download = `Report_Audit_Hygiene_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+
+            showToast('Report Excel berhasil diexport! 📊');
+        }
+
+        function initAdmin() {
+            if (Store.currentUser?.role !== 'admin') {
+                showToast('Akses ditolak! Hanya admin.', 'error');
+                navigateTo('dashboard');
+                return;
+            }
+
+            renderUsers();
+            renderTemplates();
+            renderTenants();
+            generateExcelReport();
+        }
+
+        function renderUsers() {
+            const tbody = document.getElementById('usersTable');
+            tbody.innerHTML = Store.users.map(u => `
+                <tr>
+                    <td>${u.username}</td>
+                    <td>${u.name}</td>
+                    <td><span class="status-badge ${u.role === 'admin' ? 'completed' : 'draft'}">${u.role}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn edit" onclick="editUser(${u.id})">✏️</button>
+                            <button class="action-btn delete" onclick="deleteUser(${u.id})">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderTemplates() {
+            const tbody = document.getElementById('templatesTable');
+            tbody.innerHTML = Store.checklistTemplates.map(t => `
+                <tr>
+                    <td>${t.category}</td>
+                    <td>${t.name}</td>
+                    <td>${t.requiresGas ? '✅' : '❌'}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn edit" onclick="editTemplate(${t.id})">✏️</button>
+                            <button class="action-btn delete" onclick="deleteTemplate(${t.id})">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderTenants() {
+            const tbody = document.getElementById('tenantsTable');
+            tbody.innerHTML = Store.tenants.map(t => `
+                <tr>
+                    <td>${t.name}</td>
+                    <td><span class="tenant-type ${t.usesGas ? 'gas' : 'non-gas'}">${t.usesGas ? 'Gas' : 'Non-Gas'}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn edit" onclick="editTenant(${t.id})">✏️</button>
+                            <button class="action-btn delete" onclick="deleteTenant(${t.id})">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Modal functions
+        function showUserModal() {
+            document.getElementById('userModal').classList.add('active');
+        }
+
+        function showTemplateModal() {
+            document.getElementById('templateModal').classList.add('active');
+        }
+
+        function showTenantModal() {
+            document.getElementById('tenantModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function saveUser(e) {
+            e.preventDefault();
+            const user = {
+                id: Date.now(),
+                username: document.getElementById('newUsername').value,
+                password: document.getElementById('newPassword').value,
+                name: document.getElementById('newFullName').value,
+                role: document.getElementById('newRole').value
+            };
+            Store.users.push(user);
+            closeModal('userModal');
+            renderUsers();
+            showToast('User berhasil ditambahkan!');
+            e.target.reset();
+        }
+
+        function saveTemplate(e) {
+            e.preventDefault();
+            const template = {
+                id: Date.now(),
+                category: document.getElementById('newCategory').value,
+                name: document.getElementById('newActivity').value,
+                requiresGas: document.getElementById('newGasOnly').checked
+            };
+            Store.checklistTemplates.push(template);
+            closeModal('templateModal');
+            renderTemplates();
+            showToast('Template berhasil ditambahkan!');
+            e.target.reset();
+        }
+
+        function saveTenant(e) {
+            e.preventDefault();
+            const tenant = {
+                id: Date.now(),
+                name: document.getElementById('newTenantName').value,
+                usesGas: document.getElementById('newTenantGas').checked
+            };
+            Store.tenants.push(tenant);
+            closeModal('tenantModal');
+            renderTenants();
+            showToast('Tenant berhasil ditambahkan!');
+            e.target.reset();
+        }
+
+        function deleteUser(id) {
+            if (!confirm('Hapus user ini?')) return;
+            Store.users = Store.users.filter(u => u.id !== id);
+            renderUsers();
+            showToast('User dihapus');
+        }
+
+        function deleteTemplate(id) {
+            if (!confirm('Hapus template ini?')) return;
+            Store.checklistTemplates = Store.checklistTemplates.filter(t => t.id !== id);
+            renderTemplates();
+            showToast('Template dihapus');
+        }
+
+        function deleteTenant(id) {
+            if (!confirm('Hapus tenant ini?')) return;
+            Store.tenants = Store.tenants.filter(t => t.id !== id);
+            renderTenants();
+            showToast('Tenant dihapus');
+        }
+
+        // ========== DEMO DATA ==========
+        function loadDemoData() {
+            // Create a sample completed audit
+            const demoAudit = {
+                id: 'AUD-DEMO-001',
+                date: '2026-05-10',
+                tenantId: 1,
+                tenantName: 'Teras by Plataran',
+                picId: 2,
+                picName: 'Budi Santoso',
+                isGas: true,
+                status: 'COMPLETED',
+                createdAt: '2026-05-10T08:00:00Z',
+                completedAt: '2026-05-10T09:30:00Z',
+                items: Store.checklistTemplates.filter(t => !t.requiresGas || true).map((t, idx) => ({
+                    templateId: t.id,
+                    category: t.category,
+                    name: t.name,
+                    status: idx % 5 === 0 ? 'FAIL' : 'PASS',
+                    note: idx % 5 === 0 ? 'Perlu perhatian khusus' : '',
+                    photos: []
+                })),
+                categories: {}
+            };
+
+            // Recalculate categories
+            const cats = {};
+            demoAudit.items.forEach(item => {
+                if (!cats[item.category]) cats[item.category] = [];
+                cats[item.category].push({ id: item.templateId });
+            });
+            demoAudit.categories = cats;
+
+            Store.audits.push(demoAudit);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDemoData();
+            initIndexedDB().catch(console.error);
+        });
+
+        // Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:text/javascript,' + encodeURIComponent(`
+                self.addEventListener('install', e => self.skipWaiting());
+                self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+                self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));
+
+                // Push notification handler
+                self.addEventListener('push', event => {
+                    const data = event.data.json();
+                    event.waitUntil(
+                        self.registration.showNotification(data.title, {
+                            body: data.body,
+                            icon: data.icon || '/icon-192x192.png',
+                            badge: '/badge-72x72.png',
+                            tag: data.tag || 'default'
+                        })
+                    );
+                });
+
+                // Notification click handler
+                self.addEventListener('notificationclick', event => {
+                    event.notification.close();
+                    event.waitUntil(
+                        clients.openWindow('/')
+                    );
+                });
+            `)).catch(() => {});
+        }
+    </script>
+
+    <!-- ========== EXPORT MENU ========== -->
+    <button class="fab-button" id="fabButton" onclick="toggleExportMenu()" style="display: none;">📤</button>
+    <div class="export-menu" id="exportMenu">
+        <button class="export-btn" onclick="exportPDF()">
+            <span>📄</span> Export PDF
+        </button>
+        <button class="export-btn" onclick="exportExcel()">
+            <span>📊</span> Export Excel
+        </button>
+        <button class="export-btn" onclick="shareAudit()">
+            <span>🔗</span> Share
+        </button>
+    </div>
+
+    <!-- ========== SYNC STATUS ========== -->
+    <div class="sync-status" id="syncStatus">
+        <span class="sync-icon" id="syncIcon">🔄</span>
+        <span class="sync-text" id="syncText">Menyinkronkan...</span>
+        <button class="sync-action" id="syncAction" onclick="manualSync()">Sync</button>
+    </div>
+
+    <!-- ========== NOTIFICATION PERMISSION ========== -->
+    <div class="notification-permission" id="notifPermission">
+        <h4>🔔 Aktifkan Notifikasi</h4>
+        <p>Dapatkan pemberitahuan saat audit selesai, ada item FAIL, atau reminder jadwal audit.</p>
+        <div class="notification-actions">
+            <button class="btn btn-white" onclick="requestNotification()">Aktifkan</button>
+            <button class="btn btn-transparent" onclick="dismissNotification()">Nanti</button>
+        </div>
+    </div>
+</body>
+</html>

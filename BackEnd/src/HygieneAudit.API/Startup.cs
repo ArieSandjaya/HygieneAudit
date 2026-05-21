@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Web.Http;
 using Autofac;
@@ -13,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
+using Microsoft.Owin.FileSystems;
+using Microsoft.Owin.StaticFiles;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Owin;
@@ -34,6 +37,7 @@ namespace HygieneAudit.API
             ConfigureDependencies(httpConfig, configuration);
             ConfigureCors(app, configuration);
             app.Use<SecurityHeadersMiddleware>();
+            ConfigureStaticFiles(app);
 
             app.UseWebApi(httpConfig);
 
@@ -124,15 +128,32 @@ namespace HygieneAudit.API
             });
         }
 
+        private static void ConfigureStaticFiles(IAppBuilder app)
+        {
+            var wwwroot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
+            if (!Directory.Exists(wwwroot)) return;
+
+            var fileSystem = new PhysicalFileSystem(wwwroot);
+            app.UseDefaultFiles(new DefaultFilesOptions { FileSystem = fileSystem });
+            app.UseStaticFiles(new StaticFileOptions { FileSystem = fileSystem });
+        }
+
         private static void MigrateDatabase(IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-            var options = new DbContextOptionsBuilder<HygieneAuditDbContext>()
-                .UseSqlServer(connectionString)
-                .Options;
-            using (var db = new HygieneAuditDbContext(options))
+            try
             {
-                db.Database.Migrate();
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+                var options = new DbContextOptionsBuilder<HygieneAuditDbContext>()
+                    .UseSqlServer(connectionString)
+                    .Options;
+                using (var db = new HygieneAuditDbContext(options))
+                {
+                    db.Database.Migrate();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Warning] Database migration failed: {ex.Message}");
             }
         }
     }
