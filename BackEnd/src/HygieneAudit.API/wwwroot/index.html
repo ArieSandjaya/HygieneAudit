@@ -9,12 +9,15 @@
     <meta name="apple-mobile-web-app-title" content="Hygiene Audit">
     <title>Hygiene Audit App</title>
     <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSHlnaWVuZSBBdWRpdCBBcHAiLCJzaG9ydF9uYW1lIjoiSHlnaWVuZUF1ZGl0Iiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZmZmZmYiLCJ0aGVtZV9jb2xvciI6IiM2OTZjZmYiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1qQXdJaUJvWldsbmFIUTlJakl3TUNJZ2RtbGxkMEp2ZUQwaU1DQXdJREl3TUNBeU1EQWlJSGh0YkcwaUlqZzROREl5TURBd01EQWlJSGh0Ykc1aGJXVWlPbHRkSWlCbWFXeHNQU0lqWm1abVptWm1JaUIyYVdWM0FtOTdQQzlpYkhWemJEc2dabWxzWkQwaUkyWm1abVptWmlJSE53WVdOb1BTSWlJSEJoWTJ0bFpDQm9iMnhrWlhJOUlqMGlkSEpoYm5ObWIzSnRjeUlnZDJsa2JHbHVaRDBpTUM0d0xqQWlJR0p2YjNRaU9pQWlJbjA9Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/boxicons.min.css" rel="stylesheet">
+    <link href="assets/bootstrap.min.css" rel="stylesheet">
     <style>
+        @font-face {
+            font-family: 'Public Sans';
+            font-style: normal;
+            font-weight: 300 700;
+            src: local('Inter'), local('Segoe UI'), local('-apple-system');
+        }
         :root {
             --primary: #696cff;
             --primary-dark: #5557e8;
@@ -45,7 +48,7 @@
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: 'Public Sans', sans-serif;
+            font-family: 'Public Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--body-bg);
             color: #566a7f;
             font-size: .9375rem;
@@ -58,53 +61,69 @@
         /* SIDEBAR */
         .layout-menu {
             position:fixed; top:0; left:0; height:100vh;
-            width:var(--menu-width); background:var(--menu-bg);
+            width:var(--menu-width); background:#fff;
             z-index:1100; display:flex; flex-direction:column;
-            overflow:hidden; box-shadow:0 2px 20px rgba(47,51,73,.4);
-            transition:transform .3s ease;
+            overflow:hidden;
+            box-shadow:0 0 0 1px rgba(75,70,92,.05), 0 4px 18px 0 rgba(75,70,92,.1);
+            transition:transform .3s ease, width .3s ease;
         }
         .app-brand {
             display:flex; align-items:center; gap:12px;
-            padding:22px 20px; border-bottom:1px solid rgba(255,255,255,.06);
-            text-decoration:none;
+            padding:0 20px; height:var(--navbar-height);
+            text-decoration:none; flex-shrink:0; position:relative;
+            overflow:hidden;
         }
         .app-brand-logo {
             width:36px; height:36px; background:var(--primary);
             border-radius:10px; display:flex; align-items:center;
             justify-content:center; color:#fff; font-size:18px; flex-shrink:0;
         }
-        .app-brand-text { color:#fff; font-size:15px; font-weight:700; line-height:1.2; }
-        .app-brand-text small { display:block; font-size:11px; font-weight:400; color:var(--menu-color); }
+        .app-brand-text { color:#566a7f; font-size:15px; font-weight:700; line-height:1.2; white-space:nowrap; }
+        .app-brand-text small { display:block; font-size:11px; font-weight:400; color:#a5aeb7; }
+        /* Circular collapse toggle on right edge */
+        .layout-menu-toggle {
+            position:absolute; right:-14px; top:50%; transform:translateY(-50%);
+            width:28px; height:28px; border-radius:50%;
+            background:var(--primary); color:#fff;
+            border:2px solid #fff; outline:none;
+            display:flex; align-items:center; justify-content:center;
+            cursor:pointer; box-shadow:0 2px 8px rgba(105,108,255,.5);
+            font-size:13px; z-index:20; transition:all .2s; flex-shrink:0;
+        }
+        .layout-menu-toggle:hover { background:var(--primary-dark); transform:translateY(-50%) scale(1.1); }
+        .layout-menu-toggle i { transition:transform .3s ease; }
+        /* Sidebar section divider line */
+        .menu-inner-separator { height:1px; background:rgba(75,70,92,.08); margin:4px 0; }
         .menu-inner { flex:1; overflow-y:auto; overflow-x:hidden; padding:8px 0; list-style:none; }
         .menu-inner::-webkit-scrollbar { width:4px; }
-        .menu-inner::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+        .menu-inner::-webkit-scrollbar-thumb { background:rgba(75,70,92,.12); border-radius:2px; }
         .menu-item { list-style:none; margin:2px 12px; }
         .menu-link {
             display:flex; align-items:center; gap:10px;
-            padding:10px 16px; color:var(--menu-color);
+            padding:10px 16px; color:#566a7f;
             border-radius:8px; font-size:.875rem; font-weight:500;
             cursor:pointer; transition:all .2s;
             border:none; background:none; width:100%; text-align:left;
-            text-decoration:none;
+            text-decoration:none; white-space:nowrap;
         }
-        .menu-link:hover { background:rgba(255,255,255,.06); color:#d4d6e0; }
-        .menu-item.active .menu-link {
-            background:linear-gradient(270deg,#a367fc,#696cff);
-            color:#fff; box-shadow:0 4px 10px rgba(105,108,255,.4);
-        }
-        .menu-icon { font-size:20px; flex-shrink:0; }
-        .menu-divider { height:1px; background:rgba(255,255,255,.06); margin:8px 12px; }
+        .menu-link:hover { background:rgba(105,108,255,.06); color:var(--primary); }
+        .menu-link:hover .menu-icon { color:var(--primary); }
+        .menu-item.active .menu-link { background:rgba(105,108,255,.1); color:var(--primary); }
+        .menu-item.active .menu-icon { color:var(--primary); }
+        .menu-icon { font-size:20px; flex-shrink:0; color:#a5aeb7; transition:color .2s; }
+        .menu-divider { height:1px; background:rgba(75,70,92,.08); margin:8px 12px; }
         .menu-section {
             padding:8px 28px 4px; font-size:11px; font-weight:600;
-            text-transform:uppercase; letter-spacing:.8px; color:rgba(139,143,167,.7);
+            text-transform:uppercase; letter-spacing:.8px; color:#a5aeb7;
+            white-space:nowrap; overflow:hidden;
         }
         .menu-badge {
             margin-left:auto; min-width:20px; height:20px;
             border-radius:10px; background:var(--danger); color:#fff;
-            font-size:10px; font-weight:800;
+            font-size:10px; font-weight:800; flex-shrink:0;
             display:flex; align-items:center; justify-content:center; padding:0 4px;
         }
-        .menu-user { padding:16px 20px; border-top:1px solid rgba(255,255,255,.06); }
+        .menu-user { padding:14px 20px; border-top:1px solid rgba(75,70,92,.06); background:#f8f7fa; }
         .menu-user-info { display:flex; align-items:center; gap:10px; }
         .menu-user-avatar {
             width:36px; height:36px; border-radius:50%; background:var(--primary);
@@ -112,8 +131,23 @@
             font-size:14px; font-weight:700; flex-shrink:0;
         }
         .menu-user-details { flex:1; overflow:hidden; }
-        .menu-user-name { font-size:13px; font-weight:600; color:#d4d6e0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .menu-user-role { font-size:11px; color:var(--menu-color); }
+        .menu-user-name { font-size:13px; font-weight:600; color:#566a7f; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .menu-user-role { font-size:11px; color:#a5aeb7; }
+        /* Collapsed sidebar (desktop) */
+        .layout-menu.menu-collapsed { width:68px; }
+        .layout-menu.menu-collapsed .app-brand-text,
+        .layout-menu.menu-collapsed .menu-section,
+        .layout-menu.menu-collapsed .menu-link span,
+        .layout-menu.menu-collapsed .menu-user-details,
+        .layout-menu.menu-collapsed .menu-badge { display:none !important; }
+        .layout-menu.menu-collapsed .menu-link { justify-content:center; padding:10px; }
+        .layout-menu.menu-collapsed .menu-icon { margin:0; }
+        .layout-menu.menu-collapsed .layout-menu-toggle i { transform:rotate(180deg); }
+        .layout-menu.menu-collapsed .menu-user { padding:14px 10px; }
+        .layout-menu.menu-collapsed .menu-user-info { justify-content:center; }
+        .layout-menu.menu-collapsed .menu-user-avatar { margin:0 auto; }
+        .layout-menu.menu-collapsed + .layout-page,
+        .layout-page.menu-collapsed { margin-left:68px; }
         /* LAYOUT PAGE */
         .layout-page {
             flex:1; display:flex; flex-direction:column; min-height:100vh;
@@ -170,6 +204,8 @@
     </style>
     <style>
         /* LOGIN */
+        #appContainer { display:none; }
+        #appContainer.active { display:block; }
         #loginPage {
             min-height:100vh; display:flex; align-items:center; justify-content:center;
             background:linear-gradient(135deg,#696cff,#a367fc); padding:20px;
@@ -313,6 +349,14 @@
     </style>
     <style>
         /* HISTORY */
+        .history-search-bar { margin-bottom:1rem; }
+        .history-search-input-wrap { position:relative; display:flex; align-items:center; }
+        .history-search-icon { position:absolute; left:12px; font-size:18px; color:#a1aab2; pointer-events:none; }
+        .history-search-input { width:100%; padding:10px 40px 10px 38px; border:1.5px solid var(--gray-200); border-radius:10px; font-size:.875rem; font-family:inherit; color:#334155; background:#fff; outline:none; transition:border-color .2s; }
+        .history-search-input:focus { border-color:var(--primary); }
+        .history-search-input::placeholder { color:#a1aab2; }
+        .history-search-clear { position:absolute; right:10px; background:none; border:none; cursor:pointer; color:#a1aab2; display:flex; align-items:center; padding:4px; border-radius:50%; font-size:18px; transition:color .2s; }
+        .history-search-clear:hover { color:#566a7f; }
         .history-filters { display:flex; gap:8px; margin-bottom:1.25rem; flex-wrap:wrap; }
         .filter-chip { padding:6px 16px; border-radius:100px; border:1.5px solid var(--gray-200); background:#fff; font-size:.8125rem; font-weight:600; color:#566a7f; cursor:pointer; transition:all .2s; }
         .filter-chip.active { background:var(--primary); color:#fff; border-color:var(--primary); }
@@ -520,9 +564,9 @@
         a { color:var(--primary); }
     </style>
     <script src="config.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="assets/jspdf.umd.min.js"></script>
+    <script src="assets/jspdf.plugin.autotable.min.js"></script>
+    <script src="assets/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="toast-container" id="toastContainer"></div>
@@ -577,14 +621,21 @@
                 <!-- SIDEBAR -->
                 <aside id="layout-menu" class="layout-menu">
                     <a class="app-brand">
-                        <div class="app-brand-logo">📋</div>
+                        <div class="app-brand-logo">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 5.55228 9.44772 6 10 6H14C14.5523 6 15 5.55228 15 5M9 5C9 4.44772 9.44772 4 10 4H14C14.5523 4 15 4.44772 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
                         <div class="app-brand-text">Hygiene Audit<small>Management System</small></div>
+                        <button class="layout-menu-toggle d-none d-lg-flex" id="sidebarToggle" onclick="toggleSidebarCollapse()" title="Ciutkan menu">
+                            <i class="bx bx-chevron-left"></i>
+                        </button>
                     </a>
                     <ul class="menu-inner">
                         <li class="menu-section">Menu Utama</li>
                         <li class="menu-item active" data-page="dashboard">
                             <button class="menu-link" onclick="navigateTo('dashboard')">
-                                <i class="menu-icon bx bx-home-circle"></i><span>Dashboard</span>
+                                <i class="menu-icon bx bxs-dashboard"></i><span>Dashboard</span>
                             </button>
                         </li>
                         <li class="menu-item" data-page="newAudit">
@@ -612,8 +663,8 @@
                                 <div class="menu-user-name" id="sidebarUserName">Admin</div>
                                 <div class="menu-user-role" id="sidebarUserRole">Auditor</div>
                             </div>
-                            <button class="menu-link" onclick="logout()" style="padding:6px;min-width:32px;border-radius:8px;" title="Logout">
-                                <i class="bx bx-log-out" style="font-size:18px;color:#a1aab2;"></i>
+                            <button onclick="logout()" title="Logout" style="padding:6px;min-width:32px;border-radius:8px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+                                <i class="bx bx-log-out" style="font-size:18px;color:#a5aeb7;"></i>
                             </button>
                         </div>
                     </div>
@@ -751,6 +802,16 @@
 
                             <!-- HISTORY -->
                             <div class="page" id="pageHistory">
+                                <div class="history-search-bar">
+                                    <div class="history-search-input-wrap">
+                                        <i class="bx bx-search history-search-icon"></i>
+                                        <input type="text" id="historySearchInput" class="history-search-input"
+                                               placeholder="Cari tenant atau PIC..." oninput="searchHistory(this.value)">
+                                        <button class="history-search-clear" id="historyClearBtn" onclick="clearHistorySearch()" style="display:none;">
+                                            <i class="bx bx-x"></i>
+                                        </button>
+                                    </div>
+                                </div>
                                 <div class="history-filters">
                                     <button class="filter-chip active" onclick="filterHistory('all')">Semua</button>
                                     <button class="filter-chip" onclick="filterHistory('completed')">Selesai</button>
@@ -1597,45 +1658,46 @@
 
         // ========== AUTHENTICATION ==========
         async function _applySession(user) {
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('appContainer').classList.add('active');
-            document.getElementById('userName').textContent = user.name;
-            document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
-            document.getElementById('dashboardUserName').textContent = user.name;
-            document.getElementById('dashboardDate').textContent = formatDate(new Date());
+            showLoading();
 
             const isAdmin = ['admin', 'Admin', 'SuperAdmin'].includes(user.role);
-            document.getElementById('navAdmin').style.display = isAdmin ? 'block' : 'none';
-            document.getElementById('sidebarAvatar').textContent = user.name.charAt(0).toUpperCase();
-            document.getElementById('sidebarUserName').textContent = user.name;
-            document.getElementById('sidebarUserRole').textContent = user.role;
 
             try { Store.tenants = await ApiClient.tenants.getAll(); } catch { }
 
             // Load audits from API (works in incognito); fall back to IndexedDB if offline
             try {
                 const apiAudits = await ApiClient.audits.getAll();
-                Store.audits = apiAudits.map(a => ({
-                    ...a,
-                    items: (a.items || []).map(item => ({
+                Store.audits = apiAudits.map(a => {
+                    const mappedItems = (a.items || []).map(item => ({
                         ...item,
                         status: item.status || null,
                         note: item.note || '',
                         photos: item.photos || [],
-                    })),
-                    categories: (() => {
-                        const cats = {};
-                        (a.items || []).forEach(item => {
-                            if (!cats[item.category]) cats[item.category] = [];
-                            cats[item.category].push(item);
-                        });
-                        return cats;
-                    })(),
-                }));
+                    }));
+                    const cats = {};
+                    mappedItems.forEach(item => {
+                        if (!cats[item.category]) cats[item.category] = [];
+                        cats[item.category].push(item);
+                    });
+                    return { ...a, items: mappedItems, categories: cats };
+                });
             } catch {
                 Store.audits = await getAuditsOffline().catch(() => []);
             }
 
+            // Now show app with real data
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('appContainer').classList.add('active');
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('dashboardUserName').textContent = user.name;
+            document.getElementById('dashboardDate').textContent = formatDate(new Date());
+            document.getElementById('navAdmin').style.display = isAdmin ? 'block' : 'none';
+            document.getElementById('sidebarAvatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('sidebarUserName').textContent = user.name;
+            document.getElementById('sidebarUserRole').textContent = user.role;
+
+            hideLoading();
             initDashboard();
             showToast(`Selamat datang, ${user.name}!`);
             setTimeout(showInstallPrompt, 2000);
@@ -2310,8 +2372,15 @@
 
         // ========== HISTORY ==========
         let historyFilter = 'all';
+        let historySearch = '';
 
         function initHistory() {
+            // Reset search on page enter
+            historySearch = '';
+            const input = document.getElementById('historySearchInput');
+            if (input) input.value = '';
+            const clearBtn = document.getElementById('historyClearBtn');
+            if (clearBtn) clearBtn.style.display = 'none';
             renderHistory();
         }
 
@@ -2322,12 +2391,37 @@
             renderHistory();
         }
 
+        function searchHistory(query) {
+            historySearch = query.trim().toLowerCase();
+            const clearBtn = document.getElementById('historyClearBtn');
+            if (clearBtn) clearBtn.style.display = historySearch ? 'flex' : 'none';
+            renderHistory();
+        }
+
+        function clearHistorySearch() {
+            historySearch = '';
+            const input = document.getElementById('historySearchInput');
+            if (input) { input.value = ''; input.focus(); }
+            const clearBtn = document.getElementById('historyClearBtn');
+            if (clearBtn) clearBtn.style.display = 'none';
+            renderHistory();
+        }
+
         function renderHistory() {
             const container = document.getElementById('historyContainer');
             let audits = Store.audits;
 
             if (historyFilter !== 'all') {
                 audits = audits.filter(a => a.status.toLowerCase() === historyFilter);
+            }
+
+            if (historySearch) {
+                audits = audits.filter(a => {
+                    const tenant = Store.tenants.find(t => t.id === a.tenantId);
+                    const tenantName = (tenant?.name || '').toLowerCase();
+                    const picName = (a.picName || '').toLowerCase();
+                    return tenantName.includes(historySearch) || picName.includes(historySearch);
+                });
             }
 
             // Group by tenant
@@ -2343,13 +2437,17 @@
             });
 
             if (Object.keys(tenantGroups).length === 0) {
-                container.innerHTML = `
-                        <div class="empty-state">
+                container.innerHTML = historySearch
+                    ? `<div class="empty-state">
+                            <div class="icon">🔍</div>
+                            <h3>Tidak ditemukan</h3>
+                            <p>Tidak ada audit yang cocok dengan "<strong>${historySearch}</strong>"</p>
+                        </div>`
+                    : `<div class="empty-state">
                             <div class="icon">📜</div>
                             <h3>Belum ada history</h3>
                             <p>Audit yang telah dilakukan akan muncul di sini</p>
-                        </div>
-                    `;
+                        </div>`;
                 return;
             }
 
@@ -2427,16 +2525,25 @@
 
                         <div class="stats-grid" style="margin-bottom: 20px;">
                             <div class="stat-card success">
-                                <div class="stat-value" style="font-size: 24px;">${passItems}</div>
-                                <div class="stat-label">Pass</div>
+                                <div class="stat-icon">✅</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">${passItems}</div>
+                                    <div class="stat-label">Pass</div>
+                                </div>
                             </div>
                             <div class="stat-card danger">
-                                <div class="stat-value" style="font-size: 24px;">${failItems}</div>
-                                <div class="stat-label">Fail</div>
+                                <div class="stat-icon">❌</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">${failItems}</div>
+                                    <div class="stat-label">Fail</div>
+                                </div>
                             </div>
                             <div class="stat-card primary">
-                                <div class="stat-value" style="font-size: 24px;">${passRate}%</div>
-                                <div class="stat-label">Pass Rate</div>
+                                <div class="stat-icon">📊</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">${passRate}%</div>
+                                    <div class="stat-label">Pass Rate</div>
+                                </div>
                             </div>
                         </div>
 
@@ -2831,11 +2938,34 @@
             if (overlay) overlay.classList.remove('active');
         }
 
+        function toggleSidebarCollapse() {
+            const menu = document.getElementById('layout-menu');
+            const page = document.querySelector('.layout-page');
+            const icon = document.querySelector('#sidebarToggle i');
+            if (!menu) return;
+            const collapsed = menu.classList.toggle('menu-collapsed');
+            if (page) page.style.marginLeft = collapsed ? '68px' : 'var(--menu-width)';
+            if (icon) icon.style.transform = collapsed ? 'rotate(180deg)' : '';
+            localStorage.setItem('sidebarCollapsed', collapsed ? '1' : '0');
+        }
+
+        function initSidebarState() {
+            if (localStorage.getItem('sidebarCollapsed') === '1') {
+                const menu = document.getElementById('layout-menu');
+                const page = document.querySelector('.layout-page');
+                const icon = document.querySelector('#sidebarToggle i');
+                if (menu) menu.classList.add('menu-collapsed');
+                if (page) page.style.marginLeft = '68px';
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
                 // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
             await initIndexedDB().catch(console.error);
             SyncManager.init();
             NotificationManager.init();
+            initSidebarState();
 
             // Check backend reachability and show status on login page
             checkServerStatus();
