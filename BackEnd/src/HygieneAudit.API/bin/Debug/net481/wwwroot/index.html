@@ -2234,7 +2234,10 @@
 
         <!-- App Header -->
         <div class="app-header" id="appHeader">
-            <h1 id="pageTitle">Dashboard</h1>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <button class="header-btn" id="backBtn" onclick="goBack()" title="Kembali" style="display:none;">&#8592;</button>
+                <h1 id="pageTitle">Dashboard</h1>
+            </div>
             <div class="header-actions">
                 <div class="user-badge" id="userBadge">
                     <div class="avatar" id="userAvatar">A</div>
@@ -2632,7 +2635,9 @@
             audits: [],         // loaded from IndexedDB; updated on create/submit
             currentUser: null,  // { id, name, role }
             currentAudit: null, // in-progress audit object
-            excelReportData: null
+            excelReportData: null,
+            viewingAuditId: null,
+            previousPage: 'dashboard'
         };
 
         // Decode JWT payload (used to extract user ID)
@@ -3394,10 +3399,28 @@
         }
 
         // ========== NAVIGATION ==========
+        function goBack() {
+            navigateTo(Store.previousPage || 'dashboard');
+        }
+
         function navigateTo(page) {
+            const pagesWithBack = ['auditDetail', 'checklist'];
+            const currentPage = document.querySelector('.page.active')?.id;
+            if (currentPage) {
+                const reverseMap = {
+                    'pageDashboard': 'dashboard', 'pageNewAudit': 'newAudit',
+                    'pageHistory': 'history', 'pageAdmin': 'admin',
+                    'pageChecklist': 'checklist', 'pageAuditDetail': 'auditDetail'
+                };
+                Store.previousPage = reverseMap[currentPage] || 'dashboard';
+            }
+
             // Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            const backBtn = document.getElementById('backBtn');
+            if (backBtn) backBtn.style.display = pagesWithBack.includes(page) ? 'inline-flex' : 'none';
 
             // Show target page
             const pageMap = {
@@ -4091,6 +4114,7 @@
         function viewAuditDetail(auditId) {
             const audit = Store.audits.find(a => a.id === auditId);
             if (!audit) return;
+            Store.viewingAuditId = auditId;
 
             const tenant = Store.tenants.find(t => t.id === audit.tenantId);
             const totalItems = audit.items?.length || 0;
@@ -4171,7 +4195,7 @@
 
         // Export from detail view
         async function exportCurrentAuditToPDF() {
-            const auditId = Store.audits[Store.audits.length - 1]?.id;
+            const auditId = Store.viewingAuditId;
             if (auditId) {
                 Store.currentAudit = Store.audits.find(a => a.id === auditId);
                 await exportToPDF();
@@ -4179,7 +4203,7 @@
         }
 
         async function exportCurrentAuditToExcel() {
-            const auditId = Store.audits[Store.audits.length - 1]?.id;
+            const auditId = Store.viewingAuditId;
             if (auditId) {
                 Store.currentAudit = Store.audits.find(a => a.id === auditId);
                 await exportToExcel();
