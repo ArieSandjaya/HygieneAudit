@@ -1599,45 +1599,46 @@
 
         // ========== AUTHENTICATION ==========
         async function _applySession(user) {
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('appContainer').classList.add('active');
-            document.getElementById('userName').textContent = user.name;
-            document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
-            document.getElementById('dashboardUserName').textContent = user.name;
-            document.getElementById('dashboardDate').textContent = formatDate(new Date());
+            showLoading();
 
             const isAdmin = ['admin', 'Admin', 'SuperAdmin'].includes(user.role);
-            document.getElementById('navAdmin').style.display = isAdmin ? 'block' : 'none';
-            document.getElementById('sidebarAvatar').textContent = user.name.charAt(0).toUpperCase();
-            document.getElementById('sidebarUserName').textContent = user.name;
-            document.getElementById('sidebarUserRole').textContent = user.role;
 
             try { Store.tenants = await ApiClient.tenants.getAll(); } catch { }
 
             // Load audits from API (works in incognito); fall back to IndexedDB if offline
             try {
                 const apiAudits = await ApiClient.audits.getAll();
-                Store.audits = apiAudits.map(a => ({
-                    ...a,
-                    items: (a.items || []).map(item => ({
+                Store.audits = apiAudits.map(a => {
+                    const mappedItems = (a.items || []).map(item => ({
                         ...item,
                         status: item.status || null,
                         note: item.note || '',
                         photos: item.photos || [],
-                    })),
-                    categories: (() => {
-                        const cats = {};
-                        (a.items || []).forEach(item => {
-                            if (!cats[item.category]) cats[item.category] = [];
-                            cats[item.category].push(item);
-                        });
-                        return cats;
-                    })(),
-                }));
+                    }));
+                    const cats = {};
+                    mappedItems.forEach(item => {
+                        if (!cats[item.category]) cats[item.category] = [];
+                        cats[item.category].push(item);
+                    });
+                    return { ...a, items: mappedItems, categories: cats };
+                });
             } catch {
                 Store.audits = await getAuditsOffline().catch(() => []);
             }
 
+            // Now show app with real data
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('appContainer').classList.add('active');
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('dashboardUserName').textContent = user.name;
+            document.getElementById('dashboardDate').textContent = formatDate(new Date());
+            document.getElementById('navAdmin').style.display = isAdmin ? 'block' : 'none';
+            document.getElementById('sidebarAvatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('sidebarUserName').textContent = user.name;
+            document.getElementById('sidebarUserRole').textContent = user.role;
+
+            hideLoading();
             initDashboard();
             showToast(`Selamat datang, ${user.name}!`);
             setTimeout(showInstallPrompt, 2000);
@@ -2429,16 +2430,25 @@
 
                         <div class="stats-grid" style="margin-bottom: 20px;">
                             <div class="stat-card success">
-                                <div class="stat-value" style="font-size: 24px;">${passItems}</div>
-                                <div class="stat-label">Pass</div>
+                                <div class="stat-icon">✅</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">${passItems}</div>
+                                    <div class="stat-label">Pass</div>
+                                </div>
                             </div>
                             <div class="stat-card danger">
-                                <div class="stat-value" style="font-size: 24px;">${failItems}</div>
-                                <div class="stat-label">Fail</div>
+                                <div class="stat-icon">❌</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">${failItems}</div>
+                                    <div class="stat-label">Fail</div>
+                                </div>
                             </div>
                             <div class="stat-card primary">
-                                <div class="stat-value" style="font-size: 24px;">${passRate}%</div>
-                                <div class="stat-label">Pass Rate</div>
+                                <div class="stat-icon">📊</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">${passRate}%</div>
+                                    <div class="stat-label">Pass Rate</div>
+                                </div>
                             </div>
                         </div>
 
