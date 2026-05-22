@@ -315,6 +315,14 @@
     </style>
     <style>
         /* HISTORY */
+        .history-search-bar { margin-bottom:1rem; }
+        .history-search-input-wrap { position:relative; display:flex; align-items:center; }
+        .history-search-icon { position:absolute; left:12px; font-size:18px; color:#a1aab2; pointer-events:none; }
+        .history-search-input { width:100%; padding:10px 40px 10px 38px; border:1.5px solid var(--gray-200); border-radius:10px; font-size:.875rem; font-family:inherit; color:#334155; background:#fff; outline:none; transition:border-color .2s; }
+        .history-search-input:focus { border-color:var(--primary); }
+        .history-search-input::placeholder { color:#a1aab2; }
+        .history-search-clear { position:absolute; right:10px; background:none; border:none; cursor:pointer; color:#a1aab2; display:flex; align-items:center; padding:4px; border-radius:50%; font-size:18px; transition:color .2s; }
+        .history-search-clear:hover { color:#566a7f; }
         .history-filters { display:flex; gap:8px; margin-bottom:1.25rem; flex-wrap:wrap; }
         .filter-chip { padding:6px 16px; border-radius:100px; border:1.5px solid var(--gray-200); background:#fff; font-size:.8125rem; font-weight:600; color:#566a7f; cursor:pointer; transition:all .2s; }
         .filter-chip.active { background:var(--primary); color:#fff; border-color:var(--primary); }
@@ -753,6 +761,16 @@
 
                             <!-- HISTORY -->
                             <div class="page" id="pageHistory">
+                                <div class="history-search-bar">
+                                    <div class="history-search-input-wrap">
+                                        <i class="bx bx-search history-search-icon"></i>
+                                        <input type="text" id="historySearchInput" class="history-search-input"
+                                               placeholder="Cari tenant atau PIC..." oninput="searchHistory(this.value)">
+                                        <button class="history-search-clear" id="historyClearBtn" onclick="clearHistorySearch()" style="display:none;">
+                                            <i class="bx bx-x"></i>
+                                        </button>
+                                    </div>
+                                </div>
                                 <div class="history-filters">
                                     <button class="filter-chip active" onclick="filterHistory('all')">Semua</button>
                                     <button class="filter-chip" onclick="filterHistory('completed')">Selesai</button>
@@ -2313,8 +2331,15 @@
 
         // ========== HISTORY ==========
         let historyFilter = 'all';
+        let historySearch = '';
 
         function initHistory() {
+            // Reset search on page enter
+            historySearch = '';
+            const input = document.getElementById('historySearchInput');
+            if (input) input.value = '';
+            const clearBtn = document.getElementById('historyClearBtn');
+            if (clearBtn) clearBtn.style.display = 'none';
             renderHistory();
         }
 
@@ -2325,12 +2350,37 @@
             renderHistory();
         }
 
+        function searchHistory(query) {
+            historySearch = query.trim().toLowerCase();
+            const clearBtn = document.getElementById('historyClearBtn');
+            if (clearBtn) clearBtn.style.display = historySearch ? 'flex' : 'none';
+            renderHistory();
+        }
+
+        function clearHistorySearch() {
+            historySearch = '';
+            const input = document.getElementById('historySearchInput');
+            if (input) { input.value = ''; input.focus(); }
+            const clearBtn = document.getElementById('historyClearBtn');
+            if (clearBtn) clearBtn.style.display = 'none';
+            renderHistory();
+        }
+
         function renderHistory() {
             const container = document.getElementById('historyContainer');
             let audits = Store.audits;
 
             if (historyFilter !== 'all') {
                 audits = audits.filter(a => a.status.toLowerCase() === historyFilter);
+            }
+
+            if (historySearch) {
+                audits = audits.filter(a => {
+                    const tenant = Store.tenants.find(t => t.id === a.tenantId);
+                    const tenantName = (tenant?.name || '').toLowerCase();
+                    const picName = (a.picName || '').toLowerCase();
+                    return tenantName.includes(historySearch) || picName.includes(historySearch);
+                });
             }
 
             // Group by tenant
@@ -2346,13 +2396,17 @@
             });
 
             if (Object.keys(tenantGroups).length === 0) {
-                container.innerHTML = `
-                        <div class="empty-state">
+                container.innerHTML = historySearch
+                    ? `<div class="empty-state">
+                            <div class="icon">🔍</div>
+                            <h3>Tidak ditemukan</h3>
+                            <p>Tidak ada audit yang cocok dengan "<strong>${historySearch}</strong>"</p>
+                        </div>`
+                    : `<div class="empty-state">
                             <div class="icon">📜</div>
                             <h3>Belum ada history</h3>
                             <p>Audit yang telah dilakukan akan muncul di sini</p>
-                        </div>
-                    `;
+                        </div>`;
                 return;
             }
 
