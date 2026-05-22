@@ -9,12 +9,15 @@
     <meta name="apple-mobile-web-app-title" content="Hygiene Audit">
     <title>Hygiene Audit App</title>
     <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSHlnaWVuZSBBdWRpdCBBcHAiLCJzaG9ydF9uYW1lIjoiSHlnaWVuZUF1ZGl0Iiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZmZmZmYiLCJ0aGVtZV9jb2xvciI6IiM2OTZjZmYiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1qQXdJaUJvWldsbmFIUTlJakl3TUNJZ2RtbGxkMEp2ZUQwaU1DQXdJREl3TUNBeU1EQWlJSGh0YkcwaUlqZzROREl5TURBd01EQWlJSGh0Ykc1aGJXVWlPbHRkSWlCbWFXeHNQU0lqWm1abVptWm1JaUIyYVdWM0FtOTdQQzlpYkhWemJEc2dabWxzWkQwaUkyWm1abVptWmlJSE53WVdOb1BTSWlJSEJoWTJ0bFpDQm9iMnhrWlhJOUlqMGlkSEpoYm5ObWIzSnRjeUlnZDJsa2JHbHVaRDBpTUM0d0xqQWlJR0p2YjNRaU9pQWlJbjA9Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/boxicons.min.css" rel="stylesheet">
+    <link href="assets/bootstrap.min.css" rel="stylesheet">
     <style>
+        @font-face {
+            font-family: 'Public Sans';
+            font-style: normal;
+            font-weight: 300 700;
+            src: local('Inter'), local('Segoe UI'), local('-apple-system');
+        }
         :root {
             --primary: #696cff;
             --primary-dark: #5557e8;
@@ -45,7 +48,7 @@
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: 'Public Sans', sans-serif;
+            font-family: 'Public Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--body-bg);
             color: #566a7f;
             font-size: .9375rem;
@@ -530,9 +533,9 @@
         a { color:var(--primary); }
     </style>
     <script src="config.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="assets/jspdf.umd.min.js"></script>
+    <script src="assets/jspdf.plugin.autotable.min.js"></script>
+    <script src="assets/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="toast-container" id="toastContainer"></div>
