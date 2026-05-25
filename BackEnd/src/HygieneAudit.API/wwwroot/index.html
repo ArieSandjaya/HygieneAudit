@@ -939,7 +939,7 @@
                                         <button class="btn btn-sm btn-primary" onclick="showTenantModal()">+ Tambah</button>
                                     </div>
                                     <table class="admin-table">
-                                        <thead><tr><th>Nama Tenant</th><th>Tipe</th><th>Aksi</th></tr></thead>
+                                        <thead><tr><th>Nama Tenant</th><th>Lantai</th><th>Tipe</th><th>Aksi</th></tr></thead>
                                         <tbody id="tenantsTable"></tbody>
                                     </table>
                                 </div>
@@ -1017,16 +1017,20 @@
     <div class="modal-overlay" id="userModal">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">Tambah User</h3>
+                <h3 class="modal-title" id="userModalTitle">Tambah User</h3>
                 <button class="modal-close" onclick="closeModal('userModal')">&times;</button>
             </div>
             <form onsubmit="saveUser(event)">
+                <input type="hidden" id="editUserId">
                 <div class="form-group"><label class="form-label">Username</label><input type="text" class="form-input" id="newUsername" required></div>
-                <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" id="newPassword" required></div>
+                <div class="form-group" id="passwordGroup"><label class="form-label">Password <span id="passwordHint" style="font-weight:400;color:#a5aeb7;font-size:.8125rem;"></span></label><input type="password" class="form-input" id="newPassword"></div>
                 <div class="form-group"><label class="form-label">Nama Lengkap</label><input type="text" class="form-input" id="newFullName" required></div>
                 <div class="form-group">
                     <label class="form-label">Role</label>
-                    <select class="form-input" id="newRole" required><option value="auditor">Auditor</option><option value="admin">Admin</option></select>
+                    <select class="form-input" id="newRole"><option value="Auditor">Auditor</option><option value="Admin">Admin</option></select>
+                </div>
+                <div class="form-group" id="activeGroup" style="display:none;">
+                    <div class="toggle-group"><span class="toggle-label">Aktif?</span><label class="toggle-switch"><input type="checkbox" id="editUserActive" checked><span class="toggle-slider"></span></label></div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-full">Simpan</button>
             </form>
@@ -1035,12 +1039,14 @@
     <div class="modal-overlay" id="templateModal">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">Tambah Template Checklist</h3>
+                <h3 class="modal-title" id="templateModalTitle">Tambah Template Checklist</h3>
                 <button class="modal-close" onclick="closeModal('templateModal')">&times;</button>
             </div>
             <form onsubmit="saveTemplate(event)">
+                <input type="hidden" id="editTemplateId">
                 <div class="form-group"><label class="form-label">Kategori</label><input type="text" class="form-input" id="newCategory" placeholder="Contoh: LIFE SAFETY" required></div>
                 <div class="form-group"><label class="form-label">Nama Kegiatan</label><input type="text" class="form-input" id="newActivity" placeholder="Contoh: Kondisi Pipa Gas" required></div>
+                <div class="form-group"><label class="form-label">Urutan Tampil</label><input type="number" class="form-input" id="newDisplayOrder" value="0" min="0"></div>
                 <div class="form-group">
                     <div class="toggle-group"><span class="toggle-label">Hanya untuk Tenant Gas?</span><label class="toggle-switch"><input type="checkbox" id="newGasOnly"><span class="toggle-slider"></span></label></div>
                 </div>
@@ -1051,11 +1057,14 @@
     <div class="modal-overlay" id="tenantModal">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">Tambah Tenant</h3>
+                <h3 class="modal-title" id="tenantModalTitle">Tambah Tenant</h3>
                 <button class="modal-close" onclick="closeModal('tenantModal')">&times;</button>
             </div>
             <form onsubmit="saveTenant(event)">
+                <input type="hidden" id="editTenantId">
                 <div class="form-group"><label class="form-label">Nama Tenant</label><input type="text" class="form-input" id="newTenantName" required></div>
+                <div class="form-group"><label class="form-label">Lantai</label><input type="text" class="form-input" id="newTenantFloor" placeholder="Contoh: G, 1, 2, LG"></div>
+                <div class="form-group"><label class="form-label">Kategori</label><input type="text" class="form-input" id="newTenantCategory" placeholder="Contoh: Restoran, Kafe, Retail"></div>
                 <div class="form-group">
                     <div class="toggle-group"><span class="toggle-label">Menggunakan Gas?</span><label class="toggle-switch"><input type="checkbox" id="newTenantGas"><span class="toggle-slider"></span></label></div>
                 </div>
@@ -2915,43 +2924,144 @@
         function initAdminTenants()   { if (_adminGuard()) renderTenants(); }
         function initAdminReports()   { if (_adminGuard()) generateExcelReport(); }
 
-        function renderUsers() {
-            // User management requires a dedicated API endpoint (not yet implemented)
-            document.getElementById('usersTable').innerHTML =
-                '<tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:20px;">Manajemen user tersedia melalui database langsung. API endpoint belum diimplementasikan.</td></tr>';
+        // ── Render Users ─────────────────────────────────────────────────────
+        async function renderUsers() {
+            const tbody = document.getElementById('usersTable');
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:#a5aeb7;">Memuat data...</td></tr>';
+            try {
+                const users = await ApiClient.users.getAll();
+                if (!users.length) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:#a5aeb7;">Belum ada data user.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = users.map(u => `
+                    <tr>
+                        <td>${u.username}</td>
+                        <td>${u.name}</td>
+                        <td><span class="tenant-type ${u.role === 'Admin' || u.role === 'SuperAdmin' ? 'gas' : 'non-gas'}">${u.role}</span>
+                            ${!u.isActive ? '<span style="font-size:11px;color:var(--danger);margin-left:4px;">(Non-aktif)</span>' : ''}</td>
+                        <td style="white-space:nowrap;">
+                            <button class="btn btn-sm" style="padding:4px 10px;margin-right:4px;" onclick="editUser(${u.id})">Edit</button>
+                            <button class="btn btn-sm" style="padding:4px 10px;background:rgba(255,62,29,.1);color:var(--danger);border:none;" onclick="deleteUser(${u.id})">Hapus</button>
+                        </td>
+                    </tr>`).join('');
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--danger);">Gagal memuat: ${err.message}</td></tr>`;
+            }
         }
 
-        function renderTemplates() {
-            // Template management requires a dedicated API endpoint (not yet implemented)
-            document.getElementById('templatesTable').innerHTML =
-                '<tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:20px;">Manajemen template tersedia melalui database langsung. API endpoint belum diimplementasikan.</td></tr>';
+        // ── Render Templates ──────────────────────────────────────────────────
+        async function renderTemplates() {
+            const tbody = document.getElementById('templatesTable');
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:#a5aeb7;">Memuat data...</td></tr>';
+            try {
+                const templates = await ApiClient.templates.getAll();
+                if (!templates.length) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:#a5aeb7;">Belum ada template.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = templates.map(t => `
+                    <tr>
+                        <td>${t.category}</td>
+                        <td>${t.name}</td>
+                        <td>${t.requiresGas ? '<span class="tenant-type gas">Ya</span>' : '<span style="color:#a5aeb7;font-size:.8125rem;">Tidak</span>'}</td>
+                        <td style="white-space:nowrap;">
+                            <button class="btn btn-sm" style="padding:4px 10px;margin-right:4px;" onclick="editTemplate(${t.id})">Edit</button>
+                            <button class="btn btn-sm" style="padding:4px 10px;background:rgba(255,62,29,.1);color:var(--danger);border:none;" onclick="deleteTemplate(${t.id})">Hapus</button>
+                        </td>
+                    </tr>`).join('');
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--danger);">Gagal memuat: ${err.message}</td></tr>`;
+            }
         }
 
+        // ── Render Tenants ────────────────────────────────────────────────────
         function renderTenants() {
             const tbody = document.getElementById('tenantsTable');
             if (!Store.tenants.length) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--gray-400);padding:20px;">Belum ada data tenant.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:#a5aeb7;">Belum ada data tenant.</td></tr>';
                 return;
             }
             tbody.innerHTML = Store.tenants.map(t => `
-                    <tr>
-                        <td>${t.name}</td>
-                        <td><span class="tenant-type ${t.usesGas ? 'gas' : 'non-gas'}">${t.usesGas ? 'Gas' : 'Non-Gas'}</span></td>
-                        <td><span style="font-size:12px;color:var(--gray-400);">Readonly dari API</span></td>
-                    </tr>
-                `).join('');
+                <tr>
+                    <td>${t.name}</td>
+                    <td>${t.floor ? `<span style="font-size:.8125rem;color:#566a7f;">${t.floor}</span>` : '<span style="color:#a5aeb7;font-size:.8125rem;">-</span>'}</td>
+                    <td><span class="tenant-type ${t.usesGas ? 'gas' : 'non-gas'}">${t.usesGas ? 'Gas' : 'Non-Gas'}</span></td>
+                    <td style="white-space:nowrap;">
+                        <button class="btn btn-sm" style="padding:4px 10px;margin-right:4px;" onclick="editTenant(${t.id})">Edit</button>
+                        <button class="btn btn-sm" style="padding:4px 10px;background:rgba(255,62,29,.1);color:var(--danger);border:none;" onclick="deleteTenant(${t.id})">Hapus</button>
+                    </td>
+                </tr>`).join('');
         }
 
-        // Modal functions
+        // ── Modal open helpers ────────────────────────────────────────────────
         function showUserModal() {
+            document.getElementById('userModalTitle').textContent = 'Tambah User';
+            document.getElementById('editUserId').value = '';
+            document.getElementById('newUsername').disabled = false;
+            document.getElementById('newPassword').required = true;
+            document.getElementById('passwordHint').textContent = '';
+            document.getElementById('activeGroup').style.display = 'none';
+            document.getElementById('userModal').querySelector('form').reset();
             document.getElementById('userModal').classList.add('active');
         }
 
+        function editUser(id) {
+            ApiClient.users.getAll().then(users => {
+                const u = users.find(x => x.id === id);
+                if (!u) return;
+                document.getElementById('userModalTitle').textContent = 'Edit User';
+                document.getElementById('editUserId').value = u.id;
+                document.getElementById('newUsername').value = u.username;
+                document.getElementById('newUsername').disabled = true;
+                document.getElementById('newFullName').value = u.name;
+                document.getElementById('newRole').value = u.role;
+                document.getElementById('newPassword').value = '';
+                document.getElementById('newPassword').required = false;
+                document.getElementById('passwordHint').textContent = '(kosongkan jika tidak diubah)';
+                document.getElementById('editUserActive').checked = u.isActive;
+                document.getElementById('activeGroup').style.display = 'block';
+                document.getElementById('userModal').classList.add('active');
+            }).catch(err => showToast(err.message, 'error'));
+        }
+
         function showTemplateModal() {
+            document.getElementById('templateModalTitle').textContent = 'Tambah Template';
+            document.getElementById('editTemplateId').value = '';
+            document.getElementById('templateModal').querySelector('form').reset();
             document.getElementById('templateModal').classList.add('active');
         }
 
+        function editTemplate(id) {
+            ApiClient.templates.getAll().then(templates => {
+                const t = templates.find(x => x.id === id);
+                if (!t) return;
+                document.getElementById('templateModalTitle').textContent = 'Edit Template';
+                document.getElementById('editTemplateId').value = t.id;
+                document.getElementById('newCategory').value = t.category;
+                document.getElementById('newActivity').value = t.name;
+                document.getElementById('newDisplayOrder').value = t.displayOrder;
+                document.getElementById('newGasOnly').checked = t.requiresGas;
+                document.getElementById('templateModal').classList.add('active');
+            }).catch(err => showToast(err.message, 'error'));
+        }
+
         function showTenantModal() {
+            document.getElementById('tenantModalTitle').textContent = 'Tambah Tenant';
+            document.getElementById('editTenantId').value = '';
+            document.getElementById('tenantModal').querySelector('form').reset();
+            document.getElementById('tenantModal').classList.add('active');
+        }
+
+        function editTenant(id) {
+            const t = Store.tenants.find(x => x.id === id);
+            if (!t) return;
+            document.getElementById('tenantModalTitle').textContent = 'Edit Tenant';
+            document.getElementById('editTenantId').value = t.id;
+            document.getElementById('newTenantName').value = t.name;
+            document.getElementById('newTenantFloor').value = t.floor || '';
+            document.getElementById('newTenantCategory').value = t.category || '';
+            document.getElementById('newTenantGas').checked = t.usesGas;
             document.getElementById('tenantModal').classList.add('active');
         }
 
@@ -2959,70 +3069,119 @@
             document.getElementById(modalId).classList.remove('active');
         }
 
-        function saveUser(e) {
+        // ── Save functions ────────────────────────────────────────────────────
+        async function saveUser(e) {
             e.preventDefault();
-            const user = {
-                id: Date.now(),
-                username: document.getElementById('newUsername').value,
-                password: document.getElementById('newPassword').value,
-                name: document.getElementById('newFullName').value,
-                role: document.getElementById('newRole').value
-            };
-            Store.users.push(user);
-            closeModal('userModal');
-            renderUsers();
-            showToast('User berhasil ditambahkan!');
-            e.target.reset();
+            const id       = document.getElementById('editUserId').value;
+            const name     = document.getElementById('newFullName').value;
+            const role     = document.getElementById('newRole').value;
+            const password = document.getElementById('newPassword').value;
+            const isActive = document.getElementById('editUserActive').checked;
+            showLoading();
+            try {
+                if (id) {
+                    const upd = { name, role, isActive };
+                    if (password) upd.password = password;
+                    await ApiClient.users.update(parseInt(id), upd);
+                    showToast('User berhasil diperbarui!');
+                } else {
+                    const username = document.getElementById('newUsername').value;
+                    await ApiClient.users.create({ username, password, name, role });
+                    showToast('User berhasil ditambahkan!');
+                }
+                closeModal('userModal');
+                renderUsers();
+            } catch (err) {
+                showToast(err.message, 'error');
+            } finally { hideLoading(); }
         }
 
-        function saveTemplate(e) {
+        async function saveTemplate(e) {
             e.preventDefault();
-            const template = {
-                id: Date.now(),
-                category: document.getElementById('newCategory').value,
-                name: document.getElementById('newActivity').value,
-                requiresGas: document.getElementById('newGasOnly').checked
-            };
-            Store.checklistTemplates.push(template);
-            closeModal('templateModal');
-            renderTemplates();
-            showToast('Template berhasil ditambahkan!');
-            e.target.reset();
+            const id           = document.getElementById('editTemplateId').value;
+            const category     = document.getElementById('newCategory').value;
+            const name         = document.getElementById('newActivity').value;
+            const requiresGas  = document.getElementById('newGasOnly').checked;
+            const displayOrder = parseInt(document.getElementById('newDisplayOrder').value) || 0;
+            showLoading();
+            try {
+                if (id) {
+                    await ApiClient.templates.update(parseInt(id), { category, name, requiresGas, displayOrder });
+                    showToast('Template berhasil diperbarui!');
+                } else {
+                    await ApiClient.templates.create({ category, name, requiresGas, displayOrder });
+                    showToast('Template berhasil ditambahkan!');
+                }
+                closeModal('templateModal');
+                renderTemplates();
+            } catch (err) {
+                showToast(err.message, 'error');
+            } finally { hideLoading(); }
         }
 
-        function saveTenant(e) {
+        async function saveTenant(e) {
             e.preventDefault();
-            const tenant = {
-                id: Date.now(),
-                name: document.getElementById('newTenantName').value,
-                usesGas: document.getElementById('newTenantGas').checked
-            };
-            Store.tenants.push(tenant);
-            closeModal('tenantModal');
-            renderTenants();
-            showToast('Tenant berhasil ditambahkan!');
-            e.target.reset();
+            const id       = document.getElementById('editTenantId').value;
+            const name     = document.getElementById('newTenantName').value;
+            const usesGas  = document.getElementById('newTenantGas').checked;
+            const floor    = document.getElementById('newTenantFloor').value || null;
+            const category = document.getElementById('newTenantCategory').value || null;
+            showLoading();
+            try {
+                if (id) {
+                    await ApiClient.tenants.update(parseInt(id), { name, usesGas, floor, category });
+                    showToast('Tenant berhasil diperbarui!');
+                } else {
+                    await ApiClient.tenants.create({ name, usesGas, floor, category });
+                    showToast('Tenant berhasil ditambahkan!');
+                }
+                // Refresh Store.tenants
+                Store.tenants = await ApiClient.tenants.getAll();
+                closeModal('tenantModal');
+                renderTenants();
+                renderTenantOptions('');
+            } catch (err) {
+                showToast(err.message, 'error');
+            } finally { hideLoading(); }
         }
 
-        function deleteUser(id) {
-            if (!confirm('Hapus user ini?')) return;
-            Store.users = Store.users.filter(u => u.id !== id);
-            renderUsers();
-            showToast('User dihapus');
+        // ── Delete functions ──────────────────────────────────────────────────
+        async function deleteUser(id) {
+            if (!confirm('Nonaktifkan user ini?')) return;
+            showLoading();
+            try {
+                await ApiClient.users.delete(id);
+                showToast('User dinonaktifkan.');
+                renderUsers();
+            } catch (err) {
+                showToast(err.message, 'error');
+            } finally { hideLoading(); }
         }
 
-        function deleteTemplate(id) {
+        async function deleteTemplate(id) {
             if (!confirm('Hapus template ini?')) return;
-            Store.checklistTemplates = Store.checklistTemplates.filter(t => t.id !== id);
-            renderTemplates();
-            showToast('Template dihapus');
+            showLoading();
+            try {
+                await ApiClient.templates.delete(id);
+                showToast('Template dihapus.');
+                renderTemplates();
+            } catch (err) {
+                showToast(err.message, 'error');
+            } finally { hideLoading(); }
         }
 
-        function deleteTenant(id) {
+        async function deleteTenant(id) {
             if (!confirm('Hapus tenant ini?')) return;
-            Store.tenants = Store.tenants.filter(t => t.id !== id);
-            renderTenants();
-            showToast('Tenant dihapus');
+            showLoading();
+            try {
+                await ApiClient.tenants.delete(id);
+                Store.tenants = await ApiClient.tenants.getAll();
+                showToast('Tenant dihapus.');
+                renderTenants();
+                renderTenantOptions('');
+            } catch (err) {
+                showToast(err.message, 'error');
+            } finally { hideLoading(); }
         }
 
         // ========== DEMO DATA ==========
