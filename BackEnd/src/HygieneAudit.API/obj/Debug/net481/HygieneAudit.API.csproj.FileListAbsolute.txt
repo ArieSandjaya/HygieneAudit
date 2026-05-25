@@ -1,6 +1,17 @@
 F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\appsettings.json
 F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\appsettings.Production.json
 F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\Web.config
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\assets\bootstrap.min.css
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\assets\boxicons.min.css
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\assets\fonts\boxicons.eot
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\assets\fonts\boxicons.svg
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\assets\fonts\boxicons.ttf
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\assets\fonts\boxicons.woff
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\assets\fonts\boxicons.woff2
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\assets\jspdf.plugin.autotable.min.js
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\assets\jspdf.umd.min.js
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\assets\xlsx.full.min.js
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\config.js
 F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\index.html
 F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\HygieneAudit.API.exe.config
 F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\HygieneAudit.API.exe
@@ -93,4 +104,3 @@ F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\obj\Debug\net481\HygieneAudit.A
 F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\obj\Debug\net481\HygieneA.8BB0C912.Up2Date
 F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\obj\Debug\net481\HygieneAudit.API.exe
 F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\obj\Debug\net481\HygieneAudit.API.pdb
-F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\config.js

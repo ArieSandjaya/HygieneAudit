@@ -1,2544 +1,995 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="light-style" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#696cff">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Hygiene Audit">
     <title>Hygiene Audit App</title>
-
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSHlnaWVuZSBBdWRpdCBBcHAiLCJzaG9ydF9uYW1lIjoiSHlnaWVuZUF1ZGl0Iiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZmZmZmYiLCJ0aGVtZV9jb2xvciI6IiMyNTYzZWIiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1qQXdJaUJvWldsbmFIUTlJakl3TUNJZ2RtbGxkMEp2ZUQwaU1DQXdJREl3TUNBeU1EQWlJSGh0YkcwaUlqZzROREl5TURBd01EQWlJSGh0Ykc1aGJXVWlPbHRkSWlCbWFXeHNQU0lqWm1abVptWm1JaUIyYVdWM0FtOTdQQzlpYkhWemJEc2dabWxzWkQwaUkyWm1abVptWmlJSE53WVdOb1BTSWlJSEJoWTJ0bFpDQm9iMnhrWlhJOUlqMGlkSEpoYm5ObWIzSnRjeUlnZDJsa2JHbHVaRDBpTUM0d0xqQWlJR0p2YjNRaU9pQWlJbjA9Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9LHsic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTWpBd0lpQm9aV2xuYUhROUlqSXdNQ0lnZJ1bWxkMEp2ZUQwaU1DQXdJREl3TUNBeU1EQWlJSGh0YkcwaUlqZzROREl5TURBd01EQWlJSGh0Ykc1aGJXVWlPbHRkSWlCbWFXeHNQU0lqWm1abVptWm1JaUIyYVdWM0FtOTdQQzlpYkhWemJEc2dabWxzWkQwaUkyWm1abVptWmlJSE53WVdOb1BTSWlJSEJoWTJ0bFpDQm9iMnhrWlhJOUlqMGlkSEpoYm5ObWIzSnRjeUlnZDJsa2JHbHVaRDBpTUM0d0xqQWlJR0p2YjNRaU9pQWlJbjA9Iiwic2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
-
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSHlnaWVuZSBBdWRpdCBBcHAiLCJzaG9ydF9uYW1lIjoiSHlnaWVuZUF1ZGl0Iiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZmZmZmYiLCJ0aGVtZV9jb2xvciI6IiM2OTZjZmYiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1qQXdJaUJvWldsbmFIUTlJakl3TUNJZ2RtbGxkMEp2ZUQwaU1DQXdJREl3TUNBeU1EQWlJSGh0YkcwaUlqZzROREl5TURBd01EQWlJSGh0Ykc1aGJXVWlPbHRkSWlCbWFXeHNQU0lqWm1abVptWm1JaUIyYVdWM0FtOTdQQzlpYkhWemJEc2dabWxzWkQwaUkyWm1abVptWmlJSE53WVdOb1BTSWlJSEJoWTJ0bFpDQm9iMnhrWlhJOUlqMGlkSEpoYm5ObWIzSnRjeUlnZDJsa2JHbHVaRDBpTUM0d0xqQWlJR0p2YjNRaU9pQWlJbjA9Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
+    <link href="assets/boxicons.min.css" rel="stylesheet">
+    <link href="assets/bootstrap.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        @font-face {
+            font-family: 'Public Sans';
+            font-style: normal;
+            font-weight: 300 700;
+            src: local('Inter'), local('Segoe UI'), local('-apple-system');
         }
-
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --success: #22c55e;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --primary: #696cff;
+            --primary-dark: #5557e8;
+            --success: #71dd37;
+            --danger: #ff3e1d;
+            --warning: #ffab00;
+            --info: #03c3ec;
+            --menu-bg: #2f3349;
+            --menu-color: #8b8fa7;
+            --body-bg: #f5f5f9;
+            --card-border-radius: 0.5rem;
+            --navbar-height: 64px;
+            --menu-width: 260px;
+            --gray-50: #f8f8f8;
+            --gray-100: #f0f0f0;
+            --gray-200: #e0e0e0;
+            --gray-300: #bdbdbd;
+            --gray-400: #9e9e9e;
+            --gray-500: #757575;
+            --gray-600: #616161;
+            --gray-700: #424242;
+            --gray-800: #212121;
+            --gray-900: #111111;
+            --shadow-sm: 0 1px 2px rgba(75,70,92,.07);
+            --shadow: 0 2px 6px rgba(75,70,92,.1);
+            --shadow-md: 0 5px 15px rgba(75,70,92,.12);
+            --shadow-lg: 0 10px 30px rgba(75,70,92,.15);
         }
-
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-800);
-            min-height: 100vh;
-            overflow-x: hidden;
+            font-family: 'Public Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--body-bg);
+            color: #566a7f;
+            font-size: .9375rem;
+            line-height: 1.5;
             -webkit-tap-highlight-color: transparent;
         }
-
-        /* ========== LOGIN PAGE ========== */
-        .login-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            padding: 20px;
-        }
-
-        .login-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px 30px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .login-logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-            .login-logo .icon {
-                width: 80px;
-                height: 80px;
-                background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-                border-radius: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 0 auto 15px;
-                font-size: 40px;
-            }
-
-            .login-logo h1 {
-                font-size: 24px;
-                font-weight: 700;
-                color: var(--gray-800);
-            }
-
-            .login-logo p {
-                font-size: 14px;
-                color: var(--gray-500);
-                margin-top: 5px;
-            }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-700);
-            margin-bottom: 8px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--gray-200);
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.2s;
-            background: var(--gray-50);
-        }
-
-            .form-input:focus {
-                outline: none;
-                border-color: var(--primary);
-                background: white;
-            }
-
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-            .btn-primary:active {
-                background: var(--primary-dark);
-                transform: scale(0.98);
-            }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: var(--gray-200);
-            color: var(--gray-700);
-        }
-
-        .btn-sm {
-            padding: 10px 16px;
-            font-size: 14px;
-            width: auto;
-        }
-
-        /* ========== APP LAYOUT ========== */
-        .app-container {
-            display: none;
-            min-height: 100vh;
-            padding-bottom: 80px;
-        }
-
-            .app-container.active {
-                display: block;
-            }
-
-        /* Header */
-        .app-header {
-            background: white;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--gray-200);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-sm);
-        }
-
-            .app-header h1 {
-                font-size: 18px;
-                font-weight: 700;
-            }
-
-        .header-actions {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .header-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            border: none;
-            background: var(--gray-100);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-            .header-btn:active {
-                background: var(--gray-200);
-                transform: scale(0.95);
-            }
-
-        .user-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 12px;
-            background: var(--gray-100);
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-            .user-badge .avatar {
-                width: 28px;
-                height: 28px;
-                border-radius: 50%;
-                background: var(--primary);
-                color: white;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 12px;
-            }
-
-        /* Bottom Nav */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            border-top: 1px solid var(--gray-200);
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0;
-            z-index: 100;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-        }
-
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            padding: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            background: none;
-            color: var(--gray-400);
-        }
-
-            .nav-item.active {
-                color: var(--primary);
-            }
-
-            .nav-item .icon {
-                font-size: 24px;
-            }
-
-            .nav-item .label {
-                font-size: 11px;
-                font-weight: 600;
-            }
-
-        /* ========== PAGES ========== */
-        .page {
-            display: none;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
-        }
-
-            .page.active {
-                display: block;
-            }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ========== DASHBOARD ========== */
-        .dashboard-header {
-            margin-bottom: 24px;
-        }
-
-            .dashboard-header h2 {
-                font-size: 22px;
-                font-weight: 700;
-                margin-bottom: 4px;
-            }
-
-            .dashboard-header p {
-                color: var(--gray-500);
-                font-size: 14px;
-            }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--gray-100);
-        }
-
-            .stat-card .stat-icon {
-                width: 48px;
-                height: 48px;
-                border-radius: 12px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 24px;
-                margin-bottom: 12px;
-            }
-
-            .stat-card .stat-value {
-                font-size: 28px;
-                font-weight: 800;
-                color: var(--gray-900);
-            }
-
-            .stat-card .stat-label {
-                font-size: 13px;
-                color: var(--gray-500);
-                margin-top: 4px;
-            }
-
-            .stat-card.primary .stat-icon {
-                background: #dbeafe;
-            }
-
-            .stat-card.success .stat-icon {
-                background: #dcfce7;
-            }
-
-            .stat-card.warning .stat-icon {
-                background: #fef3c7;
-            }
-
-            .stat-card.danger .stat-icon {
-                background: #fee2e2;
-            }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-            .section-title a {
-                font-size: 13px;
-                color: var(--primary);
-                text-decoration: none;
-                font-weight: 600;
-            }
-
-        /* Recent Audits */
-        .audit-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .audit-card {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--gray-100);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-            .audit-card:active {
-                transform: scale(0.98);
-                box-shadow: var(--shadow-sm);
-            }
-
-        .audit-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 12px;
-        }
-
-        .audit-card-title {
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--gray-800);
-        }
-
-        .audit-card-subtitle {
-            font-size: 13px;
-            color: var(--gray-500);
-            margin-top: 2px;
-        }
-
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-            .status-badge.completed {
-                background: #dcfce7;
-                color: #166534;
-            }
-
-            .status-badge.draft {
-                background: #fef3c7;
-                color: #92400e;
-            }
-
-        .audit-card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid var(--gray-100);
-        }
-
-        .audit-meta {
-            font-size: 12px;
-            color: var(--gray-500);
-        }
-
-        .pass-rate {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-            .pass-rate .rate-bar {
-                width: 60px;
-                height: 6px;
-                background: var(--gray-200);
-                border-radius: 3px;
-                overflow: hidden;
-            }
-
-                .pass-rate .rate-bar .fill {
-                    height: 100%;
-                    background: var(--success);
-                    border-radius: 3px;
-                    transition: width 0.3s;
-                }
-
-        /* ========== AUDIT FORM ========== */
-        .form-section {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--gray-100);
-        }
-
-        .form-section-title {
-            font-size: 14px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--gray-500);
-            letter-spacing: 0.5px;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--gray-100);
-        }
-
-        .form-row {
-            display: flex;
-            gap: 12px;
-        }
-
-            .form-row .form-group {
-                flex: 1;
-            }
-
-        select.form-input {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 20px;
-            padding-right: 40px;
-        }
-
-        /* Toggle Switch */
-        .toggle-group {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .toggle-label {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 60px;
-            height: 32px;
-        }
-
-            .toggle-switch input {
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--gray-300);
-            border-radius: 32px;
-            transition: 0.3s;
-        }
-
-            .toggle-slider:before {
-                content: "";
-                position: absolute;
-                height: 24px;
-                width: 24px;
-                left: 4px;
-                bottom: 4px;
-                background: white;
-                border-radius: 50%;
-                transition: 0.3s;
-                box-shadow: var(--shadow-sm);
-            }
-
-        .toggle-switch input:checked + .toggle-slider {
-            background: var(--primary);
-        }
-
-            .toggle-switch input:checked + .toggle-slider:before {
-                transform: translateX(28px);
-            }
-
-        .toggle-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--primary);
-            min-width: 80px;
-        }
-
-        /* ========== CHECKLIST PAGE ========== */
-        .checklist-container {
-            padding: 0;
-        }
-
-        .category-section {
-            margin-bottom: 16px;
-        }
-
-        .category-header {
-            background: var(--gray-100);
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: all 0.2s;
-            border-radius: 12px 12px 0 0;
-        }
-
-            .category-header.collapsed {
-                border-radius: 12px;
-            }
-
-            .category-header:active {
-                background: var(--gray-200);
-            }
-
-        .category-title {
-            font-size: 15px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-            .category-title .icon {
-                font-size: 20px;
-            }
-
-        .category-progress {
-            font-size: 13px;
-            color: var(--gray-500);
-            font-weight: 600;
-        }
-
-        .category-items {
-            background: white;
-            border-radius: 0 0 12px 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .checklist-item {
-            padding: 20px;
-            border-bottom: 1px solid var(--gray-100);
-            transition: all 0.2s;
-        }
-
-            .checklist-item:last-child {
-                border-bottom: none;
-            }
-
-        .checklist-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 12px;
-        }
-
-        .checklist-item-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--gray-800);
-            flex: 1;
-            padding-right: 12px;
-        }
-
-        .status-toggle {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .status-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 3px solid var(--gray-200);
-            background: white;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-            .status-btn.pass {
-                border-color: var(--success);
-                background: #dcfce7;
-            }
-
-            .status-btn.fail {
-                border-color: var(--danger);
-                background: #fee2e2;
-            }
-
-            .status-btn:active {
-                transform: scale(0.9);
-            }
-
-        .checklist-item-note {
-            margin-top: 12px;
-        }
-
-        .note-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--gray-200);
-            border-radius: 10px;
-            font-size: 14px;
-            resize: vertical;
-            min-height: 80px;
-            font-family: inherit;
-        }
-
-            .note-input:focus {
-                outline: none;
-                border-color: var(--primary);
-            }
-
-            .note-input.required {
-                border-color: var(--danger);
-                background: #fef2f2;
-            }
-
-        .note-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--gray-500);
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-            .note-label .required-mark {
-                color: var(--danger);
-            }
-
-        /* Photos */
-        .photo-section {
-            margin-top: 16px;
-        }
-
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .photo-thumb {
-            aspect-ratio: 1;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-            background: var(--gray-100);
-            cursor: pointer;
-        }
-
-            .photo-thumb img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-            .photo-thumb .remove-btn {
-                position: absolute;
-                top: 4px;
-                right: 4px;
-                width: 24px;
-                height: 24px;
-                border-radius: 50%;
-                background: rgba(0,0,0,0.6);
-                color: white;
-                border: none;
-                font-size: 14px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-            }
-
-        .photo-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .photo-btn {
-            flex: 1;
-            padding: 12px;
-            border: 2px dashed var(--gray-300);
-            border-radius: 10px;
-            background: var(--gray-50);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 13px;
-            color: var(--gray-600);
-            font-weight: 600;
-        }
-
-            .photo-btn:active {
-                background: var(--gray-100);
-                border-color: var(--primary);
-                color: var(--primary);
-            }
-
-            .photo-btn .icon {
-                font-size: 24px;
-            }
-
-        /* Hidden file input */
-        .hidden-input {
-            display: none;
-        }
-
-        /* ========== HISTORY PAGE ========== */
-        .history-filters {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }
-
-        .filter-chip {
-            padding: 10px 18px;
-            border-radius: 20px;
-            border: 2px solid var(--gray-200);
-            background: white;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-600);
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-
-            .filter-chip.active {
-                background: var(--primary);
-                color: white;
-                border-color: var(--primary);
-            }
-
-            .filter-chip:active {
-                transform: scale(0.95);
-            }
-
-        .tenant-history-card {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--gray-100);
-        }
-
-        .tenant-history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .tenant-name {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .tenant-type {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-            .tenant-type.gas {
-                background: #fef3c7;
-                color: #92400e;
-            }
-
-            .tenant-type.non-gas {
-                background: #e0e7ff;
-                color: #3730a3;
-            }
-
-        .history-timeline {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .timeline-item {
-            display: flex;
-            gap: 12px;
-            padding: 16px;
-            background: var(--gray-50);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-            .timeline-item:active {
-                background: var(--gray-100);
-                transform: scale(0.98);
-            }
-
-        .timeline-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-top: 4px;
-            flex-shrink: 0;
-        }
-
-            .timeline-dot.pass {
-                background: var(--success);
-            }
-
-            .timeline-dot.fail {
-                background: var(--danger);
-            }
-
-            .timeline-dot.mixed {
-                background: var(--warning);
-            }
-
-        .timeline-content {
-            flex: 1;
-        }
-
-        .timeline-date {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--gray-700);
-        }
-
-        .timeline-pic {
-            font-size: 12px;
-            color: var(--gray-500);
-            margin-top: 2px;
-        }
-
-        .timeline-result {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .result-badge {
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-            .result-badge.good {
-                background: #dcfce7;
-                color: #166534;
-            }
-
-            .result-badge.bad {
-                background: #fee2e2;
-                color: #991b1b;
-            }
-
-        /* ========== ADMIN PANEL ========== */
-        .admin-section {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-        }
-
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-            .admin-table th,
-            .admin-table td {
-                padding: 12px;
-                text-align: left;
-                font-size: 14px;
-                border-bottom: 1px solid var(--gray-100);
-            }
-
-            .admin-table th {
-                font-weight: 700;
-                color: var(--gray-500);
-                text-transform: uppercase;
-                font-size: 12px;
-                letter-spacing: 0.5px;
-            }
-
-            .admin-table tr:last-child td {
-                border-bottom: none;
-            }
-
-        .action-btns {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-            .action-btn.edit {
-                background: #dbeafe;
-                color: var(--primary);
-            }
-
-            .action-btn.delete {
-                background: #fee2e2;
-                color: var(--danger);
-            }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-            .modal-overlay.active {
-                display: flex;
-            }
-
-        .modal {
-            background: white;
-            border-radius: 20px;
-            padding: 24px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: modalIn 0.3s ease;
-        }
-
-        @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .modal-close {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: var(--gray-100);
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Photo Viewer */
-        .photo-viewer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-            .photo-viewer.active {
-                display: flex;
-            }
-
-            .photo-viewer img {
-                max-width: 90%;
-                max-height: 90%;
-                border-radius: 8px;
-            }
-
-            .photo-viewer .close-viewer {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                width: 44px;
-                height: 44px;
-                border-radius: 50%;
-                background: rgba(255,255,255,0.2);
-                color: white;
-                border: none;
-                font-size: 24px;
-                cursor: pointer;
-            }
-
-        /* Toast */
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3000;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            pointer-events: none;
-        }
-
-        .toast {
-            padding: 14px 24px;
-            border-radius: 12px;
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
-            box-shadow: var(--shadow-lg);
-            animation: toastIn 0.3s ease;
-            pointer-events: auto;
-        }
-
-            .toast.success {
-                background: var(--success);
-            }
-
-            .toast.error {
-                background: var(--danger);
-            }
-
-            .toast.info {
-                background: var(--primary);
-            }
-
-        @keyframes toastIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-            .empty-state .icon {
-                font-size: 64px;
-                margin-bottom: 16px;
-                opacity: 0.5;
-            }
-
-            .empty-state h3 {
-                font-size: 18px;
-                font-weight: 700;
-                color: var(--gray-600);
-                margin-bottom: 8px;
-            }
-
-            .empty-state p {
-                font-size: 14px;
-                color: var(--gray-400);
-            }
-
-        /* Progress Bar */
-        .overall-progress {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .progress-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--gray-700);
-        }
-
-        .progress-value {
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: var(--gray-200);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-            .progress-bar .fill {
-                height: 100%;
-                background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-                border-radius: 4px;
-                transition: width 0.5s ease;
-            }
-
-        /* Submit Button Fixed */
-        .submit-bar {
-            position: fixed;
-            bottom: 80px;
-            left: 0;
-            right: 0;
-            background: white;
-            padding: 16px 20px;
-            border-top: 1px solid var(--gray-200);
-            display: flex;
-            gap: 12px;
-            z-index: 50;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
-        }
-
-            .submit-bar .btn {
-                flex: 1;
-            }
-
-        /* Scrollbar hide */
-        ::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Loading */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255,255,255,0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 4000;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-            .loading-overlay.active {
-                display: flex;
-            }
-
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--gray-200);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Install Prompt */
-        .install-prompt {
-            position: fixed;
-            bottom: 100px;
-            left: 20px;
-            right: 20px;
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: var(--shadow-lg);
-            z-index: 500;
-            display: none;
-            border: 2px solid var(--primary);
-        }
-
-            .install-prompt.active {
-                display: block;
-                animation: slideUp 0.3s ease;
-            }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .install-prompt h4 {
-            font-size: 16px;
-            margin-bottom: 8px;
-        }
-
-        .install-prompt p {
-            font-size: 13px;
-            color: var(--gray-500);
-            margin-bottom: 12px;
-        }
-
-        .install-prompt .btn {
-            margin-top: 8px;
-        }
-
-        .install-steps {
-            background: var(--gray-50);
-            border-radius: 10px;
-            padding: 12px;
-            margin: 12px 0;
-        }
-
-            .install-steps li {
-                font-size: 13px;
-                color: var(--gray-600);
-                margin: 6px 0;
-                padding-left: 8px;
-            }
-
-        /* ========== EXPORT FEATURE ========== */
-        .export-menu {
-            position: fixed;
-            bottom: 100px;
-            right: 20px;
-            background: white;
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: var(--shadow-lg);
-            z-index: 200;
-            display: none;
-            min-width: 200px;
-        }
-
-            .export-menu.active {
-                display: block;
-                animation: slideUp 0.3s ease;
-            }
-
-        .export-btn {
-            width: 100%;
-            padding: 12px 16px;
-            border: none;
-            background: var(--gray-50);
-            border-radius: 10px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-700);
-            transition: all 0.2s;
-        }
-
-            .export-btn:last-child {
-                margin-bottom: 0;
-            }
-
-            .export-btn:hover {
-                background: var(--gray-100);
-            }
-
-            .export-btn:active {
-                transform: scale(0.98);
-            }
-
-        .fab-button {
-            position: fixed;
-            bottom: 100px;
-            right: 20px;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            border: none;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: var(--shadow-lg);
-            z-index: 150;
-            transition: all 0.2s;
-        }
-
-            .fab-button:active {
-                transform: scale(0.9);
-            }
-
-        /* ========== OFFLINE SYNC ========== */
-        .sync-status {
-            position: fixed;
-            top: 70px;
-            left: 20px;
-            right: 20px;
-            background: white;
-            border-radius: 12px;
-            padding: 14px 18px;
-            box-shadow: var(--shadow-md);
-            z-index: 90;
-            display: none;
-            align-items: center;
-            gap: 12px;
-            border-left: 4px solid var(--warning);
-        }
-
-            .sync-status.active {
-                display: flex;
-                animation: slideDown 0.3s ease;
-            }
-
-            .sync-status.online {
-                border-left-color: var(--success);
-            }
-
-            .sync-status.offline {
-                border-left-color: var(--danger);
-            }
-
-            .sync-status.syncing {
-                border-left-color: var(--warning);
-            }
-
-        @keyframes slideDown {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .sync-icon {
-            font-size: 20px;
-        }
-
-        .sync-text {
-            flex: 1;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .sync-action {
-            padding: 8px 14px;
-            border-radius: 8px;
-            border: none;
-            background: var(--primary);
-            color: white;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* ========== PUSH NOTIFICATION ========== */
-        .notification-permission {
-            position: fixed;
-            top: 70px;
-            left: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: var(--shadow-lg);
-            z-index: 250;
-            display: none;
-            color: white;
-        }
-
-            .notification-permission.active {
-                display: block;
-                animation: slideDown 0.3s ease;
-            }
-
-            .notification-permission h4 {
-                font-size: 16px;
-                margin-bottom: 8px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .notification-permission p {
-                font-size: 13px;
-                opacity: 0.9;
-                margin-bottom: 14px;
-                line-height: 1.5;
-            }
-
-        .notification-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-            .notification-actions .btn {
-                flex: 1;
-                padding: 12px;
-                font-size: 14px;
-            }
-
-        .btn-white {
-            background: white;
-            color: #667eea;
-        }
-
-        .btn-transparent {
-            background: rgba(255,255,255,0.2);
-            color: white;
-        }
-
-        /* Notification Badge */
-        .nav-badge {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--danger);
-            color: white;
-            font-size: 10px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-item {
-            position: relative;
-        }
-
-        /* ========== TENANT HISTORY PREVIEW ========== */
-        .tenant-history-preview {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--gray-100);
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-            .tenant-history-preview.active {
-                display: block;
-            }
-
-            .tenant-history-preview .preview-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 16px;
-                padding-bottom: 12px;
-                border-bottom: 2px solid var(--gray-100);
-            }
-
-            .tenant-history-preview .preview-title {
-                font-size: 16px;
-                font-weight: 700;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .tenant-history-preview .preview-subtitle {
-                font-size: 13px;
-                color: var(--gray-500);
-                margin-top: 2px;
-            }
-
-            .tenant-history-preview .history-stats {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 10px;
-                margin-bottom: 16px;
-            }
-
-            .tenant-history-preview .history-stat {
-                background: var(--gray-50);
-                border-radius: 10px;
-                padding: 12px;
-                text-align: center;
-            }
-
-            .tenant-history-preview .history-stat-value {
-                font-size: 20px;
-                font-weight: 800;
-                color: var(--gray-900);
-            }
-
-            .tenant-history-preview .history-stat-label {
-                font-size: 11px;
-                color: var(--gray-500);
-                margin-top: 4px;
-            }
-
-            .tenant-history-preview .trend-chart {
-                background: var(--gray-50);
-                border-radius: 10px;
-                padding: 16px;
-                margin-bottom: 16px;
-            }
-
-            .tenant-history-preview .trend-title {
-                font-size: 13px;
-                font-weight: 700;
-                color: var(--gray-600);
-                margin-bottom: 12px;
-            }
-
-            .tenant-history-preview .trend-bars {
-                display: flex;
-                align-items: flex-end;
-                gap: 8px;
-                height: 80px;
-                padding-bottom: 20px;
-                position: relative;
-            }
-
-            .tenant-history-preview .trend-bar-wrapper {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 4px;
-            }
-
-            .tenant-history-preview .trend-bar {
-                width: 100%;
-                min-height: 4px;
-                border-radius: 4px 4px 0 0;
-                transition: height 0.5s ease;
-                position: relative;
-            }
-
-                .tenant-history-preview .trend-bar.pass {
-                    background: linear-gradient(to top, var(--success), #86efac);
-                }
-
-                .tenant-history-preview .trend-bar.fail {
-                    background: linear-gradient(to top, var(--danger), #fca5a5);
-                }
-
-            .tenant-history-preview .trend-bar-label {
-                font-size: 10px;
-                color: var(--gray-500);
-                font-weight: 600;
-                white-space: nowrap;
-            }
-
-            .tenant-history-preview .trend-bar-value {
-                position: absolute;
-                top: -18px;
-                left: 50%;
-                transform: translateX(-50%);
-                font-size: 10px;
-                font-weight: 700;
-                color: var(--gray-700);
-            }
-
-            .tenant-history-preview .recent-audits-list {
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .tenant-history-preview .recent-audit-item {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 12px;
-                background: var(--gray-50);
-                border-radius: 10px;
-                cursor: pointer;
-                transition: all 0.2s;
-            }
-
-                .tenant-history-preview .recent-audit-item:hover {
-                    background: var(--gray-100);
-                }
-
-            .tenant-history-preview .recent-audit-dot {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                flex-shrink: 0;
-            }
-
-            .tenant-history-preview .recent-audit-info {
-                flex: 1;
-            }
-
-            .tenant-history-preview .recent-audit-date {
-                font-size: 13px;
-                font-weight: 700;
-                color: var(--gray-700);
-            }
-
-            .tenant-history-preview .recent-audit-pic {
-                font-size: 12px;
-                color: var(--gray-500);
-            }
-
-            .tenant-history-preview .recent-audit-rate {
-                font-size: 14px;
-                font-weight: 800;
-                padding: 4px 10px;
-                border-radius: 8px;
-            }
-
-                .tenant-history-preview .recent-audit-rate.good {
-                    background: #dcfce7;
-                    color: #166534;
-                }
-
-                .tenant-history-preview .recent-audit-rate.bad {
-                    background: #fee2e2;
-                    color: #991b1b;
-                }
-
-            .tenant-history-preview .no-history {
-                text-align: center;
-                padding: 30px;
-                color: var(--gray-500);
-            }
-
-                .tenant-history-preview .no-history .icon {
-                    font-size: 40px;
-                    margin-bottom: 8px;
-                }
-
-                .tenant-history-preview .no-history p {
-                    font-size: 14px;
-                }
-
-        /* Tenant select with history indicator */
-        .tenant-select-wrapper {
-            position: relative;
-        }
-
-        .tenant-history-badge {
-            position: absolute;
-            right: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--primary);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 700;
-            display: none;
-        }
-
-            .tenant-history-badge.active {
-                display: block;
-            }
-
-        /* ========== EXCEL REPORT ========== */
-        .excel-report-container {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            overflow-x: auto;
-        }
-
-        .excel-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--gray-100);
-        }
-
-        .excel-toolbar-title {
-            font-size: 18px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .excel-toolbar-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .excel-btn {
-            padding: 10px 18px;
-            border-radius: 10px;
-            border: none;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-            .excel-btn.export {
-                background: #217346;
-                color: white;
-            }
-
-                .excel-btn.export:active {
-                    background: #1a5c38;
-                    transform: scale(0.98);
-                }
-
-            .excel-btn.filter {
-                background: var(--gray-100);
-                color: var(--gray-700);
-            }
-
-        .excel-table-wrapper {
-            overflow-x: auto;
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-        }
-
-        .excel-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-            min-width: 800px;
-        }
-
-            .excel-table thead {
-                background: #217346;
-                color: white;
-            }
-
-            .excel-table th {
-                padding: 12px 14px;
-                text-align: left;
-                font-weight: 600;
-                font-size: 12px;
-                text-transform: uppercase;
-                letter-spacing: 0.3px;
-                border-right: 1px solid rgba(255,255,255,0.1);
-                white-space: nowrap;
-            }
-
-                .excel-table th:last-child {
-                    border-right: none;
-                }
-
-            .excel-table td {
-                padding: 12px 14px;
-                border-bottom: 1px solid var(--gray-100);
-                border-right: 1px solid var(--gray-100);
-                vertical-align: top;
-            }
-
-                .excel-table td:last-child {
-                    border-right: none;
-                }
-
-            .excel-table tbody tr:hover {
-                background: #f0f9ff;
-            }
-
-            .excel-table tbody tr:nth-child(even) {
-                background: #fafafa;
-            }
-
-                .excel-table tbody tr:nth-child(even):hover {
-                    background: #f0f9ff;
-                }
-
-        .excel-cell-tenant {
-            font-weight: 700;
-            color: var(--gray-800);
-        }
-
-        .excel-cell-type {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-            .excel-cell-type.gas {
-                background: #fef3c7;
-                color: #92400e;
-            }
-
-            .excel-cell-type.non-gas {
-                background: #e0e7ff;
-                color: #3730a3;
-            }
-
-        .excel-cell-date {
-            color: var(--gray-600);
-            font-size: 12px;
-        }
-
-        .excel-cell-pic {
-            color: var(--gray-600);
-            font-size: 12px;
-        }
-
-        .excel-cell-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-            .excel-cell-status.completed {
-                background: #dcfce7;
-                color: #166534;
-            }
-
-            .excel-cell-status.draft {
-                background: #fef3c7;
-                color: #92400e;
-            }
-
-        .excel-cell-rate {
-            font-weight: 800;
-            font-size: 14px;
-        }
-
-            .excel-cell-rate.good {
-                color: #166534;
-            }
-
-            .excel-cell-rate.warning {
-                color: #92400e;
-            }
-
-            .excel-cell-rate.bad {
-                color: #991b1b;
-            }
-
-        .excel-cell-items {
-            font-size: 12px;
-            color: var(--gray-500);
-        }
-
-        .excel-cell-fail {
-            color: var(--danger);
-            font-weight: 700;
-        }
-
-        .excel-cell-note {
-            font-size: 12px;
-            color: var(--gray-500);
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-            .excel-cell-note:hover {
-                white-space: normal;
-                overflow: visible;
-            }
-
-        .excel-progress-bar {
-            width: 80px;
-            height: 6px;
-            background: var(--gray-200);
-            border-radius: 3px;
-            overflow: hidden;
-            display: inline-block;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        .excel-progress-fill {
-            height: 100%;
-            border-radius: 3px;
-            transition: width 0.3s;
-        }
-
-            .excel-progress-fill.good {
-                background: var(--success);
-            }
-
-            .excel-progress-fill.warning {
-                background: var(--warning);
-            }
-
-            .excel-progress-fill.bad {
-                background: var(--danger);
-            }
-
-        .excel-summary-row {
-            background: #f3f4f6 !important;
-            font-weight: 700;
-        }
-
-            .excel-summary-row td {
-                border-top: 2px solid var(--gray-300);
-                color: var(--gray-800);
-            }
-
-        .excel-filter-bar {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .excel-filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .excel-filter-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--gray-500);
-        }
-
-        .excel-filter-input {
-            padding: 10px 14px;
-            border: 2px solid var(--gray-200);
-            border-radius: 8px;
-            font-size: 14px;
-            background: var(--gray-50);
-            min-width: 150px;
-        }
-
-            .excel-filter-input:focus {
-                outline: none;
-                border-color: var(--primary);
-                background: white;
-            }
-
-        .excel-empty-report {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-            .excel-empty-report .icon {
-                font-size: 64px;
-                margin-bottom: 16px;
-            }
-
-            .excel-empty-report h3 {
-                font-size: 18px;
-                font-weight: 700;
-                color: var(--gray-600);
-                margin-bottom: 8px;
-            }
-
-            .excel-empty-report p {
-                font-size: 14px;
-                color: var(--gray-400);
-            }
-
-        .excel-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-            .excel-badge.fail {
-                background: #fee2e2;
-                color: #991b1b;
-            }
-
-            .excel-badge.pass {
-                background: #dcfce7;
-                color: #166534;
-            }
+        /* LAYOUT */
+        .layout-wrapper { display:flex; flex-direction:column; min-height:100vh; }
+        .layout-container { display:flex; flex:1; overflow:hidden; position:relative; }
+        /* SIDEBAR */
+        .layout-menu {
+            position:fixed; top:0; left:0; height:100vh;
+            width:var(--menu-width); background:#fff;
+            z-index:1100; display:flex; flex-direction:column;
+            overflow:visible;
+            box-shadow:0 0 0 1px rgba(75,70,92,.05), 0 4px 18px 0 rgba(75,70,92,.1);
+            transition:transform .3s ease, width .3s ease;
+        }
+        .app-brand {
+            display:flex; align-items:center; gap:12px;
+            padding:0 20px; height:var(--navbar-height);
+            text-decoration:none; flex-shrink:0; position:relative;
+            overflow:visible;
+        }
+        .app-brand-logo {
+            width:36px; height:36px; background:var(--primary);
+            border-radius:10px; display:flex; align-items:center;
+            justify-content:center; color:#fff; font-size:18px; flex-shrink:0;
+        }
+        .app-brand-text { color:#566a7f; font-size:15px; font-weight:700; line-height:1.2; white-space:nowrap; }
+        .app-brand-text small { display:block; font-size:11px; font-weight:400; color:#a5aeb7; }
+        /* Circular collapse toggle on right edge */
+        .layout-menu-toggle {
+            position:absolute; right:-14px; top:50%; transform:translateY(-50%);
+            width:28px; height:28px; border-radius:50%;
+            background:var(--primary); color:#fff;
+            border:2px solid #fff; outline:none;
+            display:flex; align-items:center; justify-content:center;
+            cursor:pointer; box-shadow:0 2px 8px rgba(105,108,255,.5);
+            font-size:13px; z-index:20; transition:all .2s; flex-shrink:0;
+        }
+        .layout-menu-toggle:hover { background:var(--primary-dark); transform:translateY(-50%) scale(1.1); }
+        .layout-menu-toggle i { transition:transform .3s ease; }
+        /* Sidebar section divider line */
+        .menu-inner-separator { height:1px; background:rgba(75,70,92,.08); margin:4px 0; }
+        .menu-inner { flex:1; overflow-y:auto; overflow-x:hidden; padding:8px 0; list-style:none; }
+        .menu-inner::-webkit-scrollbar { width:4px; }
+        .menu-inner::-webkit-scrollbar-thumb { background:rgba(75,70,92,.12); border-radius:2px; }
+        .menu-item { list-style:none; margin:2px 12px; }
+        .menu-link {
+            display:flex; align-items:center; gap:10px;
+            padding:10px 16px; color:#566a7f;
+            border-radius:8px; font-size:.875rem; font-weight:500;
+            cursor:pointer; transition:all .2s;
+            border:none; background:none; width:100%; text-align:left;
+            text-decoration:none; white-space:nowrap;
+        }
+        .menu-link:hover { background:rgba(105,108,255,.06); color:var(--primary); }
+        .menu-link:hover .menu-icon { color:var(--primary); }
+        .menu-item.active .menu-link { background:rgba(105,108,255,.1); color:var(--primary); }
+        .menu-item.active .menu-icon { color:var(--primary); }
+        .menu-icon { font-size:20px; flex-shrink:0; color:#a5aeb7; transition:color .2s; }
+        .menu-divider { height:1px; background:rgba(75,70,92,.08); margin:8px 12px; }
+        .menu-section {
+            padding:8px 28px 4px; font-size:11px; font-weight:600;
+            text-transform:uppercase; letter-spacing:.8px; color:#a5aeb7;
+            white-space:nowrap; overflow:hidden;
+        }
+        .menu-badge {
+            margin-left:auto; min-width:20px; height:20px;
+            border-radius:10px; background:var(--danger); color:#fff;
+            font-size:10px; font-weight:800; flex-shrink:0;
+            display:flex; align-items:center; justify-content:center; padding:0 4px;
+        }
+        .menu-user { padding:14px 20px; border-top:1px solid rgba(75,70,92,.06); background:#f8f7fa; }
+        .menu-user-info { display:flex; align-items:center; gap:10px; }
+        .menu-user-avatar {
+            width:36px; height:36px; border-radius:50%; background:var(--primary);
+            color:#fff; display:flex; align-items:center; justify-content:center;
+            font-size:14px; font-weight:700; flex-shrink:0;
+        }
+        .menu-user-details { flex:1; overflow:hidden; }
+        .menu-user-name { font-size:13px; font-weight:600; color:#566a7f; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .menu-user-role { font-size:11px; color:#a5aeb7; }
+        /* Collapsed sidebar (desktop) */
+        .layout-menu.menu-collapsed { width:68px; }
+        .layout-menu.menu-collapsed .app-brand-text,
+        .layout-menu.menu-collapsed .menu-section,
+        .layout-menu.menu-collapsed .menu-link span,
+        .layout-menu.menu-collapsed .menu-user-details,
+        .layout-menu.menu-collapsed .menu-badge { display:none !important; }
+        .layout-menu.menu-collapsed .menu-link { justify-content:center; padding:10px; }
+        .layout-menu.menu-collapsed .menu-icon { margin:0; }
+        .layout-menu.menu-collapsed .layout-menu-toggle i { transform:rotate(180deg); }
+        .layout-menu.menu-collapsed .menu-user { padding:14px 10px; }
+        .layout-menu.menu-collapsed .menu-user-info { justify-content:center; }
+        .layout-menu.menu-collapsed .menu-user-avatar { margin:0 auto; }
+        .layout-menu.menu-collapsed + .layout-page,
+        .layout-page.menu-collapsed { margin-left:68px; }
+        /* LAYOUT PAGE */
+        .layout-page {
+            flex:1; display:flex; flex-direction:column; min-height:100vh;
+            margin-left:var(--menu-width); transition:margin-left .3s ease; overflow:hidden;
+        }
+        /* NAVBAR */
+        .layout-navbar {
+            position:sticky; top:0; z-index:1090; background:#fff;
+            height:var(--navbar-height); display:flex; align-items:center;
+            padding:0 24px; gap:16px;
+            border-bottom:1px solid rgba(75,70,92,.1); box-shadow:var(--shadow-sm);
+        }
+        .navbar-menu-toggle {
+            display:none; width:40px; height:40px; border-radius:8px;
+            border:none; background:var(--gray-100);
+            align-items:center; justify-content:center;
+            cursor:pointer; font-size:22px; color:#566a7f; flex-shrink:0;
+        }
+        .navbar-page-title {
+            flex:1; font-size:18px; font-weight:700; color:#334155;
+            display:flex; align-items:center; gap:10px;
+        }
+        .navbar-back-btn {
+            width:32px; height:32px; border-radius:8px; border:none;
+            background:var(--gray-100); color:#566a7f;
+            display:none; align-items:center; justify-content:center;
+            font-size:16px; cursor:pointer;
+        }
+        .navbar-actions { display:flex; align-items:center; gap:10px; }
+        .navbar-user-pill {
+            display:flex; align-items:center; gap:8px;
+            padding:5px 12px; border-radius:100px;
+            background:var(--gray-100); border:none; cursor:default;
+        }
+        .navbar-avatar {
+            width:30px; height:30px; border-radius:50%; background:var(--primary);
+            color:#fff; display:flex; align-items:center; justify-content:center;
+            font-size:12px; font-weight:700;
+        }
+        .navbar-username { font-size:.875rem; font-weight:600; color:#334155; }
+        .navbar-logout-btn {
+            width:36px; height:36px; border-radius:8px; border:none;
+            background:#fee2e2; color:var(--danger); display:flex;
+            align-items:center; justify-content:center; font-size:18px; cursor:pointer;
+        }
+        .navbar-logout-btn:hover { background:#fecaca; }
+        /* CONTENT */
+        .content-wrapper { flex:1; overflow-y:auto; overflow-x:hidden; }
+        .content-body { padding:24px; min-height:calc(100vh - var(--navbar-height)); }
+        /* PAGES */
+        .page { display:none; animation:fadeIn .3s ease; }
+        .page.active { display:block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
     </style>
-
-    <!-- Backend Config & API Client -->
+    <style>
+        /* LOGIN */
+        #appContainer { display:none; }
+        #appContainer.active { display:block; }
+        #loginPage {
+            min-height:100vh; display:flex; align-items:center; justify-content:center;
+            background:linear-gradient(135deg,#696cff,#a367fc); padding:20px;
+        }
+        .login-card {
+            background:#fff; border-radius:1rem; padding:2.5rem 2rem;
+            width:100%; max-width:420px; box-shadow:var(--shadow-lg);
+        }
+        .login-logo { text-align:center; margin-bottom:2rem; }
+        .login-logo .icon {
+            width:72px; height:72px; background:linear-gradient(135deg,#696cff,#a367fc);
+            border-radius:16px; display:flex; align-items:center; justify-content:center;
+            margin:0 auto 14px; font-size:36px;
+        }
+        .login-logo h1 { font-size:22px; font-weight:700; color:#2d3748; margin-bottom:4px; }
+        .login-logo p { font-size:14px; color:#9ca3af; }
+        .form-group { margin-bottom:1.25rem; }
+        .form-label { display:block; font-size:.875rem; font-weight:600; color:#566a7f; margin-bottom:6px; }
+        .form-input {
+            width:100%; padding:.625rem .875rem;
+            border:1.5px solid #d9dee3; border-radius:.375rem;
+            font-size:.9375rem; font-family:'Public Sans',sans-serif;
+            color:#2d3748; background:#fff; transition:border-color .2s,box-shadow .2s;
+        }
+        .form-input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(105,108,255,.15); }
+        select.form-input {
+            appearance:none;
+            background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat:no-repeat; background-position:right 12px center; padding-right:36px;
+        }
+        /* BUTTONS */
+        .btn {
+            display:inline-flex; align-items:center; justify-content:center; gap:6px;
+            padding:.5rem 1.25rem; border:none; border-radius:.375rem;
+            font-size:.875rem; font-weight:600; font-family:'Public Sans',sans-serif;
+            cursor:pointer; transition:all .2s; text-decoration:none; white-space:nowrap;
+        }
+        .btn-primary { background:var(--primary); color:#fff; box-shadow:0 2px 6px rgba(105,108,255,.4); }
+        .btn-primary:hover { background:var(--primary-dark); }
+        .btn-success { background:#71dd37; color:#1e4620; }
+        .btn-success:hover { background:#5cc72a; }
+        .btn-danger { background:var(--danger); color:#fff; }
+        .btn-warning { background:var(--warning); color:#fff; }
+        .btn-secondary { background:var(--gray-200); color:var(--gray-700); }
+        .btn-secondary:hover { background:var(--gray-300); }
+        .btn-sm { padding:.375rem .875rem; font-size:.8125rem; }
+        .btn-full { width:100%; }
+    </style>
+    <style>
+        /* CARDS */
+        .card { background:#fff; border-radius:var(--card-border-radius); box-shadow:var(--shadow); border:none; margin-bottom:1.5rem; }
+        .card-header { padding:1.25rem 1.5rem; border-bottom:1px solid rgba(75,70,92,.08); display:flex; align-items:center; justify-content:space-between; }
+        .card-title { font-size:1rem; font-weight:600; color:#334155; margin:0; }
+        .card-body { padding:1.5rem; }
+        /* STATS */
+        .stats-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-bottom:1.5rem; }
+        .stat-card { background:#fff; border-radius:var(--card-border-radius); padding:1.25rem; box-shadow:var(--shadow); display:flex; align-items:flex-start; gap:1rem; }
+        .stat-icon { width:48px; height:48px; border-radius:.5rem; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+        .stat-card.primary .stat-icon { background:rgba(105,108,255,.16); }
+        .stat-card.success .stat-icon { background:rgba(113,221,55,.16); }
+        .stat-card.warning .stat-icon { background:rgba(255,171,0,.16); }
+        .stat-card.danger  .stat-icon { background:rgba(255,62,29,.16); }
+        .stat-info .stat-value { font-size:1.5rem; font-weight:700; color:#334155; line-height:1; margin-bottom:4px; }
+        .stat-info .stat-label { font-size:.8125rem; color:#a1aab2; }
+        .section-title { font-size:.9375rem; font-weight:700; color:#334155; margin-bottom:1rem; display:flex; align-items:center; justify-content:space-between; }
+        .section-title a { font-size:.8125rem; color:var(--primary); text-decoration:none; font-weight:600; }
+        /* AUDIT LIST */
+        .audit-list { display:flex; flex-direction:column; gap:.75rem; }
+        .audit-card { background:#fff; border-radius:var(--card-border-radius); padding:1.25rem; box-shadow:var(--shadow); cursor:pointer; transition:all .2s; }
+        .audit-card:hover { box-shadow:var(--shadow-md); transform:translateY(-1px); }
+        .audit-card-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.75rem; }
+        .audit-card-title { font-weight:700; font-size:.9375rem; color:#334155; }
+        .audit-card-subtitle { font-size:.8125rem; color:#a1aab2; margin-top:2px; }
+        .audit-card-footer { display:flex; justify-content:space-between; align-items:center; margin-top:.75rem; padding-top:.75rem; border-top:1px solid rgba(75,70,92,.08); }
+        .audit-meta { font-size:.75rem; color:#a1aab2; }
+        .pass-rate { display:flex; align-items:center; gap:6px; font-size:.8125rem; font-weight:700; }
+        .rate-bar { width:60px; height:5px; background:var(--gray-200); border-radius:3px; overflow:hidden; }
+        .rate-bar .fill { height:100%; background:#71dd37; border-radius:3px; }
+        /* STATUS BADGES */
+        .status-badge { padding:4px 10px; border-radius:100px; font-size:.75rem; font-weight:700; text-transform:uppercase; }
+        .status-badge.completed { background:rgba(113,221,55,.16); color:#3b8f1a; }
+        .status-badge.draft { background:rgba(255,171,0,.16); color:#a07500; }
+    </style>
+    <style>
+        /* FORM SECTION */
+        .form-section { background:#fff; border-radius:var(--card-border-radius); padding:1.5rem; margin-bottom:1rem; box-shadow:var(--shadow); }
+        .form-section-title { font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:#a1aab2; margin-bottom:1.25rem; padding-bottom:.75rem; border-bottom:1px solid rgba(75,70,92,.08); }
+        .form-row { display:flex; gap:1rem; }
+        .form-row .form-group { flex:1; }
+        .toggle-group { display:flex; align-items:center; gap:1rem; }
+        .toggle-label { font-size:.9375rem; font-weight:600; color:#566a7f; }
+        .toggle-switch { position:relative; width:52px; height:28px; }
+        .toggle-switch input { opacity:0; width:0; height:0; }
+        .toggle-slider { position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background:var(--gray-300); border-radius:28px; transition:.3s; }
+        .toggle-slider:before { content:""; position:absolute; height:20px; width:20px; left:4px; bottom:4px; background:#fff; border-radius:50%; transition:.3s; box-shadow:0 1px 4px rgba(0,0,0,.2); }
+        .toggle-switch input:checked + .toggle-slider { background:var(--primary); }
+        .toggle-switch input:checked + .toggle-slider:before { transform:translateX(24px); }
+        .toggle-value { font-size:.875rem; font-weight:700; color:var(--primary); min-width:70px; }
+        /* CHECKLIST */
+        .overall-progress { background:#fff; border-radius:var(--card-border-radius); padding:1.25rem; margin-bottom:1rem; box-shadow:var(--shadow); }
+        .progress-header { display:flex; justify-content:space-between; margin-bottom:.75rem; }
+        .progress-title { font-size:.875rem; font-weight:700; color:#566a7f; }
+        .progress-value { font-size:.875rem; font-weight:800; color:var(--primary); }
+        .progress-bar { height:6px; background:var(--gray-200); border-radius:3px; overflow:hidden; }
+        .progress-bar .fill { height:100%; background:linear-gradient(90deg,var(--primary),#a367fc); border-radius:3px; transition:width .5s ease; }
+        .category-section { margin-bottom:1rem; }
+        .category-header { background:rgba(105,108,255,.06); padding:1rem 1.25rem; display:flex; align-items:center; justify-content:space-between; cursor:pointer; border-radius:8px 8px 0 0; transition:background .2s; }
+        .category-header.collapsed { border-radius:8px; }
+        .category-header:hover { background:rgba(105,108,255,.1); }
+        .category-title { font-size:.9375rem; font-weight:700; color:#334155; display:flex; align-items:center; gap:8px; }
+        .category-title .icon { font-size:20px; }
+        .category-progress { font-size:.8125rem; color:#a1aab2; font-weight:600; }
+        .category-items { background:#fff; border-radius:0 0 8px 8px; overflow:hidden; box-shadow:var(--shadow); }
+        .checklist-item { padding:1.25rem; border-bottom:1px solid rgba(75,70,92,.06); }
+        .checklist-item:last-child { border-bottom:none; }
+        .checklist-item-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.75rem; }
+        .checklist-item-name { font-size:.9375rem; font-weight:600; color:#334155; flex:1; padding-right:12px; }
+        .status-toggle { display:flex; gap:8px; align-items:center; }
+        .status-btn { width:44px; height:44px; border-radius:50%; border:2.5px solid var(--gray-200); background:#fff; font-size:22px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s; }
+        .status-btn.pass { border-color:#71dd37; background:rgba(113,221,55,.1); }
+        .status-btn.fail { border-color:var(--danger); background:rgba(255,62,29,.1); }
+        .status-btn:active { transform:scale(.9); }
+        .checklist-item-note { margin-top:.75rem; }
+        .note-input { width:100%; padding:.5rem .75rem; border:1.5px solid var(--gray-200); border-radius:.375rem; font-size:.875rem; resize:vertical; min-height:72px; font-family:'Public Sans',sans-serif; }
+        .note-input:focus { outline:none; border-color:var(--primary); }
+        .note-input.required { border-color:var(--danger); background:rgba(255,62,29,.04); }
+        .note-label { font-size:.75rem; font-weight:600; color:#a1aab2; margin-bottom:4px; display:flex; align-items:center; gap:4px; }
+        .note-label .required-mark { color:var(--danger); }
+        .photo-section { margin-top:1rem; }
+        .photo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px; }
+        .photo-thumb { aspect-ratio:1; border-radius:8px; overflow:hidden; position:relative; background:var(--gray-100); cursor:pointer; }
+        .photo-thumb img { width:100%; height:100%; object-fit:cover; }
+        .photo-thumb .remove-btn { position:absolute; top:4px; right:4px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,.6); color:#fff; border:none; font-size:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+        .photo-actions { display:flex; gap:8px; margin-top:8px; }
+        .photo-btn { flex:1; padding:.625rem; border:1.5px dashed var(--gray-300); border-radius:8px; background:var(--gray-50); display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; font-size:.75rem; color:#a1aab2; font-weight:600; transition:all .2s; }
+        .photo-btn:hover { border-color:var(--primary); color:var(--primary); }
+        .photo-btn .icon { font-size:20px; }
+        .hidden-input { display:none; }
+        .submit-bar { position:sticky; bottom:0; background:#fff; padding:1rem 1.5rem; border-top:1px solid rgba(75,70,92,.1); display:flex; gap:.75rem; z-index:50; box-shadow:0 -4px 16px rgba(75,70,92,.08); }
+        .submit-bar .btn { flex:1; }
+    </style>
+    <style>
+        /* HISTORY */
+        .history-search-bar { margin-bottom:1rem; }
+        .history-search-input-wrap { position:relative; display:flex; align-items:center; }
+        .history-search-icon { position:absolute; left:12px; font-size:18px; color:#a1aab2; pointer-events:none; }
+        .history-search-input { width:100%; padding:10px 40px 10px 38px; border:1.5px solid var(--gray-200); border-radius:10px; font-size:.875rem; font-family:inherit; color:#334155; background:#fff; outline:none; transition:border-color .2s; }
+        .history-search-input:focus { border-color:var(--primary); }
+        .history-search-input::placeholder { color:#a1aab2; }
+        .history-search-clear { position:absolute; right:10px; background:none; border:none; cursor:pointer; color:#a1aab2; display:flex; align-items:center; padding:4px; border-radius:50%; font-size:18px; transition:color .2s; }
+        .history-search-clear:hover { color:#566a7f; }
+        .history-filters { display:flex; gap:8px; margin-bottom:1.25rem; flex-wrap:wrap; }
+        .filter-chip { padding:6px 16px; border-radius:100px; border:1.5px solid var(--gray-200); background:#fff; font-size:.8125rem; font-weight:600; color:#566a7f; cursor:pointer; transition:all .2s; }
+        .filter-chip.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+        .tenant-history-card { background:#fff; border-radius:var(--card-border-radius); padding:1.25rem; margin-bottom:1rem; box-shadow:var(--shadow); }
+        .tenant-history-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+        .tenant-name { font-size:1rem; font-weight:700; color:#334155; }
+        .tenant-type { padding:3px 10px; border-radius:100px; font-size:.75rem; font-weight:700; }
+        .tenant-type.gas { background:rgba(255,171,0,.16); color:#a07500; }
+        .tenant-type.non-gas { background:rgba(105,108,255,.16); color:#696cff; }
+        .history-timeline { display:flex; flex-direction:column; gap:.75rem; }
+        .timeline-item { display:flex; gap:10px; padding:1rem; background:var(--gray-50); border-radius:8px; cursor:pointer; transition:all .2s; }
+        .timeline-item:hover { background:rgba(105,108,255,.06); }
+        .timeline-dot { width:10px; height:10px; border-radius:50%; margin-top:5px; flex-shrink:0; }
+        .timeline-dot.pass { background:#71dd37; }
+        .timeline-dot.fail { background:var(--danger); }
+        .timeline-dot.mixed { background:var(--warning); }
+        .timeline-content { flex:1; }
+        .timeline-date { font-size:.8125rem; font-weight:700; color:#566a7f; }
+        .timeline-pic { font-size:.75rem; color:#a1aab2; margin-top:2px; }
+        .timeline-result { display:flex; align-items:center; gap:8px; margin-top:6px; }
+        .result-badge { padding:2px 8px; border-radius:6px; font-size:.75rem; font-weight:700; }
+        .result-badge.good { background:rgba(113,221,55,.16); color:#3b8f1a; }
+        .result-badge.bad { background:rgba(255,62,29,.16); color:#c02c0d; }
+        /* ADMIN */
+        .admin-section { background:#fff; border-radius:var(--card-border-radius); padding:1.5rem; margin-bottom:1rem; box-shadow:var(--shadow); }
+        .admin-table { width:100%; border-collapse:collapse; }
+        .admin-table th,.admin-table td { padding:.75rem 1rem; text-align:left; font-size:.875rem; border-bottom:1px solid rgba(75,70,92,.06); }
+        .admin-table th { font-weight:700; color:#a1aab2; text-transform:uppercase; font-size:.75rem; letter-spacing:.5px; }
+        .admin-table tr:last-child td { border-bottom:none; }
+        .action-btns { display:flex; gap:6px; }
+        .action-btn { width:32px; height:32px; border-radius:6px; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; }
+        .action-btn.edit { background:rgba(105,108,255,.12); color:var(--primary); }
+        .action-btn.delete { background:rgba(255,62,29,.12); color:var(--danger); }
+    </style>
+    <style>
+        /* TENANT HISTORY PREVIEW */
+        .tenant-history-preview { background:#fff; border-radius:var(--card-border-radius); padding:1.25rem; margin-bottom:1rem; box-shadow:var(--shadow); display:none; }
+        .tenant-history-preview.active { display:block; }
+        .tenant-history-preview .preview-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; padding-bottom:.75rem; border-bottom:1px solid rgba(75,70,92,.08); }
+        .tenant-history-preview .preview-title { font-size:.9375rem; font-weight:700; color:#334155; display:flex; align-items:center; gap:6px; }
+        .tenant-history-preview .preview-subtitle { font-size:.8125rem; color:#a1aab2; margin-top:2px; }
+        .tenant-history-preview .history-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:.75rem; margin-bottom:1rem; }
+        .tenant-history-preview .history-stat { background:var(--gray-50); border-radius:8px; padding:.75rem; text-align:center; }
+        .tenant-history-preview .history-stat-value { font-size:1.25rem; font-weight:800; color:#334155; }
+        .tenant-history-preview .history-stat-label { font-size:.6875rem; color:#a1aab2; margin-top:3px; }
+        .tenant-history-preview .trend-chart { background:var(--gray-50); border-radius:8px; padding:1rem; margin-bottom:1rem; }
+        .tenant-history-preview .trend-title { font-size:.8125rem; font-weight:700; color:#566a7f; margin-bottom:.75rem; }
+        .tenant-history-preview .trend-bars { display:flex; align-items:flex-end; gap:8px; height:80px; padding-bottom:20px; position:relative; }
+        .tenant-history-preview .trend-bar-wrapper { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+        .tenant-history-preview .trend-bar { width:100%; min-height:4px; border-radius:4px 4px 0 0; transition:height .5s ease; position:relative; }
+        .tenant-history-preview .trend-bar.pass { background:linear-gradient(to top,#71dd37,#a3f060); }
+        .tenant-history-preview .trend-bar.fail { background:linear-gradient(to top,var(--danger),#ff8878); }
+        .tenant-history-preview .trend-bar-label { font-size:10px; color:#a1aab2; font-weight:600; white-space:nowrap; }
+        .tenant-history-preview .trend-bar-value { position:absolute; top:-18px; left:50%; transform:translateX(-50%); font-size:10px; font-weight:700; color:#566a7f; }
+        .tenant-history-preview .recent-audits-list { display:flex; flex-direction:column; gap:6px; }
+        .tenant-history-preview .recent-audit-item { display:flex; align-items:center; gap:10px; padding:.75rem; background:var(--gray-50); border-radius:8px; cursor:pointer; transition:all .2s; }
+        .tenant-history-preview .recent-audit-item:hover { background:rgba(105,108,255,.06); }
+        .tenant-history-preview .recent-audit-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+        .tenant-history-preview .recent-audit-info { flex:1; }
+        .tenant-history-preview .recent-audit-date { font-size:.8125rem; font-weight:700; color:#566a7f; }
+        .tenant-history-preview .recent-audit-pic { font-size:.75rem; color:#a1aab2; }
+        .tenant-history-preview .recent-audit-rate { font-size:.875rem; font-weight:800; padding:3px 8px; border-radius:6px; }
+        .tenant-history-preview .recent-audit-rate.good { background:rgba(113,221,55,.16); color:#3b8f1a; }
+        .tenant-history-preview .recent-audit-rate.bad { background:rgba(255,62,29,.16); color:#c02c0d; }
+        .tenant-history-preview .no-history { text-align:center; padding:1.5rem; color:#a1aab2; }
+        .tenant-history-preview .no-history .icon { font-size:36px; margin-bottom:6px; display:block; }
+        .tenant-history-preview .no-history p { font-size:.875rem; }
+        .tenant-select-wrapper { position:relative; }
+        .tenant-history-badge { position:absolute; right:40px; top:50%; transform:translateY(-50%); background:var(--primary); color:#fff; padding:1px 7px; border-radius:10px; font-size:11px; font-weight:700; display:none; z-index:2; }
+        .tenant-history-badge.active { display:block; }
+        /* Searchable dropdown */
+        .searchable-select { position:relative; width:100%; }
+        .searchable-select-trigger {
+            display:flex; align-items:center; justify-content:space-between; gap:8px;
+            width:100%; padding:.625rem .875rem;
+            border:1.5px solid #d9dee3; border-radius:.375rem;
+            background:#fff; cursor:pointer; transition:border-color .2s, box-shadow .2s;
+            font-size:.9375rem; color:#a0aec0; user-select:none;
+        }
+        .searchable-select-trigger:hover { border-color:#b0b7c3; }
+        .searchable-select.open .searchable-select-trigger {
+            border-color:var(--primary); box-shadow:0 0 0 3px rgba(105,108,255,.15);
+        }
+        .searchable-select-trigger.has-value { color:#2d3748; }
+        .searchable-select-value { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .searchable-select-arrow { font-size:18px; color:#9ca3af; transition:transform .2s; flex-shrink:0; }
+        .searchable-select.open .searchable-select-arrow { transform:rotate(180deg); }
+        .searchable-select-menu {
+            display:none; position:absolute; top:calc(100% + 4px); left:0; right:0;
+            background:#fff; border:1.5px solid #d9dee3;
+            border-radius:.375rem; box-shadow:0 8px 24px rgba(75,70,92,.15);
+            z-index:300; overflow:hidden;
+        }
+        .searchable-select.open .searchable-select-menu { display:block; }
+        .searchable-select-search {
+            display:flex; align-items:center; gap:8px;
+            padding:8px 12px; border-bottom:1px solid rgba(75,70,92,.08);
+            background:#fafafa;
+        }
+        .searchable-select-search i { color:#a5aeb7; font-size:18px; flex-shrink:0; }
+        .searchable-select-search input {
+            border:none; outline:none; flex:1; font-size:.875rem; color:#566a7f;
+            background:transparent; min-width:0;
+        }
+        .searchable-select-search input::placeholder { color:#a5aeb7; }
+        .searchable-select-list {
+            list-style:none; max-height:220px; overflow-y:auto; padding:4px 0; margin:0;
+        }
+        .searchable-select-list li {
+            padding:9px 14px; cursor:pointer; font-size:.875rem; color:#566a7f;
+            transition:background .12s; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+        }
+        .searchable-select-list li:hover { background:rgba(105,108,255,.07); color:var(--primary); }
+        .searchable-select-list li.selected { background:rgba(105,108,255,.1); color:var(--primary); font-weight:600; }
+        .searchable-select-list li.ss-no-result { color:#a5aeb7; text-align:center; padding:18px; cursor:default; font-style:italic; }
+        .searchable-select-list li.ss-no-result:hover { background:none; color:#a5aeb7; }
+    </style>
+    <style>
+        /* EXCEL REPORT */
+        .excel-report-container { overflow-x:auto; margin-top:1rem; }
+        .excel-toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; padding-bottom:1rem; border-bottom:1px solid rgba(75,70,92,.08); flex-wrap:wrap; gap:.75rem; }
+        .excel-toolbar-title { font-size:1rem; font-weight:700; color:#334155; display:flex; align-items:center; gap:8px; }
+        .excel-toolbar-actions { display:flex; gap:8px; }
+        .excel-btn { padding:8px 16px; border-radius:8px; border:none; font-size:.8125rem; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all .2s; }
+        .excel-btn.export { background:#217346; color:#fff; }
+        .excel-btn.export:hover { background:#1a5c38; }
+        .excel-btn.filter { background:var(--gray-100); color:#566a7f; }
+        .excel-table-wrapper { overflow-x:auto; border:1px solid rgba(75,70,92,.1); border-radius:8px; }
+        .excel-table { width:100%; border-collapse:collapse; font-size:.8125rem; min-width:800px; }
+        .excel-table thead { background:#217346; color:#fff; }
+        .excel-table th { padding:.75rem .875rem; text-align:left; font-weight:600; font-size:.75rem; text-transform:uppercase; letter-spacing:.3px; border-right:1px solid rgba(255,255,255,.1); white-space:nowrap; }
+        .excel-table th:last-child { border-right:none; }
+        .excel-table td { padding:.75rem .875rem; border-bottom:1px solid rgba(75,70,92,.06); border-right:1px solid rgba(75,70,92,.06); vertical-align:top; }
+        .excel-table td:last-child { border-right:none; }
+        .excel-table tbody tr:hover { background:#f0f7ff; }
+        .excel-table tbody tr:nth-child(even) { background:#fafafa; }
+        .excel-cell-tenant { font-weight:700; color:#334155; }
+        .excel-cell-type { display:inline-block; padding:2px 8px; border-radius:100px; font-size:.6875rem; font-weight:700; }
+        .excel-cell-type.gas { background:rgba(255,171,0,.16); color:#a07500; }
+        .excel-cell-type.non-gas { background:rgba(105,108,255,.16); color:#696cff; }
+        .excel-cell-date,.excel-cell-pic { color:#a1aab2; font-size:.75rem; }
+        .excel-cell-status { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:100px; font-size:.75rem; font-weight:700; }
+        .excel-cell-status.completed { background:rgba(113,221,55,.16); color:#3b8f1a; }
+        .excel-cell-status.draft { background:rgba(255,171,0,.16); color:#a07500; }
+        .excel-cell-rate { font-weight:800; font-size:.875rem; }
+        .excel-cell-rate.good { color:#3b8f1a; }
+        .excel-cell-rate.warning { color:#a07500; }
+        .excel-cell-rate.bad { color:#c02c0d; }
+        .excel-cell-items { font-size:.75rem; color:#a1aab2; }
+        .excel-cell-fail { color:var(--danger); font-weight:700; }
+        .excel-cell-note { font-size:.75rem; color:#a1aab2; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .excel-cell-note:hover { white-space:normal; overflow:visible; }
+        .excel-progress-bar { width:70px; height:5px; background:var(--gray-200); border-radius:3px; overflow:hidden; display:inline-block; margin-right:6px; vertical-align:middle; }
+        .excel-progress-fill { height:100%; border-radius:3px; transition:width .3s; }
+        .excel-progress-fill.good { background:#71dd37; }
+        .excel-progress-fill.warning { background:var(--warning); }
+        .excel-progress-fill.bad { background:var(--danger); }
+        .excel-summary-row { background:var(--gray-100) !important; font-weight:700; }
+        .excel-summary-row td { border-top:2px solid var(--gray-300); color:#334155; }
+        .excel-filter-bar { display:flex; gap:1rem; margin-bottom:1rem; flex-wrap:wrap; }
+        .excel-filter-group { display:flex; flex-direction:column; gap:4px; }
+        .excel-filter-label { font-size:.75rem; font-weight:600; color:#a1aab2; }
+        .excel-filter-input { padding:8px 12px; border:1.5px solid var(--gray-200); border-radius:6px; font-size:.875rem; background:var(--gray-50); min-width:140px; font-family:'Public Sans',sans-serif; }
+        .excel-filter-input:focus { outline:none; border-color:var(--primary); }
+        .excel-empty-report { text-align:center; padding:3rem 1rem; }
+        .excel-empty-report .icon { font-size:56px; margin-bottom:1rem; display:block; }
+        .excel-empty-report h3 { font-size:1.125rem; font-weight:700; color:#566a7f; margin-bottom:6px; }
+        .excel-empty-report p { font-size:.875rem; color:#a1aab2; }
+        .excel-badge { display:inline-flex; align-items:center; gap:3px; padding:2px 7px; border-radius:6px; font-size:.6875rem; font-weight:700; }
+        .excel-badge.fail { background:rgba(255,62,29,.12); color:#c02c0d; }
+        .excel-badge.pass { background:rgba(113,221,55,.12); color:#3b8f1a; }
+    </style>
+    <style>
+        /* MODALS */
+        .modal-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(47,51,73,.6); display:none; align-items:center; justify-content:center; z-index:2000; padding:1rem; }
+        .modal-overlay.active { display:flex; }
+        .modal { background:#fff; border-radius:1rem; padding:1.5rem; width:100%; max-width:480px; max-height:90vh; overflow-y:auto; animation:modalIn .25s ease; }
+        @keyframes modalIn { from{opacity:0;transform:scale(.92)} to{opacity:1;transform:scale(1)} }
+        .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; }
+        .modal-title { font-size:1.125rem; font-weight:700; color:#334155; }
+        .modal-close { width:32px; height:32px; border-radius:50%; border:none; background:var(--gray-100); font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#566a7f; }
+        /* PHOTO VIEWER */
+        .photo-viewer { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.92); display:none; align-items:center; justify-content:center; z-index:3000; }
+        .photo-viewer.active { display:flex; }
+        .photo-viewer img { max-width:92%; max-height:92%; border-radius:8px; }
+        .photo-viewer .close-viewer { position:absolute; top:16px; right:16px; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.2); color:#fff; border:none; font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        /* TOAST */
+        .toast-container { position:fixed; top:16px; left:50%; transform:translateX(-50%); z-index:5000; display:flex; flex-direction:column; gap:8px; pointer-events:none; }
+        .toast { padding:12px 20px; border-radius:8px; color:#fff; font-weight:600; font-size:.875rem; box-shadow:var(--shadow-md); animation:toastIn .3s ease; pointer-events:auto; white-space:nowrap; }
+        .toast.success { background:#71dd37; color:#1e4620; }
+        .toast.error { background:var(--danger); }
+        .toast.info { background:var(--primary); }
+        @keyframes toastIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+        /* LOADING */
+        .loading-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,.88); display:none; align-items:center; justify-content:center; z-index:4000; flex-direction:column; gap:14px; }
+        .loading-overlay.active { display:flex; }
+        .spinner { width:44px; height:44px; border:3.5px solid rgba(105,108,255,.2); border-top-color:var(--primary); border-radius:50%; animation:spin .8s linear infinite; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        /* EMPTY STATE */
+        .empty-state { text-align:center; padding:3.5rem 1rem; }
+        .empty-state .icon { font-size:56px; margin-bottom:1rem; opacity:.5; display:block; }
+        .empty-state h3 { font-size:1.125rem; font-weight:700; color:#566a7f; margin-bottom:6px; }
+        .empty-state p { font-size:.875rem; color:#a1aab2; }
+        /* INSTALL PROMPT */
+        .install-prompt { position:fixed; bottom:20px; left:20px; background:#fff; border-radius:14px; padding:1.25rem; box-shadow:var(--shadow-lg); z-index:1400; display:none; border:2px solid var(--primary); max-width:300px; }
+        .install-prompt.active { display:block; }
+        .install-prompt h4 { font-size:.9375rem; margin-bottom:6px; color:#334155; }
+        .install-prompt p { font-size:.8125rem; color:#a1aab2; margin-bottom:.75rem; }
+        .install-steps { background:var(--gray-50); border-radius:8px; padding:.75rem; margin:.75rem 0; }
+        .install-steps li { font-size:.8125rem; color:#566a7f; margin:4px 0; padding-left:4px; }
+        /* SYNC STATUS */
+        .sync-status { position:fixed; top:80px; right:20px; background:#fff; border-radius:10px; padding:10px 16px; box-shadow:var(--shadow-md); z-index:1080; display:none; align-items:center; gap:10px; border-left:3px solid var(--warning); min-width:200px; }
+        .sync-status.active { display:flex; }
+        .sync-status.online { border-left-color:#71dd37; }
+        .sync-status.offline { border-left-color:var(--danger); }
+        .sync-status.syncing { border-left-color:var(--warning); }
+        .sync-icon { font-size:18px; }
+        .sync-text { flex:1; font-size:.8125rem; font-weight:600; color:#566a7f; }
+        .sync-action { padding:4px 10px; border-radius:6px; border:none; background:var(--primary); color:#fff; font-size:.75rem; font-weight:700; cursor:pointer; }
+        /* NOTIFICATION */
+        .notification-permission { position:fixed; bottom:20px; right:20px; background:linear-gradient(135deg,#696cff,#a367fc); border-radius:14px; padding:1.25rem; box-shadow:var(--shadow-lg); z-index:1500; display:none; color:#fff; max-width:300px; }
+        .notification-permission.active { display:block; }
+        .notification-permission h4 { font-size:.9375rem; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+        .notification-permission p { font-size:.8125rem; opacity:.9; margin-bottom:1rem; line-height:1.5; }
+        .notification-actions { display:flex; gap:8px; }
+        .notification-actions .btn { flex:1; padding:8px 12px; font-size:.8125rem; }
+        .btn-white { background:#fff; color:#696cff; }
+        .btn-transparent { background:rgba(255,255,255,.2); color:#fff; }
+        /* EXPORT */
+        .export-menu { position:fixed; bottom:80px; right:20px; background:#fff; border-radius:12px; padding:12px; box-shadow:var(--shadow-lg); z-index:200; display:none; min-width:180px; }
+        .export-menu.active { display:block; }
+        .export-btn { width:100%; padding:10px 14px; border:none; background:var(--gray-50); border-radius:8px; margin-bottom:6px; cursor:pointer; display:flex; align-items:center; gap:8px; font-size:.875rem; font-weight:600; color:#566a7f; transition:all .2s; }
+        .export-btn:last-child { margin-bottom:0; }
+        .export-btn:hover { background:var(--gray-100); }
+        .fab-button { position:fixed; bottom:20px; right:20px; width:52px; height:52px; border-radius:50%; background:var(--primary); color:#fff; border:none; font-size:22px; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 16px rgba(105,108,255,.4); z-index:150; transition:all .2s; }
+        /* LAYOUT OVERLAY */
+        .layout-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(47,51,73,.6); z-index:1050; display:none; cursor:pointer; }
+        .layout-overlay.active { display:block; }
+        /* RESPONSIVE */
+        @media (max-width:991.98px) {
+            .layout-menu { transform:translateX(-100%); width:var(--menu-width) !important; }
+            .layout-menu.open { transform:translateX(0); }
+            .layout-page { margin-left:0 !important; }
+            .navbar-menu-toggle { display:flex; }
+            /* Always show full sidebar on mobile regardless of desktop collapsed state */
+            .layout-menu.menu-collapsed { width:var(--menu-width) !important; }
+            .layout-menu.menu-collapsed .app-brand-text,
+            .layout-menu.menu-collapsed .menu-section,
+            .layout-menu.menu-collapsed .menu-user-details,
+            .layout-menu.menu-collapsed .menu-badge { display:block !important; }
+            .layout-menu.menu-collapsed .menu-link span { display:inline !important; }
+            .layout-menu.menu-collapsed .menu-link { justify-content:flex-start !important; padding:10px 16px !important; }
+            .layout-menu.menu-collapsed .menu-icon { margin:0 !important; }
+            .layout-menu.menu-collapsed .menu-user { padding:14px 20px !important; }
+            .layout-menu.menu-collapsed .menu-user-info { justify-content:flex-start !important; }
+            .layout-menu.menu-collapsed .menu-user-avatar { margin:0 !important; }
+            .layout-menu-toggle { display:none !important; }
+        }
+        @media (min-width:992px) { .layout-overlay { display:none !important; } }
+        @media (max-width:576px) { .content-body{padding:16px;} .form-row{flex-direction:column;gap:0;} .excel-filter-bar{flex-direction:column;} }
+        ::-webkit-scrollbar { width:6px; height:6px; }
+        ::-webkit-scrollbar-track { background:transparent; }
+        ::-webkit-scrollbar-thumb { background:rgba(75,70,92,.2); border-radius:3px; }
+        a { color:var(--primary); }
+    </style>
     <script src="config.js"></script>
-
-    <!-- CDN Libraries for Export and Offline -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="assets/jspdf.umd.min.js"></script>
+    <script src="assets/jspdf.plugin.autotable.min.js"></script>
+    <script src="assets/xlsx.full.min.js"></script>
 </head>
 <body>
-
-    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
-
-    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
-        <p style="color: var(--gray-600); font-weight: 600;">Memuat...</p>
+        <p style="color:#566a7f;font-weight:600;font-size:.875rem;">Memuat...</p>
     </div>
-
-    <!-- Photo Viewer -->
     <div class="photo-viewer" id="photoViewer" onclick="closePhotoViewer()">
         <button class="close-viewer">&times;</button>
         <img id="viewerImage" src="" alt="Photo">
     </div>
-
-    <!-- Install Prompt -->
     <div class="install-prompt" id="installPrompt">
         <h4>📱 Install Aplikasi</h4>
         <p>Tambahkan ke Home Screen untuk akses lebih cepat</p>
-        <div class="install-steps" id="installSteps">
-            <!-- Dynamic content based on platform -->
-        </div>
-        <button class="btn btn-secondary" onclick="dismissInstall()" style="width: 100%;">Nanti Saja</button>
+        <div class="install-steps" id="installSteps"></div>
+        <button class="btn btn-secondary btn-full" onclick="dismissInstall()" style="margin-top:8px;">Nanti Saja</button>
     </div>
 
-    <!-- ========== LOGIN PAGE ========== -->
-    <div class="login-container" id="loginPage">
+    <!-- LOGIN PAGE -->
+    <div id="loginPage">
         <div class="login-card">
             <div class="login-logo">
                 <div class="icon">📋</div>
                 <h1>Hygiene Audit</h1>
                 <p>Login untuk memulai audit</p>
             </div>
-
-            <!-- Server status indicator -->
-            <div id="serverStatus" style="
-                display:flex; align-items:center; gap:8px;
-                padding:10px 14px; border-radius:10px; margin-bottom:18px;
-                font-size:13px; font-weight:600;
-                background:var(--gray-100); color:var(--gray-500);">
-                <span id="serverStatusDot" style="width:9px;height:9px;border-radius:50%;background:var(--gray-300);flex-shrink:0;"></span>
+            <div id="serverStatus" style="display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;margin-bottom:1.25rem;font-size:.8125rem;font-weight:600;background:var(--gray-100);color:#a1aab2;">
+                <span id="serverStatusDot" style="width:8px;height:8px;border-radius:50%;background:var(--gray-300);flex-shrink:0;"></span>
                 <span id="serverStatusText">Memeriksa koneksi server...</span>
             </div>
-
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label class="form-label">Username</label>
                     <input type="text" class="form-input" id="loginUsername" placeholder="Masukkan username" required>
                 </div>
-
                 <div class="form-group">
                     <label class="form-label">Password</label>
                     <input type="password" class="form-input" id="loginPassword" placeholder="Masukkan password" required>
                 </div>
-
-                <button type="submit" class="btn btn-primary">
-                    <span>🔐</span> Login
+                <button type="submit" class="btn btn-primary btn-full">
+                    <i class="bx bx-lock-open-alt"></i> Login
                 </button>
             </form>
-
-            <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--gray-400);">
-                Hubungi admin untuk pembuatan akun
-            </p>
+            <p style="text-align:center;margin-top:1.25rem;font-size:.8125rem;color:#a1aab2;">Hubungi admin untuk pembuatan akun</p>
         </div>
     </div>
 
-    <!-- ========== MAIN APP ========== -->
-    <div class="app-container" id="appContainer">
-
-        <!-- App Header -->
-        <div class="app-header" id="appHeader">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <button class="header-btn" id="backBtn" onclick="goBack()" title="Kembali" style="display:none;">&#8592;</button>
-                <h1 id="pageTitle">Dashboard</h1>
-            </div>
-            <div class="header-actions">
-                <div class="user-badge" id="userBadge">
-                    <div class="avatar" id="userAvatar">A</div>
-                    <span id="userName">Admin</span>
-                </div>
-                <button class="header-btn" onclick="logout()" title="Logout">🚪</button>
-            </div>
-        </div>
-
-        <!-- ========== DASHBOARD PAGE ========== -->
-        <div class="page active" id="pageDashboard">
-            <div class="dashboard-header">
-                <h2>Selamat Datang, <span id="dashboardUserName">Admin</span>! 👋</h2>
-                <p id="dashboardDate">Senin, 15 Mei 2026</p>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-card primary">
-                    <div class="stat-icon">📊</div>
-                    <div class="stat-value" id="statTotal">0</div>
-                    <div class="stat-label">Total Audit</div>
-                </div>
-                <div class="stat-card success">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-value" id="statCompleted">0</div>
-                    <div class="stat-label">Selesai</div>
-                </div>
-                <div class="stat-card warning">
-                    <div class="stat-icon">📝</div>
-                    <div class="stat-value" id="statDraft">0</div>
-                    <div class="stat-label">Draft</div>
-                </div>
-                <div class="stat-card danger">
-                    <div class="stat-icon">⚠️</div>
-                    <div class="stat-value" id="statFail">0</div>
-                    <div class="stat-label">Item Fail</div>
-                </div>
-            </div>
-
-            <div class="section-title">
-                <span>Audit Terbaru</span>
-                <a href="#" onclick="navigateTo('newAudit')">+ Audit Baru</a>
-            </div>
-
-            <div class="audit-list" id="recentAudits">
-                <!-- Dynamic content -->
-            </div>
-        </div>
-
-        <!-- ========== NEW AUDIT PAGE ========== -->
-        <div class="page" id="pageNewAudit">
-            <div class="form-section">
-                <div class="form-section-title">Informasi Audit</div>
-
-                <div class="form-group">
-                    <label class="form-label">Tanggal Audit</label>
-                    <input type="date" class="form-input" id="auditDate" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Nama Tenant</label>
-                    <div class="tenant-select-wrapper">
-                        <select class="form-input" id="auditTenant" required>
-                            <option value="">Pilih Tenant</option>
-                        </select>
-                        <span class="tenant-history-badge" id="tenantHistoryBadge">0 audit</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">PIC (Person In Charge)</label>
-                    <select class="form-input" id="auditPIC" required>
-                        <option value="">Pilih PIC</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <div class="toggle-group">
-                        <span class="toggle-label">Tenant Menggunakan Gas?</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="auditGas" onchange="updateGasLabel()">
-                            <span class="toggle-slider"></span>
-                        </label>
-                        <span class="toggle-value" id="gasLabel">Non-Gas</span>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Tenant History Preview (shows after tenant selection) -->
-            <div class="tenant-history-preview" id="tenantHistoryPreview">
-                <div class="preview-header">
-                    <div>
-                        <div class="preview-title">
-                            <span>📜</span>
-                            <span>Riwayat Audit Tenant</span>
+    <!-- MAIN APP -->
+    <div id="appContainer">
+        <div class="layout-wrapper layout-content-navbar">
+            <div class="layout-container">
+                <!-- SIDEBAR -->
+                <aside id="layout-menu" class="layout-menu">
+                    <a class="app-brand">
+                        <div class="app-brand-logo">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 5.55228 9.44772 6 10 6H14C14.5523 6 15 5.55228 15 5M9 5C9 4.44772 9.44772 4 10 4H14C14.5523 4 15 4.44772 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
                         </div>
-                        <div class="preview-subtitle" id="previewTenantSubtitle">3 audit ditemukan</div>
+                        <div class="app-brand-text">Hygiene Audit<small>Management System</small></div>
+                        <button class="layout-menu-toggle d-none d-lg-flex" id="sidebarToggle" onclick="toggleSidebarCollapse()" title="Ciutkan menu">
+                            <i class="bx bx-chevron-left"></i>
+                        </button>
+                    </a>
+                    <ul class="menu-inner">
+                        <li class="menu-section">Menu Utama</li>
+                        <li class="menu-item active" data-page="dashboard">
+                            <button class="menu-link" onclick="navigateTo('dashboard')">
+                                <i class="menu-icon bx bxs-dashboard"></i><span>Dashboard</span>
+                            </button>
+                        </li>
+                        <li class="menu-item" data-page="newAudit">
+                            <button class="menu-link" onclick="navigateTo('newAudit')">
+                                <i class="menu-icon bx bx-plus-circle"></i><span>Audit Baru</span>
+                            </button>
+                        </li>
+                        <li class="menu-item" data-page="history">
+                            <button class="menu-link" onclick="navigateTo('history')">
+                                <i class="menu-icon bx bx-history"></i><span>History Audit</span>
+                            </button>
+                        </li>
+                        <li class="menu-divider"></li>
+                        <li class="menu-section">Administration</li>
+                        <li class="menu-item" data-page="admin" id="navAdmin" style="display:none;">
+                            <button class="menu-link" onclick="navigateTo('admin')">
+                                <i class="menu-icon bx bx-cog"></i><span>Admin Panel</span>
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="menu-user">
+                        <div class="menu-user-info">
+                            <div class="menu-user-avatar" id="sidebarAvatar">A</div>
+                            <div class="menu-user-details">
+                                <div class="menu-user-name" id="sidebarUserName">Admin</div>
+                                <div class="menu-user-role" id="sidebarUserRole">Auditor</div>
+                            </div>
+                            <button onclick="logout()" title="Logout" style="padding:6px;min-width:32px;border-radius:8px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+                                <i class="bx bx-log-out" style="font-size:18px;color:#a5aeb7;"></i>
+                            </button>
+                        </div>
                     </div>
-                    <span class="tenant-type" id="previewTenantType">🔥 Gas</span>
-                </div>
+                </aside>
 
-                <div class="history-stats" id="previewHistoryStats">
-                    <div class="history-stat">
-                        <div class="history-stat-value" id="previewTotalAudits">3</div>
-                        <div class="history-stat-label">Total Audit</div>
-                    </div>
-                    <div class="history-stat">
-                        <div class="history-stat-value" id="previewAvgPass">85%</div>
-                        <div class="history-stat-label">Rata-rata Pass</div>
-                    </div>
-                    <div class="history-stat">
-                        <div class="history-stat-value" id="previewLastAudit">10 hari</div>
-                        <div class="history-stat-label">Audit Terakhir</div>
-                    </div>
-                </div>
+                <!-- LAYOUT PAGE -->
+                <div class="layout-page">
+                    <nav class="layout-navbar">
+                        <button class="navbar-menu-toggle" id="menuToggle" onclick="toggleMenu()">
+                            <i class="bx bx-menu"></i>
+                        </button>
+                        <div class="navbar-page-title">
+                            <button class="navbar-back-btn" id="backBtn" onclick="goBack()" title="Kembali">
+                                <i class="bx bx-arrow-back"></i>
+                            </button>
+                            <span id="pageTitle">Dashboard</span>
+                        </div>
+                        <div class="navbar-actions">
+                            <div class="navbar-user-pill">
+                                <div class="navbar-avatar" id="userAvatar">A</div>
+                                <span class="navbar-username" id="userName">Admin</span>
+                            </div>
+                            <button class="navbar-logout-btn" onclick="logout()" title="Logout">
+                                <i class="bx bx-log-out"></i>
+                            </button>
+                        </div>
+                    </nav>
 
-                <div class="trend-chart">
-                    <div class="trend-title">📊 Trend Pass Rate (6 Audit Terakhir)</div>
-                    <div class="trend-bars" id="previewTrendBars">
-                        <!-- Dynamic trend bars -->
-                    </div>
-                </div>
+                    <div class="content-wrapper">
+                        <div class="content-body">
+                            <!-- DASHBOARD -->
+                            <div class="page active" id="pageDashboard">
+                                <div style="margin-bottom:1.5rem;">
+                                    <h4 style="font-size:1.25rem;font-weight:700;color:#334155;margin-bottom:4px;">Selamat Datang, <span id="dashboardUserName">Admin</span>! 👋</h4>
+                                    <p id="dashboardDate" style="font-size:.875rem;color:#a1aab2;"></p>
+                                </div>
+                                <div class="stats-grid">
+                                    <div class="stat-card primary">
+                                        <div class="stat-icon">📊</div>
+                                        <div class="stat-info"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total Audit</div></div>
+                                    </div>
+                                    <div class="stat-card success">
+                                        <div class="stat-icon">✅</div>
+                                        <div class="stat-info"><div class="stat-value" id="statCompleted">0</div><div class="stat-label">Selesai</div></div>
+                                    </div>
+                                    <div class="stat-card warning">
+                                        <div class="stat-icon">📝</div>
+                                        <div class="stat-info"><div class="stat-value" id="statDraft">0</div><div class="stat-label">Draft</div></div>
+                                    </div>
+                                    <div class="stat-card danger">
+                                        <div class="stat-icon">⚠️</div>
+                                        <div class="stat-info"><div class="stat-value" id="statFail">0</div><div class="stat-label">Item Fail</div></div>
+                                    </div>
+                                </div>
+                                <div class="section-title">
+                                    <span>Audit Terbaru</span>
+                                    <a href="#" onclick="navigateTo('newAudit');return false;">+ Audit Baru</a>
+                                </div>
+                                <div class="audit-list" id="recentAudits"></div>
+                            </div>
 
-                <div class="recent-audits-list" id="previewRecentAudits">
-                    <!-- Dynamic recent audit items -->
-                </div>
-            </div>
+                            <!-- NEW AUDIT -->
+                            <div class="page" id="pageNewAudit">
+                                <div class="form-section">
+                                    <div class="form-section-title">Informasi Audit</div>
+                                    <div class="form-group">
+                                        <label class="form-label">Tanggal Audit</label>
+                                        <input type="date" class="form-input" id="auditDate" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Nama Tenant</label>
+                                        <div class="tenant-select-wrapper">
+                                            <div class="searchable-select" id="tenantDropdown">
+                                                <div class="searchable-select-trigger" onclick="toggleTenantDropdown(event)">
+                                                    <span class="searchable-select-value" id="tenantSelectedText">Pilih Tenant</span>
+                                                    <i class="bx bx-chevron-down searchable-select-arrow"></i>
+                                                </div>
+                                                <div class="searchable-select-menu" id="tenantDropdownMenu">
+                                                    <div class="searchable-select-search">
+                                                        <i class="bx bx-search"></i>
+                                                        <input type="text" id="tenantSearchInput" placeholder="Cari nama tenant..." oninput="filterTenantOptions(this.value)" autocomplete="off">
+                                                    </div>
+                                                    <ul class="searchable-select-list" id="tenantOptionsList"></ul>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" id="auditTenant">
+                                            <span class="tenant-history-badge" id="tenantHistoryBadge">0 audit</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">PIC (Person In Charge)</label>
+                                        <select class="form-input" id="auditPIC" required>
+                                            <option value="">Pilih PIC</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="toggle-group">
+                                            <span class="toggle-label">Tenant Menggunakan Gas?</span>
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="auditGas" onchange="updateGasLabel()">
+                                                <span class="toggle-slider"></span>
+                                            </label>
+                                            <span class="toggle-value" id="gasLabel">Non-Gas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tenant-history-preview" id="tenantHistoryPreview">
+                                    <div class="preview-header">
+                                        <div>
+                                            <div class="preview-title"><span>📜</span><span>Riwayat Audit Tenant</span></div>
+                                            <div class="preview-subtitle" id="previewTenantSubtitle">3 audit ditemukan</div>
+                                        </div>
+                                        <span class="tenant-type" id="previewTenantType">🔥 Gas</span>
+                                    </div>
+                                    <div class="history-stats" id="previewHistoryStats">
+                                        <div class="history-stat"><div class="history-stat-value" id="previewTotalAudits">3</div><div class="history-stat-label">Total Audit</div></div>
+                                        <div class="history-stat"><div class="history-stat-value" id="previewAvgPass">85%</div><div class="history-stat-label">Rata-rata Pass</div></div>
+                                        <div class="history-stat"><div class="history-stat-value" id="previewLastAudit">10 hari</div><div class="history-stat-label">Audit Terakhir</div></div>
+                                    </div>
+                                    <div class="trend-chart">
+                                        <div class="trend-title">📊 Trend Pass Rate (6 Audit Terakhir)</div>
+                                        <div class="trend-bars" id="previewTrendBars"></div>
+                                    </div>
+                                    <div class="recent-audits-list" id="previewRecentAudits"></div>
+                                </div>
+                                <button class="btn btn-primary btn-full" onclick="startAudit()" style="margin-bottom:2rem;">
+                                    <i class="bx bx-rocket"></i> Mulai Audit
+                                </button>
+                            </div>
 
-            <button class="btn btn-primary" onclick="startAudit()" style="margin-bottom: 100px;">
-                <span>🚀</span> Mulai Audit
-            </button>
-        </div>
+                            <!-- CHECKLIST -->
+                            <div class="page" id="pageChecklist">
+                                <div class="overall-progress" id="overallProgress">
+                                    <div class="progress-header">
+                                        <span class="progress-title">Progress Audit</span>
+                                        <span class="progress-value" id="progressText">0/0</span>
+                                    </div>
+                                    <div class="progress-bar"><div class="fill" id="progressFill" style="width:0%"></div></div>
+                                </div>
+                                <div id="checklistContainer"></div>
+                                <div class="submit-bar">
+                                    <button class="btn btn-secondary" onclick="saveDraft()"><i class="bx bx-save"></i> Simpan Draft</button>
+                                    <button class="btn btn-success" onclick="submitAudit()"><i class="bx bx-check-circle"></i> Selesai Audit</button>
+                                </div>
+                            </div>
 
-        <!-- ========== CHECKLIST PAGE ========== -->
-        <div class="page checklist-container" id="pageChecklist">
-            <div class="overall-progress" id="overallProgress">
-                <div class="progress-header">
-                    <span class="progress-title">Progress Audit</span>
-                    <span class="progress-value" id="progressText">0/0</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="fill" id="progressFill" style="width: 0%"></div>
-                </div>
-            </div>
+                            <!-- HISTORY -->
+                            <div class="page" id="pageHistory">
+                                <div class="history-search-bar">
+                                    <div class="history-search-input-wrap">
+                                        <i class="bx bx-search history-search-icon"></i>
+                                        <input type="text" id="historySearchInput" class="history-search-input"
+                                               placeholder="Cari tenant atau PIC..." oninput="searchHistory(this.value)">
+                                        <button class="history-search-clear" id="historyClearBtn" onclick="clearHistorySearch()" style="display:none;">
+                                            <i class="bx bx-x"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="history-filters">
+                                    <button class="filter-chip active" onclick="filterHistory('all')">Semua</button>
+                                    <button class="filter-chip" onclick="filterHistory('completed')">Selesai</button>
+                                    <button class="filter-chip" onclick="filterHistory('draft')">Draft</button>
+                                </div>
+                                <div id="historyContainer"></div>
+                            </div>
 
-            <div id="checklistContainer">
-                <!-- Dynamic checklist categories -->
-            </div>
+                            <!-- ADMIN -->
+                            <div class="page" id="pageAdmin">
+                                <div class="admin-section">
+                                    <div class="section-title">
+                                        <span>Manajemen User</span>
+                                        <button class="btn btn-sm btn-primary" onclick="showUserModal()">+ Tambah</button>
+                                    </div>
+                                    <table class="admin-table">
+                                        <thead><tr><th>Username</th><th>Nama</th><th>Role</th><th>Aksi</th></tr></thead>
+                                        <tbody id="usersTable"></tbody>
+                                    </table>
+                                </div>
+                                <div class="admin-section">
+                                    <div class="section-title">
+                                        <span>Template Checklist</span>
+                                        <button class="btn btn-sm btn-primary" onclick="showTemplateModal()">+ Tambah</button>
+                                    </div>
+                                    <table class="admin-table">
+                                        <thead><tr><th>Kategori</th><th>Kegiatan</th><th>Gas Only</th><th>Aksi</th></tr></thead>
+                                        <tbody id="templatesTable"></tbody>
+                                    </table>
+                                </div>
+                                <div class="admin-section">
+                                    <div class="section-title">
+                                        <span>Master Tenant</span>
+                                        <button class="btn btn-sm btn-primary" onclick="showTenantModal()">+ Tambah</button>
+                                    </div>
+                                    <table class="admin-table">
+                                        <thead><tr><th>Nama Tenant</th><th>Tipe</th><th>Aksi</th></tr></thead>
+                                        <tbody id="tenantsTable"></tbody>
+                                    </table>
+                                </div>
+                                <div class="admin-section">
+                                    <div class="section-title">
+                                        <span>📊 Reporting Audit (Excel View)</span>
+                                        <button class="btn btn-sm btn-primary" onclick="generateExcelReport()">🔄 Refresh</button>
+                                    </div>
+                                    <div class="excel-filter-bar">
+                                        <div class="excel-filter-group">
+                                            <label class="excel-filter-label">Filter Status</label>
+                                            <select class="excel-filter-input" id="reportFilterStatus" onchange="filterExcelReport()">
+                                                <option value="all">Semua Status</option>
+                                                <option value="COMPLETED">Selesai</option>
+                                                <option value="DRAFT">Draft</option>
+                                            </select>
+                                        </div>
+                                        <div class="excel-filter-group">
+                                            <label class="excel-filter-label">Filter Type</label>
+                                            <select class="excel-filter-input" id="reportFilterType" onchange="filterExcelReport()">
+                                                <option value="all">Semua Type</option>
+                                                <option value="gas">Gas</option>
+                                                <option value="non-gas">Non-Gas</option>
+                                            </select>
+                                        </div>
+                                        <div class="excel-filter-group">
+                                            <label class="excel-filter-label">Cari Tenant</label>
+                                            <input type="text" class="excel-filter-input" id="reportSearchTenant" placeholder="Nama tenant..." onkeyup="filterExcelReport()">
+                                        </div>
+                                    </div>
+                                    <div class="excel-report-container" id="excelReportContainer"></div>
+                                </div>
+                            </div>
 
-            <!-- Submit Bar -->
-            <div class="submit-bar">
-                <button class="btn btn-secondary" onclick="saveDraft()">💾 Simpan Draft</button>
-                <button class="btn btn-success" onclick="submitAudit()">✅ Selesai Audit</button>
-            </div>
-        </div>
+                            <!-- AUDIT DETAIL -->
+                            <div class="page" id="pageAuditDetail">
+                                <div id="auditDetailContent"></div>
+                            </div>
 
-        <!-- ========== HISTORY PAGE ========== -->
-        <div class="page" id="pageHistory">
-            <div class="history-filters">
-                <button class="filter-chip active" onclick="filterHistory('all')">Semua</button>
-                <button class="filter-chip" onclick="filterHistory('completed')">Selesai</button>
-                <button class="filter-chip" onclick="filterHistory('draft')">Draft</button>
-            </div>
+                        </div><!-- end content-body -->
+                    </div><!-- end content-wrapper -->
+                </div><!-- end layout-page -->
+            </div><!-- end layout-container -->
+            <div class="layout-overlay" id="layoutOverlay" onclick="closeMenu()"></div>
+        </div><!-- end layout-wrapper -->
+    </div><!-- end appContainer -->
 
-            <div id="historyContainer">
-                <!-- Dynamic history -->
-            </div>
-        </div>
-
-        <!-- ========== ADMIN PAGE ========== -->
-        <div class="page" id="pageAdmin">
-            <div class="admin-section">
-                <div class="section-title">
-                    <span>Manajemen User</span>
-                    <button class="btn btn-sm btn-primary" onclick="showUserModal()">+ Tambah</button>
-                </div>
-
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Nama</th>
-                            <th>Role</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTable">
-                        <!-- Dynamic -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="admin-section">
-                <div class="section-title">
-                    <span>Template Checklist</span>
-                    <button class="btn btn-sm btn-primary" onclick="showTemplateModal()">+ Tambah</button>
-                </div>
-
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Kategori</th>
-                            <th>Kegiatan</th>
-                            <th>Gas Only</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="templatesTable">
-                        <!-- Dynamic -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="admin-section">
-                <div class="section-title">
-                    <span>Master Tenant</span>
-                    <button class="btn btn-sm btn-primary" onclick="showTenantModal()">+ Tambah</button>
-                </div>
-
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Nama Tenant</th>
-                            <th>Tipe</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tenantsTable">
-                        <!-- Dynamic -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- ========== AUDIT DETAIL PAGE ========== -->
-        <div class="page" id="pageAuditDetail">
-            <div id="auditDetailContent">
-                <!-- Dynamic detail -->
-            </div>
-        </div>
-
-
-        <!-- Excel Report Section -->
-        <div class="admin-section">
-            <div class="section-title">
-                <span>📊 Reporting Audit (Excel View)</span>
-                <button class="btn btn-sm btn-primary" onclick="generateExcelReport()">🔄 Refresh</button>
-            </div>
-
-            <div class="excel-filter-bar">
-                <div class="excel-filter-group">
-                    <label class="excel-filter-label">Filter Status</label>
-                    <select class="excel-filter-input" id="reportFilterStatus" onchange="filterExcelReport()">
-                        <option value="all">Semua Status</option>
-                        <option value="COMPLETED">Selesai</option>
-                        <option value="DRAFT">Draft</option>
-                    </select>
-                </div>
-                <div class="excel-filter-group">
-                    <label class="excel-filter-label">Filter Type</label>
-                    <select class="excel-filter-input" id="reportFilterType" onchange="filterExcelReport()">
-                        <option value="all">Semua Type</option>
-                        <option value="gas">Gas</option>
-                        <option value="non-gas">Non-Gas</option>
-                    </select>
-                </div>
-                <div class="excel-filter-group">
-                    <label class="excel-filter-label">Cari Tenant</label>
-                    <input type="text" class="excel-filter-input" id="reportSearchTenant" placeholder="Nama tenant..." onkeyup="filterExcelReport()">
-                </div>
-            </div>
-
-            <div class="excel-report-container" id="excelReportContainer">
-                <!-- Dynamic content -->
-            </div>
-        </div>
-
-        <!-- Bottom Navigation -->
-        <div class="bottom-nav" id="bottomNav">
-            <button class="nav-item active" onclick="navigateTo('dashboard')">
-                <span class="icon">📊</span>
-                <span class="label">Dashboard</span>
-            </button>
-            <button class="nav-item" onclick="navigateTo('newAudit')">
-                <span class="icon">➕</span>
-                <span class="label">Audit</span>
-            </button>
-            <button class="nav-item" onclick="navigateTo('history')">
-                <span class="icon">📜</span>
-                <span class="label">History</span>
-            </button>
-            <button class="nav-item" onclick="navigateTo('admin')" id="navAdmin" style="display:none;">
-                <span class="icon">⚙️</span>
-                <span class="label">Admin</span>
-            </button>
+    <!-- SYNC STATUS -->
+    <div class="sync-status" id="syncStatus">
+        <span class="sync-icon" id="syncIcon">🔄</span>
+        <span class="sync-text" id="syncText">Menyinkronkan...</span>
+        <button class="sync-action" id="syncAction" onclick="manualSync()">Sync</button>
+    </div>
+    <!-- NOTIFICATION PERMISSION -->
+    <div class="notification-permission" id="notifPermission">
+        <h4>🔔 Aktifkan Notifikasi</h4>
+        <p>Dapatkan pemberitahuan saat audit selesai, ada item FAIL, atau reminder jadwal audit.</p>
+        <div class="notification-actions">
+            <button class="btn btn-white" onclick="requestNotification()">Aktifkan</button>
+            <button class="btn btn-transparent" onclick="dismissNotification()">Nanti</button>
         </div>
     </div>
+    <!-- EXPORT MENU -->
+    <button class="fab-button" id="fabButton" onclick="toggleExportMenu()" style="display:none;">📤</button>
+    <div class="export-menu" id="exportMenu">
+        <button class="export-btn" onclick="exportPDF()"><span>📄</span> Export PDF</button>
+        <button class="export-btn" onclick="exportExcel()"><span>📊</span> Export Excel</button>
+        <button class="export-btn" onclick="shareAudit()"><span>🔗</span> Share</button>
+    </div>
 
-    <!-- ========== MODALS ========== -->
-    <!-- User Modal -->
+    <!-- MODALS -->
     <div class="modal-overlay" id="userModal">
         <div class="modal">
             <div class="modal-header">
@@ -2546,31 +997,17 @@
                 <button class="modal-close" onclick="closeModal('userModal')">&times;</button>
             </div>
             <form onsubmit="saveUser(event)">
-                <div class="form-group">
-                    <label class="form-label">Username</label>
-                    <input type="text" class="form-input" id="newUsername" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <input type="password" class="form-input" id="newPassword" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nama Lengkap</label>
-                    <input type="text" class="form-input" id="newFullName" required>
-                </div>
+                <div class="form-group"><label class="form-label">Username</label><input type="text" class="form-input" id="newUsername" required></div>
+                <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" id="newPassword" required></div>
+                <div class="form-group"><label class="form-label">Nama Lengkap</label><input type="text" class="form-input" id="newFullName" required></div>
                 <div class="form-group">
                     <label class="form-label">Role</label>
-                    <select class="form-input" id="newRole" required>
-                        <option value="auditor">Auditor</option>
-                        <option value="admin">Admin</option>
-                    </select>
+                    <select class="form-input" id="newRole" required><option value="auditor">Auditor</option><option value="admin">Admin</option></select>
                 </div>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary btn-full">Simpan</button>
             </form>
         </div>
     </div>
-
-    <!-- Template Modal -->
     <div class="modal-overlay" id="templateModal">
         <div class="modal">
             <div class="modal-header">
@@ -2578,29 +1015,15 @@
                 <button class="modal-close" onclick="closeModal('templateModal')">&times;</button>
             </div>
             <form onsubmit="saveTemplate(event)">
+                <div class="form-group"><label class="form-label">Kategori</label><input type="text" class="form-input" id="newCategory" placeholder="Contoh: LIFE SAFETY" required></div>
+                <div class="form-group"><label class="form-label">Nama Kegiatan</label><input type="text" class="form-input" id="newActivity" placeholder="Contoh: Kondisi Pipa Gas" required></div>
                 <div class="form-group">
-                    <label class="form-label">Kategori</label>
-                    <input type="text" class="form-input" id="newCategory" placeholder="Contoh: LIFE SAFETY" required>
+                    <div class="toggle-group"><span class="toggle-label">Hanya untuk Tenant Gas?</span><label class="toggle-switch"><input type="checkbox" id="newGasOnly"><span class="toggle-slider"></span></label></div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Nama Kegiatan</label>
-                    <input type="text" class="form-input" id="newActivity" placeholder="Contoh: Kondisi Pipa Gas" required>
-                </div>
-                <div class="form-group">
-                    <div class="toggle-group">
-                        <span class="toggle-label">Hanya untuk Tenant Gas?</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="newGasOnly">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary btn-full">Simpan</button>
             </form>
         </div>
     </div>
-
-    <!-- Tenant Modal -->
     <div class="modal-overlay" id="tenantModal">
         <div class="modal">
             <div class="modal-header">
@@ -2608,27 +1031,17 @@
                 <button class="modal-close" onclick="closeModal('tenantModal')">&times;</button>
             </div>
             <form onsubmit="saveTenant(event)">
+                <div class="form-group"><label class="form-label">Nama Tenant</label><input type="text" class="form-input" id="newTenantName" required></div>
                 <div class="form-group">
-                    <label class="form-label">Nama Tenant</label>
-                    <input type="text" class="form-input" id="newTenantName" required>
+                    <div class="toggle-group"><span class="toggle-label">Menggunakan Gas?</span><label class="toggle-switch"><input type="checkbox" id="newTenantGas"><span class="toggle-slider"></span></label></div>
                 </div>
-                <div class="form-group">
-                    <div class="toggle-group">
-                        <span class="toggle-label">Menggunakan Gas?</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="newTenantGas">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary btn-full">Simpan</button>
             </form>
         </div>
     </div>
 
-
-
     <script>
+
         // ========== DATA STORE ==========
         const Store = {
             tenants: [],        // loaded from API after login
@@ -3297,11 +1710,11 @@
 
             updateBadge() {
                 const completedCount = Store.audits.filter(a => a.status === 'COMPLETED').length;
-                const historyNav = document.querySelectorAll('.nav-item')[2];
+                const historyNav = document.querySelector('.menu-item[data-page="history"]');
                 if (!historyNav) return;
                 if (completedCount > 0) {
                     let badge = historyNav.querySelector('.nav-badge');
-                    if (!badge) { badge = document.createElement('span'); badge.className = 'nav-badge'; historyNav.appendChild(badge); }
+                    if (!badge) { badge = document.createElement('span'); badge.className = 'menu-badge'; historyNav.querySelector('.menu-link').appendChild(badge); }
                     badge.textContent = completedCount > 99 ? '99+' : completedCount;
                 }
             }
@@ -3315,42 +1728,46 @@
 
         // ========== AUTHENTICATION ==========
         async function _applySession(user) {
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('appContainer').classList.add('active');
-            document.getElementById('userName').textContent = user.name;
-            document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
-            document.getElementById('dashboardUserName').textContent = user.name;
-            document.getElementById('dashboardDate').textContent = formatDate(new Date());
+            showLoading();
 
             const isAdmin = ['admin', 'Admin', 'SuperAdmin'].includes(user.role);
-            document.getElementById('navAdmin').style.display = isAdmin ? 'flex' : 'none';
 
             try { Store.tenants = await ApiClient.tenants.getAll(); } catch { }
 
             // Load audits from API (works in incognito); fall back to IndexedDB if offline
             try {
                 const apiAudits = await ApiClient.audits.getAll();
-                Store.audits = apiAudits.map(a => ({
-                    ...a,
-                    items: (a.items || []).map(item => ({
+                Store.audits = apiAudits.map(a => {
+                    const mappedItems = (a.items || []).map(item => ({
                         ...item,
                         status: item.status || null,
                         note: item.note || '',
                         photos: item.photos || [],
-                    })),
-                    categories: (() => {
-                        const cats = {};
-                        (a.items || []).forEach(item => {
-                            if (!cats[item.category]) cats[item.category] = [];
-                            cats[item.category].push(item);
-                        });
-                        return cats;
-                    })(),
-                }));
+                    }));
+                    const cats = {};
+                    mappedItems.forEach(item => {
+                        if (!cats[item.category]) cats[item.category] = [];
+                        cats[item.category].push(item);
+                    });
+                    return { ...a, items: mappedItems, categories: cats };
+                });
             } catch {
                 Store.audits = await getAuditsOffline().catch(() => []);
             }
 
+            // Now show app with real data
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('appContainer').classList.add('active');
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('dashboardUserName').textContent = user.name;
+            document.getElementById('dashboardDate').textContent = formatDate(new Date());
+            document.getElementById('navAdmin').style.display = isAdmin ? 'block' : 'none';
+            document.getElementById('sidebarAvatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('sidebarUserName').textContent = user.name;
+            document.getElementById('sidebarUserRole').textContent = user.role;
+
+            hideLoading();
             initDashboard();
             showToast(`Selamat datang, ${user.name}!`);
             setTimeout(showInstallPrompt, 2000);
@@ -3394,6 +1811,7 @@
             document.getElementById('loginUsername').value = '';
             document.getElementById('loginPassword').value = '';
             document.getElementById('navAdmin').style.display = 'none';
+            closeMenu();
             document.getElementById('notifPermission').classList.remove('active');
             showToast('Berhasil logout');
         }
@@ -3404,6 +1822,7 @@
         }
 
         function navigateTo(page) {
+            closeMenu();
             const pagesWithBack = ['auditDetail', 'checklist'];
             const currentPage = document.querySelector('.page.active')?.id;
             if (currentPage) {
@@ -3417,7 +1836,7 @@
 
             // Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.menu-item[data-page]').forEach(n => n.classList.remove('active'));
 
             const backBtn = document.getElementById('backBtn');
             if (backBtn) backBtn.style.display = pagesWithBack.includes(page) ? 'inline-flex' : 'none';
@@ -3442,9 +1861,8 @@
                 'admin': 3
             };
 
-            if (navMap[page] !== undefined) {
-                document.querySelectorAll('.nav-item')[navMap[page]]?.classList.add('active');
-            }
+            const activeMenuItem = document.querySelector(`.menu-item[data-page="${page}"]`);
+            if (activeMenuItem) activeMenuItem.classList.add('active');
 
             // Update header title
             const titles = {
@@ -3518,6 +1936,63 @@
         }
 
         // ========== NEW AUDIT ==========
+
+        // ========== SEARCHABLE TENANT DROPDOWN ==========
+        let _tenantSelectedId = null;
+
+        function renderTenantOptions(query) {
+            const list = document.getElementById('tenantOptionsList');
+            if (!list) return;
+            const q = (query || '').toLowerCase().trim();
+            const filtered = q
+                ? Store.tenants.filter(t => t.name.toLowerCase().includes(q))
+                : Store.tenants;
+            if (filtered.length === 0) {
+                list.innerHTML = '<li class="ss-no-result">Tenant tidak ditemukan</li>';
+            } else {
+                list.innerHTML = filtered.map(t =>
+                    `<li class="${_tenantSelectedId === t.id ? 'selected' : ''}"
+                         onclick="selectTenantOption(${t.id}, event)">${t.name}</li>`
+                ).join('');
+            }
+        }
+
+        function toggleTenantDropdown(e) {
+            if (e) e.stopPropagation();
+            const dd = document.getElementById('tenantDropdown');
+            if (!dd) return;
+            const isOpen = dd.classList.contains('open');
+            if (isOpen) {
+                closeTenantDropdown();
+            } else {
+                dd.classList.add('open');
+                const input = document.getElementById('tenantSearchInput');
+                if (input) { input.value = ''; input.focus(); }
+                renderTenantOptions('');
+            }
+        }
+
+        function closeTenantDropdown() {
+            const dd = document.getElementById('tenantDropdown');
+            if (dd) dd.classList.remove('open');
+        }
+
+        function filterTenantOptions(query) {
+            renderTenantOptions(query);
+        }
+
+        function selectTenantOption(id, e) {
+            if (e) e.stopPropagation();
+            const tenant = Store.tenants.find(t => t.id === id);
+            if (!tenant) return;
+            _tenantSelectedId = id;
+            document.getElementById('auditTenant').value = id;
+            const triggerEl = document.getElementById('tenantSelectedText');
+            triggerEl.textContent = tenant.name;
+            triggerEl.closest('.searchable-select-trigger').classList.add('has-value');
+            closeTenantDropdown();
+            onTenantSelect();
+        }
 
         // ========== TENANT HISTORY PREVIEW ==========
         async function onTenantSelect() {
@@ -3619,11 +2094,14 @@
         function initNewAudit() {
             document.getElementById('auditDate').valueAsDate = new Date();
 
-            // Tenants from API (loaded on login)
-            const tenantSelect = document.getElementById('auditTenant');
-            tenantSelect.innerHTML = '<option value="">Pilih Tenant</option>' +
-                Store.tenants.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
-            tenantSelect.onchange = onTenantSelect;
+            // Reset searchable tenant dropdown
+            document.getElementById('auditTenant').value = '';
+            const triggerEl = document.getElementById('tenantSelectedText');
+            triggerEl.textContent = 'Pilih Tenant';
+            triggerEl.closest('.searchable-select-trigger').classList.remove('has-value');
+            _tenantSelectedId = null;
+            closeTenantDropdown();
+            renderTenantOptions('');
 
             // Auto-set PIC to current logged-in user (no users-list API endpoint)
             const picSelect = document.getElementById('auditPIC');
@@ -4024,8 +2502,15 @@
 
         // ========== HISTORY ==========
         let historyFilter = 'all';
+        let historySearch = '';
 
         function initHistory() {
+            // Reset search on page enter
+            historySearch = '';
+            const input = document.getElementById('historySearchInput');
+            if (input) input.value = '';
+            const clearBtn = document.getElementById('historyClearBtn');
+            if (clearBtn) clearBtn.style.display = 'none';
             renderHistory();
         }
 
@@ -4036,12 +2521,37 @@
             renderHistory();
         }
 
+        function searchHistory(query) {
+            historySearch = query.trim().toLowerCase();
+            const clearBtn = document.getElementById('historyClearBtn');
+            if (clearBtn) clearBtn.style.display = historySearch ? 'flex' : 'none';
+            renderHistory();
+        }
+
+        function clearHistorySearch() {
+            historySearch = '';
+            const input = document.getElementById('historySearchInput');
+            if (input) { input.value = ''; input.focus(); }
+            const clearBtn = document.getElementById('historyClearBtn');
+            if (clearBtn) clearBtn.style.display = 'none';
+            renderHistory();
+        }
+
         function renderHistory() {
             const container = document.getElementById('historyContainer');
             let audits = Store.audits;
 
             if (historyFilter !== 'all') {
                 audits = audits.filter(a => a.status.toLowerCase() === historyFilter);
+            }
+
+            if (historySearch) {
+                audits = audits.filter(a => {
+                    const tenant = Store.tenants.find(t => t.id === a.tenantId);
+                    const tenantName = (tenant?.name || '').toLowerCase();
+                    const picName = (a.picName || '').toLowerCase();
+                    return tenantName.includes(historySearch) || picName.includes(historySearch);
+                });
             }
 
             // Group by tenant
@@ -4057,13 +2567,17 @@
             });
 
             if (Object.keys(tenantGroups).length === 0) {
-                container.innerHTML = `
-                        <div class="empty-state">
+                container.innerHTML = historySearch
+                    ? `<div class="empty-state">
+                            <div class="icon">🔍</div>
+                            <h3>Tidak ditemukan</h3>
+                            <p>Tidak ada audit yang cocok dengan "<strong>${historySearch}</strong>"</p>
+                        </div>`
+                    : `<div class="empty-state">
                             <div class="icon">📜</div>
                             <h3>Belum ada history</h3>
                             <p>Audit yang telah dilakukan akan muncul di sini</p>
-                        </div>
-                    `;
+                        </div>`;
                 return;
             }
 
@@ -4141,16 +2655,25 @@
 
                         <div class="stats-grid" style="margin-bottom: 20px;">
                             <div class="stat-card success">
-                                <div class="stat-value" style="font-size: 24px;">${passItems}</div>
-                                <div class="stat-label">Pass</div>
+                                <div class="stat-icon">✅</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">${passItems}</div>
+                                    <div class="stat-label">Pass</div>
+                                </div>
                             </div>
                             <div class="stat-card danger">
-                                <div class="stat-value" style="font-size: 24px;">${failItems}</div>
-                                <div class="stat-label">Fail</div>
+                                <div class="stat-icon">❌</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">${failItems}</div>
+                                    <div class="stat-label">Fail</div>
+                                </div>
                             </div>
                             <div class="stat-card primary">
-                                <div class="stat-value" style="font-size: 24px;">${passRate}%</div>
-                                <div class="stat-label">Pass Rate</div>
+                                <div class="stat-icon">📊</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">${passRate}%</div>
+                                    <div class="stat-label">Pass Rate</div>
+                                </div>
                             </div>
                         </div>
 
@@ -4530,11 +3053,54 @@
             }
         }
 
-        // Initialize
+        // ========== SIDEBAR TOGGLE ==========
+        function toggleMenu() {
+            const menu = document.getElementById('layout-menu');
+            const overlay = document.getElementById('layoutOverlay');
+            if (menu) menu.classList.toggle('open');
+            if (overlay) overlay.classList.toggle('active');
+        }
+
+        function closeMenu() {
+            const menu = document.getElementById('layout-menu');
+            const overlay = document.getElementById('layoutOverlay');
+            if (menu) menu.classList.remove('open');
+            if (overlay) overlay.classList.remove('active');
+        }
+
+        function toggleSidebarCollapse() {
+            const menu = document.getElementById('layout-menu');
+            const page = document.querySelector('.layout-page');
+            const icon = document.querySelector('#sidebarToggle i');
+            if (!menu) return;
+            const collapsed = menu.classList.toggle('menu-collapsed');
+            if (page) page.style.marginLeft = collapsed ? '68px' : 'var(--menu-width)';
+            if (icon) icon.style.transform = collapsed ? 'rotate(180deg)' : '';
+            localStorage.setItem('sidebarCollapsed', collapsed ? '1' : '0');
+        }
+
+        function initSidebarState() {
+            if (localStorage.getItem('sidebarCollapsed') === '1') {
+                const menu = document.getElementById('layout-menu');
+                const page = document.querySelector('.layout-page');
+                const icon = document.querySelector('#sidebarToggle i');
+                if (menu) menu.classList.add('menu-collapsed');
+                if (page) page.style.marginLeft = '68px';
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+                // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
             await initIndexedDB().catch(console.error);
             SyncManager.init();
             NotificationManager.init();
+            initSidebarState();
+
+            // Close searchable dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('#tenantDropdown')) closeTenantDropdown();
+            });
 
             // Check backend reachability and show status on login page
             checkServerStatus();
@@ -4578,35 +3144,26 @@
         }
     </script>
 
-    <!-- ========== EXPORT MENU ========== -->
-    <button class="fab-button" id="fabButton" onclick="toggleExportMenu()" style="display: none;">📤</button>
-    <div class="export-menu" id="exportMenu">
-        <button class="export-btn" onclick="exportPDF()">
-            <span>📄</span> Export PDF
-        </button>
-        <button class="export-btn" onclick="exportExcel()">
-            <span>📊</span> Export Excel
-        </button>
-        <button class="export-btn" onclick="shareAudit()">
-            <span>🔗</span> Share
-        </button>
-    </div>
-
-    <!-- ========== SYNC STATUS ========== -->
-    <div class="sync-status" id="syncStatus">
-        <span class="sync-icon" id="syncIcon">🔄</span>
-        <span class="sync-text" id="syncText">Menyinkronkan...</span>
-        <button class="sync-action" id="syncAction" onclick="manualSync()">Sync</button>
-    </div>
-
-    <!-- ========== NOTIFICATION PERMISSION ========== -->
-    <div class="notification-permission" id="notifPermission">
-        <h4>🔔 Aktifkan Notifikasi</h4>
-        <p>Dapatkan pemberitahuan saat audit selesai, ada item FAIL, atau reminder jadwal audit.</p>
-        <div class="notification-actions">
-            <button class="btn btn-white" onclick="requestNotification()">Aktifkan</button>
-            <button class="btn btn-transparent" onclick="dismissNotification()">Nanti</button>
-        </div>
-    </div>
+    <!-- Service Worker for PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:text/javascript,' + encodeURIComponent(`
+                self.addEventListener('install', e => self.skipWaiting());
+                self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+                self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));
+                self.addEventListener('push', event => {
+                    const data = event.data.json();
+                    event.waitUntil(self.registration.showNotification(data.title, {
+                        body: data.body, icon: data.icon || '/icon-192x192.png',
+                        badge: '/badge-72x72.png', tag: data.tag || 'default'
+                    }));
+                });
+                self.addEventListener('notificationclick', event => {
+                    event.notification.close();
+                    event.waitUntil(clients.openWindow('/'));
+                });
+            `)).catch(() => {});
+        }
+    </script>
 </body>
 </html>
