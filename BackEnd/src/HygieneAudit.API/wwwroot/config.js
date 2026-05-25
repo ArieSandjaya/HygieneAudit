@@ -29,7 +29,16 @@ const AppConfig = {
 
         // Tenants
         TENANTS:                '/api/tenants',
+        TENANT_BY_ID:           (id)           => `/api/tenants/${id}`,
         TENANT_HISTORY:         (id)           => `/api/tenants/${id}/history`,
+
+        // Users (Admin only)
+        USERS:                  '/api/users',
+        USER_BY_ID:             (id)           => `/api/users/${id}`,
+
+        // Templates
+        TEMPLATES:              '/api/templates',
+        TEMPLATE_BY_ID:         (id)           => `/api/templates/${id}`,
 
         // Reports (Admin only)
         REPORT_LATEST:          '/api/reports/latest-per-tenant',
@@ -225,8 +234,25 @@ const ApiClient = {
     },
 
     tenants: {
-        getAll:     ()   => ApiClient.get(AppConfig.ENDPOINTS.TENANTS),
-        getHistory: (id) => ApiClient.get(AppConfig.ENDPOINTS.TENANT_HISTORY(id)),
+        getAll:     ()           => ApiClient.get(AppConfig.ENDPOINTS.TENANTS),
+        getHistory: (id)         => ApiClient.get(AppConfig.ENDPOINTS.TENANT_HISTORY(id)),
+        create:     (data)       => ApiClient.post(AppConfig.ENDPOINTS.TENANTS, data),
+        update:     (id, data)   => ApiClient.put(AppConfig.ENDPOINTS.TENANT_BY_ID(id), data),
+        delete:     (id)         => ApiClient.delete(AppConfig.ENDPOINTS.TENANT_BY_ID(id)),
+    },
+
+    users: {
+        getAll:  ()           => ApiClient.get(AppConfig.ENDPOINTS.USERS),
+        create:  (data)       => ApiClient.post(AppConfig.ENDPOINTS.USERS, data),
+        update:  (id, data)   => ApiClient.put(AppConfig.ENDPOINTS.USER_BY_ID(id), data),
+        delete:  (id)         => ApiClient.delete(AppConfig.ENDPOINTS.USER_BY_ID(id)),
+    },
+
+    templates: {
+        getAll:  ()           => ApiClient.get(AppConfig.ENDPOINTS.TEMPLATES),
+        create:  (data)       => ApiClient.post(AppConfig.ENDPOINTS.TEMPLATES, data),
+        update:  (id, data)   => ApiClient.put(AppConfig.ENDPOINTS.TEMPLATE_BY_ID(id), data),
+        delete:  (id)         => ApiClient.delete(AppConfig.ENDPOINTS.TEMPLATE_BY_ID(id)),
     },
 
     reports: {
