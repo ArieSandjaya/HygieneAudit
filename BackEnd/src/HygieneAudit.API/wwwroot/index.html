@@ -709,9 +709,24 @@
                         </li>
                         <li class="menu-divider"></li>
                         <li class="menu-section">Administration</li>
-                        <li class="menu-item" data-page="admin" id="navAdmin" style="display:none;">
-                            <button class="menu-link" onclick="navigateTo('admin')">
-                                <i class="menu-icon bx bx-cog"></i><span>Admin Panel</span>
+                        <li class="menu-item admin-nav" data-page="adminUsers" id="navAdminUsers" style="display:none;">
+                            <button class="menu-link" onclick="navigateTo('adminUsers')">
+                                <i class="menu-icon bx bx-group"></i><span>Manajemen User</span>
+                            </button>
+                        </li>
+                        <li class="menu-item admin-nav" data-page="adminTemplates" id="navAdminTemplates" style="display:none;">
+                            <button class="menu-link" onclick="navigateTo('adminTemplates')">
+                                <i class="menu-icon bx bx-list-check"></i><span>Template Checklist</span>
+                            </button>
+                        </li>
+                        <li class="menu-item admin-nav" data-page="adminTenants" id="navAdminTenants" style="display:none;">
+                            <button class="menu-link" onclick="navigateTo('adminTenants')">
+                                <i class="menu-icon bx bx-store-alt"></i><span>Master Tenant</span>
+                            </button>
+                        </li>
+                        <li class="menu-item admin-nav" data-page="adminReports" id="navAdminReports" style="display:none;">
+                            <button class="menu-link" onclick="navigateTo('adminReports')">
+                                <i class="menu-icon bx bx-bar-chart-alt-2"></i><span>Reporting</span>
                             </button>
                         </li>
                     </ul>
@@ -891,7 +906,7 @@
                             </div>
 
                             <!-- ADMIN -->
-                            <div class="page" id="pageAdmin">
+                            <div class="page" id="pageAdminUsers">
                                 <div class="admin-section">
                                     <div class="section-title">
                                         <span>Manajemen User</span>
@@ -902,6 +917,9 @@
                                         <tbody id="usersTable"></tbody>
                                     </table>
                                 </div>
+                            </div>
+
+                            <div class="page" id="pageAdminTemplates">
                                 <div class="admin-section">
                                     <div class="section-title">
                                         <span>Template Checklist</span>
@@ -912,6 +930,9 @@
                                         <tbody id="templatesTable"></tbody>
                                     </table>
                                 </div>
+                            </div>
+
+                            <div class="page" id="pageAdminTenants">
                                 <div class="admin-section">
                                     <div class="section-title">
                                         <span>Master Tenant</span>
@@ -922,10 +943,13 @@
                                         <tbody id="tenantsTable"></tbody>
                                     </table>
                                 </div>
+                            </div>
+
+                            <div class="page" id="pageAdminReports">
                                 <div class="admin-section">
                                     <div class="section-title">
-                                        <span>📊 Reporting Audit (Excel View)</span>
-                                        <button class="btn btn-sm btn-primary" onclick="generateExcelReport()">🔄 Refresh</button>
+                                        <span>Reporting Audit</span>
+                                        <button class="btn btn-sm btn-primary" onclick="generateExcelReport()">Refresh</button>
                                     </div>
                                     <div class="excel-filter-bar">
                                         <div class="excel-filter-group">
@@ -1762,7 +1786,9 @@
             document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
             document.getElementById('dashboardUserName').textContent = user.name;
             document.getElementById('dashboardDate').textContent = formatDate(new Date());
-            document.getElementById('navAdmin').style.display = isAdmin ? 'block' : 'none';
+            document.querySelectorAll('.admin-nav').forEach(el => {
+                el.style.display = isAdmin ? 'block' : 'none';
+            });
             document.getElementById('sidebarAvatar').textContent = user.name.charAt(0).toUpperCase();
             document.getElementById('sidebarUserName').textContent = user.name;
             document.getElementById('sidebarUserRole').textContent = user.role;
@@ -1810,7 +1836,7 @@
             document.getElementById('appContainer').classList.remove('active');
             document.getElementById('loginUsername').value = '';
             document.getElementById('loginPassword').value = '';
-            document.getElementById('navAdmin').style.display = 'none';
+            document.querySelectorAll('.admin-nav').forEach(el => { el.style.display = 'none'; });
             closeMenu();
             document.getElementById('notifPermission').classList.remove('active');
             showToast('Berhasil logout');
@@ -1828,7 +1854,9 @@
             if (currentPage) {
                 const reverseMap = {
                     'pageDashboard': 'dashboard', 'pageNewAudit': 'newAudit',
-                    'pageHistory': 'history', 'pageAdmin': 'admin',
+                    'pageHistory': 'history',
+                    'pageAdminUsers': 'adminUsers', 'pageAdminTemplates': 'adminTemplates',
+                    'pageAdminTenants': 'adminTenants', 'pageAdminReports': 'adminReports',
                     'pageChecklist': 'checklist', 'pageAuditDetail': 'auditDetail'
                 };
                 Store.previousPage = reverseMap[currentPage] || 'dashboard';
@@ -1846,7 +1874,10 @@
                 'dashboard': 'pageDashboard',
                 'newAudit': 'pageNewAudit',
                 'history': 'pageHistory',
-                'admin': 'pageAdmin',
+                'adminUsers': 'pageAdminUsers',
+                'adminTemplates': 'pageAdminTemplates',
+                'adminTenants': 'pageAdminTenants',
+                'adminReports': 'pageAdminReports',
                 'checklist': 'pageChecklist',
                 'auditDetail': 'pageAuditDetail'
             };
@@ -1858,7 +1889,7 @@
                 'dashboard': 0,
                 'newAudit': 1,
                 'history': 2,
-                'admin': 3
+                'adminUsers': 3, 'adminTemplates': 4, 'adminTenants': 5, 'adminReports': 6
             };
 
             const activeMenuItem = document.querySelector(`.menu-item[data-page="${page}"]`);
@@ -1869,7 +1900,10 @@
                 'dashboard': 'Dashboard',
                 'newAudit': 'Audit Baru',
                 'history': 'History Audit',
-                'admin': 'Admin Panel',
+                'adminUsers': 'Manajemen User',
+                'adminTemplates': 'Template Checklist',
+                'adminTenants': 'Master Tenant',
+                'adminReports': 'Reporting Audit',
                 'checklist': 'Detail Audit',
                 'auditDetail': 'Detail Hasil Audit'
             };
@@ -1879,7 +1913,10 @@
             if (page === 'dashboard') initDashboard();
             if (page === 'newAudit') initNewAudit();
             if (page === 'history') initHistory();
-            if (page === 'admin') initAdmin();
+            if (page === 'adminUsers') initAdminUsers();
+            if (page === 'adminTemplates') initAdminTemplates();
+            if (page === 'adminTenants') initAdminTenants();
+            if (page === 'adminReports') initAdminReports();
         }
 
         // ========== DASHBOARD ==========
@@ -2864,19 +2901,19 @@
             }
         }
 
-        function initAdmin() {
+        function _adminGuard() {
             const role = Store.currentUser?.role ?? '';
             if (!['admin', 'Admin', 'SuperAdmin'].includes(role)) {
                 showToast('Akses ditolak! Hanya admin.', 'error');
                 navigateTo('dashboard');
-                return;
+                return false;
             }
-
-            renderUsers();
-            renderTemplates();
-            renderTenants();
-            generateExcelReport();
+            return true;
         }
+        function initAdminUsers()     { if (_adminGuard()) renderUsers(); }
+        function initAdminTemplates() { if (_adminGuard()) renderTemplates(); }
+        function initAdminTenants()   { if (_adminGuard()) renderTenants(); }
+        function initAdminReports()   { if (_adminGuard()) generateExcelReport(); }
 
         function renderUsers() {
             // User management requires a dedicated API endpoint (not yet implemented)
