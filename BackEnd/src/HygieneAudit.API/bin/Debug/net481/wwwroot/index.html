@@ -3229,7 +3229,7 @@
             const isFile = location.protocol === 'file:';
             if (isFile) {
                 dot.style.background = '#f59e0b';
-                text.textContent = `⚠️ Buka via web server, bukan file://  (gunakan: npx serve FrontEnd)`;
+                text.textContent = `Buka via web server, bukan file://  (gunakan: npx serve FrontEnd)`;
                 document.getElementById('serverStatus').style.background = '#fef3c7';
                 document.getElementById('serverStatus').style.color = '#92400e';
                 return;
@@ -3238,12 +3238,12 @@
             const ok = await ApiClient.ping();
             if (ok) {
                 dot.style.background = '#22c55e';
-                text.textContent = `Server terhubung — ${AppConfig.API_BASE_URL}`;
+                text.textContent = `Server terhubung`;
                 document.getElementById('serverStatus').style.background = '#f0fdf4';
                 document.getElementById('serverStatus').style.color = '#166534';
             } else {
                 dot.style.background = '#ef4444';
-                text.textContent = `Server tidak ditemukan di ${AppConfig.API_BASE_URL} — jalankan: dotnet run`;
+                text.textContent = `Server tidak ditemukan`;
                 document.getElementById('serverStatus').style.background = '#fef2f2';
                 document.getElementById('serverStatus').style.color = '#991b1b';
             }
