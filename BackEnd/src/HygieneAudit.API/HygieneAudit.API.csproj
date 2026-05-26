@@ -50,4 +50,25 @@
     <ProjectReference Include="..\HygieneAudit.Infrastructure\HygieneAudit.Infrastructure.csproj" />
   </ItemGroup>
 
+  <!--
+    IIS requires assemblies in bin\ so OwinHttpModule (PreApplicationStartMethod)
+    is discovered by ASP.NET BuildManager. dotnet publish puts DLLs flat at root
+    by default, so this target moves them to bin\ after publish.
+  -->
+  <Target Name="ArrangeForIIS" AfterTargets="Publish">
+    <ItemGroup>
+      <PublishedDlls Include="$(PublishDir)*.dll" />
+      <PublishedPdbs Include="$(PublishDir)*.pdb" />
+      <PublishedConfigs Include="$(PublishDir)*.config"
+                        Exclude="$(PublishDir)web.config;$(PublishDir)Web.config" />
+      <PublishedRuntimeJson Include="$(PublishDir)*.runtimeconfig.json;$(PublishDir)*.deps.json" />
+      <BinSubdirs Include="$(PublishDir)x64\**\*;$(PublishDir)x86\**\*;$(PublishDir)*\*.resources.dll" />
+    </ItemGroup>
+    <MakeDir Directories="$(PublishDir)bin" />
+    <Move SourceFiles="@(PublishedDlls)" DestinationFolder="$(PublishDir)bin" />
+    <Move SourceFiles="@(PublishedPdbs)" DestinationFolder="$(PublishDir)bin" />
+    <Move SourceFiles="@(PublishedConfigs)" DestinationFolder="$(PublishDir)bin" />
+    <Move SourceFiles="@(PublishedRuntimeJson)" DestinationFolder="$(PublishDir)bin" />
+  </Target>
+
 </Project>
