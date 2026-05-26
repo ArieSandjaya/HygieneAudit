@@ -1,13 +1,13 @@
 using HygieneAudit.Application.DTOs;
 using HygieneAudit.Domain.DTOs;
-using HygieneAudit.Domain.Entities;
 
 namespace HygieneAudit.Application.Services;
 
 public interface IAuditService
 {
-    Task<Audit> CreateAuditAsync(CreateAuditRequest request);
-    Task<Audit?> GetAuditAsync(string id);
+    Task<AuditResponse> CreateAuditAsync(CreateAuditRequest request);
+    Task<AuditResponse?> GetAuditAsync(string id);
+    Task<IEnumerable<AuditResponse>> GetAuditsAsync(int picId, bool isAdmin);
     Task SaveAuditItemAsync(string auditId, int templateId, AuditItemUpdate update);
     Task SubmitAuditAsync(string id);
     Task SaveDraftAsync(string id);

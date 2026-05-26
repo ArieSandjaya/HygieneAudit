@@ -38,7 +38,7 @@ public class UnitOfWork : IUnitOfWork
         if (_transaction != null)
         {
             await _transaction.CommitAsync();
-            await _transaction.DisposeAsync();
+            _transaction.Dispose(); // IAsyncDisposable not available in EF Core 3.1 on .NET Framework
             _transaction = null;
         }
     }
@@ -48,7 +48,7 @@ public class UnitOfWork : IUnitOfWork
         if (_transaction != null)
         {
             await _transaction.RollbackAsync();
-            await _transaction.DisposeAsync();
+            _transaction.Dispose();
             _transaction = null;
         }
     }
