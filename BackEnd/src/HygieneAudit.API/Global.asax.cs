@@ -87,7 +87,8 @@ namespace HygieneAudit.API
 
             builder.RegisterInstance(Configuration).As<IConfiguration>().SingleInstance();
 
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = Configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is missing from appsettings.json.");
             var dbOptions = new DbContextOptionsBuilder<HygieneAuditDbContext>()
                 .UseSqlServer(connectionString)
                 .Options;
