@@ -11,14 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- ASP.NET Web API 2 + OWIN for IIS and self-host -->
+    <!-- ASP.NET Web API 2 (native IIS pipeline, no OWIN) -->
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.3.0" />
-    <PackageReference Include="Microsoft.Owin" Version="4.2.2" />
-    <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="4.2.2" />
-    <PackageReference Include="Microsoft.Owin.SelfHost" Version="4.2.2" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.3.0" />
-    <PackageReference Include="Microsoft.Owin.Cors" Version="4.2.2" />
-    <PackageReference Include="Microsoft.Owin.StaticFiles" Version="4.2.2" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Cors" Version="5.3.0" />
     <!-- Dependency Injection -->
     <PackageReference Include="Autofac" Version="6.5.0" />
     <PackageReference Include="Autofac.WebApi2" Version="6.0.0" />
@@ -31,7 +26,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.json">
+    <!-- ASPX pages must be explicitly included in SDK-style projects -->
+    <Content Include="Global.asax">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Default.aspx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="appsettings.json" Condition="Exists('appsettings.json')">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="appsettings.Production.json" Condition="Exists('appsettings.Production.json')">
@@ -51,9 +53,8 @@
   </ItemGroup>
 
   <!--
-    IIS requires assemblies in bin\ so OwinHttpModule (PreApplicationStartMethod)
-    is discovered by ASP.NET BuildManager. dotnet publish puts DLLs flat at root
-    by default, so this target moves them to bin\ after publish.
+    IIS requires assemblies in bin\ so the runtime can discover controllers.
+    dotnet publish puts DLLs flat at root by default — this target moves them to bin\.
   -->
   <Target Name="ArrangeForIIS" AfterTargets="Publish">
     <ItemGroup>
@@ -62,7 +63,6 @@
       <PublishedConfigs Include="$(PublishDir)*.config"
                         Exclude="$(PublishDir)web.config;$(PublishDir)Web.config" />
       <PublishedRuntimeJson Include="$(PublishDir)*.runtimeconfig.json;$(PublishDir)*.deps.json" />
-      <BinSubdirs Include="$(PublishDir)x64\**\*;$(PublishDir)x86\**\*;$(PublishDir)*\*.resources.dll" />
     </ItemGroup>
     <MakeDir Directories="$(PublishDir)bin" />
     <Move SourceFiles="@(PublishedDlls)" DestinationFolder="$(PublishDir)bin" />

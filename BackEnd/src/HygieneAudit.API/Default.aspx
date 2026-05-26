@@ -1,3 +1,4 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HygieneAudit.API.Default" %>
 <!DOCTYPE html>
 <html lang="id" class="light-style" dir="ltr">
 <head>
@@ -9,13 +10,13 @@
     <meta name="apple-mobile-web-app-title" content="Hygiene Audit">
     <title>Hygiene Audit App</title>
     <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSHlnaWVuZSBBdWRpdCBBcHAiLCJzaG9ydF9uYW1lIjoiSHlnaWVuZUF1ZGl0Iiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZmZmZmYiLCJ0aGVtZV9jb2xvciI6IiM2OTZjZmYiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1qQXdJaUJvWldsbmFIUTlJakl3TUNJZ2RtbGxkMEp2ZUQwaU1DQXdJREl3TUNBeU1EQWlJSGh0YkcwaUlqZzROREl5TURBd01EQWlJSGh0Ykc1aGJXVWlPbHRkSWlCbWFXeHNQU0lqWm1abVptWm1JaUIyYVdWM0FtOTdQQzlpYkhWemJEc2dabWxzWkQwaUkyWm1abVptWmlJSE53WVdOb1BTSWlJSEJoWTJ0bFpDQm9iMnhrWlhJOUlqMGlkSEpoYm5ObWIzSnRjeUlnZDJsa2JHbHVaRDBpTUM0d0xqQWlJR0p2YjNRaU9pQWlJbjA9Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
-    <link href="assets/boxicons.min.css" rel="stylesheet">
-    <link href="assets/bootstrap.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
-    <script src="config.js?v=2"></script>
-    <script src="assets/jspdf.umd.min.js"></script>
-    <script src="assets/jspdf.plugin.autotable.min.js"></script>
-    <script src="assets/xlsx.full.min.js"></script>
+    <link href="wwwroot/assets/boxicons.min.css" rel="stylesheet">
+    <link href="wwwroot/assets/bootstrap.min.css" rel="stylesheet">
+    <link href="wwwroot/style.css" rel="stylesheet">
+    <script src="wwwroot/config.js?v=2"></script>
+    <script src="wwwroot/assets/jspdf.umd.min.js"></script>
+    <script src="wwwroot/assets/jspdf.plugin.autotable.min.js"></script>
+    <script src="wwwroot/assets/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="toast-container" id="toastContainer"></div>
@@ -464,6 +465,6 @@
     </div>
 
 
-    <script src="app.js"></script>
+    <script src="wwwroot/app.js"></script>
 </body>
 </html>
