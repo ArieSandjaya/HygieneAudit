@@ -8,6 +8,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>HygieneAudit.API</RootNamespace>
     <AssemblyName>HygieneAudit.API</AssemblyName>
+    <!-- Force all NuGet package DLLs (incl. BCL polyfills like System.Memory) into bin\ on publish.
+         Without this, dotnet publish skips them as "framework" assemblies, leaving the GAC's older
+         versions (e.g. System.Memory 4.0.0.0) to be loaded instead of the required 4.0.1.1. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
