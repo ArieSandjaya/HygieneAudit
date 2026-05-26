@@ -12,6 +12,11 @@
          Without this, dotnet publish skips them as "framework" assemblies, leaving the GAC's older
          versions (e.g. System.Memory 4.0.0.0) to be loaded instead of the required 4.0.1.1. -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <!-- Debug build output goes to bin\ so IIS Express (classic ASP.NET) can find the DLLs.
+         Without this, SDK-style projects put DLLs in bin\Debug\net48\ which IIS Express ignores. -->
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <OutputPath>bin\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
