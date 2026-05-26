@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Infrastructure\\HygieneAudit.Infrastructure.csproj": {}
+    "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Infrastructure\\HygieneAudit.Infrastructure.csproj": {}
   },
   "projects": {
-    "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj": {
+    "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj",
+        "projectUniqueName": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj",
         "projectName": "HygieneAudit.Application",
-        "projectPath": "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj",
+        "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj",
         "packagesPath": "C:\\Users\\arie.sandjaya\\.nuget\\packages\\",
-        "outputPath": "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Application\\obj\\",
+        "outputPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -23,7 +23,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net8.0"
+          "net481"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -31,11 +31,11 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
+          "net481": {
+            "targetAlias": "net481",
             "projectReferences": {
-              "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj": {
-                "projectPath": "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj"
+              "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj": {
+                "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj"
               }
             }
           }
@@ -53,8 +53,8 @@
         "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "net481": {
+          "targetAlias": "net481",
           "dependencies": {
             "BCrypt.Net-Next": {
               "target": "Package",
@@ -62,41 +62,25 @@
             },
             "Microsoft.Extensions.Configuration": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[6.0.0, )"
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[7.1.2, )"
             }
           },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj": {
+    "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj",
+        "projectUniqueName": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj",
         "projectName": "HygieneAudit.Domain",
-        "projectPath": "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj",
+        "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj",
         "packagesPath": "C:\\Users\\arie.sandjaya\\.nuget\\packages\\",
-        "outputPath": "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Domain\\obj\\",
+        "outputPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -108,7 +92,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net8.0"
+          "net481"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -116,8 +100,8 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
+          "net481": {
+            "targetAlias": "net481",
             "projectReferences": {}
           }
         },
@@ -134,36 +118,20 @@
         "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
+        "net481": {
+          "targetAlias": "net481",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Infrastructure\\HygieneAudit.Infrastructure.csproj": {
+    "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Infrastructure\\HygieneAudit.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Infrastructure\\HygieneAudit.Infrastructure.csproj",
+        "projectUniqueName": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Infrastructure\\HygieneAudit.Infrastructure.csproj",
         "projectName": "HygieneAudit.Infrastructure",
-        "projectPath": "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Infrastructure\\HygieneAudit.Infrastructure.csproj",
+        "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Infrastructure\\HygieneAudit.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\arie.sandjaya\\.nuget\\packages\\",
-        "outputPath": "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Infrastructure\\obj\\",
+        "outputPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -175,7 +143,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net8.0"
+          "net481"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -183,14 +151,14 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
+          "net481": {
+            "targetAlias": "net481",
             "projectReferences": {
-              "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj": {
-                "projectPath": "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj"
+              "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj": {
+                "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj"
               },
-              "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj": {
-                "projectPath": "F:\\CIH\\HygieneAudit\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj"
+              "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj": {
+                "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj"
               }
             }
           }
@@ -208,41 +176,25 @@
         "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "net481": {
+          "targetAlias": "net481",
           "dependencies": {
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.5, )"
+              "version": "[3.1.32, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[8.0.5, )"
+              "version": "[3.1.32, )"
             },
             "Microsoft.Extensions.Configuration.Json": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[6.0.0, )"
             }
           },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HygieneAudit.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9cded7e9408cce0363237ccdc2075db0a13a79c4")]
 [assembly: System.Reflection.AssemblyProductAttribute("HygieneAudit.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HygieneAudit.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

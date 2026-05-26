@@ -1,24 +1,74 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
+    <OutputType>Library</OutputType>
+    <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>HygieneAudit.API</RootNamespace>
+    <AssemblyName>HygieneAudit.API</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <!-- ASP.NET Web API 2 (native IIS pipeline, no OWIN) -->
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.3.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Cors" Version="5.3.0" />
+    <!-- Dependency Injection -->
+    <PackageReference Include="Autofac" Version="6.5.0" />
+    <PackageReference Include="Autofac.WebApi2" Version="6.0.0" />
+    <!-- JSON serialization -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <!-- JWT validation -->
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
+    <!-- Configuration -->
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- ASPX pages must be explicitly included in SDK-style projects -->
+    <Content Include="Global.asax">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Default.aspx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="appsettings.json" Condition="Exists('appsettings.json')">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="appsettings.Production.json" Condition="Exists('appsettings.Production.json')">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wwwroot\**\*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HygieneAudit.Application\HygieneAudit.Application.csproj" />
     <ProjectReference Include="..\HygieneAudit.Infrastructure\HygieneAudit.Infrastructure.csproj" />
   </ItemGroup>
+
+  <!--
+    IIS requires assemblies in bin\ so the runtime can discover controllers.
+    dotnet publish puts DLLs flat at root by default — this target moves them to bin\.
+  -->
+  <Target Name="ArrangeForIIS" AfterTargets="Publish">
+    <ItemGroup>
+      <PublishedDlls Include="$(PublishDir)*.dll" />
+      <PublishedPdbs Include="$(PublishDir)*.pdb" />
+      <PublishedConfigs Include="$(PublishDir)*.config"
+                        Exclude="$(PublishDir)web.config;$(PublishDir)Web.config" />
+      <PublishedRuntimeJson Include="$(PublishDir)*.runtimeconfig.json;$(PublishDir)*.deps.json" />
+    </ItemGroup>
+    <MakeDir Directories="$(PublishDir)bin" />
+    <Move SourceFiles="@(PublishedDlls)" DestinationFolder="$(PublishDir)bin" />
+    <Move SourceFiles="@(PublishedPdbs)" DestinationFolder="$(PublishDir)bin" />
+    <Move SourceFiles="@(PublishedConfigs)" DestinationFolder="$(PublishDir)bin" />
+    <Move SourceFiles="@(PublishedRuntimeJson)" DestinationFolder="$(PublishDir)bin" />
+  </Target>
 
 </Project>

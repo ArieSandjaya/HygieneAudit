@@ -7,13 +7,13 @@ public class HygieneAuditDbContext : DbContext
 {
     public HygieneAuditDbContext(DbContextOptions<HygieneAuditDbContext> options) : base(options) { }
 
-    public DbSet<User> Users { get; set; }
-    public DbSet<Tenant> Tenants { get; set; }
-    public DbSet<ChecklistTemplate> ChecklistTemplates { get; set; }
-    public DbSet<Audit> Audits { get; set; }
-    public DbSet<AuditItem> AuditItems { get; set; }
-    public DbSet<AuditItemPhoto> AuditItemPhotos { get; set; }
-    public DbSet<SyncQueueItem> SyncQueue { get; set; }
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Tenant> Tenants { get; set; } = null!;
+    public DbSet<ChecklistTemplate> ChecklistTemplates { get; set; } = null!;
+    public DbSet<Audit> Audits { get; set; } = null!;
+    public DbSet<AuditItem> AuditItems { get; set; } = null!;
+    public DbSet<AuditItemPhoto> AuditItemPhotos { get; set; } = null!;
+    public DbSet<SyncQueueItem> SyncQueue { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
