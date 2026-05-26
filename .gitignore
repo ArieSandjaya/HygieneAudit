@@ -1,7 +1,8 @@
-################################################################################
+﻿################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
 /BackEnd/src/HygieneAudit.API/appsettings.Production.json
+/BackEnd/src/HygieneAudit.API/appsettings.json
 /BackEnd/src/HygieneAudit.API/appsettings.Development.json
 /BackEnd/.vs/HygieneAudit/FileContentIndex

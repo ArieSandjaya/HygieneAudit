@@ -1,32 +1,32 @@
+using System.Net;
+using System.Net.Http;
+using System.Web.Http.Filters;
 using HygieneAudit.Application.Exceptions;
-using Microsoft.AspNetCore.Diagnostics;
 
-namespace HygieneAudit.API.Filters;
-
-public class GlobalExceptionHandler : IExceptionHandler
+namespace HygieneAudit.API.Filters
 {
-    public async ValueTask<bool> TryHandleAsync(
-        HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+    public class GlobalExceptionFilter : ExceptionFilterAttribute
     {
-        if (exception is ValidationException validationEx)
+        public override void OnException(HttpActionExecutedContext context)
         {
-            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await httpContext.Response.WriteAsJsonAsync(
-                new { message = validationEx.Message }, cancellationToken);
-            return true;
+            if (context.Exception is ValidationException validationEx)
+            {
+                context.Response = context.Request.CreateResponse(
+                    HttpStatusCode.BadRequest,
+                    new { message = validationEx.Message });
+            }
+            else if (context.Exception is NotFoundException notFoundEx)
+            {
+                context.Response = context.Request.CreateResponse(
+                    HttpStatusCode.NotFound,
+                    new { message = notFoundEx.Message });
+            }
+            else
+            {
+                context.Response = context.Request.CreateResponse(
+                    HttpStatusCode.InternalServerError,
+                    new { message = "Internal server error." });
+            }
         }
-
-        if (exception is NotFoundException notFoundEx)
-        {
-            httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-            await httpContext.Response.WriteAsJsonAsync(
-                new { message = notFoundEx.Message }, cancellationToken);
-            return true;
-        }
-
-        httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
-        await httpContext.Response.WriteAsJsonAsync(
-            new { message = "Internal server error." }, cancellationToken);
-        return true;
     }
 }

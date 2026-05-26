@@ -1,63 +1,73 @@
+using System.Net;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Web.Http;
 using HygieneAudit.Application.DTOs;
 using HygieneAudit.Application.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
-namespace HygieneAudit.API.Controllers;
-
-[ApiController]
-[Route("api/audits")]
-[Authorize]
-public class AuditsController : ControllerBase
+namespace HygieneAudit.API.Controllers
 {
-    private readonly IAuditService _auditService;
-
-    public AuditsController(IAuditService auditService) => _auditService = auditService;
-
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [RoutePrefix("api/audits")]
+    [Authorize]
+    public class AuditsController : ApiController
     {
-        var identity = User.Identity as ClaimsIdentity;
-        var userId   = int.Parse(identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-        var isAdmin  = User.IsInRole("Admin") || User.IsInRole("SuperAdmin");
-        var audits   = await _auditService.GetAuditsAsync(userId, isAdmin);
-        return Ok(audits);
-    }
+        private readonly IAuditService _auditService;
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateAuditRequest request)
-    {
-        var audit = await _auditService.CreateAuditAsync(request);
-        return Created($"api/audits/{audit.Id}", audit);
-    }
+        public AuditsController(IAuditService auditService)
+        {
+            _auditService = auditService;
+        }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Get(string id)
-    {
-        var audit = await _auditService.GetAuditAsync(id);
-        if (audit == null) return NotFound();
-        return Ok(audit);
-    }
+        [HttpGet]
+        [Route("")]
+        public async Task<IHttpActionResult> GetAll()
+        {
+            var identity = User.Identity as ClaimsIdentity;
+            var userId = int.Parse(identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var isAdmin = User.IsInRole("Admin") || User.IsInRole("SuperAdmin");
+            var audits = await _auditService.GetAuditsAsync(userId, isAdmin);
+            return Ok(audits);
+        }
 
-    [HttpPut("{id}/items/{templateId}")]
-    public async Task<IActionResult> UpdateItem(string id, int templateId, [FromBody] AuditItemUpdate update)
-    {
-        await _auditService.SaveAuditItemAsync(id, templateId, update);
-        return NoContent();
-    }
+        [HttpPost]
+        [Route("")]
+        public async Task<IHttpActionResult> Create([FromBody] CreateAuditRequest request)
+        {
+            var audit = await _auditService.CreateAuditAsync(request);
+            return Created(new System.Uri($"api/audits/{audit.Id}", System.UriKind.Relative), audit);
+        }
 
-    [HttpPost("{id}/submit")]
-    public async Task<IActionResult> Submit(string id)
-    {
-        await _auditService.SubmitAuditAsync(id);
-        return Ok(new { message = "Audit berhasil diselesaikan!" });
-    }
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IHttpActionResult> Get(string id)
+        {
+            var audit = await _auditService.GetAuditAsync(id);
+            if (audit == null) return NotFound();
+            return Ok(audit);
+        }
 
-    [HttpPost("{id}/draft")]
-    public async Task<IActionResult> SaveDraft(string id)
-    {
-        await _auditService.SaveDraftAsync(id);
-        return Ok(new { message = "Draft berhasil disimpan!" });
+        [HttpPut]
+        [Route("{id}/items/{templateId}")]
+        public async Task<IHttpActionResult> UpdateItem(string id, int templateId, [FromBody] AuditItemUpdate update)
+        {
+            await _auditService.SaveAuditItemAsync(id, templateId, update);
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        [HttpPost]
+        [Route("{id}/submit")]
+        public async Task<IHttpActionResult> Submit(string id)
+        {
+            await _auditService.SubmitAuditAsync(id);
+            return Ok(new { message = "Audit berhasil diselesaikan!" });
+        }
+
+        [HttpPost]
+        [Route("{id}/draft")]
+        public async Task<IHttpActionResult> SaveDraft(string id)
+        {
+            await _auditService.SaveDraftAsync(id);
+            return Ok(new { message = "Draft berhasil disimpan!" });
+        }
     }
 }
