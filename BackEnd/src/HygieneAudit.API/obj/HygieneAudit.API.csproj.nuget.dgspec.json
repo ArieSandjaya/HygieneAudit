@@ -110,11 +110,6 @@
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313\\RuntimeIdentifierGraph.json"
         }
-      },
-      "runtimes": {
-        "win-x86": {
-          "#import": []
-        }
       }
     },
     "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj": {

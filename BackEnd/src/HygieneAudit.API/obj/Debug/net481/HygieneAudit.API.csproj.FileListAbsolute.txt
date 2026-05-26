@@ -104,3 +104,8 @@ F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\obj\Debug\net481\HygieneAudit.A
 F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\obj\Debug\net481\HygieneA.8BB0C912.Up2Date
 F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\obj\Debug\net481\HygieneAudit.API.exe
 F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\obj\Debug\net481\HygieneAudit.API.pdb
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\fonts\boxicons.eot
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\fonts\boxicons.svg
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\fonts\boxicons.ttf
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\fonts\boxicons.woff
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\bin\Debug\net481\wwwroot\fonts\boxicons.woff2
