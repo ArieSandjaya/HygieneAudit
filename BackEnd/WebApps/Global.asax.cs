@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -13,6 +15,7 @@ namespace WebApps
     {
         protected void Application_Start()
         {
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(config =>
             {
