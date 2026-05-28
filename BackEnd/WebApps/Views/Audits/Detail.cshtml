@@ -4,41 +4,45 @@
 
 <div id="audit-detail-page">
     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-start mb-4">
         <div>
             <h4 class="fw-bold mb-1" data-bind="text: 'Audit: ' + tenantName()"></h4>
             <p class="text-muted mb-0">
-                <span data-bind="text: new Date(auditDate()).toLocaleDateString('id-ID')"></span>
+                <span data-bind="text: auditDate() ? new Date(auditDate()).toLocaleDateString('id-ID') : ''"></span>
                 &nbsp;&bull;&nbsp;
-                <span class="badge" data-bind="text: status, css: { 'bg-label-success': status() === 'Completed', 'bg-label-warning': status() === 'Draft' }"></span>
+                <span data-bind="text: picName()"></span>
+                &nbsp;&bull;&nbsp;
+                <span class="badge bg-label-info" data-bind="text: isGas() ? 'Dengan Gas' : 'Tanpa Gas'"></span>
+                &nbsp;
+                <span class="badge" data-bind="text: status(), css: { 'bg-label-success': status() === 'COMPLETED', 'bg-label-warning': status() === 'DRAFT' }"></span>
             </p>
         </div>
-        <div class="d-flex gap-2">
+        <div class="d-flex gap-2 flex-shrink-0">
             <a href="@Url.Action("Index", "Audits")" class="btn btn-outline-secondary">
                 <i class="bx bx-arrow-back me-1"></i> Kembali
             </a>
-            <button class="btn btn-warning" data-bind="click: saveDraft, visible: status() !== 'Completed'">
+            <button class="btn btn-warning" data-bind="click: saveDraft, visible: status() !== 'COMPLETED'">
                 <i class="bx bx-save me-1"></i> Simpan Draft
             </button>
-            <button class="btn btn-success" data-bind="click: submitAudit, visible: status() !== 'Completed'">
+            <button class="btn btn-success" data-bind="click: submitAudit, visible: status() !== 'COMPLETED'">
                 <i class="bx bx-check-circle me-1"></i> Submit
             </button>
         </div>
     </div>
 
-    <!-- Progress Card -->
-    <div class="row mb-4">
+    <!-- Progress Cards -->
+    <div class="row g-3 mb-4">
         <div class="col-md-4">
             <div class="card text-center">
-                <div class="card-body">
-                    <h3 class="text-primary mb-0" data-bind="text: totalItems"></h3>
+                <div class="card-body py-3">
+                    <h3 class="text-primary mb-0" data-bind="text: totalCount"></h3>
                     <small class="text-muted">Total Item</small>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card text-center">
-                <div class="card-body">
+                <div class="card-body py-3">
                     <h3 class="text-success mb-0" data-bind="text: passCount"></h3>
                     <small class="text-muted">Pass</small>
                 </div>
@@ -46,7 +50,7 @@
         </div>
         <div class="col-md-4">
             <div class="card text-center">
-                <div class="card-body">
+                <div class="card-body py-3">
                     <h3 class="text-danger mb-0" data-bind="text: failCount"></h3>
                     <small class="text-muted">Fail</small>
                 </div>
@@ -65,24 +69,35 @@
                     <thead class="table-light">
                         <tr>
                             <th>Item</th>
-                            <th style="width:120px;" class="text-center">Status</th>
+                            <th style="width:140px;" class="text-center">Status</th>
                             <th>Catatan</th>
                         </tr>
                     </thead>
                     <tbody data-bind="foreach: items">
-                        <tr>
-                            <td>
-                                <span data-bind="text: templateName"></span>
-                                <span class="badge bg-label-info ms-1" data-bind="visible: requiresGas">Gas</span>
-                            </td>
-                            <td class="text-center">
+                        <tr data-bind="css: { 'table-success': status() === 'PASS', 'table-danger': status() === 'FAIL' }">
+                            <td class="align-middle" data-bind="text: name"></td>
+                            <td class="text-center align-middle">
                                 <div class="btn-group btn-group-sm" role="group">
-                                    <button type="button" class="btn" data-bind="click: function(){ $root.setItemResult($data, true); }, css: { 'btn-success': result() === true, 'btn-outline-success': result() !== true }">Pass</button>
-                                    <button type="button" class="btn" data-bind="click: function(){ $root.setItemResult($data, false); }, css: { 'btn-danger': result() === false, 'btn-outline-danger': result() !== false }">Fail</button>
+                                    <button type="button" class="btn"
+                                            data-bind="click: function(){ $root.setItemStatus($data, 'PASS') },
+                                                       css: { 'btn-success': status() === 'PASS', 'btn-outline-success': status() !== 'PASS' }">
+                                        <i class="bx bx-check"></i> Pass
+                                    </button>
+                                    <button type="button" class="btn"
+                                            data-bind="click: function(){ $root.setItemStatus($data, 'FAIL') },
+                                                       css: { 'btn-danger': status() === 'FAIL', 'btn-outline-danger': status() !== 'FAIL' }">
+                                        <i class="bx bx-x"></i> Fail
+                                    </button>
                                 </div>
                             </td>
-                            <td>
-                                <input type="text" class="form-control form-control-sm" placeholder="Catatan..." data-bind="value: notes, visible: result() === false" />
+                            <td class="align-middle">
+                                <input type="text" class="form-control form-control-sm" placeholder="Catatan..."
+                                       data-bind="value: note, valueUpdate: 'afterkeydown',
+                                                  visible: status() === 'FAIL',
+                                                  event: { change: $root.onItemChange.bind($root, $data) }" />
+                                <span class="text-muted small" data-bind="visible: status() !== 'FAIL' && note()">
+                                    <i class="bx bx-note me-1"></i><span data-bind="text: note"></span>
+                                </span>
                             </td>
                         </tr>
                     </tbody>
@@ -90,13 +105,19 @@
             </div>
         </div>
     </div>
+
+    <!-- Empty state -->
+    <div data-bind="visible: categories().length === 0" class="text-center text-muted py-5">
+        <i class="bx bx-loader-circle bx-spin bx-lg d-block mb-2"></i>
+        Memuat data audit...
+    </div>
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/knockout")
     <script src="~/Scripts/app/audits.viewmodel.js"></script>
     <script>
-        var auditId = @Html.Raw(ViewBag.AuditId ?? "null");
+        var auditId = '@Html.Raw(ViewBag.AuditId)';
         ko.applyBindings(new AuditDetailViewModel(auditId), document.getElementById('audit-detail-page'));
     </script>
 }

@@ -79,6 +79,13 @@ function AuditDetailViewModel(auditId) {
     self.audit      = ko.observable(null);
     self.categories = ko.observableArray([]);
 
+    // Flattened header props
+    self.tenantName = ko.computed(function () { return self.audit() ? self.audit().tenantName : ''; });
+    self.auditDate  = ko.computed(function () { return self.audit() ? self.audit().date : null; });
+    self.picName    = ko.computed(function () { return self.audit() ? self.audit().picName : ''; });
+    self.status     = ko.computed(function () { return self.audit() ? self.audit().status : ''; });
+    self.isGas      = ko.computed(function () { return self.audit() ? self.audit().isGas : false; });
+
     self.passCount  = ko.computed(function () {
         return self.categories().reduce(function (n, cat) {
             return n + cat.items.filter(function (i) { return i.status() === 'PASS'; }).length;
@@ -107,6 +114,11 @@ function AuditDetailViewModel(auditId) {
                 return { name: k, items: grouped[k] };
             }));
         });
+    };
+
+    self.setItemStatus = function (item, status) {
+        item.status(item.status() === status ? '' : status); // toggle off jika klik ulang
+        self.onItemChange(item);
     };
 
     self.onItemChange = function (item) {
