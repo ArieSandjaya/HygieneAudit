@@ -14,6 +14,23 @@ function AuditsViewModel() {
         picId: ko.observable(null)
     };
 
+    // Searchable tenant dropdown
+    self.tenantSearch = ko.observable('');
+    self.filteredTenants = ko.computed(function () {
+        var q = self.tenantSearch().toLowerCase();
+        return q ? self.tenants().filter(function (t) { return t.name.toLowerCase().indexOf(q) >= 0; })
+                 : self.tenants();
+    });
+    self.selectedTenantName = ko.computed(function () {
+        var id = self.newAudit.tenantId();
+        var t = ko.utils.arrayFirst(self.tenants(), function (t) { return t.id == id; });
+        return t ? t.name : null;
+    });
+    self.selectTenant = function (tenant) {
+        self.newAudit.tenantId(tenant.id);
+        self.tenantSearch('');
+    };
+
     self.filteredAudits = ko.computed(function () {
         var tab = self.activeTab();
         return self.audits().filter(function (a) {

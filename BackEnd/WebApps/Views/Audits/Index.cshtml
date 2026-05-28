@@ -23,7 +23,28 @@
             <div class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">Tenant</label>
-                    <select class="form-select" data-bind="value: newAudit.tenantId, options: tenants, optionsText: 'name', optionsValue: 'id', optionsCaption: '-- Pilih Tenant --'"></select>
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center"
+                                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            <span data-bind="text: selectedTenantName() || '-- Pilih Tenant --'"></span>
+                        </button>
+                        <ul class="dropdown-menu w-100 p-0" style="min-width:100%">
+                            <li class="px-2 pt-2 pb-1">
+                                <input type="text" class="form-control form-control-sm" placeholder="Cari tenant..."
+                                       data-bind="value: tenantSearch, valueUpdate: 'input'" autocomplete="off" />
+                            </li>
+                            <li><hr class="dropdown-divider m-0"></li>
+                            <li style="max-height:220px;overflow-y:auto;">
+                                <!-- ko foreach: filteredTenants -->
+                                <a class="dropdown-item" href="#"
+                                   data-bind="text: name, click: $root.selectTenant, css: { active: id == $root.newAudit.tenantId() }"></a>
+                                <!-- /ko -->
+                                <!-- ko if: filteredTenants().length === 0 -->
+                                <span class="dropdown-item text-muted small">Tidak ada hasil</span>
+                                <!-- /ko -->
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Tanggal</label>
