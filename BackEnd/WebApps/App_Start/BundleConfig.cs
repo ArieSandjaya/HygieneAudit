@@ -29,6 +29,21 @@ namespace WebApps
                 "~/Scripts/app/home.viewmodel.js",
                 "~/Scripts/app/_run.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/audits").Include(
+                "~/Scripts/app/audits.viewmodel.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/templates").Include(
+                "~/Scripts/app/templates.viewmodel.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/tenants").Include(
+                "~/Scripts/app/tenants.viewmodel.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/users").Include(
+                "~/Scripts/app/users.viewmodel.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/reports").Include(
+                "~/Scripts/app/reports.viewmodel.js"));
+
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(

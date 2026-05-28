@@ -1,10 +1,7 @@
-﻿using Microsoft.Owin.Security.OAuth;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Web.Http;
+using WebApps.Filters;
 
 namespace WebApps
 {
@@ -12,13 +9,14 @@ namespace WebApps
     {
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
-            // Configure Web API to use only bearer token authentication.
-            config.SuppressDefaultHostAuthentication();
-            config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+            // Use camel case for JSON, ignore nulls
+            var settings = config.Formatters.JsonFormatter.SerializerSettings;
+            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            settings.NullValueHandling = NullValueHandling.Ignore;
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
 
-            // Use camel case for JSON data.
-            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            // Global domain exception handling
+            config.Filters.Add(new DomainExceptionFilter());
 
             // Web API routes
             config.MapHttpAttributeRoutes();

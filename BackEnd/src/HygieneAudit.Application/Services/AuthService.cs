@@ -36,6 +36,7 @@ public class AuthService : IAuthService
 
         return new AuthResponse
         {
+            UserId = user.Id,
             Token = token,
             Name = user.Name,
             Role = user.Role.ToString(),

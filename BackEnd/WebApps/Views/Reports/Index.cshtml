@@ -1,0 +1,115 @@
+@{
+    ViewBag.Title = "Laporan";
+}
+
+<div id="reports-page">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Laporan Audit Hygiene</h2>
+        <a class="btn btn-success" data-bind="attr: { href: exportUrl }">Export CSV</a>
+    </div>
+
+    <!-- Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 mb-2">
+                    <label>Status</label>
+                    <select class="form-select" data-bind="value: filter.status, event: { change: loadReport }">
+                        <option value="all">Semua</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Draft">Draft</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <label>Tipe</label>
+                    <select class="form-select" data-bind="value: filter.type, event: { change: loadReport }">
+                        <option value="all">Semua</option>
+                        <option value="gas">Dengan Gas</option>
+                        <option value="nogas">Tanpa Gas</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <label>Cari</label>
+                    <input type="text" class="form-control" placeholder="Nama tenant..." data-bind="value: filter.search, event: { input: loadReport }" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4" data-bind="with: summary">
+        <div class="col-md-3">
+            <div class="card text-center bg-light">
+                <div class="card-body">
+                    <h4 data-bind="text: tenantCount"></h4>
+                    <p class="mb-0 text-muted">Tenant</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-light">
+                <div class="card-body">
+                    <h4 data-bind="text: totalItems"></h4>
+                    <p class="mb-0 text-muted">Total Item</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-success text-white">
+                <div class="card-body">
+                    <h4 data-bind="text: totalPass"></h4>
+                    <p class="mb-0">Pass</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-danger text-white">
+                <div class="card-body">
+                    <h4 data-bind="text: (averagePassRate * 100).toFixed(1) + '%'"></h4>
+                    <p class="mb-0">Rata-rata Pass Rate</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Table -->
+    <div class="table-responsive">
+        <table class="table table-hover table-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>No</th>
+                    <th>Tenant</th>
+                    <th>Tanggal</th>
+                    <th>PIC</th>
+                    <th>Status</th>
+                    <th>Pass/Total</th>
+                    <th>Pass Rate</th>
+                    <th>Catatan Fail</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: rows">
+                <tr>
+                    <td data-bind="text: no"></td>
+                    <td data-bind="text: tenantName"></td>
+                    <td data-bind="text: new Date(date).toLocaleDateString('id-ID')"></td>
+                    <td data-bind="text: picName"></td>
+                    <td>
+                        <span class="badge" data-bind="text: status, css: { 'bg-success': status === 'Completed', 'bg-warning text-dark': status === 'Draft' }"></span>
+                    </td>
+                    <td data-bind="text: passItems + '/' + totalItems"></td>
+                    <td data-bind="text: (passRate * 100).toFixed(1) + '%'"></td>
+                    <td data-bind="text: failNotes || '-'" style="max-width:200px; white-space:normal; font-size:0.85em;"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div data-bind="visible: rows().length === 0" class="text-muted text-center py-4">Tidak ada data laporan.</div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/knockout")
+    <script src="~/Scripts/app/reports.viewmodel.js"></script>
+    <script>
+        ko.applyBindings(new ReportsViewModel(), document.getElementById('reports-page'));
+    </script>
+}

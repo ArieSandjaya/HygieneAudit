@@ -1,0 +1,76 @@
+@{
+    ViewBag.Title = "Daftar Tenant";
+}
+
+<div id="tenants-page">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Daftar Tenant</h2>
+        <!-- Admin/SuperAdmin only: add button -->
+        <button class="btn btn-dark" data-bind="click: showAddForm, visible: isAdmin">+ Tambah Tenant</button>
+    </div>
+
+    <!-- Add/Edit Form (Admin only) -->
+    <div class="card mb-4" data-bind="visible: showForm">
+        <div class="card-body">
+            <h5 class="card-title" data-bind="text: editingId() ? 'Edit Tenant' : 'Tambah Tenant'"></h5>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label>Nama Tenant</label>
+                    <input type="text" class="form-control" data-bind="value: form.name" />
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label>Lantai</label>
+                    <input type="text" class="form-control" data-bind="value: form.floor" />
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label>Kategori</label>
+                    <input type="text" class="form-control" data-bind="value: form.category" />
+                </div>
+                <div class="col-md-2 mb-3 d-flex align-items-end">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="usesGas" data-bind="checked: form.usesGas" />
+                        <label class="form-check-label" for="usesGas">Pakai Gas</label>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-dark me-2" data-bind="click: saveTenant">Simpan</button>
+            <button class="btn btn-outline-secondary" data-bind="click: cancelForm">Batal</button>
+        </div>
+    </div>
+
+    <!-- Tenants Table -->
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nama</th>
+                    <th>Lantai</th>
+                    <th>Kategori</th>
+                    <th>Gas</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: tenants">
+                <tr>
+                    <td data-bind="text: name"></td>
+                    <td data-bind="text: floor || '-'"></td>
+                    <td data-bind="text: category || '-'"></td>
+                    <td data-bind="text: usesGas ? 'Ya' : 'Tidak'"></td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-dark me-1" data-bind="attr: { href: '/api/tenants/' + id + '/history' }" target="_blank">History</a>
+                        <button class="btn btn-sm btn-outline-secondary me-1" data-bind="click: $root.editTenant, visible: $root.isAdmin">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger" data-bind="click: $root.deleteTenant, visible: $root.isAdmin">Hapus</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/knockout")
+    <script src="~/Scripts/app/tenants.viewmodel.js"></script>
+    <script>
+        ko.applyBindings(new TenantsViewModel(), document.getElementById('tenants-page'));
+    </script>
+}

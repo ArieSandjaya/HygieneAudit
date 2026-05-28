@@ -149,6 +149,89 @@
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <!-- References to domain/application DLLs and their dependencies (from API bin) -->
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\src\HygieneAudit.API\bin\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac.Integration.WebApi">
+      <HintPath>..\src\HygieneAudit.API\bin\Autofac.Integration.WebApi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BCrypt.Net-Next">
+      <HintPath>..\src\HygieneAudit.API\bin\BCrypt.Net-Next.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IdentityModel.Tokens.Jwt">
+      <HintPath>..\src\HygieneAudit.API\bin\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.IdentityModel.Tokens.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.IdentityModel.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Abstractions">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.IdentityModel.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.EntityFrameworkCore.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Abstractions">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Relational">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.SqlServer">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.EntityFrameworkCore.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Options.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.SqlClient">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Data.SqlClient.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Owin">
       <HintPath>..\packages\Microsoft.Owin.4.2.2\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -216,17 +299,33 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AuditsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\TemplatesController.cs" />
+    <Compile Include="Controllers\TenantsController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\Api\AuditsApiController.cs" />
+    <Compile Include="Controllers\Api\ReportsApiController.cs" />
+    <Compile Include="Controllers\Api\SyncApiController.cs" />
+    <Compile Include="Controllers\Api\TenantsApiController.cs" />
+    <Compile Include="Controllers\Api\TemplatesApiController.cs" />
+    <Compile Include="Controllers\Api\UsersApiController.cs" />
+    <Compile Include="Filters\DomainAuthorizeAttribute.cs" />
+    <Compile Include="Filters\DomainExceptionFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DomainLoginViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MeViewModels.cs" />
+    <Compile Include="Models\SyncModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -337,6 +436,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Controllers\Api\" />
+    <Folder Include="Filters\" />
+    <Folder Include="Views\Audits\" />
+    <Folder Include="Views\Templates\" />
+    <Folder Include="Views\Tenants\" />
+    <Folder Include="Views\Users\" />
+    <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\bootstrap.min.js.map" />
@@ -408,6 +514,35 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
+  </ItemGroup>
+  <!-- Project references to domain layer -->
+  <ItemGroup>
+    <ProjectReference Include="..\src\HygieneAudit.Domain\HygieneAudit.Domain.csproj">
+      <Project>{A1B2C3D4-E5F6-7890-1234-567890ABCDEF}</Project>
+      <Name>HygieneAudit.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\HygieneAudit.Application\HygieneAudit.Application.csproj">
+      <Project>{B2C3D4E5-F6A7-8901-2345-678901BCDEF0}</Project>
+      <Name>HygieneAudit.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\HygieneAudit.Infrastructure\HygieneAudit.Infrastructure.csproj">
+      <Project>{C3D4E5F6-A7B8-9012-3456-789012CDEF01}</Project>
+      <Name>HygieneAudit.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <!-- New views and scripts -->
+  <ItemGroup>
+    <Content Include="Views\Audits\Index.cshtml" />
+    <Content Include="Views\Audits\Detail.cshtml" />
+    <Content Include="Views\Templates\Index.cshtml" />
+    <Content Include="Views\Tenants\Index.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Scripts\app\audits.viewmodel.js" />
+    <Content Include="Scripts\app\templates.viewmodel.js" />
+    <Content Include="Scripts\app\tenants.viewmodel.js" />
+    <Content Include="Scripts\app\users.viewmodel.js" />
+    <Content Include="Scripts\app\reports.viewmodel.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

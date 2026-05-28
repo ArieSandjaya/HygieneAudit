@@ -1,0 +1,72 @@
+@{
+    ViewBag.Title = "Daftar Audit";
+}
+
+<div id="audits-page">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Daftar Audit</h2>
+        <button class="btn btn-dark" data-bind="click: createAudit, visible: !showForm()">+ Buat Audit Baru</button>
+    </div>
+
+    <!-- Create Audit Form -->
+    <div class="card mb-4" data-bind="visible: showForm">
+        <div class="card-body">
+            <h5 class="card-title">Buat Audit Baru</h5>
+            <div class="mb-3">
+                <label>Tanggal</label>
+                <input type="date" class="form-control" data-bind="value: form.date" />
+            </div>
+            <div class="mb-3">
+                <label>Tenant</label>
+                <select class="form-select" data-bind="options: tenants, optionsText: 'name', optionsValue: 'id', value: form.tenantId, optionsCaption: '-- Pilih Tenant --'"></select>
+            </div>
+            <div class="mb-3">
+                <label>PIC</label>
+                <select class="form-select" data-bind="options: users, optionsText: 'name', optionsValue: 'id', value: form.picId, optionsCaption: '-- Pilih PIC --'"></select>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="isGas" data-bind="checked: form.isGas" />
+                <label class="form-check-label" for="isGas">Include Gas Checklist</label>
+            </div>
+            <button class="btn btn-dark me-2" data-bind="click: submitCreate">Buat</button>
+            <button class="btn btn-outline-secondary" data-bind="click: cancelCreate">Batal</button>
+        </div>
+    </div>
+
+    <!-- Audit List -->
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Tenant</th>
+                    <th>PIC</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: audits">
+                <tr>
+                    <td data-bind="text: new Date(date).toLocaleDateString('id-ID')"></td>
+                    <td data-bind="text: tenantName"></td>
+                    <td data-bind="text: picName"></td>
+                    <td>
+                        <span class="badge" data-bind="text: status, css: { 'bg-success': status === 'Completed', 'bg-warning text-dark': status === 'Draft' }"></span>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-dark" data-bind="attr: { href: '/Audits/Detail?id=' + id }">Detail</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div data-bind="visible: audits().length === 0" class="text-muted text-center py-4">Belum ada data audit.</div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/knockout")
+    <script src="~/Scripts/app/audits.viewmodel.js"></script>
+    <script>
+        ko.applyBindings(new AuditsViewModel(), document.getElementById('audits-page'));
+    </script>
+}

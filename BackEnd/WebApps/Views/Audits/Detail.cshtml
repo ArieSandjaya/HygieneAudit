@@ -1,0 +1,71 @@
+@{
+    ViewBag.Title = "Detail Audit";
+    var auditId = ViewBag.AuditId as string ?? Request.QueryString["id"];
+}
+
+<div id="audit-detail-page">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Detail Audit</h2>
+        <div>
+            <button class="btn btn-success me-2" data-bind="click: submitAudit, visible: audit() && audit().status === 'Draft'">Selesaikan Audit</button>
+            <button class="btn btn-outline-secondary" data-bind="click: saveDraft, visible: audit() && audit().status === 'Draft'">Simpan Draft</button>
+            <a href="/Audits" class="btn btn-outline-dark ms-2">Kembali</a>
+        </div>
+    </div>
+
+    <!-- Audit Info -->
+    <div class="card mb-4" data-bind="with: audit">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3"><strong>Tenant:</strong> <span data-bind="text: tenantName"></span></div>
+                <div class="col-md-3"><strong>PIC:</strong> <span data-bind="text: picName"></span></div>
+                <div class="col-md-3"><strong>Tanggal:</strong> <span data-bind="text: new Date(date).toLocaleDateString('id-ID')"></span></div>
+                <div class="col-md-3"><strong>Status:</strong> <span class="badge" data-bind="text: status, css: { 'bg-success': status === 'Completed', 'bg-warning text-dark': status === 'Draft' }"></span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checklist Items grouped by category -->
+    <div data-bind="foreach: categories">
+        <h5 class="mt-3 text-uppercase" data-bind="text: name"></h5>
+        <div class="table-responsive mb-3">
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:40%">Item</th>
+                        <th style="width:15%">Status</th>
+                        <th>Catatan</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: items">
+                    <tr data-bind="css: { 'table-danger': status() === 'Fail', 'table-success': status() === 'Pass' }">
+                        <td data-bind="text: name"></td>
+                        <td>
+                            <select class="form-select form-select-sm" data-bind="value: status, event: { change: $root.onItemChange.bind($root, $data) }">
+                                <option value="">-</option>
+                                <option value="Pass">Pass</option>
+                                <option value="Fail">Fail</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control form-control-sm" placeholder="Catatan (wajib jika Fail)"
+                                data-bind="value: note, visible: status() === 'Fail', event: { change: $root.onItemChange.bind($root, $data) }" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div data-bind="visible: !audit()" class="text-center py-4">
+        <div class="spinner-border" role="status"></div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/knockout")
+    <script src="~/Scripts/app/audits.viewmodel.js"></script>
+    <script>
+        ko.applyBindings(new AuditDetailViewModel('@auditId'), document.getElementById('audit-detail-page'));
+    </script>
+}

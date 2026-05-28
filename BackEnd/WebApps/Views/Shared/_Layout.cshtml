@@ -19,7 +19,17 @@
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "HelpPage" }, new { @class = "nav-link" })</li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Audit", "Index", "Audits", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Tenant", "Index", "Tenants", new { area = "" }, new { @class = "nav-link" })</li>
+                        if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                        {
+                            <li>@Html.ActionLink("Template", "Index", "Templates", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Pengguna", "Index", "Users", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Laporan", "Index", "Reports", new { area = "" }, new { @class = "nav-link" })</li>
+                        }
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

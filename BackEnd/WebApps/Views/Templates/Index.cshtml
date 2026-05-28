@@ -1,0 +1,74 @@
+@{
+    ViewBag.Title = "Kelola Template";
+}
+
+<div id="templates-page">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Kelola Template Checklist</h2>
+        <button class="btn btn-dark" data-bind="click: showAddForm">+ Tambah Template</button>
+    </div>
+
+    <!-- Add/Edit Form -->
+    <div class="card mb-4" data-bind="visible: showForm">
+        <div class="card-body">
+            <h5 class="card-title" data-bind="text: editingId() ? 'Edit Template' : 'Tambah Template'"></h5>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label>Kategori</label>
+                    <input type="text" class="form-control" data-bind="value: form.category" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>Nama Item</label>
+                    <input type="text" class="form-control" data-bind="value: form.name" />
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label>Urutan</label>
+                    <input type="number" class="form-control" data-bind="value: form.displayOrder" />
+                </div>
+                <div class="col-md-2 mb-3 d-flex align-items-end">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="reqGas" data-bind="checked: form.requiresGas" />
+                        <label class="form-check-label" for="reqGas">Butuh Gas</label>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-dark me-2" data-bind="click: saveTemplate">Simpan</button>
+            <button class="btn btn-outline-secondary" data-bind="click: cancelForm">Batal</button>
+        </div>
+    </div>
+
+    <!-- Templates Table -->
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Kategori</th>
+                    <th>Nama</th>
+                    <th>Urutan</th>
+                    <th>Gas</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: templates">
+                <tr>
+                    <td data-bind="text: category"></td>
+                    <td data-bind="text: name"></td>
+                    <td data-bind="text: displayOrder"></td>
+                    <td data-bind="text: requiresGas ? 'Ya' : 'Tidak'"></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-dark me-1" data-bind="click: $root.editTemplate">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger" data-bind="click: $root.deleteTemplate">Hapus</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/knockout")
+    <script src="~/Scripts/app/templates.viewmodel.js"></script>
+    <script>
+        ko.applyBindings(new TemplatesViewModel(), document.getElementById('templates-page'));
+    </script>
+}
