@@ -1,93 +1,117 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
+          Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
 
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion></ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D4E5F6A7-B8C9-0123-4567-890123DEF012}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HygieneAudit.API</RootNamespace>
     <AssemblyName>HygieneAudit.API</AssemblyName>
-    <!-- Force all NuGet package DLLs (incl. BCL polyfills like System.Memory) into bin\ on publish.
-         Without this, dotnet publish skips them as "framework" assemblies, leaving the GAC's older
-         versions (e.g. System.Memory 4.0.0.0) to be loaded instead of the required 4.0.1.1. -->
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <!-- Debug build output goes to bin\ so IIS Express (classic ASP.NET) can find the DLLs.
-         Without this, SDK-style projects put DLLs in bin\Debug\net48\ which IIS Express ignores. -->
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <OutputPath>bin\</OutputPath>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <!-- ASP.NET Web API 2 (native IIS pipeline, no OWIN) -->
   <ItemGroup>
-    <!-- ASP.NET Web API 2 (native IIS pipeline, no OWIN) -->
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.3.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Cors" Version="5.3.0" />
-    <!-- Dependency Injection -->
+    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.3.0" />
     <PackageReference Include="Autofac" Version="6.5.0" />
     <PackageReference Include="Autofac.WebApi2" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.3.0" />
-    <!-- JSON serialization -->
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <!-- JWT validation -->
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
-    <!-- Configuration -->
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <!-- ASPX pages must be explicitly included in SDK-style projects -->
-    <Content Include="Global.asax">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Attributes\ValidationAttributes.cs" />
+    <Compile Include="Controllers\AuditsController.cs" />
+    <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\SyncController.cs" />
+    <Compile Include="Controllers\TemplatesController.cs" />
+    <Compile Include="Controllers\TenantsController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\GlobalExceptionFilter.cs" />
+    <Compile Include="Filters\JwtAuthenticationHandler.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Default.aspx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>ASPXCodeBehind</SubType>
     </Content>
+    <Content Include="Global.asax">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Component</SubType>
+    </Content>
+    <Content Include="Web.config" />
+    <Content Include="wwwroot\**\*" />
+    <!-- appsettings.json diload dari AppDomain.BaseDirectory (bin\), perlu dicopy ke output -->
     <Content Include="appsettings.json" Condition="Exists('appsettings.json')">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="appsettings.Production.json" Condition="Exists('appsettings.Production.json')">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="wwwroot\**\*">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HygieneAudit.Application\HygieneAudit.Application.csproj" />
-    <ProjectReference Include="..\HygieneAudit.Infrastructure\HygieneAudit.Infrastructure.csproj" />
+    <None Include="appsettings.example.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="System.Web" />
+    <ProjectReference Include="..\HygieneAudit.Application\HygieneAudit.Application.csproj">
+      <Project>{B2C3D4E5-F6A7-8901-2345-678901BCDEF0}</Project>
+      <Name>HygieneAudit.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HygieneAudit.Infrastructure\HygieneAudit.Infrastructure.csproj">
+      <Project>{C3D4E5F6-A7B8-9012-3456-789012CDEF01}</Project>
+      <Name>HygieneAudit.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
 
-  <!--
-    IIS requires assemblies in bin\ so the runtime can discover controllers.
-    dotnet publish puts DLLs flat at root by default — this target moves them to bin\.
-  -->
-  <Target Name="ArrangeForIIS" AfterTargets="Publish">
-    <ItemGroup>
-      <PublishedDlls Include="$(PublishDir)*.dll" />
-      <PublishedPdbs Include="$(PublishDir)*.pdb" />
-      <PublishedConfigs Include="$(PublishDir)*.config" Exclude="$(PublishDir)web.config;$(PublishDir)Web.config" />
-      <PublishedRuntimeJson Include="$(PublishDir)*.runtimeconfig.json;$(PublishDir)*.deps.json" />
-    </ItemGroup>
-    <MakeDir Directories="$(PublishDir)bin" />
-    <Move SourceFiles="@(PublishedDlls)" DestinationFolder="$(PublishDir)bin" />
-    <Move SourceFiles="@(PublishedPdbs)" DestinationFolder="$(PublishDir)bin" />
-    <Move SourceFiles="@(PublishedConfigs)" DestinationFolder="$(PublishDir)bin" />
-    <Move SourceFiles="@(PublishedRuntimeJson)" DestinationFolder="$(PublishDir)bin" />
-  </Target>
-
-  <!-- Registers this project as a Web Application in the VS project system.
-       Enables IIS Express as a run target (commandName: IISExpress in launchSettings.json).
-       Condition prevents build failure when dotnet publish runs outside VS (no VSToolsPath). -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets"
           Condition="'$(VSToolsPath)' != ''" />
-
 </Project>
