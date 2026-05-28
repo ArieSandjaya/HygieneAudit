@@ -15,7 +15,7 @@ public class AuditService : IAuditService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Audit> CreateAuditAsync(CreateAuditRequest request)
+    public async Task<AuditResponse> CreateAuditAsync(CreateAuditRequest request)
     {
         var templates = await _unitOfWork.Templates.GetAllAsync();
         var filteredTemplates = templates
@@ -38,12 +38,21 @@ public class AuditService : IAuditService
 
         await _unitOfWork.Audits.AddAsync(audit);
         await _unitOfWork.SaveChangesAsync();
-        return audit;
+
+        var saved = await _unitOfWork.Audits.GetByIdWithItemsAsync(audit.Id);
+        return AuditResponse.FromEntity(saved!);
     }
 
-    public async Task<Audit?> GetAuditAsync(string id)
+    public async Task<AuditResponse?> GetAuditAsync(string id)
     {
-        return await _unitOfWork.Audits.GetByIdWithItemsAsync(id);
+        var audit = await _unitOfWork.Audits.GetByIdWithItemsAsync(id);
+        return audit == null ? null : AuditResponse.FromEntity(audit);
+    }
+
+    public async Task<IEnumerable<AuditResponse>> GetAuditsAsync(int picId, bool isAdmin)
+    {
+        var audits = await _unitOfWork.Audits.GetRecentAsync(picId, isAdmin);
+        return audits.Select(AuditResponse.FromEntity);
     }
 
     public async Task SaveAuditItemAsync(string auditId, int templateId, AuditItemUpdate update)
@@ -54,8 +63,21 @@ public class AuditService : IAuditService
         var item = audit.Items.FirstOrDefault(i => i.TemplateId == templateId);
         if (item == null) throw new NotFoundException("Item not found");
 
-        item.Status = update.Status;
+        item.Status = update.Status?.ToLowerInvariant() switch
+        {
+            "pass" => AuditItemStatus.Pass,
+            "fail" => AuditItemStatus.Fail,
+            _      => (AuditItemStatus?)null
+        };
         item.Note = update.Note;
+
+        if (update.Photos != null)
+        {
+            var existing = item.Photos.ToList();
+            foreach (var p in existing) item.Photos.Remove(p);
+            foreach (var url in update.Photos)
+                item.Photos.Add(new AuditItemPhoto { PhotoUrl = url });
+        }
 
         await _unitOfWork.SaveChangesAsync();
     }
@@ -116,10 +138,10 @@ public class AuditService : IAuditService
             rows.Add(new ExcelReportRow
             {
                 No = no++,
-                TenantName = audit.Tenant.Name,
-                UsesGas = audit.Tenant.UsesGas,
+                TenantName = audit.Tenant?.Name ?? string.Empty,
+                UsesGas = audit.Tenant?.UsesGas ?? false,
                 Date = audit.Date,
-                PicName = audit.Pic.Name,
+                PicName = audit.Pic?.Name ?? string.Empty,
                 Status = audit.Status.ToString(),
                 TotalItems = total,
                 PassItems = pass,
@@ -146,7 +168,7 @@ public class AuditService : IAuditService
         };
     }
 
-    public async Task<byte[]> ExportExcelAsync(ExcelReportDto report)
+    public Task<byte[]> ExportExcelAsync(ExcelReportDto report)
     {
         var csv = new System.Text.StringBuilder();
         csv.AppendLine("No,Tenant,Type,Tanggal,PIC,Status,Pass Rate,Total,Pass,Fail,Catatan");
@@ -158,6 +180,6 @@ public class AuditService : IAuditService
 
         csv.AppendLine($",TOTAL / RATA-RATA,,,,,{report.Summary.AveragePassRate}%,{report.Summary.TotalItems},{report.Summary.TotalPass},{report.Summary.TotalFail},{report.Summary.TenantCount} Tenant");
 
-        return System.Text.Encoding.UTF8.GetBytes(csv.ToString());
+        return Task.FromResult(System.Text.Encoding.UTF8.GetBytes(csv.ToString()));
     }
 }

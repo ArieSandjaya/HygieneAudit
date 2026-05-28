@@ -1,0 +1,2 @@
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\obj\Release\HygieneAudit.API.csproj.AssemblyReference.cache
+F:\CIH\HygieneAudit\BackEnd\src\HygieneAudit.API\obj\Release\HygieneAudit.API.csproj.CoreCompileInputs.cache

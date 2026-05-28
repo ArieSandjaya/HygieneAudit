@@ -1,7 +1,12 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "F:\\CIH\\HygieneAudit\\",
-  "Documents": [],
+  "WorkspaceRootPath": "F:\\CIH\\HygieneAudit\\BackEnd\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,12 +14,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 2,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
@@ -22,6 +23,19 @@
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.Production.json",
+              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\appsettings.Production.json",
+              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\appsettings.Production.json",
+              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\appsettings.Production.json",
+              "RelativeToolTip": "src\\HygieneAudit.API\\appsettings.Production.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-05-28T07:22:04.586Z",
+              "EditorCaption": ""
             }
           ]
         }

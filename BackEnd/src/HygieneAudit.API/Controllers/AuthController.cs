@@ -1,27 +1,31 @@
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Http;
 using HygieneAudit.Application.Services;
 using HygieneAudit.Domain.DTOs;
-using Microsoft.AspNetCore.Mvc;
 
-namespace HygieneAudit.API.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class AuthController : ControllerBase
+namespace HygieneAudit.API.Controllers
 {
-    private readonly IAuthService _authService;
-
-    public AuthController(IAuthService authService)
+    [RoutePrefix("api/auth")]
+    public class AuthController : ApiController
     {
-        _authService = authService;
-    }
+        private readonly IAuthService _authService;
 
-    [HttpPost("login")]
-    public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest request)
-    {
-        var response = await _authService.AuthenticateAsync(request.Username, request.Password);
-        if (response == null)
-            return Unauthorized(new { message = "Username atau password salah!" });
+        public AuthController(IAuthService authService)
+        {
+            _authService = authService;
+        }
 
-        return Ok(response);
+        [HttpPost]
+        [Route("login")]
+        [AllowAnonymous]
+        public async Task<IHttpActionResult> Login([FromBody] LoginRequest request)
+        {
+            var response = await _authService.AuthenticateAsync(request.Username, request.Password);
+            if (response == null)
+                return Content(HttpStatusCode.Unauthorized, new { message = "Username atau password salah!" });
+
+            return Ok(response);
+        }
     }
 }

@@ -1,0 +1,470 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HygieneAudit.API.Default" %>
+<!DOCTYPE html>
+<html lang="id" class="light-style" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#696cff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Hygiene Audit">
+    <title>Hygiene Audit App</title>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSHlnaWVuZSBBdWRpdCBBcHAiLCJzaG9ydF9uYW1lIjoiSHlnaWVuZUF1ZGl0Iiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZmZmZmYiLCJ0aGVtZV9jb2xvciI6IiM2OTZjZmYiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1qQXdJaUJvWldsbmFIUTlJakl3TUNJZ2RtbGxkMEp2ZUQwaU1DQXdJREl3TUNBeU1EQWlJSGh0YkcwaUlqZzROREl5TURBd01EQWlJSGh0Ykc1aGJXVWlPbHRkSWlCbWFXeHNQU0lqWm1abVptWm1JaUIyYVdWM0FtOTdQQzlpYkhWemJEc2dabWxzWkQwaUkyWm1abVptWmlJSE53WVdOb1BTSWlJSEJoWTJ0bFpDQm9iMnhrWlhJOUlqMGlkSEpoYm5ObWIzSnRjeUlnZDJsa2JHbHVaRDBpTUM0d0xqQWlJR0p2YjNRaU9pQWlJbjA9Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
+    <link href="wwwroot/assets/boxicons.min.css" rel="stylesheet">
+    <link href="wwwroot/assets/bootstrap.min.css" rel="stylesheet">
+    <link href="wwwroot/style.css" rel="stylesheet">
+    <script src="wwwroot/config.js?v=2"></script>
+    <script src="wwwroot/assets/jspdf.umd.min.js"></script>
+    <script src="wwwroot/assets/jspdf.plugin.autotable.min.js"></script>
+    <script src="wwwroot/assets/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="toast-container" id="toastContainer"></div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p style="color:#566a7f;font-weight:600;font-size:.875rem;">Memuat...</p>
+    </div>
+    <div class="photo-viewer" id="photoViewer" onclick="closePhotoViewer()">
+        <button class="close-viewer">&times;</button>
+        <img id="viewerImage" src="" alt="Photo">
+    </div>
+    <div class="install-prompt" id="installPrompt">
+        <h4>📱 Install Aplikasi</h4>
+        <p>Tambahkan ke Home Screen untuk akses lebih cepat</p>
+        <div class="install-steps" id="installSteps"></div>
+        <button class="btn btn-secondary btn-full" onclick="dismissInstall()" style="margin-top:8px;">Nanti Saja</button>
+    </div>
+
+    <!-- LOGIN PAGE -->
+    <div id="loginPage">
+        <div class="login-card">
+            <div class="login-logo">
+                <div class="icon">📋</div>
+                <h1>Hygiene Audit</h1>
+                <p>Login untuk memulai audit</p>
+            </div>
+            <div id="serverStatus" style="display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;margin-bottom:1.25rem;font-size:.8125rem;font-weight:600;background:var(--gray-100);color:#a1aab2;">
+                <span id="serverStatusDot" style="width:8px;height:8px;border-radius:50%;background:var(--gray-300);flex-shrink:0;"></span>
+                <span id="serverStatusText">Memeriksa koneksi server...</span>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="loginUsername" placeholder="Masukkan username" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="loginPassword" placeholder="Masukkan password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    <i class="bx bx-lock-open-alt"></i> Login
+                </button>
+            </form>
+            <p style="text-align:center;margin-top:1.25rem;font-size:.8125rem;color:#a1aab2;">Hubungi admin untuk pembuatan akun</p>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="appContainer">
+        <div class="layout-wrapper layout-content-navbar">
+            <div class="layout-container">
+                <!-- SIDEBAR -->
+                <aside id="layout-menu" class="layout-menu">
+                    <a class="app-brand">
+                        <div class="app-brand-logo">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 5.55228 9.44772 6 10 6H14C14.5523 6 15 5.55228 15 5M9 5C9 4.44772 9.44772 4 10 4H14C14.5523 4 15 4.44772 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="app-brand-text">Hygiene Audit<small>Management System</small></div>
+                        <button class="layout-menu-toggle d-none d-lg-flex" id="sidebarToggle" onclick="toggleSidebarCollapse()" title="Ciutkan menu">
+                            <i class="bx bx-chevron-left"></i>
+                        </button>
+                    </a>
+                    <ul class="menu-inner">
+                        <li class="menu-section">Menu Utama</li>
+                        <li class="menu-item active" data-page="dashboard">
+                            <button class="menu-link" onclick="navigateTo('dashboard')">
+                                <i class="menu-icon bx bxs-dashboard"></i><span>Dashboard</span>
+                            </button>
+                        </li>
+                        <li class="menu-item" data-page="newAudit">
+                            <button class="menu-link" onclick="navigateTo('newAudit')">
+                                <i class="menu-icon bx bx-plus-circle"></i><span>Audit Baru</span>
+                            </button>
+                        </li>
+                        <li class="menu-item" data-page="history">
+                            <button class="menu-link" onclick="navigateTo('history')">
+                                <i class="menu-icon bx bx-history"></i><span>History Audit</span>
+                            </button>
+                        </li>
+                        <li class="menu-divider"></li>
+                        <li class="menu-section">Administration</li>
+                        <li class="menu-item admin-nav" data-page="adminUsers" id="navAdminUsers" style="display:none;">
+                            <button class="menu-link" onclick="navigateTo('adminUsers')">
+                                <i class="menu-icon bx bx-group"></i><span>Manajemen User</span>
+                            </button>
+                        </li>
+                        <li class="menu-item admin-nav" data-page="adminTemplates" id="navAdminTemplates" style="display:none;">
+                            <button class="menu-link" onclick="navigateTo('adminTemplates')">
+                                <i class="menu-icon bx bx-list-check"></i><span>Template Checklist</span>
+                            </button>
+                        </li>
+                        <li class="menu-item admin-nav" data-page="adminTenants" id="navAdminTenants" style="display:none;">
+                            <button class="menu-link" onclick="navigateTo('adminTenants')">
+                                <i class="menu-icon bx bx-store-alt"></i><span>Master Tenant</span>
+                            </button>
+                        </li>
+                        <li class="menu-item admin-nav" data-page="adminReports" id="navAdminReports" style="display:none;">
+                            <button class="menu-link" onclick="navigateTo('adminReports')">
+                                <i class="menu-icon bx bx-bar-chart-alt-2"></i><span>Reporting</span>
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="menu-user">
+                        <div class="menu-user-info">
+                            <div class="menu-user-avatar" id="sidebarAvatar">A</div>
+                            <div class="menu-user-details">
+                                <div class="menu-user-name" id="sidebarUserName">Admin</div>
+                                <div class="menu-user-role" id="sidebarUserRole">Auditor</div>
+                            </div>
+                            <button onclick="logout()" title="Logout" style="padding:6px;min-width:32px;border-radius:8px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+                                <i class="bx bx-log-out" style="font-size:18px;color:#a5aeb7;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- LAYOUT PAGE -->
+                <div class="layout-page">
+                    <nav class="layout-navbar">
+                        <button class="navbar-menu-toggle" id="menuToggle" onclick="toggleMenu()">
+                            <i class="bx bx-menu"></i>
+                        </button>
+                        <div class="navbar-page-title">
+                            <button class="navbar-back-btn" id="backBtn" onclick="goBack()" title="Kembali">
+                                <i class="bx bx-arrow-back"></i>
+                            </button>
+                            <span id="pageTitle">Dashboard</span>
+                        </div>
+                        <div class="navbar-actions">
+                            <div class="navbar-user-pill">
+                                <div class="navbar-avatar" id="userAvatar">A</div>
+                                <span class="navbar-username" id="userName">Admin</span>
+                            </div>
+                            <button class="navbar-logout-btn" onclick="logout()" title="Logout">
+                                <i class="bx bx-log-out"></i>
+                            </button>
+                        </div>
+                    </nav>
+
+                    <div class="content-wrapper">
+                        <div class="content-body">
+                            <!-- DASHBOARD -->
+                            <div class="page active" id="pageDashboard">
+                                <div style="margin-bottom:1.5rem;">
+                                    <h4 style="font-size:1.25rem;font-weight:700;color:#334155;margin-bottom:4px;">Selamat Datang, <span id="dashboardUserName">Admin</span>! 👋</h4>
+                                    <p id="dashboardDate" style="font-size:.875rem;color:#a1aab2;"></p>
+                                </div>
+                                <div class="stats-grid">
+                                    <div class="stat-card primary">
+                                        <div class="stat-icon">📊</div>
+                                        <div class="stat-info"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total Audit</div></div>
+                                    </div>
+                                    <div class="stat-card success">
+                                        <div class="stat-icon">✅</div>
+                                        <div class="stat-info"><div class="stat-value" id="statCompleted">0</div><div class="stat-label">Selesai</div></div>
+                                    </div>
+                                    <div class="stat-card warning">
+                                        <div class="stat-icon">📝</div>
+                                        <div class="stat-info"><div class="stat-value" id="statDraft">0</div><div class="stat-label">Draft</div></div>
+                                    </div>
+                                    <div class="stat-card danger">
+                                        <div class="stat-icon">⚠️</div>
+                                        <div class="stat-info"><div class="stat-value" id="statFail">0</div><div class="stat-label">Item Fail</div></div>
+                                    </div>
+                                </div>
+                                <div class="section-title">
+                                    <span>Audit Terbaru</span>
+                                    <a href="#" onclick="navigateTo('newAudit');return false;">+ Audit Baru</a>
+                                </div>
+                                <div class="audit-list" id="recentAudits"></div>
+                            </div>
+
+                            <!-- NEW AUDIT -->
+                            <div class="page" id="pageNewAudit">
+                                <div class="form-section">
+                                    <div class="form-section-title">Informasi Audit</div>
+                                    <div class="form-group">
+                                        <label class="form-label">Tanggal Audit</label>
+                                        <input type="date" class="form-input" id="auditDate" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Nama Tenant</label>
+                                        <div class="tenant-select-wrapper">
+                                            <div class="searchable-select" id="tenantDropdown">
+                                                <div class="searchable-select-trigger" onclick="toggleTenantDropdown(event)">
+                                                    <span class="searchable-select-value" id="tenantSelectedText">Pilih Tenant</span>
+                                                    <i class="bx bx-chevron-down searchable-select-arrow"></i>
+                                                </div>
+                                                <div class="searchable-select-menu" id="tenantDropdownMenu">
+                                                    <div class="searchable-select-search">
+                                                        <i class="bx bx-search"></i>
+                                                        <input type="text" id="tenantSearchInput" placeholder="Cari nama tenant..." oninput="filterTenantOptions(this.value)" autocomplete="off">
+                                                    </div>
+                                                    <ul class="searchable-select-list" id="tenantOptionsList"></ul>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" id="auditTenant">
+                                            <span class="tenant-history-badge" id="tenantHistoryBadge">0 audit</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">PIC (Person In Charge)</label>
+                                        <select class="form-input" id="auditPIC" required>
+                                            <option value="">Pilih PIC</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="toggle-group">
+                                            <span class="toggle-label">Tenant Menggunakan Gas?</span>
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="auditGas" onchange="updateGasLabel()">
+                                                <span class="toggle-slider"></span>
+                                            </label>
+                                            <span class="toggle-value" id="gasLabel">Non-Gas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tenant-history-preview" id="tenantHistoryPreview">
+                                    <div class="preview-header">
+                                        <div>
+                                            <div class="preview-title"><span>📜</span><span>Riwayat Audit Tenant</span></div>
+                                            <div class="preview-subtitle" id="previewTenantSubtitle">3 audit ditemukan</div>
+                                        </div>
+                                        <span class="tenant-type" id="previewTenantType">🔥 Gas</span>
+                                    </div>
+                                    <div class="history-stats" id="previewHistoryStats">
+                                        <div class="history-stat"><div class="history-stat-value" id="previewTotalAudits">3</div><div class="history-stat-label">Total Audit</div></div>
+                                        <div class="history-stat"><div class="history-stat-value" id="previewAvgPass">85%</div><div class="history-stat-label">Rata-rata Pass</div></div>
+                                        <div class="history-stat"><div class="history-stat-value" id="previewLastAudit">10 hari</div><div class="history-stat-label">Audit Terakhir</div></div>
+                                    </div>
+                                    <div class="trend-chart">
+                                        <div class="trend-title">📊 Trend Pass Rate (6 Audit Terakhir)</div>
+                                        <div class="trend-bars" id="previewTrendBars"></div>
+                                    </div>
+                                    <div class="recent-audits-list" id="previewRecentAudits"></div>
+                                </div>
+                                <button class="btn btn-primary btn-full" onclick="startAudit()" style="margin-bottom:2rem;">
+                                    <i class="bx bx-rocket"></i> Mulai Audit
+                                </button>
+                            </div>
+
+                            <!-- CHECKLIST -->
+                            <div class="page" id="pageChecklist">
+                                <div class="overall-progress" id="overallProgress">
+                                    <div class="progress-header">
+                                        <span class="progress-title">Progress Audit</span>
+                                        <span class="progress-value" id="progressText">0/0</span>
+                                    </div>
+                                    <div class="progress-bar"><div class="fill" id="progressFill" style="width:0%"></div></div>
+                                </div>
+                                <div id="checklistContainer"></div>
+                                <div class="submit-bar">
+                                    <button class="btn btn-secondary" onclick="saveDraft()"><i class="bx bx-save"></i> Simpan Draft</button>
+                                    <button class="btn btn-success" onclick="submitAudit()"><i class="bx bx-check-circle"></i> Selesai Audit</button>
+                                </div>
+                            </div>
+
+                            <!-- HISTORY -->
+                            <div class="page" id="pageHistory">
+                                <div class="history-search-bar">
+                                    <div class="history-search-input-wrap">
+                                        <i class="bx bx-search history-search-icon"></i>
+                                        <input type="text" id="historySearchInput" class="history-search-input"
+                                               placeholder="Cari tenant atau PIC..." oninput="searchHistory(this.value)">
+                                        <button class="history-search-clear" id="historyClearBtn" onclick="clearHistorySearch()" style="display:none;">
+                                            <i class="bx bx-x"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="history-filters">
+                                    <button class="filter-chip active" onclick="filterHistory('all')">Semua</button>
+                                    <button class="filter-chip" onclick="filterHistory('completed')">Selesai</button>
+                                    <button class="filter-chip" onclick="filterHistory('draft')">Draft</button>
+                                </div>
+                                <div id="historyContainer"></div>
+                            </div>
+
+                            <!-- ADMIN -->
+                            <div class="page" id="pageAdminUsers">
+                                <div class="admin-section">
+                                    <div class="section-title">
+                                        <span>Manajemen User</span>
+                                        <button class="btn btn-sm btn-primary" onclick="showUserModal()">+ Tambah</button>
+                                    </div>
+                                    <table class="admin-table">
+                                        <thead><tr><th>Username</th><th>Nama</th><th>Role</th><th>Aksi</th></tr></thead>
+                                        <tbody id="usersTable"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="page" id="pageAdminTemplates">
+                                <div class="admin-section">
+                                    <div class="section-title">
+                                        <span>Template Checklist</span>
+                                        <button class="btn btn-sm btn-primary" onclick="showTemplateModal()">+ Tambah</button>
+                                    </div>
+                                    <table class="admin-table">
+                                        <thead><tr><th>Kategori</th><th>Kegiatan</th><th>Gas Only</th><th>Aksi</th></tr></thead>
+                                        <tbody id="templatesTable"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="page" id="pageAdminTenants">
+                                <div class="admin-section">
+                                    <div class="section-title">
+                                        <span>Master Tenant</span>
+                                        <button class="btn btn-sm btn-primary" onclick="showTenantModal()">+ Tambah</button>
+                                    </div>
+                                    <table class="admin-table">
+                                        <thead><tr><th>Nama Tenant</th><th>Lantai</th><th>Tipe</th><th>Aksi</th></tr></thead>
+                                        <tbody id="tenantsTable"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="page" id="pageAdminReports">
+                                <div class="admin-section">
+                                    <div class="section-title">
+                                        <span>Reporting Audit</span>
+                                        <button class="btn btn-sm btn-primary" onclick="generateExcelReport()">Refresh</button>
+                                    </div>
+                                    <div class="excel-filter-bar">
+                                        <div class="excel-filter-group">
+                                            <label class="excel-filter-label">Filter Status</label>
+                                            <select class="excel-filter-input" id="reportFilterStatus" onchange="filterExcelReport()">
+                                                <option value="all">Semua Status</option>
+                                                <option value="COMPLETED">Selesai</option>
+                                                <option value="DRAFT">Draft</option>
+                                            </select>
+                                        </div>
+                                        <div class="excel-filter-group">
+                                            <label class="excel-filter-label">Filter Type</label>
+                                            <select class="excel-filter-input" id="reportFilterType" onchange="filterExcelReport()">
+                                                <option value="all">Semua Type</option>
+                                                <option value="gas">Gas</option>
+                                                <option value="non-gas">Non-Gas</option>
+                                            </select>
+                                        </div>
+                                        <div class="excel-filter-group">
+                                            <label class="excel-filter-label">Cari Tenant</label>
+                                            <input type="text" class="excel-filter-input" id="reportSearchTenant" placeholder="Nama tenant..." onkeyup="filterExcelReport()">
+                                        </div>
+                                    </div>
+                                    <div class="excel-report-container" id="excelReportContainer"></div>
+                                </div>
+                            </div>
+
+                            <!-- AUDIT DETAIL -->
+                            <div class="page" id="pageAuditDetail">
+                                <div id="auditDetailContent"></div>
+                            </div>
+
+                        </div><!-- end content-body -->
+                    </div><!-- end content-wrapper -->
+                </div><!-- end layout-page -->
+            </div><!-- end layout-container -->
+            <div class="layout-overlay" id="layoutOverlay" onclick="closeMenu()"></div>
+        </div><!-- end layout-wrapper -->
+    </div><!-- end appContainer -->
+
+    <!-- SYNC STATUS -->
+    <div class="sync-status" id="syncStatus">
+        <span class="sync-icon" id="syncIcon">🔄</span>
+        <span class="sync-text" id="syncText">Menyinkronkan...</span>
+        <button class="sync-action" id="syncAction" onclick="manualSync()">Sync</button>
+    </div>
+    <!-- NOTIFICATION PERMISSION -->
+    <div class="notification-permission" id="notifPermission">
+        <h4>🔔 Aktifkan Notifikasi</h4>
+        <p>Dapatkan pemberitahuan saat audit selesai, ada item FAIL, atau reminder jadwal audit.</p>
+        <div class="notification-actions">
+            <button class="btn btn-white" onclick="requestNotification()">Aktifkan</button>
+            <button class="btn btn-transparent" onclick="dismissNotification()">Nanti</button>
+        </div>
+    </div>
+    <!-- EXPORT MENU -->
+    <button class="fab-button" id="fabButton" onclick="toggleExportMenu()" style="display:none;">📤</button>
+    <div class="export-menu" id="exportMenu">
+        <button class="export-btn" onclick="exportPDF()"><span>📄</span> Export PDF</button>
+        <button class="export-btn" onclick="exportExcel()"><span>📊</span> Export Excel</button>
+        <button class="export-btn" onclick="shareAudit()"><span>🔗</span> Share</button>
+    </div>
+
+    <!-- MODALS -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="userModalTitle">Tambah User</h3>
+                <button class="modal-close" onclick="closeModal('userModal')">&times;</button>
+            </div>
+            <form onsubmit="saveUser(event)">
+                <input type="hidden" id="editUserId">
+                <div class="form-group"><label class="form-label">Username</label><input type="text" class="form-input" id="newUsername" required></div>
+                <div class="form-group" id="passwordGroup"><label class="form-label">Password <span id="passwordHint" style="font-weight:400;color:#a5aeb7;font-size:.8125rem;"></span></label><input type="password" class="form-input" id="newPassword"></div>
+                <div class="form-group"><label class="form-label">Nama Lengkap</label><input type="text" class="form-input" id="newFullName" required></div>
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-input" id="newRole"><option value="Auditor">Auditor</option><option value="Admin">Admin</option></select>
+                </div>
+                <div class="form-group" id="activeGroup" style="display:none;">
+                    <div class="toggle-group"><span class="toggle-label">Aktif?</span><label class="toggle-switch"><input type="checkbox" id="editUserActive" checked><span class="toggle-slider"></span></label></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Simpan</button>
+            </form>
+        </div>
+    </div>
+    <div class="modal-overlay" id="templateModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="templateModalTitle">Tambah Template Checklist</h3>
+                <button class="modal-close" onclick="closeModal('templateModal')">&times;</button>
+            </div>
+            <form onsubmit="saveTemplate(event)">
+                <input type="hidden" id="editTemplateId">
+                <div class="form-group"><label class="form-label">Kategori</label><input type="text" class="form-input" id="newCategory" placeholder="Contoh: LIFE SAFETY" required></div>
+                <div class="form-group"><label class="form-label">Nama Kegiatan</label><input type="text" class="form-input" id="newActivity" placeholder="Contoh: Kondisi Pipa Gas" required></div>
+                <div class="form-group"><label class="form-label">Urutan Tampil</label><input type="number" class="form-input" id="newDisplayOrder" value="0" min="0"></div>
+                <div class="form-group">
+                    <div class="toggle-group"><span class="toggle-label">Hanya untuk Tenant Gas?</span><label class="toggle-switch"><input type="checkbox" id="newGasOnly"><span class="toggle-slider"></span></label></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Simpan</button>
+            </form>
+        </div>
+    </div>
+    <div class="modal-overlay" id="tenantModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="tenantModalTitle">Tambah Tenant</h3>
+                <button class="modal-close" onclick="closeModal('tenantModal')">&times;</button>
+            </div>
+            <form onsubmit="saveTenant(event)">
+                <input type="hidden" id="editTenantId">
+                <div class="form-group"><label class="form-label">Nama Tenant</label><input type="text" class="form-input" id="newTenantName" required></div>
+                <div class="form-group"><label class="form-label">Lantai</label><input type="text" class="form-input" id="newTenantFloor" placeholder="Contoh: G, 1, 2, LG"></div>
+                <div class="form-group"><label class="form-label">Kategori</label><input type="text" class="form-input" id="newTenantCategory" placeholder="Contoh: Restoran, Kafe, Retail"></div>
+                <div class="form-group">
+                    <div class="toggle-group"><span class="toggle-label">Menggunakan Gas?</span><label class="toggle-switch"><input type="checkbox" id="newTenantGas"><span class="toggle-slider"></span></label></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+
+    <script src="wwwroot/app.js"></script>
+</body>
+</html>

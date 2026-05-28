@@ -1,0 +1,4 @@
+/* PASTE SEMUA CSS DARI <style> DI index.html ANDA KE SINI */
+body { font-family: 'Public Sans', sans-serif; background: #f5f5f9; }
+.layout-menu { position:fixed; width:260px; height:100vh; background: #2f3349; }
+.layout-page { margin-left:260px; min-height:100vh; }

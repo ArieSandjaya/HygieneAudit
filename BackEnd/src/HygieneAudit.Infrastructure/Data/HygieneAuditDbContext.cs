@@ -7,13 +7,13 @@ public class HygieneAuditDbContext : DbContext
 {
     public HygieneAuditDbContext(DbContextOptions<HygieneAuditDbContext> options) : base(options) { }
 
-    public DbSet<User> Users { get; set; }
-    public DbSet<Tenant> Tenants { get; set; }
-    public DbSet<ChecklistTemplate> ChecklistTemplates { get; set; }
-    public DbSet<Audit> Audits { get; set; }
-    public DbSet<AuditItem> AuditItems { get; set; }
-    public DbSet<AuditItemPhoto> AuditItemPhotos { get; set; }
-    public DbSet<SyncQueueItem> SyncQueue { get; set; }
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Tenant> Tenants { get; set; } = null!;
+    public DbSet<ChecklistTemplate> ChecklistTemplates { get; set; } = null!;
+    public DbSet<Audit> Audits { get; set; } = null!;
+    public DbSet<AuditItem> AuditItems { get; set; } = null!;
+    public DbSet<AuditItemPhoto> AuditItemPhotos { get; set; } = null!;
+    public DbSet<SyncQueueItem> SyncQueue { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,9 +35,9 @@ public class HygieneAuditDbContext : DbContext
 
         // Seed Users
         modelBuilder.Entity<User>().HasData(
-            new User { Id = 1, Username = "admin", PasswordHash = "$2a$11$vGQn8U.h1TkckZt8Onm1zOQ3YhZ2Z3Z4Z5Z6Z7Z8Z9Z0Z1Z2Z3Z4Z5Z", Name = "Administrator", Role = UserRole.Admin },
-            new User { Id = 2, Username = "auditor1", PasswordHash = "$2a$11$vGQn8U.h1TkckZt8Onm1zOQ3YhZ2Z3Z4Z5Z6Z7Z8Z9Z0Z1Z2Z3Z4Z5Z", Name = "Budi Santoso", Role = UserRole.Auditor },
-            new User { Id = 3, Username = "auditor2", PasswordHash = "$2a$11$vGQn8U.h1TkckZt8Onm1zOQ3YhZ2Z3Z4Z5Z6Z7Z8Z9Z0Z1Z2Z3Z4Z5Z", Name = "Dewi Kusuma", Role = UserRole.Auditor }
+            new User { Id = 1, Username = "admin",    PasswordHash = "$2a$11$MlU7tuaJIbKYYSzk4nnE/ubbS8sqVdhcwPN523z4ZlSs6o6fVBLDO", Name = "Administrator", Role = UserRole.Admin },
+            new User { Id = 2, Username = "auditor1", PasswordHash = "$2a$11$K7YLnOyngILPisuPnBSD.ObjSwl9hgAYjqH9C5Mh8ZuSsGPGU4njK", Name = "Budi Santoso",  Role = UserRole.Auditor },
+            new User { Id = 3, Username = "auditor2", PasswordHash = "$2a$11$K7YLnOyngILPisuPnBSD.ObjSwl9hgAYjqH9C5Mh8ZuSsGPGU4njK", Name = "Dewi Kusuma",   Role = UserRole.Auditor }
         );
 
         // Seed Tenants

@@ -24,6 +24,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
     {
         return await _context.Audits
             .Include(a => a.Items)
+                .ThenInclude(i => i.Photos)
             .Where(a => a.TenantId == tenantId)
             .OrderByDescending(a => a.Date)
             .ToListAsync();
@@ -40,6 +41,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
             .Include(a => a.Items)
+                .ThenInclude(i => i.Photos)
             .Where(a => latestIds.Contains(a.Id))
             .OrderByDescending(a => a.Date)
             .ToListAsync();
@@ -51,10 +53,12 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
             .Include(a => a.Items)
+                .ThenInclude(i => i.Photos)
             .AsQueryable();
 
-        if (!string.IsNullOrEmpty(status) && status != "all")
-            query = query.Where(a => a.Status.ToString() == status);
+        if (!string.IsNullOrEmpty(status) && status != "all" &&
+            Enum.TryParse<AuditStatus>(status, ignoreCase: true, out var auditStatus))
+            query = query.Where(a => a.Status == auditStatus);
 
         if (!string.IsNullOrEmpty(type) && type != "all")
         {
@@ -132,5 +136,23 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
                 daysSince == 1 ? "Kemarin" : $"{daysSince} hari",
             RecentAudits = recent
         };
+    }
+
+    public async Task<IEnumerable<Audit>> GetRecentAsync(int picId, bool isAdmin, int limit = 100)
+    {
+        var query = _context.Audits
+            .Include(a => a.Tenant)
+            .Include(a => a.Pic)
+            .Include(a => a.Items)
+                .ThenInclude(i => i.Photos)
+            .AsQueryable();
+
+        if (!isAdmin)
+            query = query.Where(a => a.PicId == picId);
+
+        return await query
+            .OrderByDescending(a => a.CreatedAt)
+            .Take(limit)
+            .ToListAsync();
     }
 }
