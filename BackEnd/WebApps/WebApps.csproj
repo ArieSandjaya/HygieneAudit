@@ -155,6 +155,10 @@
       <HintPath>..\src\HygieneAudit.API\bin\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces">
+      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Autofac.Integration.WebApi">
       <HintPath>..\src\HygieneAudit.API\bin\Autofac.Integration.WebApi.dll</HintPath>
       <Private>True</Private>
