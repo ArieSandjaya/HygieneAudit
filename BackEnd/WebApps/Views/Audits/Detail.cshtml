@@ -69,9 +69,9 @@
                     <thead class="table-light">
                         <tr>
                             <th>Item</th>
-                            <th style="width:140px;" class="text-center">Status</th>
-                            <th>Catatan</th>
-                            <th style="width:160px;">Foto</th>
+                            <th style="width:160px;" class="text-center">Status</th>
+                            <th style="width:200px;">Catatan</th>
+                            <th style="width:220px;">Foto</th>
                         </tr>
                     </thead>
                     <tbody data-bind="foreach: items">
@@ -101,25 +101,28 @@
                                 </span>
                             </td>
                             <td class="align-middle">
-                                <label class="btn btn-sm btn-outline-secondary mb-1"
-                                       data-bind="visible: $root.status() !== 'COMPLETED'">
-                                    <i class="bx bx-camera"></i>
-                                    <input type="file" accept="image/*" multiple class="d-none"
-                                           data-bind="event: { change: function(d,e){ $root.addPhoto($data, e) } }" />
-                                </label>
-                                <!-- ko foreach: photos -->
-                                <div class="d-inline-block position-relative me-1 mb-1" style="width:52px;height:52px;">
-                                    <img data-bind="attr: { src: $data }"
-                                         style="width:52px;height:52px;object-fit:cover;border-radius:4px;" />
-                                    <!-- ko if: $root.status() !== 'COMPLETED' -->
-                                    <button type="button" class="btn btn-danger position-absolute top-0 end-0 p-0"
-                                            style="width:16px;height:16px;font-size:9px;border-radius:50%;min-width:0;line-height:1;"
-                                            data-bind="click: function(){ $root.removePhoto($parent, $data) }">
-                                        &times;
-                                    </button>
+                                <div class="d-flex align-items-center gap-1 flex-wrap">
+                                    <label class="btn btn-sm btn-outline-secondary flex-shrink-0"
+                                           data-bind="visible: $root.status() !== 'COMPLETED'"
+                                           title="Tambah foto">
+                                        <i class="bx bx-camera"></i>
+                                        <input type="file" accept="image/*" multiple class="d-none"
+                                               data-bind="event: { change: function(d,e){ $root.addPhoto($data, e) } }" />
+                                    </label>
+                                    <!-- ko foreach: photos -->
+                                    <div class="position-relative flex-shrink-0" style="width:40px;height:40px;">
+                                        <img data-bind="attr: { src: $data }"
+                                             style="width:40px;height:40px;object-fit:cover;border-radius:4px;" />
+                                        <!-- ko if: $root.status() !== 'COMPLETED' -->
+                                        <button type="button" class="btn btn-danger position-absolute top-0 end-0 p-0"
+                                                style="width:14px;height:14px;font-size:8px;border-radius:50%;min-width:0;line-height:1;"
+                                                data-bind="click: function(){ $root.removePhoto($parent, $data) }">
+                                            &times;
+                                        </button>
+                                        <!-- /ko -->
+                                    </div>
                                     <!-- /ko -->
                                 </div>
-                                <!-- /ko -->
                             </td>
                         </tr>
                     </tbody>
