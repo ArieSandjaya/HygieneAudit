@@ -1,7 +1,97 @@
-﻿@section SPAViews {
-    @Html.Partial("_Home")
+@using System.Security.Claims
+@{
+    ViewBag.Title = "Dashboard";
+    var userName = (User.Identity as ClaimsIdentity)?.FindFirst(ClaimTypes.GivenName)?.Value ?? User.Identity?.Name ?? "User";
+    var userRole = (User.Identity as ClaimsIdentity)?.FindFirst(ClaimTypes.Role)?.Value ?? "";
+    var isAdmin = userRole == "Admin" || userRole == "SuperAdmin";
 }
-@section Scripts{
-    @Scripts.Render("~/bundles/knockout")
-    @Scripts.Render("~/bundles/app")
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h4 class="fw-bold mb-1">Halo, @userName 👋</h4>
+        <p class="text-muted">Selamat datang di Hygiene Audit System</p>
+    </div>
+</div>
+
+<!-- Quick Action Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="avatar flex-shrink-0">
+                    <span class="avatar-initial rounded-circle bg-label-primary" style="width:48px;height:48px;font-size:1.4rem;">
+                        <i class="bx bx-clipboard"></i>
+                    </span>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 class="mb-1 fw-semibold">Audit</h6>
+                    <p class="text-muted small mb-2">Buat dan kelola sesi audit hygiene</p>
+                    <a href="@Url.Action("Index", "Audits")" class="btn btn-sm btn-primary">Buka Audit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="avatar flex-shrink-0">
+                    <span class="avatar-initial rounded-circle bg-label-info" style="width:48px;height:48px;font-size:1.4rem;">
+                        <i class="bx bx-store"></i>
+                    </span>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 class="mb-1 fw-semibold">Tenant</h6>
+                    <p class="text-muted small mb-2">Lihat daftar tenant yang terdaftar</p>
+                    <a href="@Url.Action("Index", "Tenants")" class="btn btn-sm btn-info">Buka Tenant</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (isAdmin)
+    {
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-warning" style="width:48px;height:48px;font-size:1.4rem;">
+                            <i class="bx bx-bar-chart-alt-2"></i>
+                        </span>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 fw-semibold">Laporan</h6>
+                        <p class="text-muted small mb-2">Lihat ringkasan hasil audit</p>
+                        <a href="@Url.Action("Index", "Reports")" class="btn btn-sm btn-warning">Buka Laporan</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (isAdmin)
+{
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Template Checklist</h5>
+                    <a href="@Url.Action("Index", "Templates")" class="btn btn-sm btn-outline-primary">Kelola</a>
+                </div>
+                <div class="card-body text-muted small">
+                    Atur item checklist yang digunakan dalam setiap sesi audit.
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Pengguna</h5>
+                    <a href="@Url.Action("Index", "Users")" class="btn btn-sm btn-outline-primary">Kelola</a>
+                </div>
+                <div class="card-body text-muted small">
+                    Tambah dan kelola akun auditor dan administrator.
+                </div>
+            </div>
+        </div>
+    </div>
 }

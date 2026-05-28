@@ -2,50 +2,80 @@
 @model DomainLoginViewModel
 @{
     ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title</h2>
-    <div class="row">
-        <div class="col-md-6">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>Hygiene Audit</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="mb-3 row">
-                    @Html.LabelFor(m => m.Username, new { @class = "col-md-3 col-form-label" })
-                    <div class="col-md-9">
-                        @Html.TextBoxFor(m => m.Username, new { @class = "form-control", autocomplete = "username" })
-                        @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+<link rel="stylesheet" href="@Url.Content("~/Content/sneat/vendor/css/pages/page-auth.css")" />
+
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+            <div class="card">
+                <div class="card-body">
+                    <div class="app-brand justify-content-center mb-4">
+                        <span class="app-brand-logo demo">
+                            <svg width="25" viewBox="0 0 25 42" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <defs>
+                                    <path d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.20850219,33.2640127 7.09180128,32.5391577 C8.347334,32.0559211 11.4559176,30.0011079 16.4175519,26.3747182 C18.0338572,24.4997857 18.6973423,22.4544883 18.4080071,20.2388261 C17.963753,17.5346866 16.1776345,15.5799961 13.0496516,14.3747546 L10.9194936,13.4715819 L18.6192054,7.984237 L13.7918663,0.358365126 Z" id="p1"></path>
+                                    <path d="M5.47320593,6.00457225 C4.05321814,8.216144 4.36334763,10.0722806 6.40359441,11.5729822 C8.61520715,12.571656 10.0999176,13.2171421 10.8577257,13.5094407 L15.5088241,14.433041 L18.6192054,7.984237 C15.5364148,3.11535317 13.9273018,0.573395879 13.7918663,0.358365126 C13.5790555,0.511491653 10.8061687,2.3935607 5.47320593,6.00457225 Z" id="p3"></path>
+                                </defs>
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <g transform="translate(-27,-15)"><g transform="translate(27,15)"><g transform="translate(0,8)">
+                                        <mask id="m2" fill="white"><use xlink:href="#p1"></use></mask>
+                                        <use fill="#696cff" xlink:href="#p1"></use>
+                                        <g mask="url(#m2)"><use fill="#696cff" xlink:href="#p3"></use><use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#p3"></use></g>
+                                    </g></g></g>
+                                </g>
+                            </svg>
+                        </span>
+                        <span class="app-brand-text demo text-body fw-bolder ms-2" style="font-size:1.25rem;">HygieneAudit</span>
                     </div>
-                </div>
-                <div class="mb-3 row">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-3 col-form-label" })
-                    <div class="col-md-9">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", autocomplete = "current-password" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <div class="offset-md-3 col-md-9">
-                        <div class="form-check">
-                            @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input" })
-                            @Html.LabelFor(m => m.RememberMe, new { @class = "form-check-label" })
+
+                    <h4 class="mb-2">Selamat Datang! 👋</h4>
+                    <p class="mb-4 text-muted">Masuk untuk melanjutkan ke aplikasi</p>
+
+                    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger py-2" })
+
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.Username, "Username", new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "Masukkan username", autofocus = "autofocus", autocomplete = "username" })
+                            @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger small" })
                         </div>
-                    </div>
+                        <div class="mb-3 form-password-toggle">
+                            <div class="input-group input-group-merge">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "••••••••••••", autocomplete = "current-password", id = "Password" })
+                                <span class="input-group-text cursor-pointer" id="togglePassword">
+                                    <i class="bx bx-hide" id="togglePasswordIcon"></i>
+                                </span>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger small" })
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input" })
+                                @Html.LabelFor(m => m.RememberMe, "Ingat Saya", new { @class = "form-check-label" })
+                            </div>
+                        </div>
+                        <button class="btn btn-primary d-grid w-100" type="submit">
+                            <i class="bx bx-log-in-circle me-1"></i> Masuk
+                        </button>
+                    }
                 </div>
-                <div class="row">
-                    <div class="offset-md-3 col-md-9">
-                        <input type="submit" value="Log in" class="btn btn-dark" />
-                    </div>
-                </div>
-            }
+            </div>
         </div>
     </div>
-</main>
+</div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            var pwd = document.getElementById('Password');
+            var icon = document.getElementById('togglePasswordIcon');
+            if (pwd.type === 'password') { pwd.type = 'text'; icon.classList.replace('bx-hide', 'bx-show'); }
+            else { pwd.type = 'password'; icon.classList.replace('bx-show', 'bx-hide'); }
+        });
+    </script>
 }

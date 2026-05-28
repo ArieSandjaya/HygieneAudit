@@ -1,0 +1,32 @@
+{
+  "name": "Hygiene Audit",
+  "short_name": "HygieneAudit",
+  "description": "Aplikasi Audit Hygiene untuk monitoring kebersihan tenant",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#696cff",
+  "background_color": "#f4f5fb",
+  "icons": [
+    {
+      "src": "/Content/sneat/img/favicon/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/Content/sneat/img/pwa-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/Content/sneat/img/pwa-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "lang": "id"
+}
