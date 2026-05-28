@@ -80,4 +80,10 @@
     <Move SourceFiles="@(PublishedRuntimeJson)" DestinationFolder="$(PublishDir)bin" />
   </Target>
 
+  <!-- Registers this project as a Web Application in the VS project system.
+       Enables IIS Express as a run target (commandName: IISExpress in launchSettings.json).
+       Condition prevents build failure when dotnet publish runs outside VS (no VSToolsPath). -->
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets"
+          Condition="'$(VSToolsPath)' != ''" />
+
 </Project>
