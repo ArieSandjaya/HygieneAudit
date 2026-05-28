@@ -83,15 +83,15 @@ namespace HygieneAudit.API.Controllers
 
     internal class UpdateItemPayload
     {
-        public string? AuditId { get; set; }
+        public string AuditId { get; set; }
         public int TemplateId { get; set; }
-        public string? Status { get; set; }
-        public string? Note { get; set; }
-        public List<string>? Photos { get; set; }
+        public string Status { get; set; }
+        public string Note { get; set; }
+        public List<string> Photos { get; set; }
     }
 
     internal class DraftPayload
     {
-        public string? Id { get; set; }
+        public string Id { get; set; }
     }
 }

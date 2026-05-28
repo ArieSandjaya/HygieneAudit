@@ -129,6 +129,10 @@
       <Project>{B2C3D4E5-F6A7-8901-2345-678901BCDEF0}</Project>
       <Name>HygieneAudit.Application</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HygieneAudit.Domain\HygieneAudit.Domain.csproj">
+      <Project>{a1b2c3d4-e5f6-7890-1234-567890abcdef}</Project>
+      <Name>HygieneAudit.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HygieneAudit.Infrastructure\HygieneAudit.Infrastructure.csproj">
       <Project>{C3D4E5F6-A7B8-9012-3456-789012CDEF01}</Project>
       <Name>HygieneAudit.Infrastructure</Name>

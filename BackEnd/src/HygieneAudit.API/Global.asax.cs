@@ -19,7 +19,7 @@ namespace HygieneAudit.API
 {
     public class Global : HttpApplication
     {
-        internal static IConfiguration Configuration { get; private set; } = null!;
+        internal static IConfiguration Configuration { get; private set; }
 
         protected void Application_Start(object sender, EventArgs e)
         {
@@ -111,8 +111,10 @@ namespace HygieneAudit.API
                 var options = new DbContextOptionsBuilder<HygieneAuditDbContext>()
                     .UseSqlServer(connectionString)
                     .Options;
-                using var db = new HygieneAuditDbContext(options);
-                db.Database.Migrate();
+                using (var db = new HygieneAuditDbContext(options))
+                {
+                    db.Database.Migrate();
+                }
             }
             catch (Exception ex)
             {

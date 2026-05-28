@@ -36,6 +36,9 @@
               "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj": {
                 "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj"
               },
+              "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj": {
+                "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj"
+              },
               "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Infrastructure\\HygieneAudit.Infrastructure.csproj": {
                 "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Infrastructure\\HygieneAudit.Infrastructure.csproj"
               }
