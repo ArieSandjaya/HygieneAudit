@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HygieneAudit.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6839f5a750f6bda7298314c0846c8e4a4dd27787")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3d261bb19afa445e362d98d1df7af954da9faf8b")]
 [assembly: System.Reflection.AssemblyProductAttribute("HygieneAudit.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HygieneAudit.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

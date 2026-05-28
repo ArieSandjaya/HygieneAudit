@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    ".NETFramework,Version=v4.8.1": {
+    ".NETFramework,Version=v4.8": {
       "Autofac/6.5.0": {
         "type": "package",
         "dependencies": {
@@ -56,7 +56,7 @@
           }
         }
       },
-      "Microsoft.AspNet.Cors/5.0.0": {
+      "Microsoft.AspNet.Cors/5.3.0": {
         "type": "package",
         "compile": {
           "lib/net45/System.Web.Cors.dll": {}
@@ -103,20 +103,35 @@
           }
         }
       },
-      "Microsoft.AspNet.WebApi.Owin/5.3.0": {
+      "Microsoft.AspNet.WebApi.Cors/5.3.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNet.WebApi.Core": "5.3.0",
-          "Microsoft.Owin": "4.2.2",
-          "Owin": "1.0.0"
+          "Microsoft.AspNet.Cors": "5.3.0",
+          "Microsoft.AspNet.WebApi.Core": "5.3.0"
         },
         "compile": {
-          "lib/net45/System.Web.Http.Owin.dll": {
+          "lib/net45/System.Web.Http.Cors.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net45/System.Web.Http.Owin.dll": {
+          "lib/net45/System.Web.Http.Cors.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Microsoft.AspNet.WebApi.WebHost/5.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Core": "5.3.0"
+        },
+        "compile": {
+          "lib/net45/System.Web.Http.WebHost.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/System.Web.Http.WebHost.dll": {
             "related": ".xml"
           }
         }
@@ -721,153 +736,6 @@
           }
         }
       },
-      "Microsoft.Owin/4.2.2": {
-        "type": "package",
-        "dependencies": {
-          "Owin": "1.0.0"
-        },
-        "compile": {
-          "lib/net45/Microsoft.Owin.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net45/Microsoft.Owin.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.Owin.Cors/4.2.2": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.AspNet.Cors": "5.0.0",
-          "Microsoft.Owin": "4.2.2",
-          "Owin": "1.0.0"
-        },
-        "compile": {
-          "lib/net45/Microsoft.Owin.Cors.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net45/Microsoft.Owin.Cors.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.Owin.Diagnostics/4.2.2": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Owin": "4.2.2",
-          "Owin": "1.0.0"
-        },
-        "compile": {
-          "lib/net45/Microsoft.Owin.Diagnostics.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net45/Microsoft.Owin.Diagnostics.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.Owin.FileSystems/4.2.2": {
-        "type": "package",
-        "compile": {
-          "lib/net45/Microsoft.Owin.FileSystems.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net45/Microsoft.Owin.FileSystems.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.Owin.Host.HttpListener/4.2.2": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Owin": "4.2.2",
-          "Owin": "1.0.0"
-        },
-        "compile": {
-          "lib/net45/Microsoft.Owin.Host.HttpListener.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net45/Microsoft.Owin.Host.HttpListener.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.Owin.Host.SystemWeb/4.2.2": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Owin": "4.2.2",
-          "Owin": "1.0.0"
-        },
-        "frameworkAssemblies": [
-          "System.Configuration",
-          "System.Web"
-        ],
-        "compile": {
-          "lib/net45/Microsoft.Owin.Host.SystemWeb.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net45/Microsoft.Owin.Host.SystemWeb.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.Owin.Hosting/4.2.2": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Owin": "4.2.2",
-          "Owin": "1.0.0"
-        },
-        "compile": {
-          "lib/net45/Microsoft.Owin.Hosting.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net45/Microsoft.Owin.Hosting.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.Owin.SelfHost/4.2.2": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Owin": "4.2.2",
-          "Microsoft.Owin.Diagnostics": "4.2.2",
-          "Microsoft.Owin.Host.HttpListener": "4.2.2",
-          "Microsoft.Owin.Hosting": "4.2.2",
-          "Owin": "1.0.0"
-        }
-      },
-      "Microsoft.Owin.StaticFiles/4.2.2": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Owin": "4.2.2",
-          "Microsoft.Owin.FileSystems": "4.2.2",
-          "Owin": "1.0.0"
-        },
-        "compile": {
-          "lib/net45/Microsoft.Owin.StaticFiles.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net45/Microsoft.Owin.StaticFiles.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
@@ -895,15 +763,6 @@
           "lib/net45/Newtonsoft.Json.Bson.dll": {
             "related": ".pdb;.xml"
           }
-        }
-      },
-      "Owin/1.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Owin.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Owin.dll": {}
         }
       },
       "System.Buffers/4.5.1": {
@@ -1238,7 +1097,7 @@
       },
       "HygieneAudit.Application/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.8.1",
+        "framework": ".NETFramework,Version=v4.8",
         "dependencies": {
           "BCrypt.Net-Next": "4.0.3",
           "HygieneAudit.Domain": "1.0.0",
@@ -1254,7 +1113,7 @@
       },
       "HygieneAudit.Domain/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.8.1",
+        "framework": ".NETFramework,Version=v4.8",
         "compile": {
           "bin/placeholder/HygieneAudit.Domain.dll": {}
         },
@@ -1264,7 +1123,7 @@
       },
       "HygieneAudit.Infrastructure/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.8.1",
+        "framework": ".NETFramework,Version=v4.8",
         "dependencies": {
           "HygieneAudit.Application": "1.0.0",
           "HygieneAudit.Domain": "1.0.0",
@@ -1348,15 +1207,17 @@
         "readme.md"
       ]
     },
-    "Microsoft.AspNet.Cors/5.0.0": {
-      "sha512": "jNwFhEnm0jRlaRCgHEk52hJQltVoM2Bllysv2NtPYrgsVWyS3r5BOtCXkM/lEZ5AdUUBOvha+4QAVcVp1MZp5g==",
+    "Microsoft.AspNet.Cors/5.3.0": {
+      "sha512": "GmnL9NNGTheEcUVSzjnFaMaCEIwWdvP6mBed1ux/7M0D2yc+uzZ6UN/gAA5mva1BZmah0G+F+MVaPkoValWpmQ==",
       "type": "package",
-      "path": "microsoft.aspnet.cors/5.0.0",
+      "path": "microsoft.aspnet.cors/5.3.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
+        "NET.icon.png",
+        "NET_Library_EULA_ENU.txt",
         "lib/net45/System.Web.Cors.dll",
-        "microsoft.aspnet.cors.5.0.0.nupkg.sha512",
+        "microsoft.aspnet.cors.5.3.0.nupkg.sha512",
         "microsoft.aspnet.cors.nuspec"
       ]
     },
@@ -1395,19 +1256,34 @@
         "microsoft.aspnet.webapi.core.nuspec"
       ]
     },
-    "Microsoft.AspNet.WebApi.Owin/5.3.0": {
-      "sha512": "goLNSAd5Vzp6nKlCueU9IeV4HbqCYYhl2qjAPNJcvyoK1W3uq3AQeebRuFZeQ5zJG9+ACG5jCpOhEu98gw79hg==",
+    "Microsoft.AspNet.WebApi.Cors/5.3.0": {
+      "sha512": "TsXWN+j08g8VWvLZCAxo3z7d1tBiDHUoXM/d5ES5+2/PJX42nsJCMtGjBOn+by8A1fQyPlYPStEnA9Fc8na6WQ==",
       "type": "package",
-      "path": "microsoft.aspnet.webapi.owin/5.3.0",
+      "path": "microsoft.aspnet.webapi.cors/5.3.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "NET.icon.png",
         "NET_Library_EULA_ENU.txt",
-        "lib/net45/System.Web.Http.Owin.dll",
-        "lib/net45/System.Web.Http.Owin.xml",
-        "microsoft.aspnet.webapi.owin.5.3.0.nupkg.sha512",
-        "microsoft.aspnet.webapi.owin.nuspec"
+        "lib/net45/System.Web.Http.Cors.dll",
+        "lib/net45/System.Web.Http.Cors.xml",
+        "microsoft.aspnet.webapi.cors.5.3.0.nupkg.sha512",
+        "microsoft.aspnet.webapi.cors.nuspec"
+      ]
+    },
+    "Microsoft.AspNet.WebApi.WebHost/5.3.0": {
+      "sha512": "8eE0saCz7qWVwEBd/1vwycROmD8+UTbnw9aJmBAMVbn/Sh8lTDvDMOHt2NjrdmsZTLXELhAIbXg3Ffhy2u63mA==",
+      "type": "package",
+      "path": "microsoft.aspnet.webapi.webhost/5.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NET.icon.png",
+        "NET_Library_EULA_ENU.txt",
+        "lib/net45/System.Web.Http.WebHost.dll",
+        "lib/net45/System.Web.Http.WebHost.xml",
+        "microsoft.aspnet.webapi.webhost.5.3.0.nupkg.sha512",
+        "microsoft.aspnet.webapi.webhost.nuspec"
       ]
     },
     "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
@@ -2075,131 +1951,6 @@
         "microsoft.identitymodel.tokens.nuspec"
       ]
     },
-    "Microsoft.Owin/4.2.2": {
-      "sha512": "jt410l/8dvCIguRdU7dupYdm4kGLepVdD8EOTKU4nYZcLRrn6kQYqI6pbJOTJp7Vlm/T2WUF5bzyKK2z29xtjg==",
-      "type": "package",
-      "path": "microsoft.owin/4.2.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "lib/net45/Microsoft.Owin.dll",
-        "lib/net45/Microsoft.Owin.xml",
-        "microsoft.owin.4.2.2.nupkg.sha512",
-        "microsoft.owin.nuspec"
-      ]
-    },
-    "Microsoft.Owin.Cors/4.2.2": {
-      "sha512": "v5+J/LZ40kA7nmJi42nyOvZ10HrkLzg11tg9Gyxgns45QjmVBBuEhtUscs+JszL4YEglFwQPAK/iwcBIqAbb/w==",
-      "type": "package",
-      "path": "microsoft.owin.cors/4.2.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "lib/net45/Microsoft.Owin.Cors.dll",
-        "lib/net45/Microsoft.Owin.Cors.xml",
-        "microsoft.owin.cors.4.2.2.nupkg.sha512",
-        "microsoft.owin.cors.nuspec"
-      ]
-    },
-    "Microsoft.Owin.Diagnostics/4.2.2": {
-      "sha512": "2Ia8e/9qeMRdp9wSCcdgorooLGYnmlTVMP8n2BWHyzzGSJLdx50qerbvosgZBSpOxhd2PBmOAfY4nNnayvMygg==",
-      "type": "package",
-      "path": "microsoft.owin.diagnostics/4.2.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "lib/net45/Microsoft.Owin.Diagnostics.dll",
-        "lib/net45/Microsoft.Owin.Diagnostics.xml",
-        "microsoft.owin.diagnostics.4.2.2.nupkg.sha512",
-        "microsoft.owin.diagnostics.nuspec"
-      ]
-    },
-    "Microsoft.Owin.FileSystems/4.2.2": {
-      "sha512": "GDYA+V0xJkqdp5lRehCJ3vT8Fp1OjmKLvKibEvYTgwg41CtUXduo5xKpsfnZ2IYCszUSrGJ8OdUKtoFc7mpMcw==",
-      "type": "package",
-      "path": "microsoft.owin.filesystems/4.2.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "lib/net45/Microsoft.Owin.FileSystems.dll",
-        "lib/net45/Microsoft.Owin.FileSystems.xml",
-        "microsoft.owin.filesystems.4.2.2.nupkg.sha512",
-        "microsoft.owin.filesystems.nuspec"
-      ]
-    },
-    "Microsoft.Owin.Host.HttpListener/4.2.2": {
-      "sha512": "Kl1A0sBzfMD3qvX6XcGU0FopN6POFFRpIEQnKIAbvsShadIG9/UxgDdHVlX/IzFHXwIHfY59Ae4RGDVKYNvIqQ==",
-      "type": "package",
-      "path": "microsoft.owin.host.httplistener/4.2.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "lib/net45/Microsoft.Owin.Host.HttpListener.dll",
-        "lib/net45/Microsoft.Owin.Host.HttpListener.xml",
-        "microsoft.owin.host.httplistener.4.2.2.nupkg.sha512",
-        "microsoft.owin.host.httplistener.nuspec"
-      ]
-    },
-    "Microsoft.Owin.Host.SystemWeb/4.2.2": {
-      "sha512": "MYdqpNXC5xX7pVAnhGDfZvU7ybylYENqnV17XYGGkInk3Hco2Fx8t4nVBXBoAw/3ox6cNTbazq+EiS4Pi9lGQA==",
-      "type": "package",
-      "path": "microsoft.owin.host.systemweb/4.2.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "lib/net45/Microsoft.Owin.Host.SystemWeb.dll",
-        "lib/net45/Microsoft.Owin.Host.SystemWeb.xml",
-        "microsoft.owin.host.systemweb.4.2.2.nupkg.sha512",
-        "microsoft.owin.host.systemweb.nuspec"
-      ]
-    },
-    "Microsoft.Owin.Hosting/4.2.2": {
-      "sha512": "KsupM0TNPUfLn1uHvQy22IX6VWE+wi7C2shseSnhO9JYFxgwWcsSmjxrRpw+xcD+4hA3O280tBxfZ6T+kJuhjg==",
-      "type": "package",
-      "path": "microsoft.owin.hosting/4.2.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "lib/net45/Microsoft.Owin.Hosting.dll",
-        "lib/net45/Microsoft.Owin.Hosting.xml",
-        "microsoft.owin.hosting.4.2.2.nupkg.sha512",
-        "microsoft.owin.hosting.nuspec"
-      ]
-    },
-    "Microsoft.Owin.SelfHost/4.2.2": {
-      "sha512": "v3+uEiIFPlaWwAPqOmF3XgjlyQhCnWKuwFU1v/7praTwkkaLXNJ8W4I3H81FGjKMIOPkrUyxfn3S3k4Tbe7u2Q==",
-      "type": "package",
-      "path": "microsoft.owin.selfhost/4.2.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "README.md",
-        "microsoft.owin.selfhost.4.2.2.nupkg.sha512",
-        "microsoft.owin.selfhost.nuspec"
-      ]
-    },
-    "Microsoft.Owin.StaticFiles/4.2.2": {
-      "sha512": "yRflUgZxWRMUap4QqDjev9q3tY9eGh6JETYKTD5UaVxbggRRfxhQ65QH/8vo6Wc9rSAlPIrLtd21EFfv83lxvQ==",
-      "type": "package",
-      "path": "microsoft.owin.staticfiles/4.2.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "lib/net45/Microsoft.Owin.StaticFiles.dll",
-        "lib/net45/Microsoft.Owin.StaticFiles.xml",
-        "microsoft.owin.staticfiles.4.2.2.nupkg.sha512",
-        "microsoft.owin.staticfiles.nuspec"
-      ]
-    },
     "Newtonsoft.Json/13.0.3": {
       "sha512": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
       "type": "package",
@@ -2249,18 +2000,6 @@
         "lib/netstandard2.0/Newtonsoft.Json.Bson.xml",
         "newtonsoft.json.bson.1.0.2.nupkg.sha512",
         "newtonsoft.json.bson.nuspec"
-      ]
-    },
-    "Owin/1.0.0": {
-      "sha512": "OseTFniKmyp76mEzOBwIKGBRS5eMoYNkMKaMXOpxx9jv88+b6mh1rSaw43vjBOItNhaLFG3d0a20PfHyibH5sw==",
-      "type": "package",
-      "path": "owin/1.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net40/Owin.dll",
-        "owin.1.0.0.nupkg.sha512",
-        "owin.nuspec"
       ]
     },
     "System.Buffers/4.5.1": {
@@ -3067,19 +2806,15 @@
     }
   },
   "projectFileDependencyGroups": {
-    ".NETFramework,Version=v4.8.1": [
+    ".NETFramework,Version=v4.8": [
       "Autofac >= 6.5.0",
       "Autofac.WebApi2 >= 6.0.0",
       "HygieneAudit.Application >= 1.0.0",
       "HygieneAudit.Infrastructure >= 1.0.0",
       "Microsoft.AspNet.WebApi.Core >= 5.3.0",
-      "Microsoft.AspNet.WebApi.Owin >= 5.3.0",
+      "Microsoft.AspNet.WebApi.Cors >= 5.3.0",
+      "Microsoft.AspNet.WebApi.WebHost >= 5.3.0",
       "Microsoft.Extensions.Configuration.Json >= 6.0.0",
-      "Microsoft.Owin >= 4.2.2",
-      "Microsoft.Owin.Cors >= 4.2.2",
-      "Microsoft.Owin.Host.SystemWeb >= 4.2.2",
-      "Microsoft.Owin.SelfHost >= 4.2.2",
-      "Microsoft.Owin.StaticFiles >= 4.2.2",
       "Newtonsoft.Json >= 13.0.3",
       "System.IdentityModel.Tokens.Jwt >= 7.1.2"
     ]
@@ -3108,7 +2843,7 @@
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "net481"
+        "net48"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -3116,8 +2851,8 @@
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net481": {
-          "targetAlias": "net481",
+        "net48": {
+          "targetAlias": "net48",
           "projectReferences": {
             "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj": {
               "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj"
@@ -3141,8 +2876,8 @@
       "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
-      "net481": {
-        "targetAlias": "net481",
+      "net48": {
+        "targetAlias": "net48",
         "dependencies": {
           "Autofac": {
             "target": "Package",
@@ -3156,33 +2891,17 @@
             "target": "Package",
             "version": "[5.3.0, )"
           },
-          "Microsoft.AspNet.WebApi.Owin": {
+          "Microsoft.AspNet.WebApi.Cors": {
+            "target": "Package",
+            "version": "[5.3.0, )"
+          },
+          "Microsoft.AspNet.WebApi.WebHost": {
             "target": "Package",
             "version": "[5.3.0, )"
           },
           "Microsoft.Extensions.Configuration.Json": {
             "target": "Package",
             "version": "[6.0.0, )"
-          },
-          "Microsoft.Owin": {
-            "target": "Package",
-            "version": "[4.2.2, )"
-          },
-          "Microsoft.Owin.Cors": {
-            "target": "Package",
-            "version": "[4.2.2, )"
-          },
-          "Microsoft.Owin.Host.SystemWeb": {
-            "target": "Package",
-            "version": "[4.2.2, )"
-          },
-          "Microsoft.Owin.SelfHost": {
-            "target": "Package",
-            "version": "[4.2.2, )"
-          },
-          "Microsoft.Owin.StaticFiles": {
-            "target": "Package",
-            "version": "[4.2.2, )"
           },
           "Newtonsoft.Json": {
             "target": "Package",

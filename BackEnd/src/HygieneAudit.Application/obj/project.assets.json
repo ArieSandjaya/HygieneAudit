@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    ".NETFramework,Version=v4.8.1": {
+    ".NETFramework,Version=v4.8": {
       "BCrypt.Net-Next/4.0.3": {
         "type": "package",
         "dependencies": {
@@ -338,7 +338,7 @@
       },
       "HygieneAudit.Domain/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.8.1",
+        "framework": ".NETFramework,Version=v4.8",
         "compile": {
           "bin/placeholder/HygieneAudit.Domain.dll": {}
         },
@@ -842,7 +842,7 @@
     }
   },
   "projectFileDependencyGroups": {
-    ".NETFramework,Version=v4.8.1": [
+    ".NETFramework,Version=v4.8": [
       "BCrypt.Net-Next >= 4.0.3",
       "HygieneAudit.Domain >= 1.0.0",
       "Microsoft.Extensions.Configuration >= 6.0.0",
@@ -873,7 +873,7 @@
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "net481"
+        "net48"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -881,8 +881,8 @@
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net481": {
-          "targetAlias": "net481",
+        "net48": {
+          "targetAlias": "net48",
           "projectReferences": {
             "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj": {
               "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj"
@@ -903,8 +903,8 @@
       "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
-      "net481": {
-        "targetAlias": "net481",
+      "net48": {
+        "targetAlias": "net48",
         "dependencies": {
           "BCrypt.Net-Next": {
             "target": "Package",

@@ -23,7 +23,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net481"
+          "net48"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -31,8 +31,8 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net481": {
-            "targetAlias": "net481",
+          "net48": {
+            "targetAlias": "net48",
             "projectReferences": {
               "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj": {
                 "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Domain\\HygieneAudit.Domain.csproj"
@@ -53,8 +53,8 @@
         "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
-        "net481": {
-          "targetAlias": "net481",
+        "net48": {
+          "targetAlias": "net48",
           "dependencies": {
             "BCrypt.Net-Next": {
               "target": "Package",
@@ -92,7 +92,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net481"
+          "net48"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -100,8 +100,8 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net481": {
-            "targetAlias": "net481",
+          "net48": {
+            "targetAlias": "net48",
             "projectReferences": {}
           }
         },
@@ -118,8 +118,8 @@
         "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
-        "net481": {
-          "targetAlias": "net481",
+        "net48": {
+          "targetAlias": "net48",
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313\\RuntimeIdentifierGraph.json"
         }
       }
@@ -143,7 +143,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net481"
+          "net48"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -151,8 +151,8 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net481": {
-            "targetAlias": "net481",
+          "net48": {
+            "targetAlias": "net48",
             "projectReferences": {
               "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj": {
                 "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj"
@@ -176,8 +176,8 @@
         "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
-        "net481": {
-          "targetAlias": "net481",
+        "net48": {
+          "targetAlias": "net48",
           "dependencies": {
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",

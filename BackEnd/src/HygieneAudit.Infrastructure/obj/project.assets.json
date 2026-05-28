@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    ".NETFramework,Version=v4.8.1": {
+    ".NETFramework,Version=v4.8": {
       "BCrypt.Net-Next/4.0.3": {
         "type": "package",
         "dependencies": {
@@ -998,7 +998,7 @@
       },
       "HygieneAudit.Application/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.8.1",
+        "framework": ".NETFramework,Version=v4.8",
         "dependencies": {
           "BCrypt.Net-Next": "4.0.3",
           "HygieneAudit.Domain": "1.0.0",
@@ -1014,7 +1014,7 @@
       },
       "HygieneAudit.Domain/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.8.1",
+        "framework": ".NETFramework,Version=v4.8",
         "compile": {
           "bin/placeholder/HygieneAudit.Domain.dll": {}
         },
@@ -2632,7 +2632,7 @@
     }
   },
   "projectFileDependencyGroups": {
-    ".NETFramework,Version=v4.8.1": [
+    ".NETFramework,Version=v4.8": [
       "HygieneAudit.Application >= 1.0.0",
       "HygieneAudit.Domain >= 1.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 3.1.32",
@@ -2664,7 +2664,7 @@
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "net481"
+        "net48"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -2672,8 +2672,8 @@
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net481": {
-          "targetAlias": "net481",
+        "net48": {
+          "targetAlias": "net48",
           "projectReferences": {
             "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj": {
               "projectPath": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.Application\\HygieneAudit.Application.csproj"
@@ -2697,8 +2697,8 @@
       "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
-      "net481": {
-        "targetAlias": "net481",
+      "net48": {
+        "targetAlias": "net48",
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Design": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
