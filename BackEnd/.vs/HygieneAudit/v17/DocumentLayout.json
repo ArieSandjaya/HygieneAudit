@@ -3,8 +3,20 @@
   "WorkspaceRootPath": "F:\\CIH\\HygieneAudit\\BackEnd\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|f:\\cih\\hygieneaudit\\backend\\src\\hygieneaudit.api\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{D4E5F6A7-B8C9-0123-4567-890123DEF012}|src\\HygieneAudit.API\\HygieneAudit.API.csproj|solutionrelative:src\\hygieneaudit.api\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|f:\\cih\\hygieneaudit\\backend\\webapps\\app_start\\autofacconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|solutionrelative:webapps\\app_start\\autofacconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|f:\\cih\\hygieneaudit\\backend\\webapps\\controllers\\managecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|solutionrelative:webapps\\controllers\\managecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|f:\\cih\\hygieneaudit\\backend\\webapps\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|solutionrelative:webapps\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|f:\\cih\\hygieneaudit\\backend\\webapps\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|solutionrelative:webapps\\appsettings.production.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,15 +38,54 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ManageController.cs",
+              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\WebApps\\Controllers\\ManageController.cs",
+              "RelativeDocumentMoniker": "WebApps\\Controllers\\ManageController.cs",
+              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\WebApps\\Controllers\\ManageController.cs",
+              "RelativeToolTip": "WebApps\\Controllers\\ManageController.cs",
+              "ViewState": "AgIAAKMAAAAAAAAAAAAAwC0BAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-28T08:45:28.727Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "AutofacConfig.cs",
+              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\WebApps\\App_Start\\AutofacConfig.cs",
+              "RelativeDocumentMoniker": "WebApps\\App_Start\\AutofacConfig.cs",
+              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\WebApps\\App_Start\\AutofacConfig.cs",
+              "RelativeToolTip": "WebApps\\App_Start\\AutofacConfig.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAAAAwEgAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-28T08:45:26Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "appsettings.Production.json",
-              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\appsettings.Production.json",
-              "RelativeDocumentMoniker": "src\\HygieneAudit.API\\appsettings.Production.json",
-              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\src\\HygieneAudit.API\\appsettings.Production.json",
-              "RelativeToolTip": "src\\HygieneAudit.API\\appsettings.Production.json",
+              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\WebApps\\appsettings.Production.json",
+              "RelativeDocumentMoniker": "WebApps\\appsettings.Production.json",
+              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\WebApps\\appsettings.Production.json",
+              "RelativeToolTip": "WebApps\\appsettings.Production.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-05-28T07:22:04.586Z",
+              "WhenOpened": "2026-05-28T08:44:42.983Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\WebApps\\appsettings.json",
+              "RelativeDocumentMoniker": "WebApps\\appsettings.json",
+              "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\WebApps\\appsettings.json",
+              "RelativeToolTip": "WebApps\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-05-28T08:44:40.057Z",
               "EditorCaption": ""
             }
           ]
