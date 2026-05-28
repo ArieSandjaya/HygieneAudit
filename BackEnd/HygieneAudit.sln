@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HygieneAudit.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HygieneAudit.API", "src\HygieneAudit.API\HygieneAudit.API.csproj", "{D4E5F6A7-B8C9-0123-4567-890123DEF012}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HygieneAudit.Web", "src\HygieneAudit.Web\HygieneAudit.Web.csproj", "{E5F6A7B8-C9D0-0123-5678-90ABCDEF1234}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{D4E5F6A7-B8C9-0123-4567-890123DEF012}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4E5F6A7-B8C9-0123-4567-890123DEF012}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4E5F6A7-B8C9-0123-4567-890123DEF012}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5F6A7B8-C9D0-0123-5678-90ABCDEF1234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5F6A7B8-C9D0-0123-5678-90ABCDEF1234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5F6A7B8-C9D0-0123-5678-90ABCDEF1234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5F6A7B8-C9D0-0123-5678-90ABCDEF1234}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +49,7 @@ Global
 		{B2C3D4E5-F6A7-8901-2345-678901BCDEF0} = {C8F2D2E1-4B8A-4C1E-9F3D-2A1B3C4D5E6F}
 		{C3D4E5F6-A7B8-9012-3456-789012CDEF01} = {C8F2D2E1-4B8A-4C1E-9F3D-2A1B3C4D5E6F}
 		{D4E5F6A7-B8C9-0123-4567-890123DEF012} = {C8F2D2E1-4B8A-4C1E-9F3D-2A1B3C4D5E6F}
+		{E5F6A7B8-C9D0-0123-5678-90ABCDEF1234} = {C8F2D2E1-4B8A-4C1E-9F3D-2A1B3C4D5E6F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DF083165-CC31-412B-9C34-3E9AFAAF05A6}
