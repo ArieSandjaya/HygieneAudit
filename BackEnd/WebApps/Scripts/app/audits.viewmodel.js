@@ -108,6 +108,7 @@ function AuditDetailViewModel(auditId) {
                 if (!grouped[item.category]) grouped[item.category] = [];
                 item.status = ko.observable(item.status || '');
                 item.note   = ko.observable(item.note   || '');
+                item.photos = ko.observableArray(item.photos || []);
                 grouped[item.category].push(item);
             });
             self.categories(Object.keys(grouped).map(function (k) {
@@ -116,13 +117,35 @@ function AuditDetailViewModel(auditId) {
         });
     };
 
+    self.addPhoto = function (item, event) {
+        var files = event.target.files;
+        if (!files || !files.length) return;
+        var reads = Array.prototype.map.call(files, function (f) {
+            return new Promise(function (resolve) {
+                var reader = new FileReader();
+                reader.onload = function (e) { resolve(e.target.result); };
+                reader.readAsDataURL(f);
+            });
+        });
+        Promise.all(reads).then(function (dataUrls) {
+            dataUrls.forEach(function (url) { item.photos.push(url); });
+            self.onItemChange(item);
+        });
+        event.target.value = '';
+    };
+
+    self.removePhoto = function (item, url) {
+        item.photos.remove(url);
+        self.onItemChange(item);
+    };
+
     self.setItemStatus = function (item, status) {
         item.status(item.status() === status ? '' : status); // toggle off jika klik ulang
         self.onItemChange(item);
     };
 
     self.onItemChange = function (item) {
-        var data = { status: item.status(), note: item.note(), photos: [] };
+        var data = { status: item.status(), note: item.note(), photos: item.photos() };
         $.ajax({
             url: '/api/audits/' + auditId + '/items/' + item.templateId,
             type: 'PUT', contentType: 'application/json', data: JSON.stringify(data)

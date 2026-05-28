@@ -71,6 +71,7 @@
                             <th>Item</th>
                             <th style="width:140px;" class="text-center">Status</th>
                             <th>Catatan</th>
+                            <th style="width:160px;">Foto</th>
                         </tr>
                     </thead>
                     <tbody data-bind="foreach: items">
@@ -98,6 +99,27 @@
                                 <span class="text-muted small" data-bind="visible: status() !== 'FAIL' && note()">
                                     <i class="bx bx-note me-1"></i><span data-bind="text: note"></span>
                                 </span>
+                            </td>
+                            <td class="align-middle">
+                                <label class="btn btn-sm btn-outline-secondary mb-1"
+                                       data-bind="visible: $root.status() !== 'COMPLETED'">
+                                    <i class="bx bx-camera"></i>
+                                    <input type="file" accept="image/*" multiple class="d-none"
+                                           data-bind="event: { change: function(d,e){ $root.addPhoto($data, e) } }" />
+                                </label>
+                                <!-- ko foreach: photos -->
+                                <div class="d-inline-block position-relative me-1 mb-1" style="width:52px;height:52px;">
+                                    <img data-bind="attr: { src: $data }"
+                                         style="width:52px;height:52px;object-fit:cover;border-radius:4px;" />
+                                    <!-- ko if: $root.status() !== 'COMPLETED' -->
+                                    <button type="button" class="btn btn-danger position-absolute top-0 end-0 p-0"
+                                            style="width:16px;height:16px;font-size:9px;border-radius:50%;min-width:0;line-height:1;"
+                                            data-bind="click: function(){ $root.removePhoto($parent, $data) }">
+                                        &times;
+                                    </button>
+                                    <!-- /ko -->
+                                </div>
+                                <!-- /ko -->
                             </td>
                         </tr>
                     </tbody>
