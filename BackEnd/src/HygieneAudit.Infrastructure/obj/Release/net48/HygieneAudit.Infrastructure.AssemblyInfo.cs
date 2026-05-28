@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HygieneAudit.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8a3455eacffb0f79f3a60a3faf2decdf6a7a35b2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+26040ea9da9956d6eb45f89cf4eec709c771abfe")]
 [assembly: System.Reflection.AssemblyProductAttribute("HygieneAudit.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HygieneAudit.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
