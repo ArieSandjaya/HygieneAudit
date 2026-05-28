@@ -21,15 +21,19 @@
         </div>
         <div class="card-body">
             <div class="row g-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Tenant</label>
                     <select class="form-select" data-bind="value: newAudit.tenantId, options: tenants, optionsText: 'name', optionsValue: 'id', optionsCaption: '-- Pilih Tenant --'"></select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Tanggal</label>
                     <input type="date" class="form-control" data-bind="value: newAudit.auditDate" />
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <label class="form-label">PIC (Auditor)</label>
+                    <select class="form-select" data-bind="value: newAudit.picId, options: users, optionsText: 'name', optionsValue: 'id', optionsCaption: '-- Pilih PIC --'"></select>
+                </div>
+                <div class="col-md-3">
                     <label class="form-label">Tipe</label>
                     <select class="form-select" data-bind="value: newAudit.includeGas">
                         <option value="false">Tanpa Gas</option>
@@ -44,9 +48,28 @@
         </div>
     </div>
 
+    <!-- Filter Tabs -->
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a class="nav-link" href="#" data-bind="click: function(){ activeTab('all') }, css: { active: activeTab() === 'all' }">
+                Semua <span class="badge bg-label-secondary ms-1" data-bind="text: audits().length"></span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" data-bind="click: function(){ activeTab('active') }, css: { active: activeTab() === 'active' }">
+                Aktif <span class="badge bg-label-warning ms-1" data-bind="text: audits().filter(function(a){ return a.status !== 'COMPLETED'; }).length"></span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" data-bind="click: function(){ activeTab('history') }, css: { active: activeTab() === 'history' }">
+                History <span class="badge bg-label-success ms-1" data-bind="text: audits().filter(function(a){ return a.status === 'COMPLETED'; }).length"></span>
+            </a>
+        </li>
+    </ul>
+
     <!-- Audit Table -->
     <div class="card">
-        <div class="card-header"><h5 class="card-title mb-0">Semua Audit</h5></div>
+        <div class="card-header"><h5 class="card-title mb-0" data-bind="text: activeTab() === 'history' ? 'Riwayat Audit (Completed)' : activeTab() === 'active' ? 'Audit Aktif' : 'Semua Audit'"></h5></div>
         <div class="table-responsive">
             <table class="table table-hover mb-0">
                 <thead class="table-light">
@@ -54,29 +77,33 @@
                         <th>Tenant</th>
                         <th>Tanggal</th>
                         <th>PIC</th>
-                        <th>Status</th>
+                        <th class="text-center">Tipe</th>
+                        <th class="text-center">Status</th>
                         <th>Pass Rate</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody data-bind="foreach: audits">
+                <tbody data-bind="foreach: filteredAudits">
                     <tr>
                         <td><span class="fw-semibold" data-bind="text: tenantName"></span></td>
-                        <td data-bind="text: new Date(auditDate).toLocaleDateString('id-ID')"></td>
+                        <td data-bind="text: new Date(date).toLocaleDateString('id-ID')"></td>
                         <td data-bind="text: picName"></td>
-                        <td>
-                            <span class="badge" data-bind="text: status, css: { 'bg-label-success': status === 'Completed', 'bg-label-warning': status === 'Draft', 'bg-label-info': status === 'InProgress' }"></span>
+                        <td class="text-center">
+                            <span class="badge" data-bind="text: isGas ? 'Gas' : 'Non-Gas', css: { 'bg-label-info': isGas, 'bg-label-secondary': !isGas }"></span>
                         </td>
-                        <td>
+                        <td class="text-center">
+                            <span class="badge" data-bind="text: status, css: { 'bg-label-success': status === 'COMPLETED', 'bg-label-warning': status === 'DRAFT' }"></span>
+                        </td>
+                        <td style="min-width:120px;">
                             <div class="d-flex align-items-center gap-2">
-                                <div class="progress flex-grow-1" style="height:6px;min-width:60px;">
-                                    <div class="progress-bar bg-primary" data-bind="style: { width: (passRate * 100).toFixed(0) + '%' }"></div>
+                                <div class="progress flex-grow-1" style="height:6px;">
+                                    <div class="progress-bar bg-success" data-bind="style: { width: (passRate * 100).toFixed(0) + '%' }"></div>
                                 </div>
                                 <small data-bind="text: (passRate * 100).toFixed(0) + '%'"></small>
                             </div>
                         </td>
                         <td class="text-center">
-                            <a data-bind="attr: { href: '/Audits/Detail/' + id }" class="btn btn-sm btn-icon btn-outline-primary">
+                            <a data-bind="attr: { href: '/Audits/Detail/' + id }" class="btn btn-sm btn-icon btn-outline-primary" title="Buka">
                                 <i class="bx bx-edit-alt"></i>
                             </a>
                         </td>
@@ -84,7 +111,7 @@
                 </tbody>
             </table>
         </div>
-        <div data-bind="visible: audits().length === 0" class="text-center text-muted py-5">
+        <div data-bind="visible: filteredAudits().length === 0" class="text-center text-muted py-5">
             <i class="bx bx-clipboard bx-lg d-block mb-2"></i>
             Belum ada data audit.
         </div>
