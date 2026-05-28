@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "F:\\CIH\\HygieneAudit\\BackEnd\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|f:\\cih\\hygieneaudit\\backend\\webapps\\controllers\\managecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|solutionrelative:webapps\\controllers\\managecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|f:\\cih\\hygieneaudit\\backend\\webapps\\app_start\\autofacconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|solutionrelative:webapps\\app_start\\autofacconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|f:\\cih\\hygieneaudit\\backend\\webapps\\controllers\\managecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|solutionrelative:webapps\\controllers\\managecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D4A3A3BC-86AB-4519-9AEC-4409F6031FBC}|WebApps\\WebApps.csproj|f:\\cih\\hygieneaudit\\backend\\webapps\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -26,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,7 +38,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ManageController.cs",
               "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\WebApps\\Controllers\\ManageController.cs",
               "RelativeDocumentMoniker": "WebApps\\Controllers\\ManageController.cs",
@@ -51,13 +51,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "AutofacConfig.cs",
               "DocumentMoniker": "F:\\CIH\\HygieneAudit\\BackEnd\\WebApps\\App_Start\\AutofacConfig.cs",
               "RelativeDocumentMoniker": "WebApps\\App_Start\\AutofacConfig.cs",
               "ToolTip": "F:\\CIH\\HygieneAudit\\BackEnd\\WebApps\\App_Start\\AutofacConfig.cs",
               "RelativeToolTip": "WebApps\\App_Start\\AutofacConfig.cs",
-              "ViewState": "AgIAADQAAAAAAAAAAAAAwEQAAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAADgAAAAAAAAAAAAAwEgAAABPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-28T08:45:26Z",
               "EditorCaption": ""
