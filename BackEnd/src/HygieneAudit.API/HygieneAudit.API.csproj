@@ -53,6 +53,16 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <!-- BCL polyfills: harus direct dependency agar NuGet meng-copy DLL-nya ke bin\.
+         Sebagai transitive dependency di old-style project, NuGet menganggap mereka
+         "framework-provided" dan skip copy, sehingga runtime jatuh ke versi GAC
+         yang tidak cocok dengan binding redirect dan menghasilkan FileLoadException. -->
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+    <PackageReference Include="System.Buffers" Version="4.5.1" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Net.Http" />
