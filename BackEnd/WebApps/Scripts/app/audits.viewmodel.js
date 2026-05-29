@@ -213,7 +213,7 @@ function AuditDetailViewModel(auditId) {
         $.ajax({
             url: '/api/audits/' + auditId + '/items/' + item.templateId,
             type: 'PUT', contentType: 'application/json', data: JSON.stringify(data)
-        });
+        }).fail(function () { showToast('Gagal menyimpan perubahan item.', 'error'); });
     };
 
     self.saveDraft = function () {
