@@ -16,10 +16,14 @@
     <title>@(ViewBag.Title != null ? ViewBag.Title + " | " : "")Hygiene Audit</title>
     <meta name="description" content="Aplikasi Audit Hygiene" />
     <meta name="theme-color" content="#696cff" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="HygieneAudit" />
 
     <!-- PWA -->
     <link rel="manifest" href="@Url.Content("~/manifest.json")" />
-    <link rel="apple-touch-icon" href="@Url.Content("~/Content/sneat/img/favicon/favicon.ico")" />
+    <link rel="apple-touch-icon" sizes="192x192" href="@Url.Content("~/Content/sneat/img/pwa-192.png")" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="@Url.Content("~/Content/sneat/img/favicon/favicon.ico")" />
