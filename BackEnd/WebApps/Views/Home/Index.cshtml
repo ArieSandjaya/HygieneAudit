@@ -169,30 +169,43 @@
                 return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
             }
 
-            var html = '<div class="table-responsive"><table class="table table-hover mb-0"><thead class="table-light"><tr>' +
-                '<th>Tenant</th><th>Tanggal</th><th>PIC</th><th class="text-center">Status</th><th>Pass Rate</th><th class="text-center">Aksi</th>' +
-                '</tr></thead><tbody>';
-
-            recent.forEach(function (a) {
+            var html = '';
+            recent.forEach(function (a, idx) {
                 var items    = a.items || [];
                 var pass     = items.filter(function (i) { return i.status === 'PASS'; }).length;
                 var rate     = items.length > 0 ? Math.round(pass / items.length * 100) : 0;
+                var barColor = rate >= 70 ? '#22c55e' : '#ef4444';
+                var rateColor = rate >= 70 ? '#22c55e' : '#ef4444';
                 var statusCss = a.status === 'COMPLETED' ? 'bg-label-success' : 'bg-label-warning';
+                var sideColor = a.status === 'COMPLETED' ? '#22c55e' : '#f59e0b';
                 var date      = new Date(a.date).toLocaleDateString('id-ID');
+                var border    = idx < recent.length - 1 ? 'border-bottom' : '';
 
-                html += '<tr>' +
-                    '<td><span class="fw-semibold">' + escHtml(a.tenantName) + '</span></td>' +
-                    '<td>' + date + '</td>' +
-                    '<td>' + escHtml(a.picName) + '</td>' +
-                    '<td class="text-center"><span class="badge ' + statusCss + '">' + escHtml(a.status) + '</span></td>' +
-                    '<td style="min-width:110px;"><div class="d-flex align-items-center gap-2">' +
-                        '<div class="progress flex-grow-1" style="height:6px;"><div class="progress-bar bg-success" style="width:' + rate + '%"></div></div>' +
-                        '<small>' + rate + '%</small></div></td>' +
-                    '<td class="text-center"><a href="/Audits/Detail/' + parseInt(a.id, 10) + '" class="btn btn-sm btn-icon btn-outline-primary" title="Buka"><i class="bx bx-edit-alt"></i></a></td>' +
-                    '</tr>';
+                html += '<div class="d-flex align-items-center gap-3 px-3 py-3 ' + border + '" style="transition:background .12s;" ' +
+                    'onmouseenter="this.style.background=\'#f8f8ff\'" onmouseleave="this.style.background=\'\'">' +
+                    '<div style="width:4px;height:44px;border-radius:4px;flex-shrink:0;background:' + sideColor + '"></div>' +
+                    '<div style="flex:1;min-width:0;">' +
+                        '<div class="d-flex justify-content-between align-items-start gap-2 mb-1">' +
+                            '<span class="fw-semibold text-truncate" style="max-width:160px;">' + escHtml(a.tenantName) + '</span>' +
+                            '<span class="badge ' + statusCss + ' flex-shrink-0">' + escHtml(a.status) + '</span>' +
+                        '</div>' +
+                        '<div class="text-muted mb-2" style="font-size:12px;">' +
+                            '<i class="bx bx-calendar-alt me-1"></i>' + date +
+                            ' &bull; <i class="bx bx-user me-1"></i>' + escHtml(a.picName) +
+                        '</div>' +
+                        '<div class="d-flex align-items-center gap-2">' +
+                            '<div class="progress flex-grow-1" style="height:6px;border-radius:4px;">' +
+                                '<div class="progress-bar" style="width:' + rate + '%;background:' + barColor + ';border-radius:4px;"></div>' +
+                            '</div>' +
+                            '<small class="fw-semibold" style="min-width:32px;text-align:right;color:' + rateColor + ';">' + rate + '%</small>' +
+                        '</div>' +
+                    '</div>' +
+                    '<a href="/Audits/Detail/' + parseInt(a.id, 10) + '" class="btn btn-icon btn-outline-primary flex-shrink-0" style="width:36px;height:36px;" title="Buka">' +
+                        '<i class="bx bx-chevron-right"></i>' +
+                    '</a>' +
+                '</div>';
             });
 
-            html += '</tbody></table></div>';
             container.innerHTML = html;
         }).fail(function () {
             ['statTotal', 'statCompleted', 'statDraft', 'statFail'].forEach(function (id) {
