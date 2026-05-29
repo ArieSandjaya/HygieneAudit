@@ -6,78 +6,66 @@
     var isAdmin = userRole == "Admin" || userRole == "SuperAdmin";
 }
 
-<!-- Header -->
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
-    <div>
-        <h4 class="fw-bold mb-1">Halo, @userName 👋</h4>
-        <p class="text-muted mb-0" id="dashboardDate"></p>
+<!-- Hero -->
+<div class="ha-hero mb-4">
+    <div class="d-flex justify-content-between align-items-start">
+        <div>
+            <div style="font-size:13px;opacity:.8;margin-bottom:4px;" id="dashboardDate"></div>
+            <h4 class="fw-bold mb-1" style="font-size:1.25rem;">Halo, @userName 👋</h4>
+            <p style="font-size:13px;opacity:.85;margin:0;">Pantau audit hygiene Anda hari ini</p>
+        </div>
+        <a href="@Url.Action("Index", "Audits")" class="btn"
+           style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:12px;font-size:13px;font-weight:600;padding:8px 16px;backdrop-filter:blur(4px);">
+            <i class="bx bx-plus me-1"></i> Audit Baru
+        </a>
     </div>
-    <a href="@Url.Action("Index", "Audits")" class="btn btn-primary">
-        <i class="bx bx-plus me-1"></i> Audit Baru
-    </a>
 </div>
 
-<!-- Stat Cards -->
-<div class="row g-3 mb-4">
-    <div class="col-6 col-md-3">
-        <div class="card text-center h-100">
-            <div class="card-body py-3">
-                <div class="avatar mx-auto mb-2" style="width:48px;height:48px;">
-                    <span class="avatar-initial rounded-circle bg-label-primary" style="width:48px;height:48px;font-size:1.3rem;">
-                        <i class="bx bx-clipboard"></i>
-                    </span>
-                </div>
-                <h3 class="fw-bold mb-0 text-primary" id="statTotal">—</h3>
-                <small class="text-muted">Total Audit</small>
+<!-- Stat Chips -->
+<div class="row g-2 mb-4">
+    <div class="col-6">
+        <div class="ha-card ha-stat ha-stat--blue">
+            <div class="ha-stat__icon"><i class="bx bx-clipboard"></i></div>
+            <div>
+                <div class="ha-stat__value text-primary" id="statTotal">—</div>
+                <div class="ha-stat__label">Total Audit</div>
             </div>
         </div>
     </div>
-    <div class="col-6 col-md-3">
-        <div class="card text-center h-100">
-            <div class="card-body py-3">
-                <div class="avatar mx-auto mb-2" style="width:48px;height:48px;">
-                    <span class="avatar-initial rounded-circle bg-label-success" style="width:48px;height:48px;font-size:1.3rem;">
-                        <i class="bx bx-check-circle"></i>
-                    </span>
-                </div>
-                <h3 class="fw-bold mb-0 text-success" id="statCompleted">—</h3>
-                <small class="text-muted">Selesai</small>
+    <div class="col-6">
+        <div class="ha-card ha-stat ha-stat--green">
+            <div class="ha-stat__icon"><i class="bx bx-check-circle"></i></div>
+            <div>
+                <div class="ha-stat__value text-success" id="statCompleted">—</div>
+                <div class="ha-stat__label">Selesai</div>
             </div>
         </div>
     </div>
-    <div class="col-6 col-md-3">
-        <div class="card text-center h-100">
-            <div class="card-body py-3">
-                <div class="avatar mx-auto mb-2" style="width:48px;height:48px;">
-                    <span class="avatar-initial rounded-circle bg-label-warning" style="width:48px;height:48px;font-size:1.3rem;">
-                        <i class="bx bx-edit"></i>
-                    </span>
-                </div>
-                <h3 class="fw-bold mb-0 text-warning" id="statDraft">—</h3>
-                <small class="text-muted">Draft</small>
+    <div class="col-6">
+        <div class="ha-card ha-stat ha-stat--amber">
+            <div class="ha-stat__icon"><i class="bx bx-edit"></i></div>
+            <div>
+                <div class="ha-stat__value text-warning" id="statDraft">—</div>
+                <div class="ha-stat__label">Draft</div>
             </div>
         </div>
     </div>
-    <div class="col-6 col-md-3">
-        <div class="card text-center h-100">
-            <div class="card-body py-3">
-                <div class="avatar mx-auto mb-2" style="width:48px;height:48px;">
-                    <span class="avatar-initial rounded-circle bg-label-danger" style="width:48px;height:48px;font-size:1.3rem;">
-                        <i class="bx bx-x-circle"></i>
-                    </span>
-                </div>
-                <h3 class="fw-bold mb-0 text-danger" id="statFail">—</h3>
-                <small class="text-muted">Item Fail</small>
+    <div class="col-6">
+        <div class="ha-card ha-stat ha-stat--red">
+            <div class="ha-stat__icon"><i class="bx bx-x-circle"></i></div>
+            <div>
+                <div class="ha-stat__value text-danger" id="statFail">—</div>
+                <div class="ha-stat__label">Item Fail</div>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Recent Audits -->
-<div class="card mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="card-title mb-0">Audit Terbaru</h5>
-        <a href="@Url.Action("Index", "Audits")" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+<div class="ha-card mb-4">
+    <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-bottom:1px solid var(--ha-border);">
+        <span class="fw-bold" style="font-size:15px;">Audit Terbaru</span>
+        <a href="@Url.Action("Index", "Audits")" class="ha-badge ha-badge--blue">Lihat Semua →</a>
     </div>
     <div id="recentAuditsList">
         <div class="text-center text-muted py-5">
@@ -89,60 +77,45 @@
 
 @if (isAdmin)
 {
-    <!-- Admin quick links -->
-    <div class="row g-3">
-        <div class="col-6 col-md-4">
-            <div class="card h-100">
-                <div class="card-body d-flex align-items-center gap-3">
-                    <span class="avatar-initial rounded-circle bg-label-info" style="width:44px;height:44px;font-size:1.3rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        <i class="bx bx-store"></i>
-                    </span>
-                    <div class="flex-grow-1">
-                        <h6 class="mb-1 fw-semibold">Tenant</h6>
-                        <p class="text-muted small mb-2">Kelola daftar tenant</p>
-                        <a href="@Url.Action("Index", "Tenants")" class="btn btn-sm btn-info">Buka</a>
-                    </div>
+    <!-- Admin Quick Links -->
+    <div class="mb-2" style="font-size:12px;font-weight:700;color:var(--ha-muted);letter-spacing:.5px;text-transform:uppercase;">Manajemen</div>
+    <div class="row g-2">
+        <div class="col-4">
+            <a href="@Url.Action("Index", "Tenants")" class="ha-card d-flex flex-column align-items-center text-center p-3 text-decoration-none" style="gap:8px;">
+                <div class="ha-stat__icon ha-stat--blue" style="width:40px;height:40px;font-size:18px;">
+                    <i class="bx bx-store"></i>
                 </div>
-            </div>
+                <div style="font-size:12px;font-weight:600;color:var(--ha-text);">Tenant</div>
+            </a>
         </div>
-        <div class="col-6 col-md-4">
-            <div class="card h-100">
-                <div class="card-body d-flex align-items-center gap-3">
-                    <span class="avatar-initial rounded-circle bg-label-warning" style="width:44px;height:44px;font-size:1.3rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        <i class="bx bx-bar-chart-alt-2"></i>
-                    </span>
-                    <div class="flex-grow-1">
-                        <h6 class="mb-1 fw-semibold">Laporan</h6>
-                        <p class="text-muted small mb-2">Lihat ringkasan audit</p>
-                        <a href="@Url.Action("Index", "Reports")" class="btn btn-sm btn-warning">Buka</a>
-                    </div>
+        <div class="col-4">
+            <a href="@Url.Action("Index", "Reports")" class="ha-card d-flex flex-column align-items-center text-center p-3 text-decoration-none" style="gap:8px;">
+                <div class="ha-stat__icon ha-stat--amber" style="width:40px;height:40px;font-size:18px;">
+                    <i class="bx bx-bar-chart-alt-2"></i>
                 </div>
-            </div>
+                <div style="font-size:12px;font-weight:600;color:var(--ha-text);">Laporan</div>
+            </a>
         </div>
-        <div class="col-6 col-md-4">
-            <div class="card h-100">
-                <div class="card-body d-flex align-items-center gap-3">
-                    <span class="avatar-initial rounded-circle bg-label-secondary" style="width:44px;height:44px;font-size:1.3rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        <i class="bx bx-list-check"></i>
-                    </span>
-                    <div class="flex-grow-1">
-                        <h6 class="mb-1 fw-semibold">Template</h6>
-                        <p class="text-muted small mb-2">Atur item checklist</p>
-                        <a href="@Url.Action("Index", "Templates")" class="btn btn-sm btn-secondary">Buka</a>
-                    </div>
+        <div class="col-4">
+            <a href="@Url.Action("Index", "Templates")" class="ha-card d-flex flex-column align-items-center text-center p-3 text-decoration-none" style="gap:8px;">
+                <div class="ha-stat__icon ha-stat--green" style="width:40px;height:40px;font-size:18px;">
+                    <i class="bx bx-list-check"></i>
                 </div>
-            </div>
+                <div style="font-size:12px;font-weight:600;color:var(--ha-text);">Template</div>
+            </a>
         </div>
     </div>
 }
 
 @section Scripts {
     <script>
-        // Tanggal hari ini
         document.getElementById('dashboardDate').textContent =
             new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-        // Load stats
+        function escHtml(str) {
+            return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
         $.getJSON('/api/audits').done(function (audits) {
             var total     = audits.length;
             var completed = audits.filter(function (a) { return a.status === 'COMPLETED'; }).length;
@@ -156,7 +129,6 @@
             document.getElementById('statDraft').textContent     = draft;
             document.getElementById('statFail').textContent      = failItems;
 
-            // Recent 5 audits
             var recent = audits.slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); }).slice(0, 5);
             var container = document.getElementById('recentAuditsList');
 
@@ -165,50 +137,41 @@
                 return;
             }
 
-            function escHtml(str) {
-                return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-            }
-
             var html = '';
-            recent.forEach(function (a, idx) {
+            recent.forEach(function (a) {
                 var items    = a.items || [];
                 var pass     = items.filter(function (i) { return i.status === 'PASS'; }).length;
                 var rate     = items.length > 0 ? Math.round(pass / items.length * 100) : 0;
                 var barColor = rate >= 70 ? '#22c55e' : '#ef4444';
-                var rateColor = rate >= 70 ? '#22c55e' : '#ef4444';
-                var statusCss = a.status === 'COMPLETED' ? 'bg-label-success' : 'bg-label-warning';
                 var sideColor = a.status === 'COMPLETED' ? '#22c55e' : '#f59e0b';
-                var date      = new Date(a.date).toLocaleDateString('id-ID');
-                var border    = idx < recent.length - 1 ? 'border-bottom' : '';
+                var statusClass = a.status === 'COMPLETED' ? 'ha-badge--green' : 'ha-badge--amber';
+                var date = new Date(a.date).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
 
-                html += '<div class="d-flex align-items-center gap-3 px-3 py-3 ' + border + '" style="transition:background .12s;" ' +
-                    'onmouseenter="this.style.background=\'#f8f8ff\'" onmouseleave="this.style.background=\'\'">' +
-                    '<div style="width:4px;height:44px;border-radius:4px;flex-shrink:0;background:' + sideColor + '"></div>' +
+                html += '<a href="/Audits/Detail/' + parseInt(a.id, 10) + '" class="ha-audit-item">' +
+                    '<div class="ha-audit-item__bar" style="background:' + sideColor + ';"></div>' +
                     '<div style="flex:1;min-width:0;">' +
-                        '<div class="d-flex justify-content-between align-items-start gap-2 mb-1">' +
-                            '<span class="fw-semibold text-truncate" style="max-width:160px;">' + escHtml(a.tenantName) + '</span>' +
-                            '<span class="badge ' + statusCss + ' flex-shrink-0">' + escHtml(a.status) + '</span>' +
+                        '<div class="d-flex justify-content-between align-items-center gap-2 mb-1">' +
+                            '<span class="ha-audit-item__name text-truncate" style="max-width:160px;">' + escHtml(a.tenantName) + '</span>' +
+                            '<span class="ha-badge ' + statusClass + ' flex-shrink-0">' + escHtml(a.status) + '</span>' +
                         '</div>' +
-                        '<div class="text-muted mb-2" style="font-size:12px;">' +
+                        '<div class="ha-audit-item__meta">' +
                             '<i class="bx bx-calendar-alt me-1"></i>' + date +
                             ' &bull; <i class="bx bx-user me-1"></i>' + escHtml(a.picName) +
                         '</div>' +
                         '<div class="d-flex align-items-center gap-2">' +
-                            '<div class="progress flex-grow-1" style="height:6px;border-radius:4px;">' +
-                                '<div class="progress-bar" style="width:' + rate + '%;background:' + barColor + ';border-radius:4px;"></div>' +
+                            '<div class="progress flex-grow-1" style="height:5px;border-radius:4px;background:#ebebf0;">' +
+                                '<div style="width:' + rate + '%;height:100%;background:' + barColor + ';border-radius:4px;"></div>' +
                             '</div>' +
-                            '<small class="fw-semibold" style="min-width:32px;text-align:right;color:' + rateColor + ';">' + rate + '%</small>' +
+                            '<span class="ha-audit-item__rate" style="color:' + barColor + ';">' + rate + '%</span>' +
                         '</div>' +
                     '</div>' +
-                    '<a href="/Audits/Detail/' + parseInt(a.id, 10) + '" class="btn btn-icon btn-outline-primary flex-shrink-0" style="width:36px;height:36px;" title="Buka">' +
-                        '<i class="bx bx-chevron-right"></i>' +
-                    '</a>' +
-                '</div>';
+                    '<i class="bx bx-chevron-right" style="color:#c0c4cc;font-size:20px;flex-shrink:0;"></i>' +
+                '</a>';
             });
 
             container.innerHTML = html;
         }).fail(function () {
-            ['statTotal', 'statCompleted', 'statDraft', 'statFail'].forEach(function (id) {
+            ['statTotal','statCompleted','statDraft','statFail'].forEach(function (id) {
                 document.getElementById(id).textContent = '0';
             });
             document.getElementById('recentAuditsList').innerHTML =

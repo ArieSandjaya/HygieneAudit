@@ -4,136 +4,130 @@
 
 <div id="audit-detail-page">
     <!-- Header -->
-    <div class="d-flex flex-wrap justify-content-between align-items-start mb-4 gap-3">
-        <div>
-            <h4 class="fw-bold mb-1" data-bind="text: 'Audit: ' + tenantName()"></h4>
-            <p class="text-muted mb-0">
-                <span data-bind="text: auditDate() ? new Date(auditDate()).toLocaleDateString('id-ID') : ''"></span>
-                &nbsp;&bull;&nbsp;
-                <span data-bind="text: picName()"></span>
-                &nbsp;&bull;&nbsp;
-                <span class="badge bg-label-info" data-bind="text: isGas() ? 'Dengan Gas' : 'Tanpa Gas'"></span>
-                &nbsp;
-                <span class="badge" data-bind="text: status(), css: { 'bg-label-success': status() === 'COMPLETED', 'bg-label-warning': status() === 'DRAFT' }"></span>
-            </p>
-        </div>
-        <div class="d-flex flex-wrap gap-2">
-            <a href="@Url.Action("Index", "Audits")" class="btn btn-outline-secondary">
-                <i class="bx bx-arrow-back me-1"></i> Kembali
-            </a>
-            <button class="btn btn-warning" data-bind="click: saveDraft, visible: status() !== 'COMPLETED'">
-                <i class="bx bx-save me-1"></i> Simpan Draft
-            </button>
-            <button class="btn btn-success" data-bind="click: submitAudit, visible: status() !== 'COMPLETED'">
-                <i class="bx bx-check-circle me-1"></i> Submit
-            </button>
+    <div class="ha-hero mb-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+            <div style="flex:1;min-width:0;">
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                    <span class="ha-badge ha-badge--blue" data-bind="text: isGas() ? 'Dengan Gas' : 'Tanpa Gas'"></span>
+                    <span class="ha-badge" style="font-weight:700;"
+                          data-bind="text: status(),
+                                     css: { 'ha-badge--green': status() === 'COMPLETED', 'ha-badge--amber': status() === 'DRAFT' }"></span>
+                </div>
+                <h5 class="fw-bold mb-1" style="font-size:1.1rem;" data-bind="text: tenantName()"></h5>
+                <p style="font-size:13px;opacity:.85;margin:0;">
+                    <i class="bx bx-calendar-alt me-1"></i>
+                    <span data-bind="text: auditDate() ? new Date(auditDate()).toLocaleDateString('id-ID') : ''"></span>
+                    &nbsp;&bull;&nbsp;
+                    <i class="bx bx-user me-1"></i>
+                    <span data-bind="text: picName()"></span>
+                </p>
+            </div>
+            <div class="d-flex flex-wrap gap-2" style="flex-shrink:0;">
+                <a href="@Url.Action("Index", "Audits")"
+                   style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:10px;font-size:13px;font-weight:600;padding:7px 14px;text-decoration:none;display:inline-flex;align-items:center;">
+                    <i class="bx bx-arrow-back me-1"></i> Kembali
+                </a>
+                <button style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:10px;font-size:13px;font-weight:600;padding:7px 14px;cursor:pointer;"
+                        data-bind="click: saveDraft, visible: status() !== 'COMPLETED'">
+                    <i class="bx bx-save me-1"></i> Draft
+                </button>
+                <button style="background:#fff;color:#696cff;border:none;border-radius:10px;font-size:13px;font-weight:700;padding:7px 16px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.12);"
+                        data-bind="click: submitAudit, visible: status() !== 'COMPLETED'">
+                    <i class="bx bx-check-circle me-1"></i> Submit
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Progress Cards -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body py-3">
-                    <h3 class="text-primary mb-0" data-bind="text: totalCount"></h3>
-                    <small class="text-muted">Total Item</small>
-                </div>
-            </div>
+    <!-- Progress Strip -->
+    <div class="ha-card mb-4 p-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span style="font-size:13px;font-weight:600;color:var(--ha-muted);">Progress Checklist</span>
+            <span style="font-size:13px;font-weight:800;color:var(--ha-primary);" data-bind="text: passCount() + '/' + totalCount() + ' Pass'"></span>
         </div>
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body py-3">
-                    <h3 class="text-success mb-0" data-bind="text: passCount"></h3>
-                    <small class="text-muted">Pass</small>
-                </div>
-            </div>
+        <div style="height:8px;border-radius:6px;background:#ebebf0;overflow:hidden;">
+            <div style="height:100%;border-radius:6px;transition:width .4s;"
+                 data-bind="style: { width: (totalCount() > 0 ? Math.round(passCount() / totalCount() * 100) : 0) + '%',
+                                     background: (totalCount() > 0 && passCount() / totalCount() >= 0.7) ? '#22c55e' : '#ef4444' }"></div>
         </div>
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body py-3">
-                    <h3 class="text-danger mb-0" data-bind="text: failCount"></h3>
-                    <small class="text-muted">Fail</small>
-                </div>
-            </div>
+        <div class="d-flex justify-content-between mt-2" style="font-size:11.5px;color:var(--ha-muted);">
+            <span><span class="fw-bold text-success" data-bind="text: passCount()"></span> Pass</span>
+            <span><span class="fw-bold text-danger" data-bind="text: failCount()"></span> Fail</span>
+            <span><span class="fw-bold text-muted" data-bind="text: totalCount() - passCount() - failCount()"></span> Belum</span>
         </div>
     </div>
 
     <!-- Checklist by Category -->
     <div data-bind="foreach: categories">
-        <div class="card mb-3">
-            <!-- Collapsible category header -->
-            <div class="card-header d-flex justify-content-between align-items-center"
-                 style="cursor:pointer;" data-bind="click: $root.toggleCategory">
-                <h6 class="card-title mb-0 text-uppercase fw-semibold" data-bind="text: name"></h6>
+        <div class="ha-card mb-3 overflow-hidden">
+            <div class="ha-cat-header" data-bind="click: $root.toggleCategory">
                 <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-label-secondary" data-bind="text: checkedCount() + '/' + items.length"></span>
-                    <i class="bx" data-bind="css: { 'bx-chevron-up': !collapsed(), 'bx-chevron-down': collapsed() }"></i>
+                    <div style="width:3px;height:18px;border-radius:2px;background:var(--ha-primary);flex-shrink:0;"></div>
+                    <span class="ha-cat-name" data-bind="text: name"></span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="ha-cat-pill" data-bind="text: checkedCount() + '/' + items.length, css: { 'ha-cat-pill--done': checkedCount() === items.length && items.length > 0 }"></span>
+                    <i class="bx" style="color:var(--ha-muted);font-size:16px;" data-bind="css: { 'bx-chevron-up': !collapsed(), 'bx-chevron-down': collapsed() }"></i>
                 </div>
             </div>
+
             <div data-bind="visible: !collapsed()">
                 <!-- ko foreach: items -->
-                <div class="px-3 py-3 border-bottom"
-                     data-bind="css: { 'bg-success-subtle': status() === 'PASS', 'bg-danger-subtle': status() === 'FAIL' }">
-                    <!-- Item name + Pass/Fail buttons -->
-                    <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
-                        <div class="fw-medium" data-bind="text: name"></div>
-                        <div class="d-flex gap-2 flex-shrink-0">
-                            <button type="button"
-                                    style="width:48px;height:48px;border-radius:50%;border:3px solid;font-size:24px;cursor:pointer;transition:.15s;line-height:1;padding:0;"
+                <div class="ha-item" data-bind="css: { 'ha-item--pass': status() === 'PASS', 'ha-item--fail': status() === 'FAIL' }">
+                    <!-- Item name + verdict buttons -->
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                        <div class="ha-item__name" data-bind="text: name"></div>
+                        <div class="d-flex gap-2 flex-shrink-0" style="margin-top:2px;">
+                            <button type="button" class="ha-verdict-btn ha-verdict-btn--pass"
                                     data-bind="click: function(){ $root.setItemStatus($data, 'PASS') },
-                                               style: { borderColor: status() === 'PASS' ? '#22c55e' : '#d1d5db',
-                                                        background: status() === 'PASS' ? '#dcfce7' : 'white' }">
-                                &#128522;
+                                               css: { active: status() === 'PASS' }">
+                                &#128522; Pass
                             </button>
-                            <button type="button"
-                                    style="width:48px;height:48px;border-radius:50%;border:3px solid;font-size:24px;cursor:pointer;transition:.15s;line-height:1;padding:0;"
+                            <button type="button" class="ha-verdict-btn ha-verdict-btn--fail"
                                     data-bind="click: function(){ $root.setItemStatus($data, 'FAIL') },
-                                               style: { borderColor: status() === 'FAIL' ? '#ef4444' : '#d1d5db',
-                                                        background: status() === 'FAIL' ? '#fee2e2' : 'white' }">
-                                &#128545;
+                                               css: { active: status() === 'FAIL' }">
+                                &#128545; Fail
                             </button>
                         </div>
                     </div>
-                    <!-- Catatan -->
-                    <div class="mb-2">
-                        <small class="text-muted">Catatan
-                            <span class="text-danger" data-bind="visible: status() === 'FAIL'">*</span>
-                        </small>
-                        <textarea rows="2" class="form-control form-control-sm mt-1"
-                                  style="resize:vertical;min-height:54px;"
-                                  placeholder="Tambahkan catatan..."
-                                  data-bind="value: note, valueUpdate: 'afterkeydown',
-                                             css: { 'is-invalid': status() === 'FAIL' && !note().trim() },
-                                             event: { change: $root.onItemChange.bind($root, $data) }"></textarea>
+
+                    <!-- Note -->
+                    <textarea class="ha-note"
+                              placeholder="Tambahkan catatan..."
+                              data-bind="value: note, valueUpdate: 'afterkeydown',
+                                         css: { 'is-invalid': status() === 'FAIL' && !note().trim() },
+                                         event: { change: $root.onItemChange.bind($root, $data) }"></textarea>
+                    <div style="font-size:11px;color:#ef4444;margin-top:4px;" data-bind="visible: status() === 'FAIL' && !note().trim()">
+                        Catatan wajib diisi untuk item yang Fail
                     </div>
-                    <!-- Foto: Kamera & Galeri -->
+
+                    <!-- Photo upload (only when not completed) -->
                     <div data-bind="visible: $root.status() !== 'COMPLETED'">
-                        <div class="d-flex gap-2 mb-2">
-                            <label class="text-center p-2 flex-fill"
-                                   style="border:2px dashed #d1d5db;border-radius:10px;cursor:pointer;min-height:56px;">
-                                <div style="font-size:20px;line-height:1.4;">&#128247;</div>
-                                <div style="font-size:12px;color:#6b7280;">Kamera</div>
+                        <div class="ha-photo-btns">
+                            <label class="ha-photo-btn" style="flex:1;">
+                                <div style="font-size:22px;line-height:1.2;">&#128247;</div>
+                                <div style="font-size:11.5px;color:var(--ha-muted);font-weight:600;">Kamera</div>
                                 <input type="file" accept="image/*" capture="environment" class="d-none"
                                        data-bind="event: { change: function(d,e){ $root.addPhoto($data, e) } }" />
                             </label>
-                            <label class="text-center p-2 flex-fill"
-                                   style="border:2px dashed #d1d5db;border-radius:10px;cursor:pointer;min-height:56px;">
-                                <div style="font-size:20px;line-height:1.4;">&#128444;&#65039;</div>
-                                <div style="font-size:12px;color:#6b7280;">Galeri</div>
+                            <label class="ha-photo-btn" style="flex:1;">
+                                <div style="font-size:22px;line-height:1.2;">&#128444;&#65039;</div>
+                                <div style="font-size:11.5px;color:var(--ha-muted);font-weight:600;">Galeri</div>
                                 <input type="file" accept="image/*" multiple class="d-none"
                                        data-bind="event: { change: function(d,e){ $root.addPhoto($data, e) } }" />
                             </label>
                         </div>
                     </div>
+
                     <!-- Thumbnails -->
-                    <div class="d-flex flex-wrap gap-1">
+                    <div class="d-flex flex-wrap gap-2 mt-2" data-bind="visible: photos().length > 0">
                         <!-- ko foreach: photos -->
-                        <div class="position-relative flex-shrink-0" style="width:56px;height:56px;">
+                        <div class="position-relative flex-shrink-0">
                             <img data-bind="attr: { src: $data }"
-                                 style="width:56px;height:56px;object-fit:cover;border-radius:8px;" />
+                                 style="width:64px;height:64px;object-fit:cover;border-radius:10px;border:2px solid var(--ha-border);" />
                             <!-- ko if: $root.status() !== 'COMPLETED' -->
-                            <button type="button" class="btn btn-danger position-absolute top-0 end-0 p-0"
-                                    style="width:22px;height:22px;font-size:11px;border-radius:50%;min-width:0;line-height:1;"
+                            <button type="button"
+                                    style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#ef4444;color:#fff;border:none;font-size:13px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;"
                                     data-bind="click: function(){ $root.removePhoto($parent, $data) }">
                                 &times;
                             </button>
@@ -147,11 +141,25 @@
         </div>
     </div>
 
-    <!-- Empty state -->
+    <!-- Empty / loading state -->
     <div data-bind="visible: categories().length === 0" class="text-center text-muted py-5">
         <i class="bx bx-loader-circle bx-spin bx-lg d-block mb-2"></i>
         Memuat data audit...
     </div>
+
+    <!-- Sticky footer actions (mobile) -->
+    <div data-bind="visible: status() !== 'COMPLETED'"
+         style="position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:#fff;border-top:1px solid var(--ha-border);display:flex;gap:10px;z-index:1040;"
+         class="d-md-none">
+        <button class="btn btn-warning flex-fill" style="border-radius:12px;font-weight:700;" data-bind="click: saveDraft">
+            <i class="bx bx-save me-1"></i> Simpan Draft
+        </button>
+        <button class="btn btn-success flex-fill" style="border-radius:12px;font-weight:700;" data-bind="click: submitAudit">
+            <i class="bx bx-check-circle me-1"></i> Submit
+        </button>
+    </div>
+    <!-- Spacer for sticky footer on mobile -->
+    <div class="d-md-none" style="height:72px;" data-bind="visible: status() !== 'COMPLETED'"></div>
 </div>
 
 @section Scripts {

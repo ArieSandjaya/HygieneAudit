@@ -3,32 +3,34 @@
 }
 
 <div id="audits-page">
+    <!-- Header -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
         <div>
             <h4 class="fw-bold mb-1">Daftar Audit</h4>
-            <p class="text-muted mb-0">Kelola sesi audit hygiene</p>
+            <p class="text-muted mb-0" style="font-size:13px;">Kelola sesi audit hygiene</p>
         </div>
-        <button class="btn btn-primary" data-bind="click: showCreateForm">
+        <!-- Desktop new button -->
+        <button class="btn btn-primary d-none d-md-inline-flex" data-bind="click: showCreateForm" style="border-radius:12px;font-weight:600;">
             <i class="bx bx-plus me-1"></i> Audit Baru
         </button>
     </div>
 
     <!-- Create Form -->
-    <div class="card mb-4" data-bind="visible: showForm">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0">Buat Audit Baru</h5>
+    <div class="ha-card mb-4" data-bind="visible: showForm">
+        <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-bottom:1px solid var(--ha-border);">
+            <span class="fw-bold" style="font-size:15px;">Buat Audit Baru</span>
             <button type="button" class="btn-close" data-bind="click: cancelForm"></button>
         </div>
-        <div class="card-body">
+        <div class="p-4">
             <div class="row g-3">
-                <div class="col-md-3">
-                    <label class="form-label">Tenant</label>
+                <div class="col-md-3 col-12">
+                    <label class="form-label fw-semibold" style="font-size:13px;">Tenant</label>
                     <div class="dropdown">
                         <button type="button" class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center"
-                                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" style="border-radius:10px;">
                             <span data-bind="text: selectedTenantName() || '-- Pilih Tenant --'"></span>
                         </button>
-                        <ul class="dropdown-menu w-100 p-0" style="min-width:100%">
+                        <ul class="dropdown-menu w-100 p-0" style="min-width:100%;border-radius:12px;overflow:hidden;">
                             <li class="px-2 pt-2 pb-1">
                                 <input type="text" class="form-control form-control-sm" placeholder="Cari tenant..."
                                        data-bind="value: tenantSearch, valueUpdate: 'input'" autocomplete="off" />
@@ -46,17 +48,17 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label">Tanggal</label>
-                    <input type="date" class="form-control" data-bind="value: newAudit.auditDate" />
+                <div class="col-md-3 col-6">
+                    <label class="form-label fw-semibold" style="font-size:13px;">Tanggal</label>
+                    <input type="date" class="form-control" style="border-radius:10px;" data-bind="value: newAudit.auditDate" />
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label">PIC (Auditor)</label>
-                    <select class="form-select" data-bind="value: newAudit.picId, options: users, optionsText: 'name', optionsValue: 'id', optionsCaption: '-- Pilih PIC --'"></select>
+                <div class="col-md-3 col-6">
+                    <label class="form-label fw-semibold" style="font-size:13px;">PIC (Auditor)</label>
+                    <select class="form-select" style="border-radius:10px;" data-bind="value: newAudit.picId, options: users, optionsText: 'name', optionsValue: 'id', optionsCaption: '-- Pilih PIC --'"></select>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label">Tipe</label>
-                    <select class="form-select" data-bind="value: newAudit.includeGas">
+                <div class="col-md-3 col-12">
+                    <label class="form-label fw-semibold" style="font-size:13px;">Tipe</label>
+                    <select class="form-select" style="border-radius:10px;" data-bind="value: newAudit.includeGas">
                         <option value="false">Tanpa Gas</option>
                         <option value="true">Dengan Gas</option>
                     </select>
@@ -65,15 +67,14 @@
 
             <!-- Tenant History Preview -->
             <div class="mt-3" data-bind="visible: tenantHistoryVisible">
-                <div class="card border-0 bg-light">
-                    <div class="card-header bg-light border-bottom d-flex align-items-center gap-2 py-2">
+                <div class="ha-card" style="background:#f8f8ff;">
+                    <div class="d-flex align-items-center gap-2 px-3 py-2" style="border-bottom:1px solid var(--ha-border);">
                         <i class="bx bx-history text-primary"></i>
                         <small class="fw-bold">Riwayat Audit Tenant</small>
-                        <span class="badge bg-label-secondary" data-bind="text: tenantHistorySubtitle"></span>
+                        <span class="ha-badge ha-badge--gray" data-bind="text: tenantHistorySubtitle"></span>
                     </div>
-                    <div class="card-body p-3" data-bind="if: tenantHistoryAudits().length > 0">
-                        <!-- Stats chips -->
-                        <div class="d-flex gap-3 mb-3">
+                    <div class="p-3" data-bind="if: tenantHistoryAudits().length > 0">
+                        <div class="d-flex gap-4 mb-3">
                             <div class="text-center">
                                 <div class="fw-bold fs-5" data-bind="text: tenantTotalAudits"></div>
                                 <small class="text-muted">Total</small>
@@ -87,7 +88,6 @@
                                 <small class="text-muted">Terakhir</small>
                             </div>
                         </div>
-                        <!-- Trend bars -->
                         <div class="mb-3">
                             <small class="text-muted d-block mb-1">Trend Pass Rate (6 audit terakhir)</small>
                             <div class="d-flex align-items-end gap-1" style="height:56px;" data-bind="foreach: tenantTrendBars">
@@ -97,88 +97,78 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Recent audits list -->
                         <div data-bind="foreach: tenantHistoryAudits().slice(0, 5)">
                             <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
                                 <div>
                                     <div class="small fw-semibold" data-bind="text: new Date(date).toLocaleDateString('id-ID')"></div>
                                     <div class="text-muted" style="font-size:11px;" data-bind="text: 'PIC: ' + picName"></div>
                                 </div>
-                                <span class="badge" data-bind="text: $root.passRateLabel($data), css: $root.passRateCss($data)"></span>
+                                <span class="ha-badge" data-bind="text: $root.passRateLabel($data), css: $root.passRateCss($data)"></span>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body p-3 text-muted small" data-bind="if: tenantHistoryAudits().length === 0">
+                    <div class="p-3 text-muted small" data-bind="if: tenantHistoryAudits().length === 0">
                         <i class="bx bx-info-circle me-1"></i> Tenant ini belum memiliki riwayat audit.
                     </div>
                 </div>
             </div>
 
-            <div class="mt-3">
-                <button class="btn btn-primary me-2" data-bind="click: createAudit"><i class="bx bx-check me-1"></i> Buat</button>
-                <button class="btn btn-outline-secondary" data-bind="click: cancelForm">Batal</button>
+            <div class="mt-3 d-flex gap-2">
+                <button class="btn btn-primary" style="border-radius:10px;font-weight:600;" data-bind="click: createAudit">
+                    <i class="bx bx-check me-1"></i> Buat Audit
+                </button>
+                <button class="btn btn-outline-secondary" style="border-radius:10px;" data-bind="click: cancelForm">Batal</button>
             </div>
         </div>
     </div>
 
-    <!-- Filter Tabs -->
-    <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-            <a class="nav-link" href="#" data-bind="click: function(){ activeTab('all') }, css: { active: activeTab() === 'all' }">
-                Semua <span class="badge bg-label-secondary ms-1" data-bind="text: audits().length"></span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#" data-bind="click: function(){ activeTab('active') }, css: { active: activeTab() === 'active' }">
-                Aktif <span class="badge bg-label-warning ms-1" data-bind="text: audits().filter(function(a){ return a.status !== 'COMPLETED'; }).length"></span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#" data-bind="click: function(){ activeTab('history') }, css: { active: activeTab() === 'history' }">
-                History <span class="badge bg-label-success ms-1" data-bind="text: audits().filter(function(a){ return a.status === 'COMPLETED'; }).length"></span>
-            </a>
-        </li>
-    </ul>
+    <!-- Pill Tabs -->
+    <div class="ha-tabs mb-3">
+        <button class="ha-tab" data-bind="click: function(){ activeTab('all') }, css: { active: activeTab() === 'all' }">
+            Semua <span style="font-size:11px;opacity:.7;" data-bind="text: '(' + audits().length + ')'"></span>
+        </button>
+        <button class="ha-tab" data-bind="click: function(){ activeTab('active') }, css: { active: activeTab() === 'active' }">
+            Aktif <span style="font-size:11px;opacity:.7;" data-bind="text: '(' + audits().filter(function(a){ return a.status !== 'COMPLETED'; }).length + ')'"></span>
+        </button>
+        <button class="ha-tab" data-bind="click: function(){ activeTab('history') }, css: { active: activeTab() === 'history' }">
+            Selesai <span style="font-size:11px;opacity:.7;" data-bind="text: '(' + audits().filter(function(a){ return a.status === 'COMPLETED'; }).length + ')'"></span>
+        </button>
+    </div>
 
-    <!-- Audit Cards -->
-    <div class="card overflow-hidden">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0" data-bind="text: activeTab() === 'history' ? 'Riwayat Audit' : activeTab() === 'active' ? 'Audit Aktif' : 'Semua Audit'"></h5>
-            <small class="text-muted" data-bind="text: filteredAudits().length + ' audit'"></small>
+    <!-- Audit List -->
+    <div class="ha-card overflow-hidden">
+        <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-bottom:1px solid var(--ha-border);">
+            <span class="fw-bold" style="font-size:15px;" data-bind="text: activeTab() === 'history' ? 'Riwayat Audit' : activeTab() === 'active' ? 'Audit Aktif' : 'Semua Audit'"></span>
+            <span class="ha-badge ha-badge--gray" data-bind="text: filteredAudits().length + ' audit'"></span>
         </div>
 
         <!-- ko foreach: filteredAudits -->
-        <div class="d-flex align-items-center gap-3 px-3 py-3 border-bottom audit-row">
-            <div class="flex-shrink-0" style="width:4px;height:44px;border-radius:4px;"
-                 data-bind="style:{ background: status === 'COMPLETED' ? '#22c55e' : '#f59e0b' }"></div>
-
-            <div class="flex-grow-1" style="min-width:0;">
-                <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
-                    <span class="fw-semibold text-truncate" data-bind="text: tenantName" style="max-width:180px;"></span>
+        <a class="ha-audit-item" data-bind="attr: { href: '/Audits/Detail/' + id }">
+            <div class="ha-audit-item__bar"
+                 data-bind="style: { background: status === 'COMPLETED' ? '#22c55e' : '#f59e0b' }"></div>
+            <div style="flex:1;min-width:0;">
+                <div class="d-flex justify-content-between align-items-center gap-2 mb-1">
+                    <span class="ha-audit-item__name text-truncate" data-bind="text: tenantName" style="max-width:180px;"></span>
                     <div class="d-flex align-items-center gap-1 flex-shrink-0">
-                        <span class="badge" data-bind="text: isGas ? 'Gas' : 'Non-Gas', css: { 'bg-label-info': isGas, 'bg-label-secondary': !isGas }"></span>
-                        <span class="badge" data-bind="text: status, css: { 'bg-label-success': status === 'COMPLETED', 'bg-label-warning': status === 'DRAFT' }"></span>
+                        <span class="ha-badge" data-bind="text: isGas ? 'Gas' : 'Non-Gas', css: { 'ha-badge--blue': isGas, 'ha-badge--gray': !isGas }"></span>
+                        <span class="ha-badge" data-bind="text: status, css: { 'ha-badge--green': status === 'COMPLETED', 'ha-badge--amber': status === 'DRAFT' }"></span>
                     </div>
                 </div>
-                <div class="text-muted mb-2" style="font-size:12px;">
+                <div class="ha-audit-item__meta">
                     <i class="bx bx-calendar-alt me-1"></i><span data-bind="text: new Date(date).toLocaleDateString('id-ID')"></span>
                     &nbsp;&bull;&nbsp;<i class="bx bx-user me-1"></i><span data-bind="text: picName"></span>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <div class="progress flex-grow-1" style="height:6px;border-radius:4px;">
+                    <div class="progress flex-grow-1" style="height:5px;border-radius:4px;background:#ebebf0;">
                         <div class="progress-bar" style="border-radius:4px;"
                              data-bind="style: { width: (passRate * 100).toFixed(0) + '%', background: passRate >= 0.7 ? '#22c55e' : '#ef4444' }"></div>
                     </div>
-                    <small class="fw-semibold" style="min-width:34px;text-align:right;"
-                           data-bind="text: (passRate * 100).toFixed(0) + '%', style: { color: passRate >= 0.7 ? '#22c55e' : '#ef4444' }"></small>
+                    <span class="ha-audit-item__rate"
+                          data-bind="text: (passRate * 100).toFixed(0) + '%', style: { color: passRate >= 0.7 ? '#22c55e' : '#ef4444' }"></span>
                 </div>
             </div>
-
-            <a class="btn btn-icon btn-outline-primary flex-shrink-0" style="width:36px;height:36px;"
-               data-bind="attr: { href: '/Audits/Detail/' + id }" title="Buka">
-                <i class="bx bx-chevron-right"></i>
-            </a>
-        </div>
+            <i class="bx bx-chevron-right" style="color:#c0c4cc;font-size:20px;flex-shrink:0;"></i>
+        </a>
         <!-- /ko -->
 
         <div data-bind="visible: filteredAudits().length === 0" class="text-center text-muted py-5">
@@ -187,11 +177,10 @@
         </div>
     </div>
 
-    <style>
-        .audit-row { transition: background .12s; }
-        .audit-row:hover { background: #f8f8ff; }
-        .audit-row:last-child { border-bottom: none !important; }
-    </style>
+    <!-- FAB (mobile only) -->
+    <button class="ha-fab d-md-none" data-bind="click: showCreateForm" title="Audit Baru">
+        <i class="bx bx-plus"></i>
+    </button>
 </div>
 
 @section Scripts {

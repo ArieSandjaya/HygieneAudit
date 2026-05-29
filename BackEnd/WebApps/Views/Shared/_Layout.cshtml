@@ -38,6 +38,183 @@
     <link rel="stylesheet" href="@Url.Content("~/Content/sneat/css/demo.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/sneat/vendor/libs/perfect-scrollbar/perfect-scrollbar.css")" />
 
+    <style>
+        /* ── HygieneAudit custom design system ── */
+        :root {
+            --ha-primary: #696cff;
+            --ha-success: #22c55e;
+            --ha-danger:  #ef4444;
+            --ha-warning: #f59e0b;
+            --ha-surface: #ffffff;
+            --ha-bg:      #f4f5fb;
+            --ha-border:  #ebebf0;
+            --ha-text:    #2d3748;
+            --ha-muted:   #8592a3;
+            --ha-radius:  14px;
+        }
+
+        /* Cards */
+        .ha-card {
+            background: var(--ha-surface);
+            border-radius: var(--ha-radius);
+            box-shadow: 0 2px 12px rgba(105,108,255,.08), 0 1px 3px rgba(0,0,0,.06);
+            border: none;
+        }
+
+        /* Hero gradient banner */
+        .ha-hero {
+            background: linear-gradient(135deg, #696cff 0%, #8b5cf6 100%);
+            border-radius: var(--ha-radius);
+            padding: 20px;
+            color: #fff;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .ha-hero::after {
+            content: '';
+            position: absolute;
+            right: -20px; top: -20px;
+            width: 120px; height: 120px;
+            background: rgba(255,255,255,.1);
+            border-radius: 50%;
+        }
+
+        /* Stat chips */
+        .ha-stat {
+            border-radius: 12px;
+            padding: 14px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .ha-stat__icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0;
+        }
+        .ha-stat__value { font-size: 1.6rem; font-weight: 800; line-height: 1; }
+        .ha-stat__label { font-size: 12px; color: var(--ha-muted); margin-top: 2px; }
+        .ha-stat--blue  .ha-stat__icon { background: #ede9fe; color: #6d28d9; }
+        .ha-stat--green .ha-stat__icon { background: #dcfce7; color: #15803d; }
+        .ha-stat--amber .ha-stat__icon { background: #fef9c3; color: #b45309; }
+        .ha-stat--red   .ha-stat__icon { background: #fee2e2; color: #b91c1c; }
+        .ha-stat--blue  .ha-stat__value { color: #6d28d9; }
+        .ha-stat--green .ha-stat__value { color: #15803d; }
+        .ha-stat--amber .ha-stat__value { color: #b45309; }
+        .ha-stat--red   .ha-stat__value { color: #b91c1c; }
+
+        /* Audit list cards */
+        .ha-audit-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--ha-border);
+            transition: background .12s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .ha-audit-item:last-child { border-bottom: none; }
+        .ha-audit-item:hover { background: #f8f8ff; }
+        .ha-audit-item:active { background: #f0f0ff; }
+        .ha-audit-item__bar { width: 4px; border-radius: 4px; align-self: stretch; flex-shrink: 0; min-height: 52px; }
+        .ha-audit-item__name { font-weight: 700; font-size: 14px; color: var(--ha-text); }
+        .ha-audit-item__meta { font-size: 11.5px; color: var(--ha-muted); margin: 2px 0 6px; }
+        .ha-audit-item__rate { font-weight: 800; font-size: 13px; min-width: 38px; text-align: right; }
+
+        /* Pill tabs */
+        .ha-tabs { display: flex; gap: 6px; padding: 4px; background: #ebebf5; border-radius: 12px; margin-bottom: 16px; }
+        .ha-tab { flex: 1; text-align: center; padding: 8px 4px; border-radius: 9px; font-size: 12.5px; font-weight: 600; color: var(--ha-muted); cursor: pointer; transition: all .2s; border: none; background: none; }
+        .ha-tab.active { background: #fff; color: var(--ha-primary); box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+
+        /* Section label */
+        .ha-section-label { font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: var(--ha-muted); margin-bottom: 10px; }
+
+        /* Badge overrides */
+        .ha-badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .ha-badge--green { background: #dcfce7; color: #15803d; }
+        .ha-badge--amber { background: #fef9c3; color: #b45309; }
+        .ha-badge--blue  { background: #dbeafe; color: #1d4ed8; }
+        .ha-badge--gray  { background: #f1f5f9; color: #64748b; }
+
+        /* Category header */
+        .ha-cat-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 16px; cursor: pointer; user-select: none;
+            border-bottom: 1px solid var(--ha-border);
+        }
+        .ha-cat-header:hover { background: #f8f8ff; }
+        .ha-cat-name { font-size: 11.5px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; color: #475569; }
+        .ha-cat-progress { display: flex; align-items: center; gap: 8px; }
+        .ha-cat-pill { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 20px; background: #f1f5f9; color: #64748b; }
+        .ha-cat-pill--done { background: #dcfce7; color: #15803d; }
+
+        /* Checklist item */
+        .ha-item { padding: 14px 16px; border-bottom: 1px solid var(--ha-border); transition: background .12s; }
+        .ha-item:last-child { border-bottom: none; }
+        .ha-item--pass { background: #f0fdf4; }
+        .ha-item--fail { background: #fff1f2; }
+        .ha-item__name { font-size: 13.5px; font-weight: 500; color: var(--ha-text); line-height: 1.45; flex: 1; }
+
+        /* Verdict buttons */
+        .ha-verdict { display: flex; gap: 8px; margin-top: 10px; }
+        .ha-verdict-btn {
+            flex: 1; height: 46px; border-radius: 12px;
+            border: 2px solid var(--ha-border);
+            background: #f8fafc; cursor: pointer;
+            font-size: 13px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            transition: all .15s; color: var(--ha-muted);
+        }
+        .ha-verdict-btn--pass.active {
+            border-color: #22c55e; background: #dcfce7; color: #15803d;
+        }
+        .ha-verdict-btn--fail.active {
+            border-color: #ef4444; background: #fee2e2; color: #b91c1c;
+        }
+        .ha-verdict-btn:not(.active):hover { background: #f1f5f9; }
+
+        /* Photo upload buttons */
+        .ha-photo-btns { display: flex; gap: 8px; margin-top: 10px; }
+        .ha-photo-btn {
+            flex: 1; padding: 10px 0;
+            border: 2px dashed var(--ha-border);
+            border-radius: 12px; background: #f8fafc;
+            display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; transition: border-color .15s;
+        }
+        .ha-photo-btn:hover { border-color: var(--ha-primary); }
+        .ha-photo-btn__icon { font-size: 22px; line-height: 1.2; }
+        .ha-photo-btn__label { font-size: 11px; color: var(--ha-muted); font-weight: 600; margin-top: 2px; }
+
+        /* Note textarea */
+        .ha-note { width: 100%; border: 1.5px solid var(--ha-border); border-radius: 10px; padding: 8px 12px; font-size: 13px; resize: vertical; min-height: 52px; background: #f8fafc; transition: border-color .15s; margin-top: 8px; font-family: inherit; }
+        .ha-note:focus { outline: none; border-color: var(--ha-primary); background: #fff; }
+        .ha-note.is-invalid { border-color: var(--ha-danger); background: #fff5f5; }
+
+        /* Thumbnail */
+        .ha-thumb { width: 58px; height: 58px; border-radius: 10px; object-fit: cover; }
+        .ha-thumb-del { width: 22px; height: 22px; border-radius: 50%; background: var(--ha-danger); color: #fff; border: none; font-size: 12px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
+
+        /* Overall progress bar (detail header) */
+        .ha-progress-strip { height: 5px; background: #e2e8f0; border-radius: 0 0 var(--ha-radius) var(--ha-radius); overflow: hidden; }
+        .ha-progress-fill { height: 100%; border-radius: 5px; transition: width .4s; }
+
+        /* Quick link cards (admin) */
+        .ha-quick-link { border-radius: 14px; padding: 16px; display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit; transition: transform .15s, box-shadow .15s; }
+        .ha-quick-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.1); }
+        .ha-quick-link__icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+
+        /* FAB */
+        .ha-fab { position: fixed; bottom: 24px; right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--ha-primary); color: #fff; border: none; font-size: 28px; box-shadow: 0 6px 20px rgba(105,108,255,.45); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; transition: transform .15s, box-shadow .15s; }
+        .ha-fab:hover { transform: scale(1.07); box-shadow: 0 8px 24px rgba(105,108,255,.55); }
+        .ha-fab:active { transform: scale(.96); }
+
+        @media (min-width: 768px) { .ha-fab { display: none !important; } }
+    </style>
+
     <!-- Helpers must load before config -->
     <script src="@Url.Content("~/Content/sneat/vendor/js/helpers.js")"></script>
     <script src="@Url.Content("~/Content/sneat/js/config.js")"></script>
