@@ -4,7 +4,7 @@
 
 <div id="audit-detail-page">
     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-start mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start mb-4 gap-3">
         <div>
             <h4 class="fw-bold mb-1" data-bind="text: 'Audit: ' + tenantName()"></h4>
             <p class="text-muted mb-0">
@@ -17,7 +17,7 @@
                 <span class="badge" data-bind="text: status(), css: { 'bg-label-success': status() === 'COMPLETED', 'bg-label-warning': status() === 'DRAFT' }"></span>
             </p>
         </div>
-        <div class="d-flex gap-2 flex-shrink-0">
+        <div class="d-flex flex-wrap gap-2">
             <a href="@Url.Action("Index", "Audits")" class="btn btn-outline-secondary">
                 <i class="bx bx-arrow-back me-1"></i> Kembali
             </a>
@@ -71,91 +71,78 @@
                 </div>
             </div>
             <div data-bind="visible: !collapsed()">
-                <div class="table-responsive">
-                    <table class="table mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Item</th>
-                                <th style="width:120px;" class="text-center">Status</th>
-                                <th style="width:180px;">Foto</th>
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach: items">
-                            <tr data-bind="css: { 'table-success': status() === 'PASS', 'table-danger': status() === 'FAIL' }">
-                                <!-- Item + Catatan selalu tampil -->
-                                <td class="align-middle">
-                                    <div data-bind="text: name"></div>
-                                    <div class="mt-2">
-                                        <small class="text-muted">Catatan
-                                            <span class="text-danger" data-bind="visible: status() === 'FAIL'">*</span>
-                                        </small>
-                                        <textarea rows="2" class="form-control form-control-sm mt-1"
-                                                  style="resize:vertical;min-height:54px;"
-                                                  placeholder="Tambahkan catatan..."
-                                                  data-bind="value: note, valueUpdate: 'afterkeydown',
-                                                             css: { 'is-invalid': status() === 'FAIL' && !note().trim() },
-                                                             event: { change: $root.onItemChange.bind($root, $data) }"></textarea>
-                                    </div>
-                                </td>
-                                <!-- Circular Pass/Fail emoji buttons -->
-                                <td class="text-center align-middle">
-                                    <div class="d-flex justify-content-center gap-2">
-                                        <button type="button"
-                                                style="width:44px;height:44px;border-radius:50%;border:3px solid;font-size:22px;cursor:pointer;transition:.15s;line-height:1;padding:0;"
-                                                data-bind="click: function(){ $root.setItemStatus($data, 'PASS') },
-                                                           style: { borderColor: status() === 'PASS' ? '#22c55e' : '#d1d5db',
-                                                                    background: status() === 'PASS' ? '#dcfce7' : 'white' }">
-                                            &#128522;
-                                        </button>
-                                        <button type="button"
-                                                style="width:44px;height:44px;border-radius:50%;border:3px solid;font-size:22px;cursor:pointer;transition:.15s;line-height:1;padding:0;"
-                                                data-bind="click: function(){ $root.setItemStatus($data, 'FAIL') },
-                                                           style: { borderColor: status() === 'FAIL' ? '#ef4444' : '#d1d5db',
-                                                                    background: status() === 'FAIL' ? '#fee2e2' : 'white' }">
-                                            &#128545;
-                                        </button>
-                                    </div>
-                                </td>
-                                <!-- Foto: Kamera & Galeri terpisah -->
-                                <td class="align-middle">
-                                    <div data-bind="visible: $root.status() !== 'COMPLETED'">
-                                        <div class="d-flex gap-2 mb-2">
-                                            <label class="text-center p-2 flex-fill"
-                                                   style="border:2px dashed #d1d5db;border-radius:10px;cursor:pointer;">
-                                                <div style="font-size:18px;line-height:1.4;">&#128247;</div>
-                                                <div style="font-size:11px;color:#6b7280;">Kamera</div>
-                                                <input type="file" accept="image/*" capture="environment" class="d-none"
-                                                       data-bind="event: { change: function(d,e){ $root.addPhoto($data, e) } }" />
-                                            </label>
-                                            <label class="text-center p-2 flex-fill"
-                                                   style="border:2px dashed #d1d5db;border-radius:10px;cursor:pointer;">
-                                                <div style="font-size:18px;line-height:1.4;">&#128444;&#65039;</div>
-                                                <div style="font-size:11px;color:#6b7280;">Galeri</div>
-                                                <input type="file" accept="image/*" multiple class="d-none"
-                                                       data-bind="event: { change: function(d,e){ $root.addPhoto($data, e) } }" />
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-wrap gap-1">
-                                        <!-- ko foreach: photos -->
-                                        <div class="position-relative flex-shrink-0" style="width:48px;height:48px;">
-                                            <img data-bind="attr: { src: $data }"
-                                                 style="width:48px;height:48px;object-fit:cover;border-radius:6px;" />
-                                            <!-- ko if: $root.status() !== 'COMPLETED' -->
-                                            <button type="button" class="btn btn-danger position-absolute top-0 end-0 p-0"
-                                                    style="width:16px;height:16px;font-size:9px;border-radius:50%;min-width:0;line-height:1;"
-                                                    data-bind="click: function(){ $root.removePhoto($parent, $data) }">
-                                                &times;
-                                            </button>
-                                            <!-- /ko -->
-                                        </div>
-                                        <!-- /ko -->
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <!-- ko foreach: items -->
+                <div class="px-3 py-3 border-bottom"
+                     data-bind="css: { 'bg-success-subtle': status() === 'PASS', 'bg-danger-subtle': status() === 'FAIL' }">
+                    <!-- Item name + Pass/Fail buttons -->
+                    <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
+                        <div class="fw-medium" data-bind="text: name"></div>
+                        <div class="d-flex gap-2 flex-shrink-0">
+                            <button type="button"
+                                    style="width:48px;height:48px;border-radius:50%;border:3px solid;font-size:24px;cursor:pointer;transition:.15s;line-height:1;padding:0;"
+                                    data-bind="click: function(){ $root.setItemStatus($data, 'PASS') },
+                                               style: { borderColor: status() === 'PASS' ? '#22c55e' : '#d1d5db',
+                                                        background: status() === 'PASS' ? '#dcfce7' : 'white' }">
+                                &#128522;
+                            </button>
+                            <button type="button"
+                                    style="width:48px;height:48px;border-radius:50%;border:3px solid;font-size:24px;cursor:pointer;transition:.15s;line-height:1;padding:0;"
+                                    data-bind="click: function(){ $root.setItemStatus($data, 'FAIL') },
+                                               style: { borderColor: status() === 'FAIL' ? '#ef4444' : '#d1d5db',
+                                                        background: status() === 'FAIL' ? '#fee2e2' : 'white' }">
+                                &#128545;
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Catatan -->
+                    <div class="mb-2">
+                        <small class="text-muted">Catatan
+                            <span class="text-danger" data-bind="visible: status() === 'FAIL'">*</span>
+                        </small>
+                        <textarea rows="2" class="form-control form-control-sm mt-1"
+                                  style="resize:vertical;min-height:54px;"
+                                  placeholder="Tambahkan catatan..."
+                                  data-bind="value: note, valueUpdate: 'afterkeydown',
+                                             css: { 'is-invalid': status() === 'FAIL' && !note().trim() },
+                                             event: { change: $root.onItemChange.bind($root, $data) }"></textarea>
+                    </div>
+                    <!-- Foto: Kamera & Galeri -->
+                    <div data-bind="visible: $root.status() !== 'COMPLETED'">
+                        <div class="d-flex gap-2 mb-2">
+                            <label class="text-center p-2 flex-fill"
+                                   style="border:2px dashed #d1d5db;border-radius:10px;cursor:pointer;min-height:56px;">
+                                <div style="font-size:20px;line-height:1.4;">&#128247;</div>
+                                <div style="font-size:12px;color:#6b7280;">Kamera</div>
+                                <input type="file" accept="image/*" capture="environment" class="d-none"
+                                       data-bind="event: { change: function(d,e){ $root.addPhoto($data, e) } }" />
+                            </label>
+                            <label class="text-center p-2 flex-fill"
+                                   style="border:2px dashed #d1d5db;border-radius:10px;cursor:pointer;min-height:56px;">
+                                <div style="font-size:20px;line-height:1.4;">&#128444;&#65039;</div>
+                                <div style="font-size:12px;color:#6b7280;">Galeri</div>
+                                <input type="file" accept="image/*" multiple class="d-none"
+                                       data-bind="event: { change: function(d,e){ $root.addPhoto($data, e) } }" />
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Thumbnails -->
+                    <div class="d-flex flex-wrap gap-1">
+                        <!-- ko foreach: photos -->
+                        <div class="position-relative flex-shrink-0" style="width:56px;height:56px;">
+                            <img data-bind="attr: { src: $data }"
+                                 style="width:56px;height:56px;object-fit:cover;border-radius:8px;" />
+                            <!-- ko if: $root.status() !== 'COMPLETED' -->
+                            <button type="button" class="btn btn-danger position-absolute top-0 end-0 p-0"
+                                    style="width:22px;height:22px;font-size:11px;border-radius:50%;min-width:0;line-height:1;"
+                                    data-bind="click: function(){ $root.removePhoto($parent, $data) }">
+                                &times;
+                            </button>
+                            <!-- /ko -->
+                        </div>
+                        <!-- /ko -->
+                    </div>
                 </div>
+                <!-- /ko -->
             </div>
         </div>
     </div>
