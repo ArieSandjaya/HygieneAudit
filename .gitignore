@@ -2,10 +2,12 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/BackEnd/src/HygieneAudit.API/appsettings.Production.json
-/BackEnd/src/HygieneAudit.API/appsettings.json
-/BackEnd/src/HygieneAudit.API/appsettings.Development.json
-/BackEnd/.vs/HygieneAudit/FileContentIndex
+# Build output (never commit — leaks secrets baked into appsettings copies)
+bin/
+obj/
+.vs/
+# NuGet restore target — vendored DLLs live under BackEnd/libs/ instead
+packages/
 
 # Node / npm (tooling only, not part of the project)
 node_modules/

@@ -152,87 +152,87 @@
   <!-- References to domain/application DLLs and their dependencies (from API bin) -->
   <ItemGroup>
     <Reference Include="Autofac">
-      <HintPath>..\src\HygieneAudit.API\bin\Autofac.dll</HintPath>
+      <HintPath>..\libs\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+      <HintPath>..\libs\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Autofac.Integration.WebApi">
-      <HintPath>..\src\HygieneAudit.API\bin\Autofac.Integration.WebApi.dll</HintPath>
+      <HintPath>..\libs\Autofac.Integration.WebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="BCrypt.Net-Next">
-      <HintPath>..\src\HygieneAudit.API\bin\BCrypt.Net-Next.dll</HintPath>
+      <HintPath>..\libs\BCrypt.Net-Next.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.Configuration">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Configuration.dll</HintPath>
+      <HintPath>..\libs\Microsoft.Extensions.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+      <HintPath>..\libs\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.Configuration.Binder">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+      <HintPath>..\libs\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <HintPath>..\libs\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.Primitives">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Primitives.dll</HintPath>
+      <HintPath>..\libs\Microsoft.Extensions.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.IdentityModel.Tokens.Jwt">
-      <HintPath>..\src\HygieneAudit.API\bin\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      <HintPath>..\libs\System.IdentityModel.Tokens.Jwt.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Tokens">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.IdentityModel.Tokens.dll</HintPath>
+      <HintPath>..\libs\Microsoft.IdentityModel.Tokens.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Logging">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.IdentityModel.Logging.dll</HintPath>
+      <HintPath>..\libs\Microsoft.IdentityModel.Logging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Abstractions">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.IdentityModel.Abstractions.dll</HintPath>
+      <HintPath>..\libs\Microsoft.IdentityModel.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.EntityFrameworkCore.dll</HintPath>
+      <HintPath>..\libs\Microsoft.EntityFrameworkCore.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore.Abstractions">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
+      <HintPath>..\libs\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore.Relational">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
+      <HintPath>..\libs\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore.SqlServer">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.EntityFrameworkCore.SqlServer.dll</HintPath>
+      <HintPath>..\libs\Microsoft.EntityFrameworkCore.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.Logging">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Logging.dll</HintPath>
+      <HintPath>..\libs\Microsoft.Extensions.Logging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.Logging.Abstractions">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      <HintPath>..\libs\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.Options">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Extensions.Options.dll</HintPath>
+      <HintPath>..\libs\Microsoft.Extensions.Options.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Data.SqlClient">
-      <HintPath>..\src\HygieneAudit.API\bin\Microsoft.Data.SqlClient.dll</HintPath>
+      <HintPath>..\libs\Microsoft.Data.SqlClient.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -653,7 +653,7 @@
   <Target Name="CopySniNativeDlls" AfterTargets="Build">
     <MakeDir Directories="$(ProjectDir)bin\x86" />
     <MakeDir Directories="$(ProjectDir)bin\x64" />
-    <Copy SourceFiles="..\src\HygieneAudit.API\bin\x86\SNI.dll" DestinationFolder="$(ProjectDir)bin\x86\" ContinueOnError="true" />
-    <Copy SourceFiles="..\src\HygieneAudit.API\bin\x64\SNI.dll" DestinationFolder="$(ProjectDir)bin\x64\" ContinueOnError="true" />
+    <Copy SourceFiles="..\libs\x86\SNI.dll" DestinationFolder="$(ProjectDir)bin\x86\" ContinueOnError="true" />
+    <Copy SourceFiles="..\libs\x64\SNI.dll" DestinationFolder="$(ProjectDir)bin\x64\" ContinueOnError="true" />
   </Target>
 </Project>
