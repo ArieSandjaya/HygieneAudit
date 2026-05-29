@@ -6,92 +6,193 @@
     var isAdmin = userRole == "Admin" || userRole == "SuperAdmin";
 }
 
-<div class="row mb-4">
-    <div class="col-12">
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
         <h4 class="fw-bold mb-1">Halo, @userName 👋</h4>
-        <p class="text-muted">Selamat datang di Hygiene Audit System</p>
+        <p class="text-muted mb-0" id="dashboardDate"></p>
     </div>
+    <a href="@Url.Action("Index", "Audits")" class="btn btn-primary">
+        <i class="bx bx-plus me-1"></i> Audit Baru
+    </a>
 </div>
 
-<!-- Quick Action Cards -->
-<div class="row g-4 mb-4">
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body d-flex align-items-center gap-3">
-                <div class="avatar flex-shrink-0">
-                    <span class="avatar-initial rounded-circle bg-label-primary" style="width:48px;height:48px;font-size:1.4rem;">
+<!-- Stat Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body py-3">
+                <div class="avatar mx-auto mb-2" style="width:48px;height:48px;">
+                    <span class="avatar-initial rounded-circle bg-label-primary" style="width:48px;height:48px;font-size:1.3rem;">
                         <i class="bx bx-clipboard"></i>
                     </span>
                 </div>
-                <div class="flex-grow-1">
-                    <h6 class="mb-1 fw-semibold">Audit</h6>
-                    <p class="text-muted small mb-2">Buat dan kelola sesi audit hygiene</p>
-                    <a href="@Url.Action("Index", "Audits")" class="btn btn-sm btn-primary">Buka Audit</a>
-                </div>
+                <h3 class="fw-bold mb-0 text-primary" id="statTotal">—</h3>
+                <small class="text-muted">Total Audit</small>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body d-flex align-items-center gap-3">
-                <div class="avatar flex-shrink-0">
-                    <span class="avatar-initial rounded-circle bg-label-info" style="width:48px;height:48px;font-size:1.4rem;">
-                        <i class="bx bx-store"></i>
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body py-3">
+                <div class="avatar mx-auto mb-2" style="width:48px;height:48px;">
+                    <span class="avatar-initial rounded-circle bg-label-success" style="width:48px;height:48px;font-size:1.3rem;">
+                        <i class="bx bx-check-circle"></i>
                     </span>
                 </div>
-                <div class="flex-grow-1">
-                    <h6 class="mb-1 fw-semibold">Tenant</h6>
-                    <p class="text-muted small mb-2">Lihat daftar tenant yang terdaftar</p>
-                    <a href="@Url.Action("Index", "Tenants")" class="btn btn-sm btn-info">Buka Tenant</a>
-                </div>
+                <h3 class="fw-bold mb-0 text-success" id="statCompleted">—</h3>
+                <small class="text-muted">Selesai</small>
             </div>
         </div>
     </div>
-    @if (isAdmin)
-    {
-        <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body d-flex align-items-center gap-3">
-                    <div class="avatar flex-shrink-0">
-                        <span class="avatar-initial rounded-circle bg-label-warning" style="width:48px;height:48px;font-size:1.4rem;">
-                            <i class="bx bx-bar-chart-alt-2"></i>
-                        </span>
-                    </div>
-                    <div class="flex-grow-1">
-                        <h6 class="mb-1 fw-semibold">Laporan</h6>
-                        <p class="text-muted small mb-2">Lihat ringkasan hasil audit</p>
-                        <a href="@Url.Action("Index", "Reports")" class="btn btn-sm btn-warning">Buka Laporan</a>
-                    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body py-3">
+                <div class="avatar mx-auto mb-2" style="width:48px;height:48px;">
+                    <span class="avatar-initial rounded-circle bg-label-warning" style="width:48px;height:48px;font-size:1.3rem;">
+                        <i class="bx bx-edit"></i>
+                    </span>
                 </div>
+                <h3 class="fw-bold mb-0 text-warning" id="statDraft">—</h3>
+                <small class="text-muted">Draft</small>
             </div>
         </div>
-    }
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body py-3">
+                <div class="avatar mx-auto mb-2" style="width:48px;height:48px;">
+                    <span class="avatar-initial rounded-circle bg-label-danger" style="width:48px;height:48px;font-size:1.3rem;">
+                        <i class="bx bx-x-circle"></i>
+                    </span>
+                </div>
+                <h3 class="fw-bold mb-0 text-danger" id="statFail">—</h3>
+                <small class="text-muted">Item Fail</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Audits -->
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Audit Terbaru</h5>
+        <a href="@Url.Action("Index", "Audits")" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+    </div>
+    <div id="recentAuditsList">
+        <div class="text-center text-muted py-5">
+            <i class="bx bx-loader-circle bx-spin bx-lg d-block mb-2"></i>
+            Memuat...
+        </div>
+    </div>
 </div>
 
 @if (isAdmin)
 {
-    <div class="row g-4">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Template Checklist</h5>
-                    <a href="@Url.Action("Index", "Templates")" class="btn btn-sm btn-outline-primary">Kelola</a>
-                </div>
-                <div class="card-body text-muted small">
-                    Atur item checklist yang digunakan dalam setiap sesi audit.
+    <!-- Admin quick links -->
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="avatar-initial rounded-circle bg-label-info" style="width:44px;height:44px;font-size:1.3rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="bx bx-store"></i>
+                    </span>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 fw-semibold">Tenant</h6>
+                        <p class="text-muted small mb-2">Kelola daftar tenant</p>
+                        <a href="@Url.Action("Index", "Tenants")" class="btn btn-sm btn-info">Buka</a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Pengguna</h5>
-                    <a href="@Url.Action("Index", "Users")" class="btn btn-sm btn-outline-primary">Kelola</a>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="avatar-initial rounded-circle bg-label-warning" style="width:44px;height:44px;font-size:1.3rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="bx bx-bar-chart-alt-2"></i>
+                    </span>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 fw-semibold">Laporan</h6>
+                        <p class="text-muted small mb-2">Lihat ringkasan audit</p>
+                        <a href="@Url.Action("Index", "Reports")" class="btn btn-sm btn-warning">Buka</a>
+                    </div>
                 </div>
-                <div class="card-body text-muted small">
-                    Tambah dan kelola akun auditor dan administrator.
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <span class="avatar-initial rounded-circle bg-label-secondary" style="width:44px;height:44px;font-size:1.3rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="bx bx-list-check"></i>
+                    </span>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 fw-semibold">Template</h6>
+                        <p class="text-muted small mb-2">Atur item checklist</p>
+                        <a href="@Url.Action("Index", "Templates")" class="btn btn-sm btn-secondary">Buka</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+}
+
+@section Scripts {
+    <script>
+        // Tanggal hari ini
+        document.getElementById('dashboardDate').textContent =
+            new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+        // Load stats
+        $.getJSON('/api/audits').done(function (audits) {
+            var total     = audits.length;
+            var completed = audits.filter(function (a) { return a.status === 'COMPLETED'; }).length;
+            var draft     = audits.filter(function (a) { return a.status === 'DRAFT'; }).length;
+            var failItems = audits.reduce(function (n, a) {
+                return n + (a.items || []).filter(function (i) { return i.status === 'FAIL'; }).length;
+            }, 0);
+
+            document.getElementById('statTotal').textContent     = total;
+            document.getElementById('statCompleted').textContent = completed;
+            document.getElementById('statDraft').textContent     = draft;
+            document.getElementById('statFail').textContent      = failItems;
+
+            // Recent 5 audits
+            var recent = audits.slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); }).slice(0, 5);
+            var container = document.getElementById('recentAuditsList');
+
+            if (recent.length === 0) {
+                container.innerHTML = '<div class="text-center text-muted py-5"><i class="bx bx-clipboard bx-lg d-block mb-2"></i>Belum ada audit.</div>';
+                return;
+            }
+
+            var html = '<div class="table-responsive"><table class="table table-hover mb-0"><thead class="table-light"><tr>' +
+                '<th>Tenant</th><th>Tanggal</th><th>PIC</th><th class="text-center">Status</th><th>Pass Rate</th><th class="text-center">Aksi</th>' +
+                '</tr></thead><tbody>';
+
+            recent.forEach(function (a) {
+                var items    = a.items || [];
+                var pass     = items.filter(function (i) { return i.status === 'PASS'; }).length;
+                var rate     = items.length > 0 ? Math.round(pass / items.length * 100) : 0;
+                var statusCss = a.status === 'COMPLETED' ? 'bg-label-success' : 'bg-label-warning';
+                var date      = new Date(a.date).toLocaleDateString('id-ID');
+
+                html += '<tr>' +
+                    '<td><span class="fw-semibold">' + (a.tenantName || '') + '</span></td>' +
+                    '<td>' + date + '</td>' +
+                    '<td>' + (a.picName || '') + '</td>' +
+                    '<td class="text-center"><span class="badge ' + statusCss + '">' + a.status + '</span></td>' +
+                    '<td style="min-width:110px;"><div class="d-flex align-items-center gap-2">' +
+                        '<div class="progress flex-grow-1" style="height:6px;"><div class="progress-bar bg-success" style="width:' + rate + '%"></div></div>' +
+                        '<small>' + rate + '%</small></div></td>' +
+                    '<td class="text-center"><a href="/Audits/Detail/' + a.id + '" class="btn btn-sm btn-icon btn-outline-primary" title="Buka"><i class="bx bx-edit-alt"></i></a></td>' +
+                    '</tr>';
+            });
+
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }).fail(function () {
+            document.getElementById('recentAuditsList').innerHTML =
+                '<div class="text-center text-muted py-4"><i class="bx bx-error-circle me-1"></i>Gagal memuat data.</div>';
+        });
+    </script>
 }

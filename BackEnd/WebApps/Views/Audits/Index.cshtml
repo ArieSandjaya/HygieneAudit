@@ -62,6 +62,58 @@
                     </select>
                 </div>
             </div>
+
+            <!-- Tenant History Preview -->
+            <div class="mt-3" data-bind="visible: tenantHistoryVisible">
+                <div class="card border-0 bg-light">
+                    <div class="card-header bg-light border-bottom d-flex align-items-center gap-2 py-2">
+                        <i class="bx bx-history text-primary"></i>
+                        <small class="fw-bold">Riwayat Audit Tenant</small>
+                        <span class="badge bg-label-secondary" data-bind="text: tenantHistorySubtitle"></span>
+                    </div>
+                    <div class="card-body p-3" data-bind="if: tenantHistoryAudits().length > 0">
+                        <!-- Stats chips -->
+                        <div class="d-flex gap-4 mb-3">
+                            <div class="text-center">
+                                <div class="fw-bold fs-5" data-bind="text: tenantTotalAudits"></div>
+                                <small class="text-muted">Total</small>
+                            </div>
+                            <div class="text-center">
+                                <div class="fw-bold fs-5 text-success" data-bind="text: tenantAvgPass + '%'"></div>
+                                <small class="text-muted">Avg Pass</small>
+                            </div>
+                            <div class="text-center">
+                                <div class="fw-bold fs-5" data-bind="text: tenantLastAuditDays"></div>
+                                <small class="text-muted">Terakhir</small>
+                            </div>
+                        </div>
+                        <!-- Trend bars -->
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-1">Trend Pass Rate (6 audit terakhir)</small>
+                            <div class="d-flex align-items-end gap-1" style="height:56px;" data-bind="foreach: tenantTrendBars">
+                                <div class="flex-fill d-flex flex-column align-items-center justify-content-end" style="min-width:0;">
+                                    <div data-bind="style: { height: height, background: color, borderRadius: '3px 3px 0 0', width: '100%' }"></div>
+                                    <div class="text-muted" style="font-size:10px;" data-bind="text: label"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Recent audits list -->
+                        <div data-bind="foreach: tenantHistoryAudits().slice(0, 5)">
+                            <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                                <div>
+                                    <div class="small fw-semibold" data-bind="text: new Date(date).toLocaleDateString('id-ID')"></div>
+                                    <div class="text-muted" style="font-size:11px;" data-bind="text: 'PIC: ' + picName"></div>
+                                </div>
+                                <span class="badge" data-bind="text: $root.passRateLabel($data), css: $root.passRateCss($data)"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3 text-muted small" data-bind="if: tenantHistoryAudits().length === 0">
+                        <i class="bx bx-info-circle me-1"></i> Tenant ini belum memiliki riwayat audit.
+                    </div>
+                </div>
+            </div>
+
             <div class="mt-3">
                 <button class="btn btn-primary me-2" data-bind="click: createAudit"><i class="bx bx-check me-1"></i> Buat</button>
                 <button class="btn btn-outline-secondary" data-bind="click: cancelForm">Batal</button>

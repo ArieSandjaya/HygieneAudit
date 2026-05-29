@@ -26,9 +26,62 @@ function AuditsViewModel() {
         var t = ko.utils.arrayFirst(self.tenants(), function (t) { return t.id == id; });
         return t ? t.name : null;
     });
+
+    // Tenant history preview
+    self.tenantHistoryVisible = ko.observable(false);
+    self.tenantHistoryAudits = ko.observableArray([]);
+    self.tenantHistorySubtitle = ko.computed(function () {
+        return self.tenantHistoryAudits().length + ' audit';
+    });
+    self.tenantTotalAudits = ko.computed(function () { return self.tenantHistoryAudits().length; });
+    self.tenantAvgPass = ko.computed(function () {
+        var h = self.tenantHistoryAudits();
+        if (!h.length) return 0;
+        var sum = h.reduce(function (n, a) {
+            var items = a.items || [];
+            var pass = items.filter(function (i) { return i.status === 'PASS'; }).length;
+            return n + (items.length ? pass / items.length : 0);
+        }, 0);
+        return Math.round(sum / h.length * 100);
+    });
+    self.tenantLastAuditDays = ko.computed(function () {
+        var h = self.tenantHistoryAudits();
+        if (!h.length) return '-';
+        var d = Math.floor((new Date() - new Date(h[0].date)) / 86400000);
+        return d === 0 ? 'Hari ini' : d + ' hari lalu';
+    });
+    self.tenantTrendBars = ko.computed(function () {
+        return self.tenantHistoryAudits().slice(0, 6).reverse().map(function (a) {
+            var items = a.items || [];
+            var pass = items.filter(function (i) { return i.status === 'PASS'; }).length;
+            var rate = items.length ? Math.round(pass / items.length * 100) : 0;
+            var dt = new Date(a.date);
+            return {
+                height: Math.max(rate * 0.48, 4) + 'px',
+                color: rate >= 70 ? '#22c55e' : '#ef4444',
+                label: dt.getDate() + '/' + (dt.getMonth() + 1)
+            };
+        });
+    });
+    self.passRateLabel = function (a) {
+        var items = a.items || [];
+        var pass = items.filter(function (i) { return i.status === 'PASS'; }).length;
+        return items.length ? Math.round(pass / items.length * 100) + '%' : '-';
+    };
+    self.passRateCss = function (a) {
+        var items = a.items || [];
+        var pass = items.filter(function (i) { return i.status === 'PASS'; }).length;
+        var rate = items.length ? pass / items.length * 100 : 0;
+        return rate >= 70 ? 'bg-label-success' : 'bg-label-danger';
+    };
+
     self.selectTenant = function (tenant) {
         self.newAudit.tenantId(tenant.id);
         self.tenantSearch('');
+        var history = self.audits().filter(function (a) { return a.tenantId == tenant.id; })
+                                   .sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+        self.tenantHistoryAudits(history);
+        self.tenantHistoryVisible(true);
     };
 
     self.filteredAudits = ko.computed(function () {
@@ -56,7 +109,11 @@ function AuditsViewModel() {
     };
 
     self.showCreateForm = function () { self.showForm(true); };
-    self.cancelForm     = function () { self.showForm(false); };
+    self.cancelForm     = function () {
+        self.showForm(false);
+        self.tenantHistoryVisible(false);
+        self.tenantHistoryAudits([]);
+    };
 
     self.createAudit = function () {
         var data = {
@@ -67,7 +124,7 @@ function AuditsViewModel() {
         };
         $.ajax({ url: '/api/audits', type: 'POST', contentType: 'application/json', data: JSON.stringify(data) })
             .done(function (audit) { window.location.href = '/Audits/Detail/' + audit.id; })
-            .fail(function (xhr)   { alert((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal membuat audit.'); });
+            .fail(function (xhr)   { showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal membuat audit.', 'error'); });
     };
 
     self.init();
@@ -112,10 +169,17 @@ function AuditDetailViewModel(auditId) {
                 grouped[item.category].push(item);
             });
             self.categories(Object.keys(grouped).map(function (k) {
-                return { name: k, items: grouped[k] };
+                var catItems = grouped[k];
+                var cat = { name: k, items: catItems, collapsed: ko.observable(false) };
+                cat.checkedCount = ko.computed(function () {
+                    return catItems.filter(function (i) { return i.status() !== ''; }).length;
+                });
+                return cat;
             }));
         });
     };
+
+    self.toggleCategory = function (cat) { cat.collapsed(!cat.collapsed()); };
 
     self.addPhoto = function (item, event) {
         var files = event.target.files;
@@ -140,7 +204,7 @@ function AuditDetailViewModel(auditId) {
     };
 
     self.setItemStatus = function (item, status) {
-        item.status(item.status() === status ? '' : status); // toggle off jika klik ulang
+        item.status(item.status() === status ? '' : status);
         self.onItemChange(item);
     };
 
@@ -154,17 +218,18 @@ function AuditDetailViewModel(auditId) {
 
     self.saveDraft = function () {
         $.ajax({ url: '/api/audits/' + auditId + '/draft', type: 'POST' })
-            .done(function () { alert('Draft disimpan.'); });
+            .done(function () { showToast('Draft disimpan!'); })
+            .fail(function () { showToast('Gagal menyimpan draft.', 'error'); });
     };
 
     self.submitAudit = function () {
         if (!confirm('Yakin ingin menyelesaikan audit ini?')) return;
         $.ajax({ url: '/api/audits/' + auditId + '/submit', type: 'POST' })
             .done(function () {
-                alert('Audit berhasil diselesaikan!');
-                window.location.href = '/Audits';
+                showToast('Audit berhasil diselesaikan! 🎉');
+                setTimeout(function () { window.location.href = '/Audits'; }, 1500);
             })
-            .fail(function (xhr) { alert((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal.'); });
+            .fail(function (xhr) { showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal.', 'error'); });
     };
 
     self.init();

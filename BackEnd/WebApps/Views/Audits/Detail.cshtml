@@ -61,68 +61,101 @@
     <!-- Checklist by Category -->
     <div data-bind="foreach: categories">
         <div class="card mb-3">
-            <div class="card-header">
+            <!-- Collapsible category header -->
+            <div class="card-header d-flex justify-content-between align-items-center"
+                 style="cursor:pointer;" data-bind="click: $root.toggleCategory">
                 <h6 class="card-title mb-0 text-uppercase fw-semibold" data-bind="text: name"></h6>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-label-secondary" data-bind="text: checkedCount() + '/' + items.length"></span>
+                    <i class="bx" data-bind="css: { 'bx-chevron-up': !collapsed(), 'bx-chevron-down': collapsed() }"></i>
+                </div>
             </div>
-            <div class="table-responsive">
-                <table class="table mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Item</th>
-                            <th style="width:160px;" class="text-center">Status</th>
-                            <th style="width:220px;">Foto</th>
-                        </tr>
-                    </thead>
-                    <tbody data-bind="foreach: items">
-                        <tr data-bind="css: { 'table-success': status() === 'PASS', 'table-danger': status() === 'FAIL' }">
-                            <td class="align-middle">
-                                <div data-bind="text: name"></div>
-                                <input type="text" class="form-control form-control-sm mt-1" placeholder="Catatan..."
-                                       data-bind="value: note, valueUpdate: 'afterkeydown',
-                                                  visible: status() === 'FAIL',
-                                                  event: { change: $root.onItemChange.bind($root, $data) }" />
-                            </td>
-                            <td class="text-center align-middle">
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <button type="button" class="btn"
-                                            data-bind="click: function(){ $root.setItemStatus($data, 'PASS') },
-                                                       css: { 'btn-success': status() === 'PASS', 'btn-outline-success': status() !== 'PASS' }">
-                                        <i class="bx bx-check"></i> Pass
-                                    </button>
-                                    <button type="button" class="btn"
-                                            data-bind="click: function(){ $root.setItemStatus($data, 'FAIL') },
-                                                       css: { 'btn-danger': status() === 'FAIL', 'btn-outline-danger': status() !== 'FAIL' }">
-                                        <i class="bx bx-x"></i> Fail
-                                    </button>
-                                </div>
-                            </td>
-                            <td class="align-middle">
-                                <div class="d-flex align-items-center gap-1 flex-wrap">
-                                    <label class="btn btn-sm btn-outline-secondary flex-shrink-0"
-                                           data-bind="visible: $root.status() !== 'COMPLETED'"
-                                           title="Tambah foto">
-                                        <i class="bx bx-camera"></i>
-                                        <input type="file" accept="image/*" multiple class="d-none"
-                                               data-bind="event: { change: function(d,e){ $root.addPhoto($data, e) } }" />
-                                    </label>
-                                    <!-- ko foreach: photos -->
-                                    <div class="position-relative flex-shrink-0" style="width:40px;height:40px;">
-                                        <img data-bind="attr: { src: $data }"
-                                             style="width:40px;height:40px;object-fit:cover;border-radius:4px;" />
-                                        <!-- ko if: $root.status() !== 'COMPLETED' -->
-                                        <button type="button" class="btn btn-danger position-absolute top-0 end-0 p-0"
-                                                style="width:14px;height:14px;font-size:8px;border-radius:50%;min-width:0;line-height:1;"
-                                                data-bind="click: function(){ $root.removePhoto($parent, $data) }">
-                                            &times;
+            <div data-bind="visible: !collapsed()">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Item</th>
+                                <th style="width:120px;" class="text-center">Status</th>
+                                <th style="width:180px;">Foto</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: items">
+                            <tr data-bind="css: { 'table-success': status() === 'PASS', 'table-danger': status() === 'FAIL' }">
+                                <!-- Item + Catatan selalu tampil -->
+                                <td class="align-middle">
+                                    <div data-bind="text: name"></div>
+                                    <div class="mt-2">
+                                        <small class="text-muted">Catatan
+                                            <span class="text-danger" data-bind="visible: status() === 'FAIL'">*</span>
+                                        </small>
+                                        <textarea rows="2" class="form-control form-control-sm mt-1"
+                                                  style="resize:vertical;min-height:54px;"
+                                                  placeholder="Tambahkan catatan..."
+                                                  data-bind="value: note, valueUpdate: 'afterkeydown',
+                                                             css: { 'is-invalid': status() === 'FAIL' && !note().trim() },
+                                                             event: { change: $root.onItemChange.bind($root, $data) }"></textarea>
+                                    </div>
+                                </td>
+                                <!-- Circular Pass/Fail emoji buttons -->
+                                <td class="text-center align-middle">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <button type="button"
+                                                style="width:44px;height:44px;border-radius:50%;border:3px solid;font-size:22px;cursor:pointer;transition:.15s;line-height:1;padding:0;"
+                                                data-bind="click: function(){ $root.setItemStatus($data, 'PASS') },
+                                                           style: { borderColor: status() === 'PASS' ? '#22c55e' : '#d1d5db',
+                                                                    background: status() === 'PASS' ? '#dcfce7' : 'white' }">
+                                            &#128522;
                                         </button>
+                                        <button type="button"
+                                                style="width:44px;height:44px;border-radius:50%;border:3px solid;font-size:22px;cursor:pointer;transition:.15s;line-height:1;padding:0;"
+                                                data-bind="click: function(){ $root.setItemStatus($data, 'FAIL') },
+                                                           style: { borderColor: status() === 'FAIL' ? '#ef4444' : '#d1d5db',
+                                                                    background: status() === 'FAIL' ? '#fee2e2' : 'white' }">
+                                            &#128545;
+                                        </button>
+                                    </div>
+                                </td>
+                                <!-- Foto: Kamera & Galeri terpisah -->
+                                <td class="align-middle">
+                                    <div data-bind="visible: $root.status() !== 'COMPLETED'">
+                                        <div class="d-flex gap-2 mb-2">
+                                            <label class="text-center p-2 flex-fill"
+                                                   style="border:2px dashed #d1d5db;border-radius:10px;cursor:pointer;">
+                                                <div style="font-size:18px;line-height:1.4;">&#128247;</div>
+                                                <div style="font-size:11px;color:#6b7280;">Kamera</div>
+                                                <input type="file" accept="image/*" capture="environment" class="d-none"
+                                                       data-bind="event: { change: function(d,e){ $root.addPhoto($data, e) } }" />
+                                            </label>
+                                            <label class="text-center p-2 flex-fill"
+                                                   style="border:2px dashed #d1d5db;border-radius:10px;cursor:pointer;">
+                                                <div style="font-size:18px;line-height:1.4;">&#128444;&#65039;</div>
+                                                <div style="font-size:11px;color:#6b7280;">Galeri</div>
+                                                <input type="file" accept="image/*" multiple class="d-none"
+                                                       data-bind="event: { change: function(d,e){ $root.addPhoto($data, e) } }" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <!-- ko foreach: photos -->
+                                        <div class="position-relative flex-shrink-0" style="width:48px;height:48px;">
+                                            <img data-bind="attr: { src: $data }"
+                                                 style="width:48px;height:48px;object-fit:cover;border-radius:6px;" />
+                                            <!-- ko if: $root.status() !== 'COMPLETED' -->
+                                            <button type="button" class="btn btn-danger position-absolute top-0 end-0 p-0"
+                                                    style="width:16px;height:16px;font-size:9px;border-radius:50%;min-width:0;line-height:1;"
+                                                    data-bind="click: function(){ $root.removePhoto($parent, $data) }">
+                                                &times;
+                                            </button>
+                                            <!-- /ko -->
+                                        </div>
                                         <!-- /ko -->
                                     </div>
-                                    <!-- /ko -->
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
