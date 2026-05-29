@@ -19,6 +19,7 @@ public class AuditService : IAuditService
     {
         var templates = await _unitOfWork.Templates.GetAllAsync();
         var filteredTemplates = templates
+            .Where(t => t.IsActive)
             .Where(t => !t.RequiresGas || (t.RequiresGas && request.IsGas))
             .ToList();
 
