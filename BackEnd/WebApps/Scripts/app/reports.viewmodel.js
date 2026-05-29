@@ -21,6 +21,8 @@ function ReportsViewModel() {
         $.getJSON(url).done(function (data) {
             self.rows(data.rows || []);
             self.summary(data.summary || null);
+        }).fail(function () {
+            showToast('Gagal memuat laporan.', 'error');
         });
     };
 

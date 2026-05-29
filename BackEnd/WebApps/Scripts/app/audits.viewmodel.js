@@ -97,9 +97,9 @@ function AuditsViewModel() {
         $.getJSON('/api/audits').done(function (data) {
             data.forEach(function (audit) {
                 var items = audit.items || [];
-                var answered = items.filter(function (i) { return i.status; });
-                var passed   = items.filter(function (i) { return i.status === 'PASS'; });
-                audit.passRate = answered.length > 0 ? passed.length / answered.length : 0;
+                var passed = items.filter(function (i) { return i.status === 'PASS'; });
+                // Pass rate over TOTAL items (matches the history label, dashboard, and backend).
+                audit.passRate = items.length > 0 ? passed.length / items.length : 0;
             });
             self.audits(data);
         }).fail(function () { showToast('Gagal memuat daftar audit.', 'error'); });
@@ -119,8 +119,8 @@ function AuditsViewModel() {
     self.createAudit = function () {
         var data = {
             date:     self.newAudit.auditDate(),
-            tenantId: parseInt(self.newAudit.tenantId()) || 0,
-            picId:    parseInt(self.newAudit.picId())    || 0,
+            tenantId: parseInt(self.newAudit.tenantId(), 10) || 0,
+            picId:    parseInt(self.newAudit.picId(), 10)    || 0,
             isGas:    self.newAudit.includeGas() === 'true'
         };
         $.ajax({ url: '/api/audits', type: 'POST', contentType: 'application/json', data: JSON.stringify(data) })

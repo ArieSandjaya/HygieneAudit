@@ -39,7 +39,7 @@ function TemplatesViewModel() {
         var data = {
             category: self.form.category(),
             name: self.form.name(),
-            displayOrder: parseInt(self.form.displayOrder()),
+            displayOrder: parseInt(self.form.displayOrder(), 10) || 0,
             requiresGas: self.form.requiresGas()
         };
         var isEdit = !!self.editingId();

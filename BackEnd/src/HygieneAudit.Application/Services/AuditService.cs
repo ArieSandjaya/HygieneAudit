@@ -178,11 +178,21 @@ public class AuditService : IAuditService
 
         foreach (var row in report.Rows)
         {
-            csv.AppendLine($"{row.No},{row.TenantName},{(row.UsesGas ? "Gas" : "Non-Gas")},{row.Date:yyyy-MM-dd},{row.PicName},{row.Status},{row.PassRate}%,{row.TotalItems},{row.PassItems},{row.FailItems},\"{row.FailNotes}\"");
+            csv.AppendLine($"{row.No},{CsvField(row.TenantName)},{(row.UsesGas ? "Gas" : "Non-Gas")},{row.Date:yyyy-MM-dd},{CsvField(row.PicName)},{CsvField(row.Status)},{row.PassRate}%,{row.TotalItems},{row.PassItems},{row.FailItems},{CsvField(row.FailNotes)}");
         }
 
         csv.AppendLine($",TOTAL / RATA-RATA,,,,,{report.Summary.AveragePassRate}%,{report.Summary.TotalItems},{report.Summary.TotalPass},{report.Summary.TotalFail},{report.Summary.TenantCount} Tenant");
 
         return Task.FromResult(System.Text.Encoding.UTF8.GetBytes(csv.ToString()));
+    }
+
+    // Escape a value for safe CSV output: quote it (handles commas/quotes/newlines)
+    // and neutralize spreadsheet formula injection (leading = + - @).
+    private static string CsvField(string? value)
+    {
+        var s = value ?? string.Empty;
+        if (s.Length > 0 && (s[0] == '=' || s[0] == '+' || s[0] == '-' || s[0] == '@'))
+            s = "'" + s;
+        return "\"" + s.Replace("\"", "\"\"") + "\"";
     }
 }

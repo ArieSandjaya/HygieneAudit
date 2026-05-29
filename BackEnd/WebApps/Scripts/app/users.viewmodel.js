@@ -11,7 +11,8 @@ function UsersViewModel() {
     };
 
     self.init = function () {
-        $.getJSON('/api/users').done(function (d) { self.users(d); });
+        $.getJSON('/api/users').done(function (d) { self.users(d); })
+            .fail(function () { showToast('Gagal memuat daftar pengguna.', 'error'); });
     };
 
     self.showAddForm = function () {
@@ -45,13 +46,14 @@ function UsersViewModel() {
                 self.showForm(false);
                 self.init();
             })
-            .fail(function (xhr) { alert(xhr.responseJSON && xhr.responseJSON.message || 'Gagal menyimpan.'); });
+            .fail(function (xhr) { showToast(xhr.responseJSON && xhr.responseJSON.message || 'Gagal menyimpan.', 'error'); });
     };
 
     self.deleteUser = function (item) {
         if (!confirm('Nonaktifkan user "' + item.username + '"?')) return;
         $.ajax({ url: '/api/users/' + item.id, type: 'DELETE' })
-            .done(function () { self.init(); });
+            .done(function () { self.init(); })
+            .fail(function (xhr) { showToast(xhr.responseJSON && xhr.responseJSON.message || 'Gagal menghapus pengguna.', 'error'); });
     };
 
     self.init();

@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE_NAME = 'hygiene-audit-v1';
+const CACHE_NAME = 'hygiene-audit-v2';
 const STATIC_ASSETS = [
     '/Content/sneat/vendor/css/core.css',
     '/Content/sneat/vendor/css/theme-default.css',
@@ -48,7 +48,22 @@ self.addEventListener('fetch', function (event) {
     if (url.origin !== location.origin) return;
     if (url.pathname.startsWith('/api/')) return;
 
-    // Static assets: cache-first
+    // App viewmodels: network-first so logic updates ship immediately after deploy,
+    // falling back to cache when offline.
+    if (url.pathname.startsWith('/Scripts/app/')) {
+        event.respondWith(
+            fetch(event.request).then(function (response) {
+                var clone = response.clone();
+                caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, clone); });
+                return response;
+            }).catch(function () {
+                return caches.match(event.request);
+            })
+        );
+        return;
+    }
+
+    // Vendor static assets: cache-first
     if (url.pathname.startsWith('/Content/sneat/') ||
         url.pathname.startsWith('/Scripts/') ||
         url.pathname.endsWith('.css') ||

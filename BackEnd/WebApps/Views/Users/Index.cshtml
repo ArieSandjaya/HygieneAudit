@@ -68,7 +68,7 @@
                         <td>
                             <div class="d-flex align-items-center gap-2">
                                 <div class="avatar avatar-sm">
-                                    <span class="avatar-initial rounded-circle bg-label-primary" data-bind="text: name()[0].toUpperCase()"></span>
+                                    <span class="avatar-initial rounded-circle bg-label-primary" data-bind="text: (name() || '?').charAt(0).toUpperCase()"></span>
                                 </div>
                                 <span class="fw-semibold" data-bind="text: name"></span>
                             </div>
