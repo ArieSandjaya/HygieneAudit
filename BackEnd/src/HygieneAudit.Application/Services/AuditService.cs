@@ -60,6 +60,8 @@ public class AuditService : IAuditService
     {
         var audit = await _unitOfWork.Audits.GetByIdWithItemsAsync(auditId);
         if (audit == null) throw new NotFoundException("Audit not found");
+        if (audit.Status == AuditStatus.Completed)
+            throw new ValidationException("Audit sudah selesai dan tidak dapat diedit.");
 
         var item = audit.Items.FirstOrDefault(i => i.TemplateId == templateId);
         if (item == null) throw new NotFoundException("Item not found");

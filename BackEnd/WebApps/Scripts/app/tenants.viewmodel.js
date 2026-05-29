@@ -12,10 +12,10 @@ function TenantsViewModel() {
     };
 
     self.init = function () {
-        // Check role from /api/me or use a simpler approach via claims
-        $.getJSON('/api/tenants').done(function (d) { self.tenants(d); });
+        $.getJSON('/api/tenants').done(function (d) { self.tenants(d); })
+            .fail(function () { showToast('Gagal memuat daftar tenant.', 'error'); });
         $.getJSON('/api/users').done(function () {
-            self.isAdmin(true); // if /api/users succeeds, user is admin
+            self.isAdmin(true);
         }).fail(function () {
             self.isAdmin(false);
         });
@@ -55,13 +55,14 @@ function TenantsViewModel() {
                 self.showForm(false);
                 self.init();
             })
-            .fail(function (xhr) { alert(xhr.responseJSON && xhr.responseJSON.message || 'Gagal menyimpan.'); });
+            .fail(function (xhr) { showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal menyimpan.', 'error'); });
     };
 
     self.deleteTenant = function (item) {
         if (!confirm('Hapus tenant "' + item.name + '"?')) return;
         $.ajax({ url: '/api/tenants/' + item.id, type: 'DELETE' })
-            .done(function () { self.init(); });
+            .done(function () { self.init(); })
+            .fail(function (xhr) { showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal menghapus tenant.', 'error'); });
     };
 
     self.init();

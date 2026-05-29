@@ -102,9 +102,10 @@ function AuditsViewModel() {
                 audit.passRate = answered.length > 0 ? passed.length / answered.length : 0;
             });
             self.audits(data);
-        });
+        }).fail(function () { showToast('Gagal memuat daftar audit.', 'error'); });
 
-        $.getJSON('/api/tenants').done(function (d) { self.tenants(d); });
+        $.getJSON('/api/tenants').done(function (d) { self.tenants(d); })
+            .fail(function () { showToast('Gagal memuat daftar tenant.', 'error'); });
         $.getJSON('/api/users').done(function (d) { self.users(d); }).fail(function () { self.users([]); });
     };
 
@@ -160,6 +161,7 @@ function AuditDetailViewModel(auditId) {
     self.init = function () {
         $.getJSON('/api/audits/' + auditId).done(function (audit) {
             self.audit(audit);
+
             var grouped = {};
             (audit.items || []).forEach(function (item) {
                 if (!grouped[item.category]) grouped[item.category] = [];
@@ -176,6 +178,8 @@ function AuditDetailViewModel(auditId) {
                 });
                 return cat;
             }));
+        }).fail(function () {
+            showToast('Gagal memuat data audit. Silakan kembali dan coba lagi.', 'error');
         });
     };
 

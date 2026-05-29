@@ -43,7 +43,7 @@ public class AuditResponse
         Status = audit.Status.ToString().ToUpper(),
         CreatedAt = audit.CreatedAt,
         CompletedAt = audit.CompletedAt,
-        Items = audit.Items.Select(AuditItemResponse.FromEntity).ToList()
+        Items = (audit.Items ?? Enumerable.Empty<AuditItem>()).Select(AuditItemResponse.FromEntity).ToList()
     };
 }
 

@@ -48,11 +48,7 @@ namespace WebApps.Controllers.Api
                     item.IsSynced = false;
                     item.ErrorMessage = ex.Message;
                 }
-
-                await _uow.SyncQueue.AddAsync(item);
             }
-
-            await _uow.SaveChangesAsync();
             return Ok(new { processed, total = items.Count });
         }
 

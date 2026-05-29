@@ -11,7 +11,8 @@ function TemplatesViewModel() {
     };
 
     self.init = function () {
-        $.getJSON('/api/templates').done(function (d) { self.templates(d); });
+        $.getJSON('/api/templates').done(function (d) { self.templates(d); })
+            .fail(function () { showToast('Gagal memuat daftar template.', 'error'); });
     };
 
     self.showAddForm = function () {
@@ -48,13 +49,14 @@ function TemplatesViewModel() {
                 self.showForm(false);
                 self.init();
             })
-            .fail(function (xhr) { alert(xhr.responseJSON && xhr.responseJSON.message || 'Gagal menyimpan.'); });
+            .fail(function (xhr) { showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal menyimpan.', 'error'); });
     };
 
     self.deleteTemplate = function (item) {
         if (!confirm('Hapus template "' + item.name + '"?')) return;
         $.ajax({ url: '/api/templates/' + item.id, type: 'DELETE' })
-            .done(function () { self.init(); });
+            .done(function () { self.init(); })
+            .fail(function (xhr) { showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal menghapus template.', 'error'); });
     };
 
     self.init();
