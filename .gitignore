@@ -6,3 +6,8 @@
 /BackEnd/src/HygieneAudit.API/appsettings.json
 /BackEnd/src/HygieneAudit.API/appsettings.Development.json
 /BackEnd/.vs/HygieneAudit/FileContentIndex
+
+# Node / npm (tooling only, not part of the project)
+node_modules/
+package.json
+package-lock.json
