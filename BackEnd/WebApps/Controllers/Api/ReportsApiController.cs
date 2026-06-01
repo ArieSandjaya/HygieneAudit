@@ -35,17 +35,16 @@ namespace WebApps.Controllers.Api
             [FromUri] string type = "all",
             [FromUri] string search = "")
         {
-            var report = await _auditService.GetExcelReportAsync(status, type, search);
-            var csvBytes = await _auditService.ExportExcelAsync(report);
-
+            var bytes = await _auditService.ExportExcelAsync(status, type, search);
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new ByteArrayContent(csvBytes)
+                Content = new ByteArrayContent(bytes)
             };
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/csv");
+            response.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = $"Report_Audit_Hygiene_{DateTime.Now:yyyy-MM-dd}.csv"
+                FileName = $"Report_Audit_Hygiene_{DateTime.Now:yyyy-MM-dd}.xlsx"
             };
             return response;
         }
