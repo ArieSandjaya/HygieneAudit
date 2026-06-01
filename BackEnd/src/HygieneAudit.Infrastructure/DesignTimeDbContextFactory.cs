@@ -16,7 +16,6 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<HygieneAud
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: true)
             .AddJsonFile("appsettings.Development.json", optional: true)
-            .AddEnvironmentVariables()
             .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<HygieneAuditDbContext>();
