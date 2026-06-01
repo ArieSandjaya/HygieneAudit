@@ -112,7 +112,9 @@ function AuditsViewModel(currentUserId, isAdmin) {
             if (!isAdmin && currentUserId) {
                 self.newAudit.picId(currentUserId);
             }
-        }).fail(function () { self.users([]); });
+        }).fail(function (xhr) {
+            showToast('Gagal memuat daftar auditor (status ' + xhr.status + ').', 'error');
+        });
     };
 
     self.showCreateForm = function () { self.showForm(true); };

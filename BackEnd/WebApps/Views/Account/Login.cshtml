@@ -63,6 +63,43 @@
                             <i class="bx bx-log-in-circle me-1"></i> Masuk
                         </button>
                     }
+
+                    <!-- PWA Install — Android/Chrome/Edge -->
+                    <div id="pwa-install-wrap" style="display:none;" class="mt-3">
+                        <div class="d-flex align-items-center gap-2 my-3">
+                            <hr class="flex-grow-1 my-0">
+                            <small class="text-muted" style="white-space:nowrap;">atau</small>
+                            <hr class="flex-grow-1 my-0">
+                        </div>
+                        <button id="pwa-install-btn" type="button"
+                                class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2">
+                            <i class="bx bx-download fs-5"></i>
+                            <span>Install Aplikasi</span>
+                        </button>
+                        <p class="text-center text-muted mt-2 mb-0" style="font-size:11px;">
+                            Pasang di layar utama untuk akses lebih cepat
+                        </p>
+                    </div>
+
+                    <!-- PWA Install — iOS Safari (no JS API, show manual steps) -->
+                    <div id="ios-install-wrap" style="display:none;" class="mt-3">
+                        <div class="d-flex align-items-center gap-2 my-3">
+                            <hr class="flex-grow-1 my-0">
+                            <small class="text-muted" style="white-space:nowrap;">Install Aplikasi</small>
+                            <hr class="flex-grow-1 my-0">
+                        </div>
+                        <div class="rounded-3 p-3 text-center" style="background:#f0f0ff;border:1px dashed #696cff;">
+                            <i class="bx bx-mobile-alt text-primary fs-4 d-block mb-2"></i>
+                            <p class="mb-1" style="font-size:13px;font-weight:600;">Pasang di Home Screen</p>
+                            <p class="text-muted mb-0" style="font-size:12px;line-height:1.6;">
+                                Ketuk ikon <strong>Bagikan</strong>
+                                (<svg style="vertical-align:middle;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#697a8d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>)
+                                di browser, lalu pilih<br>
+                                <strong>"Add to Home Screen"</strong>
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -71,11 +108,57 @@
 
 @section Scripts {
     <script>
+        // Password toggle
         document.getElementById('togglePassword').addEventListener('click', function () {
             var pwd = document.getElementById('Password');
             var icon = document.getElementById('togglePasswordIcon');
             if (pwd.type === 'password') { pwd.type = 'text'; icon.classList.replace('bx-hide', 'bx-show'); }
             else { pwd.type = 'password'; icon.classList.replace('bx-show', 'bx-hide'); }
         });
+
+        // PWA install logic
+        (function () {
+            var isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                            || window.navigator.standalone === true;
+            if (isStandalone) return; // Already installed
+
+            var installWrap = document.getElementById('pwa-install-wrap');
+            var installBtn  = document.getElementById('pwa-install-btn');
+            var iosWrap     = document.getElementById('ios-install-wrap');
+            var deferredPrompt = null;
+
+            // iOS Safari: no beforeinstallprompt, show manual guide
+            var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+            if (isIos) {
+                iosWrap.style.display = '';
+                return;
+            }
+
+            // Android / Chrome / Edge: capture deferred install prompt
+            window.addEventListener('beforeinstallprompt', function (e) {
+                e.preventDefault();
+                deferredPrompt = e;
+                installWrap.style.display = '';
+            });
+
+            window.addEventListener('appinstalled', function () {
+                installWrap.style.display = 'none';
+                deferredPrompt = null;
+            });
+
+            installBtn.addEventListener('click', function () {
+                if (!deferredPrompt) return;
+                installBtn.disabled = true;
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(function (result) {
+                    if (result.outcome === 'accepted') {
+                        installWrap.style.display = 'none';
+                    } else {
+                        installBtn.disabled = false;
+                    }
+                    deferredPrompt = null;
+                });
+            });
+        })();
     </script>
 }

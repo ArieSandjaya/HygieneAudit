@@ -9,7 +9,7 @@ using System.Web.Http;
 namespace WebApps.Controllers.Api
 {
     [RoutePrefix("api/users")]
-    [Authorize(Roles = "Admin,SuperAdmin")]
+    [Authorize]
     public class UsersApiController : ApiController
     {
         private readonly IUnitOfWork _uow;
@@ -17,6 +17,7 @@ namespace WebApps.Controllers.Api
         public UsersApiController(IUnitOfWork uow) => _uow = uow;
 
         [HttpGet, Route("")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IHttpActionResult> GetAll()
         {
             var users = await _uow.Users.GetAllAsync();
@@ -34,8 +35,6 @@ namespace WebApps.Controllers.Api
 
         // Accessible to all authenticated roles — used by the audit PIC dropdown.
         [HttpGet, Route("auditors")]
-        [OverrideAuthorization]
-        [Authorize]
         public async Task<IHttpActionResult> GetAuditors()
         {
             var users = await _uow.Users.GetAllAsync();
@@ -47,6 +46,7 @@ namespace WebApps.Controllers.Api
         }
 
         [HttpPost, Route("")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IHttpActionResult> Create([FromBody] CreateUserRequest req)
         {
             if (string.IsNullOrWhiteSpace(req.Username) || string.IsNullOrWhiteSpace(req.Password))
@@ -76,6 +76,7 @@ namespace WebApps.Controllers.Api
         }
 
         [HttpPut, Route("{id:int}")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IHttpActionResult> Update(int id, [FromBody] UpdateUserRequest req)
         {
             var user = await _uow.Users.GetByIdAsync(id);
@@ -95,6 +96,7 @@ namespace WebApps.Controllers.Api
         }
 
         [HttpDelete, Route("{id:int}")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IHttpActionResult> Delete(int id)
         {
             var user = await _uow.Users.GetByIdAsync(id);
