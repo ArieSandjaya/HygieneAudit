@@ -1,5 +1,5 @@
 // Audits list viewmodel
-function AuditsViewModel() {
+function AuditsViewModel(currentUserId, isAdmin) {
     var self = this;
     self.audits = ko.observableArray([]);
     self.tenants = ko.observableArray([]);
@@ -106,7 +106,12 @@ function AuditsViewModel() {
 
         $.getJSON('/api/tenants').done(function (d) { self.tenants(d); })
             .fail(function () { showToast('Gagal memuat daftar tenant.', 'error'); });
-        $.getJSON('/api/users').done(function (d) { self.users(d); }).fail(function () { self.users([]); });
+        $.getJSON('/api/users').done(function (d) {
+            self.users(d);
+            if (!isAdmin && currentUserId) {
+                self.newAudit.picId(currentUserId);
+            }
+        }).fail(function () { self.users([]); });
     };
 
     self.showCreateForm = function () { self.showForm(true); };
