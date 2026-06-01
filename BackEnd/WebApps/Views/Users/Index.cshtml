@@ -68,12 +68,8 @@
                 <div class="col-auto">
                     <button class="btn btn-warning me-2"
                             data-bind="click: confirmResetPwd, disable: resetPwd.saving()">
-                        <!-- ko if: resetPwd.saving() -->
-                        <i class="bx bx-loader-circle bx-spin me-1"></i> Menyimpan...
-                        <!-- /ko -->
-                        <!-- ko ifnot: resetPwd.saving() -->
-                        <i class="bx bx-check me-1"></i> Reset Password
-                        <!-- /ko -->
+                        <span data-bind="visible: resetPwd.saving()"><i class="bx bx-loader-circle bx-spin me-1"></i> Menyimpan...</span>
+                        <span data-bind="visible: !resetPwd.saving()"><i class="bx bx-check me-1"></i> Reset Password</span>
                     </button>
                     <button class="btn btn-outline-secondary" data-bind="click: cancelResetPwd">Batal</button>
                 </div>
