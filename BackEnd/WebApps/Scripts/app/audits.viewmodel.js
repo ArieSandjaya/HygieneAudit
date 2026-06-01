@@ -136,6 +136,7 @@ function AuditDetailViewModel(auditId) {
     var self = this;
     self.audit      = ko.observable(null);
     self.categories = ko.observableArray([]);
+    self.submitting = ko.observable(false);
 
     // Flattened header props
     self.tenantName = ko.computed(function () { return self.audit() ? self.audit().tenantName : ''; });
@@ -227,13 +228,22 @@ function AuditDetailViewModel(auditId) {
     };
 
     self.submitAudit = function () {
-        if (!confirm('Yakin ingin menyelesaikan audit ini?')) return;
+        if (self.submitting()) return;
+        var unchecked = self.totalCount() - self.passCount() - self.failCount();
+        if (unchecked > 0) {
+            showToast(unchecked + ' item belum dicek!', 'error');
+            return;
+        }
+        self.submitting(true);
         $.ajax({ url: '/api/audits/' + auditId + '/submit', type: 'POST' })
             .done(function () {
-                showToast('Audit berhasil diselesaikan! 🎉');
+                showToast('Audit berhasil diselesaikan!');
                 setTimeout(function () { window.location.href = '/Audits'; }, 1500);
             })
-            .fail(function (xhr) { showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal.', 'error'); });
+            .fail(function (xhr) {
+                self.submitting(false);
+                showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal mengirim audit.', 'error');
+            });
     };
 
     self.init();
