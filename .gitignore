@@ -13,3 +13,8 @@ packages/
 node_modules/
 package.json
 package-lock.json
+/BackEnd/WebApps/appsettings.Production.json
+/BackEnd/WebApps/appsettings.json
+/BackEnd/WebApps/Web.config
+/BackEnd/WebApps/Web.Debug.config
+/BackEnd/WebApps/Web.Release.config
