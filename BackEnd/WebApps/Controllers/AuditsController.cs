@@ -1,4 +1,5 @@
 using HygieneAudit.Application.Services;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using WebApps.Filters;
@@ -18,6 +19,10 @@ namespace WebApps.Controllers
         public ActionResult Index()
         {
             ViewBag.Title = "Daftar Audit";
+            var identity = User.Identity as ClaimsIdentity;
+            var userIdStr = identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.CurrentUserId = int.TryParse(userIdStr, out var uid) ? uid : 0;
+            ViewBag.IsAdmin = User.IsInRole("Admin") || User.IsInRole("SuperAdmin");
             return View();
         }
 

@@ -186,5 +186,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/knockout")
     <script src="~/Scripts/app/audits.viewmodel.js"></script>
-    <script>ko.applyBindings(new AuditsViewModel(), document.getElementById('audits-page'));</script>
+    <script>ko.applyBindings(new AuditsViewModel(@ViewBag.CurrentUserId, @(ViewBag.IsAdmin ? "true" : "false")), document.getElementById('audits-page'));</script>
 }
