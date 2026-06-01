@@ -662,4 +662,14 @@
     <Copy SourceFiles="..\libs\x86\SNI.dll" DestinationFolder="$(ProjectDir)bin\x86\" ContinueOnError="true" />
     <Copy SourceFiles="..\libs\x64\SNI.dll" DestinationFolder="$(ProjectDir)bin\x64\" ContinueOnError="true" />
   </Target>
+
+  <!-- Ensure SNI native DLLs land in bin\x64\ and bin\x86\ on publish/package -->
+  <ItemGroup>
+    <FilesForPackagingFromProject Include="..\libs\x64\SNI.dll">
+      <DestinationRelativePath>bin\x64\SNI.dll</DestinationRelativePath>
+    </FilesForPackagingFromProject>
+    <FilesForPackagingFromProject Include="..\libs\x86\SNI.dll">
+      <DestinationRelativePath>bin\x86\SNI.dll</DestinationRelativePath>
+    </FilesForPackagingFromProject>
+  </ItemGroup>
 </Project>
