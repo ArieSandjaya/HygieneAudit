@@ -20,8 +20,8 @@ public static class ExcelBuilder
 
     static readonly string[] Cols = { "A","B","C","D","E","F","G","H","I","J","K","L" };
 
-    private record Img(string File, string Ext, byte[] Data);
-    private record Pin(int Col, int Row, string Rid, int Id); // Row is 0-based
+    private struct Img { public string File; public string Ext; public byte[] Data; }
+    private struct Pin { public int Col; public int Row; public string Rid; public int Id; } // Row is 0-based
 
     // ── Public entry point ────────────────────────────────────────────────────────
 
@@ -317,8 +317,8 @@ public static class ExcelBuilder
                 {
                     var (ext, data) = ParseDataUrl(photos[pi].PhotoUrl);
                     if (data.Length == 0) continue;
-                    imgs.Add(new Img($"image{imgId}.{ext}", ext, data));
-                    pins.Add(new Pin(Col: PhotoStartCol + pi, Row: row - 1, Rid: $"rId{imgId}", Id: imgId));
+                    imgs.Add(new Img { File = $"image{imgId}.{ext}", Ext = ext, Data = data });
+                    pins.Add(new Pin { Col = PhotoStartCol + pi, Row = row - 1, Rid = $"rId{imgId}", Id = imgId });
                     imgId++;
                 }
 
