@@ -1,0 +1,207 @@
+@using HygieneAudit.Application.DTOs
+@model AuditResponse
+@{
+    Layout = null;
+    var passCount  = Model.Items.Count(i => i.Status == "PASS");
+    var failCount  = Model.Items.Count(i => i.Status == "FAIL");
+    var totalCount = Model.Items.Count;
+    var passRate   = totalCount > 0 ? (int)Math.Round(passCount * 100.0 / totalCount) : 0;
+    var categories = Model.Items.GroupBy(i => i.Category).OrderBy(g => g.Key);
+}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Laporan Audit - @Model.TenantName</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; color: #1e1e2d; background: #fff; }
+
+        .page { max-width: 800px; margin: 0 auto; padding: 32px; }
+
+        /* Header */
+        .report-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #696cff; padding-bottom: 16px; margin-bottom: 20px; }
+        .report-title h1 { font-size: 20px; font-weight: 700; color: #696cff; }
+        .report-title p { font-size: 11px; color: #6c757d; margin-top: 2px; }
+        .report-meta { text-align: right; font-size: 11px; color: #6c757d; }
+        .report-meta strong { color: #1e1e2d; }
+
+        /* Info grid */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; background: #f8f8ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
+        .info-item label { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; color: #6c757d; display: block; }
+        .info-item span { font-weight: 600; font-size: 13px; }
+
+        /* Summary bar */
+        .summary { display: flex; gap: 12px; margin-bottom: 20px; }
+        .summary-chip { flex: 1; border-radius: 8px; padding: 10px 14px; text-align: center; }
+        .chip-pass  { background: #d1fae5; color: #065f46; }
+        .chip-fail  { background: #fee2e2; color: #991b1b; }
+        .chip-rate  { background: #ede9fe; color: #4c1d95; }
+        .summary-chip .num { font-size: 22px; font-weight: 800; display: block; }
+        .summary-chip .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; }
+
+        /* Progress bar */
+        .progress-wrap { background: #ebebf0; border-radius: 4px; height: 6px; margin-bottom: 20px; }
+        .progress-fill { height: 100%; border-radius: 4px; }
+
+        /* Category */
+        .category { margin-bottom: 18px; page-break-inside: avoid; }
+        .category-header { display: flex; justify-content: space-between; align-items: center; background: #696cff; color: #fff; padding: 6px 12px; border-radius: 6px 6px 0 0; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+        .category-header .pill { background: rgba(255,255,255,.25); border-radius: 20px; padding: 1px 8px; font-size: 10px; }
+
+        /* Items */
+        .item { display: flex; align-items: flex-start; padding: 8px 12px; border-bottom: 1px solid #f0f0f5; gap: 10px; }
+        .item:last-child { border-bottom: none; }
+        .item-status { width: 44px; flex-shrink: 0; text-align: center; }
+        .badge { display: inline-block; padding: 2px 7px; border-radius: 20px; font-size: 9px; font-weight: 700; text-transform: uppercase; }
+        .badge-pass { background: #d1fae5; color: #065f46; }
+        .badge-fail { background: #fee2e2; color: #991b1b; }
+        .badge-none { background: #f3f4f6; color: #6b7280; }
+        .item-body { flex: 1; }
+        .item-name { font-weight: 600; font-size: 12px; margin-bottom: 2px; }
+        .item-note { font-size: 11px; color: #6c757d; font-style: italic; }
+        .item-photos { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+        .item-photos img { width: 48px; height: 48px; object-fit: cover; border-radius: 4px; border: 1px solid #e5e7eb; }
+
+        /* Category bg for pass/fail rows */
+        .item.pass { background: #f0fdf4; }
+        .item.fail { background: #fff5f5; }
+
+        /* Footer */
+        .report-footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; font-size: 10px; color: #9ca3af; }
+
+        /* Print rules */
+        @@media print {
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .no-print { display: none !important; }
+            .page { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- Print button (hidden when printing) -->
+    <div class="no-print" style="margin-bottom:16px;display:flex;gap:8px;">
+        <button onclick="window.print()" style="background:#696cff;color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;">
+            &#128438; Cetak / Save as PDF
+        </button>
+        <button onclick="window.close()" style="background:#f3f4f6;color:#374151;border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;">
+            Tutup
+        </button>
+    </div>
+
+    <!-- Header -->
+    <div class="report-header">
+        <div class="report-title">
+            <h1>Laporan Audit Higiene</h1>
+            <p>HygieneAudit System</p>
+        </div>
+        <div class="report-meta">
+            <div>Tanggal Audit: <strong>@Model.Date.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("id-ID"))</strong></div>
+            @if (Model.CompletedAt.HasValue)
+            {
+                <div>Diselesaikan: <strong>@Model.CompletedAt.Value.ToLocalTime().ToString("dd MMM yyyy HH:mm", new System.Globalization.CultureInfo("id-ID"))</strong></div>
+            }
+            <div style="margin-top:4px;">
+                <span style="background:@(passRate >= 70 ? "#d1fae5" : "#fee2e2");color:@(passRate >= 70 ? "#065f46" : "#991b1b");padding:2px 10px;border-radius:20px;font-weight:700;font-size:12px;">
+                    @(passRate >= 70 ? "LULUS" : "TIDAK LULUS")
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info grid -->
+    <div class="info-grid">
+        <div class="info-item">
+            <label>Tenant</label>
+            <span>@Model.TenantName</span>
+        </div>
+        <div class="info-item">
+            <label>PIC / Auditor</label>
+            <span>@Model.PicName</span>
+        </div>
+        <div class="info-item">
+            <label>Tipe Audit</label>
+            <span>@(Model.IsGas ? "Dengan Gas" : "Tanpa Gas")</span>
+        </div>
+        <div class="info-item">
+            <label>Status</label>
+            <span>@Model.Status</span>
+        </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+        <div class="summary-chip chip-pass">
+            <span class="num">@passCount</span>
+            <span class="lbl">Pass</span>
+        </div>
+        <div class="summary-chip chip-fail">
+            <span class="num">@failCount</span>
+            <span class="lbl">Fail</span>
+        </div>
+        <div class="summary-chip chip-rate">
+            <span class="num">@passRate%</span>
+            <span class="lbl">Pass Rate (@totalCount item)</span>
+        </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-wrap">
+        <div class="progress-fill" style="width:@passRate%;background:@(passRate >= 70 ? "#22c55e" : "#ef4444");"></div>
+    </div>
+
+    <!-- Checklist by category -->
+    @foreach (var cat in categories)
+    {
+        var catPass = cat.Count(i => i.Status == "PASS");
+        <div class="category">
+            <div class="category-header">
+                @cat.Key
+                <span class="pill">@catPass / @cat.Count() Pass</span>
+            </div>
+            @foreach (var item in cat)
+            {
+                var rowCss = item.Status == "PASS" ? "pass" : item.Status == "FAIL" ? "fail" : "";
+                var badgeCss = item.Status == "PASS" ? "badge-pass" : item.Status == "FAIL" ? "badge-fail" : "badge-none";
+                var badgeText = item.Status ?? "BELUM";
+                <div class="item @rowCss">
+                    <div class="item-status">
+                        <span class="badge @badgeCss">@badgeText</span>
+                    </div>
+                    <div class="item-body">
+                        <div class="item-name">@item.Name</div>
+                        @if (!string.IsNullOrWhiteSpace(item.Note))
+                        {
+                            <div class="item-note">Catatan: @item.Note</div>
+                        }
+                        @if (item.Photos != null && item.Photos.Any())
+                        {
+                            <div class="item-photos">
+                                @foreach (var photo in item.Photos)
+                                {
+                                    <img src="@photo" alt="foto" />
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Footer -->
+    <div class="report-footer">
+        <span>Dicetak pada @DateTime.Now.ToString("dd MMM yyyy HH:mm", new System.Globalization.CultureInfo("id-ID"))</span>
+        <span>HygieneAudit &copy; @DateTime.Now.Year</span>
+    </div>
+
+</div>
+<script>
+    // Auto-print when opened via window.open
+    if (window.opener) window.print();
+</script>
+</body>
+</html>

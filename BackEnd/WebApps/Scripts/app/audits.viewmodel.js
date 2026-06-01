@@ -221,6 +221,10 @@ function AuditDetailViewModel(auditId) {
         }).fail(function () { showToast('Gagal menyimpan perubahan item.', 'error'); });
     };
 
+    self.exportPdf = function () {
+        window.open('/Audits/PrintReport/' + auditId, '_blank');
+    };
+
     self.saveDraft = function () {
         $.ajax({ url: '/api/audits/' + auditId + '/draft', type: 'POST' })
             .done(function () { showToast('Draft disimpan!'); })
