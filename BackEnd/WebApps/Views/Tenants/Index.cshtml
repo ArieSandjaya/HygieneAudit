@@ -31,7 +31,18 @@
                 </div>
                 <div class="col-md-12">
                     <label class="form-label">Kategori</label>
-                    <input type="text" class="form-control" data-bind="value: form.category" placeholder="Contoh: Food & Beverage" />
+                    <select class="form-select" data-bind="value: form.category">
+                        <option value="">-- Pilih Kategori --</option>
+                        <option value="Food &amp; Beverage">Food &amp; Beverage</option>
+                        <option value="Fashion">Fashion</option>
+                        <option value="Elektronik">Elektronik</option>
+                        <option value="Supermarket / Minimarket">Supermarket / Minimarket</option>
+                        <option value="Salon &amp; Kecantikan">Salon &amp; Kecantikan</option>
+                        <option value="Kesehatan &amp; Apotek">Kesehatan &amp; Apotek</option>
+                        <option value="Olahraga">Olahraga</option>
+                        <option value="Hiburan">Hiburan</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
                 </div>
             </div>
             <div class="mt-3">
