@@ -1,6 +1,7 @@
 function ReportsViewModel() {
     var self = this;
     self.rows = ko.observableArray([]);
+    self.ps = new PagedSorted(self.rows, 10);
     self.summary = ko.observable(null);
     self.filter = {
         status: ko.observable('all'),

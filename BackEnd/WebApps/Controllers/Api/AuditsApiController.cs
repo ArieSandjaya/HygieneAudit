@@ -21,8 +21,8 @@ namespace WebApps.Controllers.Api
         [HttpGet, Route("")]
         public async Task<IHttpActionResult> GetAll()
         {
-            var (userId, isAdmin) = CurrentUser();
-            var audits = await _auditService.GetAuditsAsync(userId, isAdmin);
+            // All authenticated roles see all audits; write operations remain PIC-scoped.
+            var audits = await _auditService.GetAuditsAsync(0, true);
             return Ok(audits);
         }
 
@@ -37,8 +37,7 @@ namespace WebApps.Controllers.Api
         public async Task<IHttpActionResult> Get(string id)
         {
             var audit = await _auditService.GetAuditAsync(id);
-            // Hide existence from non-owners: missing OR not-permitted both return 404.
-            if (audit == null || !CanAccess(audit)) return NotFound();
+            if (audit == null) return NotFound();
             return Ok(audit);
         }
 

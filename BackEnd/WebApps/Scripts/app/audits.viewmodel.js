@@ -92,6 +92,7 @@ function AuditsViewModel(currentUserId, isAdmin) {
             return true;
         });
     });
+    self.ps = new PagedSorted(self.filteredAudits, 10);
 
     self.init = function () {
         $.getJSON('/api/audits').done(function (data) {

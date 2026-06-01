@@ -1,6 +1,7 @@
 function TemplatesViewModel() {
     var self = this;
     self.templates = ko.observableArray([]);
+    self.ps = new PagedSorted(self.templates, 10);
     self.showForm = ko.observable(false);
     self.editingId = ko.observable(null);
     self.form = {
