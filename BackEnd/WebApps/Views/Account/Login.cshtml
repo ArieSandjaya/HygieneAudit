@@ -64,7 +64,7 @@
                         </button>
                     }
 
-                    <!-- PWA Install — Android/Chrome/Edge -->
+                    <!-- PWA Install — Android/Chrome/Edge (native install prompt when available) -->
                     <div id="pwa-install-wrap" style="display:none;" class="mt-3">
                         <div class="d-flex align-items-center gap-2 my-3">
                             <hr class="flex-grow-1 my-0">
@@ -79,6 +79,23 @@
                         <p class="text-center text-muted mt-2 mb-0" style="font-size:11px;">
                             Pasang di layar utama untuk akses lebih cepat
                         </p>
+                    </div>
+
+                    <!-- PWA Install — Android manual (shown by default, replaced by native button if available) -->
+                    <div id="android-manual-wrap" style="display:none;" class="mt-3">
+                        <div class="d-flex align-items-center gap-2 my-3">
+                            <hr class="flex-grow-1 my-0">
+                            <small class="text-muted" style="white-space:nowrap;">Install Aplikasi</small>
+                            <hr class="flex-grow-1 my-0">
+                        </div>
+                        <div class="rounded-3 p-3 text-center" style="background:#f0f0ff;border:1px dashed #696cff;">
+                            <i class="bx bx-mobile-alt text-primary fs-4 d-block mb-2"></i>
+                            <p class="mb-1" style="font-size:13px;font-weight:600;">Pasang di Home Screen</p>
+                            <p class="text-muted mb-0" style="font-size:12px;line-height:1.6;">
+                                Ketuk <strong>&#8942;</strong> (menu tiga titik) di pojok kanan atas browser,
+                                lalu pilih<br><strong>"Add to Home Screen"</strong>
+                            </p>
+                        </div>
                     </div>
 
                     <!-- PWA Install — iOS Safari (no JS API, show manual steps) -->
@@ -120,29 +137,43 @@
         (function () {
             var isStandalone = window.matchMedia('(display-mode: standalone)').matches
                             || window.navigator.standalone === true;
-            if (isStandalone) return; // Already installed
+            if (isStandalone) return; // Already installed — hide all install UI
 
-            var installWrap = document.getElementById('pwa-install-wrap');
-            var installBtn  = document.getElementById('pwa-install-btn');
-            var iosWrap     = document.getElementById('ios-install-wrap');
+            var installWrap    = document.getElementById('pwa-install-wrap');
+            var installBtn     = document.getElementById('pwa-install-btn');
+            var androidManual  = document.getElementById('android-manual-wrap');
+            var iosWrap        = document.getElementById('ios-install-wrap');
             var deferredPrompt = null;
 
-            // iOS Safari: no beforeinstallprompt, show manual guide
-            var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+            var ua = navigator.userAgent;
+            var isIos     = /iphone|ipad|ipod/i.test(ua) && !window.MSStream;
+            var isAndroid = /android/i.test(ua);
+            var isMobile  = isIos || isAndroid;
+
             if (isIos) {
+                // iOS Safari: no beforeinstallprompt API — show static guide immediately
                 iosWrap.style.display = '';
                 return;
             }
 
-            // Android / Chrome / Edge: capture deferred install prompt
+            if (isAndroid) {
+                // Android: show manual instructions immediately (Chrome engagement threshold
+                // may prevent beforeinstallprompt on first visit)
+                androidManual.style.display = '';
+            }
+
+            // Chrome / Edge on any platform: capture native install prompt when available
             window.addEventListener('beforeinstallprompt', function (e) {
                 e.preventDefault();
                 deferredPrompt = e;
+                // Upgrade: replace manual guide with the one-tap install button
+                androidManual.style.display = 'none';
                 installWrap.style.display = '';
             });
 
             window.addEventListener('appinstalled', function () {
                 installWrap.style.display = 'none';
+                androidManual.style.display = 'none';
                 deferredPrompt = null;
             });
 
