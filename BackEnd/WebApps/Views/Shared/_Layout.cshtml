@@ -281,15 +281,15 @@
                             <div>Audit</div>
                         </a>
                     </li>
-                    <li class="menu-item @(currentController == "Tenants" ? "active" : "")">
-                        <a href="@Url.Action("Index", "Tenants")" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-store"></i>
-                            <div>Tenant</div>
-                        </a>
-                    </li>
                     @if (isAdmin)
                     {
                         <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span></li>
+                        <li class="menu-item @(currentController == "Tenants" ? "active" : "")">
+                            <a href="@Url.Action("Index", "Tenants")" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-store"></i>
+                                <div>Tenant</div>
+                            </a>
+                        </li>
                         <li class="menu-item @(currentController == "Templates" ? "active" : "")">
                             <a href="@Url.Action("Index", "Templates")" class="menu-link">
                                 <i class="menu-icon tf-icons bx bx-list-check"></i>
