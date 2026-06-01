@@ -31,7 +31,7 @@
                         <span class="app-brand-text demo text-body fw-bolder ms-2" style="font-size:1.25rem;">HygieneAudit</span>
                     </div>
 
-                    <h4 class="mb-2">Selamat Datang! 👋</h4>
+                    <h4 class="mb-2">Selamat Datang! <i class="bx bx-wink-smile text-primary"></i></h4>
                     <p class="mb-4 text-muted">Masuk untuk melanjutkan ke aplikasi</p>
 
                     @Html.ValidationSummary(true, "", new { @class = "alert alert-danger py-2" })
@@ -46,7 +46,7 @@
                         </div>
                         <div class="mb-3 form-password-toggle">
                             <div class="input-group input-group-merge">
-                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "••••••••••••", autocomplete = "current-password", id = "Password" })
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", autocomplete = "current-password", id = "Password" })
                                 <span class="input-group-text cursor-pointer" id="togglePassword">
                                     <i class="bx bx-hide" id="togglePasswordIcon"></i>
                                 </span>
