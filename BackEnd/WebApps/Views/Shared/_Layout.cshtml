@@ -465,17 +465,22 @@ window.showToast = function(msg, type) {
 </div>
 <script>
 (function () {
-    var modalEl = document.getElementById('changePwdModal');
-    var bsModal  = new bootstrap.Modal(modalEl);
+    var link = document.getElementById('change-pwd-link');
+    if (!link) return;
 
-    document.getElementById('change-pwd-link').addEventListener('click', function (e) {
+    link.addEventListener('click', function (e) {
         e.preventDefault();
         document.getElementById('cp-old').value     = '';
         document.getElementById('cp-new').value     = '';
         document.getElementById('cp-confirm').value = '';
-        document.getElementById('cp-error').style.display = 'none';
-        document.getElementById('cp-save').disabled = false;
-        bsModal.show();
+        var errEl = document.getElementById('cp-error');
+        errEl.style.display = 'none';
+        var btn = document.getElementById('cp-save');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bx bx-check me-1"></i> Simpan';
+        // Lazy-init modal so bootstrap.Modal is only called when actually needed
+        var modalEl = document.getElementById('changePwdModal');
+        (bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl)).show();
     });
 
     document.getElementById('cp-save').addEventListener('click', function () {
@@ -504,7 +509,8 @@ window.showToast = function(msg, type) {
             type: 'POST', contentType: 'application/json',
             data: JSON.stringify({ oldPassword: oldPwd, newPassword: newPwd })
         }).done(function () {
-            bsModal.hide();
+            var modalEl = document.getElementById('changePwdModal');
+            (bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl)).hide();
             showToast('Password berhasil diubah.');
         }).fail(function (xhr) {
             errEl.textContent = (xhr.responseJSON && xhr.responseJSON.message) || 'Gagal mengubah password.';
