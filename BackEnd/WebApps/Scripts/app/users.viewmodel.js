@@ -1,6 +1,7 @@
 function UsersViewModel() {
     var self = this;
     self.users = ko.observableArray([]);
+    self.ps = new PagedSorted(self.users, 10);
     self.showForm = ko.observable(false);
     self.editingId = ko.observable(null);
     self.form = {

@@ -32,6 +32,20 @@ namespace WebApps.Controllers.Api
             return Ok(result);
         }
 
+        // Accessible to all authenticated roles — used by the audit PIC dropdown.
+        [HttpGet, Route("auditors")]
+        [OverrideAuthorization]
+        [Authorize]
+        public async Task<IHttpActionResult> GetAuditors()
+        {
+            var users = await _uow.Users.GetAllAsync();
+            var result = users
+                .Where(u => u.IsActive && u.Role == UserRole.Auditor)
+                .Select(u => new { u.Id, u.Name })
+                .OrderBy(u => u.Name);
+            return Ok(result);
+        }
+
         [HttpPost, Route("")]
         public async Task<IHttpActionResult> Create([FromBody] CreateUserRequest req)
         {

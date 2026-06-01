@@ -1,6 +1,7 @@
 function TenantsViewModel() {
     var self = this;
     self.tenants = ko.observableArray([]);
+    self.ps = new PagedSorted(self.tenants, 10);
     self.showForm = ko.observable(false);
     self.editingId = ko.observable(null);
     self.isAdmin = ko.observable(false);
