@@ -30,23 +30,18 @@ namespace WebApps
 
         private static void MigrateDatabase()
         {
-            try
-            {
-                var connStr = System.Configuration.ConfigurationManager
-                    .ConnectionStrings["HygieneAuditConnection"]?.ConnectionString;
-                if (string.IsNullOrEmpty(connStr)) return;
+            var connStr = System.Configuration.ConfigurationManager
+                .ConnectionStrings["HygieneAuditConnection"]?.ConnectionString;
+            if (string.IsNullOrEmpty(connStr)) return;
 
-                var options = new DbContextOptionsBuilder<HygieneAuditDbContext>()
-                    .UseSqlServer(connStr)
-                    .Options;
-                using (var db = new HygieneAuditDbContext(options))
-                {
-                    db.Database.Migrate();
-                }
-            }
-            catch (Exception ex)
+            var options = new DbContextOptionsBuilder<HygieneAuditDbContext>()
+                .UseSqlServer(connStr)
+                .Options;
+            using (var db = new HygieneAuditDbContext(options))
             {
-                System.Diagnostics.Trace.TraceError($"[Warning] Database migration failed: {ex.Message}");
+                // Throws if migration fails — surfaced as 500 on first request,
+                // which is better than silently connecting to the wrong database.
+                db.Database.Migrate();
             }
         }
     }
