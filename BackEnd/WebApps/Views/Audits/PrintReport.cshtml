@@ -61,8 +61,16 @@
         .item-body { flex: 1; }
         .item-name { font-weight: 600; font-size: 12px; margin-bottom: 2px; }
         .item-note { font-size: 11px; color: #6c757d; font-style: italic; }
-        .item-photos { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
-        .item-photos img { width: 48px; height: 48px; object-fit: cover; border-radius: 4px; border: 1px solid #e5e7eb; }
+        .item-photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-top: 8px; }
+        .item-photos img { width: 100%; height: auto; max-height: 280px; object-fit: contain; border-radius: 6px; border: 1px solid #e5e7eb; background: #f9fafb; display: block; }
+        .item-photos.single img { max-height: 420px; max-width: 100%; }
+
+        @@media print {
+            .item-photos { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; }
+            .item-photos img { max-height: 260px; }
+            .item-photos.single img { max-height: 400px; }
+            .item { page-break-inside: avoid; }
+        }
 
         /* Category bg for pass/fail rows */
         .item.pass { background: #f0fdf4; }
