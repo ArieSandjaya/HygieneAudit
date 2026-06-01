@@ -59,6 +59,17 @@ public class UpdateTemplateRequest
 
 // ── Tenants ──────────────────────────────────────────────────────────────────
 
+public class TenantResponse
+{
+    public int     Id        { get; set; }
+    public string  Name      { get; set; } = string.Empty;
+    public bool    UsesGas   { get; set; }
+    public string? Floor     { get; set; }
+    public string? Category  { get; set; }
+    public bool    IsActive  { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
 public class CreateTenantRequest
 {
     public string  Name     { get; set; } = string.Empty;

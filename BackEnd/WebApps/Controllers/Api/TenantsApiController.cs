@@ -2,6 +2,7 @@ using HygieneAudit.Application.DTOs;
 using HygieneAudit.Application.Services;
 using HygieneAudit.Domain.Entities;
 using HygieneAudit.Domain.Interfaces;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -25,7 +26,17 @@ namespace WebApps.Controllers.Api
         public async Task<IHttpActionResult> GetAll()
         {
             var tenants = await _uow.Tenants.GetActiveAsync();
-            return Ok(tenants);
+            var result = tenants.Select(t => new TenantResponse
+            {
+                Id        = t.Id,
+                Name      = t.Name,
+                UsesGas   = t.UsesGas,
+                Floor     = t.Floor,
+                Category  = t.Category,
+                IsActive  = t.IsActive,
+                CreatedAt = t.CreatedAt,
+            });
+            return Ok(result);
         }
 
         [HttpGet, Route("{id}/history")]
