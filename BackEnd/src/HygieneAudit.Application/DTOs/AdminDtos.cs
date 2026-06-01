@@ -28,6 +28,12 @@ public class UpdateUserRequest
     public bool?   IsActive { get; set; }
 }
 
+public class ChangePasswordRequest
+{
+    public string OldPassword { get; set; } = string.Empty;
+    public string NewPassword { get; set; } = string.Empty;
+}
+
 // ── Templates ────────────────────────────────────────────────────────────────
 
 public class TemplateResponse

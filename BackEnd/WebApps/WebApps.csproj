@@ -318,6 +318,7 @@
     <Compile Include="Controllers\TemplatesController.cs" />
     <Compile Include="Controllers\TenantsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\Api\AccountApiController.cs" />
     <Compile Include="Controllers\Api\AuditsApiController.cs" />
     <Compile Include="Controllers\Api\ReportsApiController.cs" />
     <Compile Include="Controllers\Api\SyncApiController.cs" />

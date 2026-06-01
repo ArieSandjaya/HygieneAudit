@@ -348,6 +348,13 @@
                                     </li>
                                     <li><div class="dropdown-divider"></div></li>
                                     <li>
+                                        <a class="dropdown-item" href="javascript:void(0);" id="change-pwd-link">
+                                            <i class="bx bx-lock-alt me-2"></i>
+                                            <span>Ganti Password</span>
+                                        </a>
+                                    </li>
+                                    <li><div class="dropdown-divider"></div></li>
+                                    <li>
                                         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "topbarLogoutForm" }))
                                         {
                                             @Html.AntiForgeryToken()
@@ -422,6 +429,91 @@ window.showToast = function(msg, type) {
                 .catch(function (err) { console.log('SW registration failed:', err); });
         });
     }
+</script>
+
+<!-- Change Password Modal (self-service, all users) -->
+<div class="modal fade" id="changePwdModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bx bx-lock-alt me-2 text-primary"></i>Ganti Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="cp-error" class="alert alert-danger py-2 mb-3" style="display:none;font-size:13px;"></div>
+                <div class="mb-3">
+                    <label class="form-label">Password Lama</label>
+                    <input type="password" id="cp-old" class="form-control" placeholder="••••••••" autocomplete="current-password" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password Baru</label>
+                    <input type="password" id="cp-new" class="form-control" placeholder="Min. 6 karakter" autocomplete="new-password" />
+                </div>
+                <div class="mb-1">
+                    <label class="form-label">Konfirmasi Password Baru</label>
+                    <input type="password" id="cp-confirm" class="form-control" placeholder="••••••••" autocomplete="new-password" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" id="cp-save">
+                    <i class="bx bx-check me-1"></i> Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+(function () {
+    var modalEl = document.getElementById('changePwdModal');
+    var bsModal  = new bootstrap.Modal(modalEl);
+
+    document.getElementById('change-pwd-link').addEventListener('click', function (e) {
+        e.preventDefault();
+        document.getElementById('cp-old').value     = '';
+        document.getElementById('cp-new').value     = '';
+        document.getElementById('cp-confirm').value = '';
+        document.getElementById('cp-error').style.display = 'none';
+        document.getElementById('cp-save').disabled = false;
+        bsModal.show();
+    });
+
+    document.getElementById('cp-save').addEventListener('click', function () {
+        var oldPwd  = document.getElementById('cp-old').value;
+        var newPwd  = document.getElementById('cp-new').value;
+        var confirm = document.getElementById('cp-confirm').value;
+        var errEl   = document.getElementById('cp-error');
+
+        errEl.style.display = 'none';
+        if (!oldPwd || !newPwd || !confirm) {
+            errEl.textContent = 'Semua field wajib diisi.'; errEl.style.display = ''; return;
+        }
+        if (newPwd.length < 6) {
+            errEl.textContent = 'Password baru minimal 6 karakter.'; errEl.style.display = ''; return;
+        }
+        if (newPwd !== confirm) {
+            errEl.textContent = 'Konfirmasi password tidak cocok.'; errEl.style.display = ''; return;
+        }
+
+        var btn = document.getElementById('cp-save');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="bx bx-loader-circle bx-spin me-1"></i> Menyimpan...';
+
+        $.ajax({
+            url: '/api/account/change-password',
+            type: 'POST', contentType: 'application/json',
+            data: JSON.stringify({ oldPassword: oldPwd, newPassword: newPwd })
+        }).done(function () {
+            bsModal.hide();
+            showToast('Password berhasil diubah.');
+        }).fail(function (xhr) {
+            errEl.textContent = (xhr.responseJSON && xhr.responseJSON.message) || 'Gagal mengubah password.';
+            errEl.style.display = '';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bx bx-check me-1"></i> Simpan';
+        });
+    });
+})();
 </script>
 </body>
 </html>

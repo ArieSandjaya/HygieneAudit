@@ -11,6 +11,40 @@ function UsersViewModel() {
         role: ko.observable('Auditor')
     };
 
+    // Reset password (admin)
+    self.resetPwd = {
+        userId: ko.observable(null),
+        userName: ko.observable(''),
+        newPassword: ko.observable(''),
+        saving: ko.observable(false)
+    };
+    self.showResetForm = ko.observable(false);
+
+    self.showResetPwd = function (item) {
+        self.resetPwd.userId(item.id);
+        self.resetPwd.userName(item.name);
+        self.resetPwd.newPassword('');
+        self.resetPwd.saving(false);
+        self.showForm(false);
+        self.showResetForm(true);
+    };
+    self.cancelResetPwd = function () { self.showResetForm(false); };
+    self.confirmResetPwd = function () {
+        var pwd = self.resetPwd.newPassword();
+        if (!pwd || pwd.length < 6) { showToast('Password minimal 6 karakter.', 'error'); return; }
+        self.resetPwd.saving(true);
+        $.ajax({
+            url: '/api/users/' + self.resetPwd.userId(),
+            type: 'PUT', contentType: 'application/json',
+            data: JSON.stringify({ password: pwd })
+        }).done(function () {
+            self.showResetForm(false);
+            showToast('Password berhasil direset.');
+        }).fail(function (xhr) {
+            showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal mereset password.', 'error');
+        }).always(function () { self.resetPwd.saving(false); });
+    };
+
     self.init = function () {
         $.getJSON('/api/users').done(function (d) { self.users(d); })
             .fail(function () { showToast('Gagal memuat daftar pengguna.', 'error'); });

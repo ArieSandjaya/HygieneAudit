@@ -49,6 +49,38 @@
         </div>
     </div>
 
+    <!-- Reset Password Form -->
+    <div class="card mb-4" data-bind="visible: showResetForm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+                <i class="bx bx-key me-1 text-warning"></i>
+                Reset Password — <span data-bind="text: resetPwd.userName"></span>
+            </h5>
+            <button type="button" class="btn-close" data-bind="click: cancelResetPwd"></button>
+        </div>
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Password Baru</label>
+                    <input type="password" class="form-control" placeholder="Min. 6 karakter"
+                           data-bind="value: resetPwd.newPassword" />
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-warning me-2"
+                            data-bind="click: confirmResetPwd, disable: resetPwd.saving()">
+                        <!-- ko if: resetPwd.saving() -->
+                        <i class="bx bx-loader-circle bx-spin me-1"></i> Menyimpan...
+                        <!-- /ko -->
+                        <!-- ko ifnot: resetPwd.saving() -->
+                        <i class="bx bx-check me-1"></i> Reset Password
+                        <!-- /ko -->
+                    </button>
+                    <button class="btn btn-outline-secondary" data-bind="click: cancelResetPwd">Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Users Table -->
     <div class="card">
         <div class="card-header"><h5 class="card-title mb-0">Daftar Pengguna</h5></div>
@@ -89,6 +121,9 @@
                         <td class="text-center">
                             <button class="btn btn-sm btn-icon btn-outline-primary me-1" data-bind="click: $root.editUser" title="Edit">
                                 <i class="bx bx-edit-alt"></i>
+                            </button>
+                            <button class="btn btn-sm btn-icon btn-outline-warning me-1" data-bind="click: $root.showResetPwd" title="Reset Password">
+                                <i class="bx bx-key"></i>
                             </button>
                             <button class="btn btn-sm btn-icon btn-outline-danger" data-bind="click: $root.deleteUser" title="Hapus">
                                 <i class="bx bx-trash"></i>
