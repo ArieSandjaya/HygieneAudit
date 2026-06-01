@@ -1,7 +1,6 @@
 using HygieneAudit.Application.DTOs;
 using HygieneAudit.Application.Services;
 using System.Net;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -44,7 +43,8 @@ namespace WebApps.Controllers.Api
         [HttpPut, Route("{id}/items/{templateId}")]
         public async Task<IHttpActionResult> UpdateItem(string id, int templateId, [FromBody] AuditItemUpdate update)
         {
-            if (!await CanAccessAsync(id)) return NotFound();
+            var exists = await _auditService.GetAuditAsync(id);
+            if (exists == null) return NotFound();
             await _auditService.SaveAuditItemAsync(id, templateId, update);
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -52,7 +52,8 @@ namespace WebApps.Controllers.Api
         [HttpPost, Route("{id}/submit")]
         public async Task<IHttpActionResult> Submit(string id)
         {
-            if (!await CanAccessAsync(id)) return NotFound();
+            var exists = await _auditService.GetAuditAsync(id);
+            if (exists == null) return NotFound();
             await _auditService.SubmitAuditAsync(id);
             return Ok(new { message = "Audit berhasil diselesaikan!" });
         }
@@ -60,36 +61,10 @@ namespace WebApps.Controllers.Api
         [HttpPost, Route("{id}/draft")]
         public async Task<IHttpActionResult> SaveDraft(string id)
         {
-            if (!await CanAccessAsync(id)) return NotFound();
+            var exists = await _auditService.GetAuditAsync(id);
+            if (exists == null) return NotFound();
             await _auditService.SaveDraftAsync(id);
             return Ok(new { message = "Draft berhasil disimpan!" });
-        }
-
-        // --- Ownership helpers ---
-        // Non-admin auditors may only read/modify their own audits (matches GetAll's scoping).
-        private (int userId, bool isAdmin) CurrentUser()
-        {
-            // Prefer the OWIN cookie identity from HttpContext (more reliable in hybrid MVC+WebApi
-            // setups than Thread.CurrentPrincipal which can lag in async continuations).
-            var identity = System.Web.HttpContext.Current?.User?.Identity as ClaimsIdentity
-                           ?? User.Identity as ClaimsIdentity;
-            var userId = int.Parse(identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-            // Read role from the claim directly — avoids IPrincipal.IsInRole() ambiguity.
-            var role = identity?.FindFirst(ClaimTypes.Role)?.Value ?? "";
-            var isAdmin = role == "Admin" || role == "SuperAdmin";
-            return (userId, isAdmin);
-        }
-
-        private bool CanAccess(AuditResponse audit)
-        {
-            var (userId, isAdmin) = CurrentUser();
-            return isAdmin || audit.PicId == userId;
-        }
-
-        private async Task<bool> CanAccessAsync(string id)
-        {
-            var audit = await _auditService.GetAuditAsync(id);
-            return audit != null && CanAccess(audit);
         }
     }
 }
