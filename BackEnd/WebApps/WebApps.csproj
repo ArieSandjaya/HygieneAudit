@@ -547,6 +547,7 @@
     <Content Include="Scripts\app\tenants.viewmodel.js" />
     <Content Include="Scripts\app\users.viewmodel.js" />
     <Content Include="Scripts\app\reports.viewmodel.js" />
+    <Content Include="Scripts\app\paged-sorted.js" />
     <Content Include="manifest.json" />
     <Content Include="service-worker.js" />
     <Content Include="Content\sneat\css\demo.css" />
