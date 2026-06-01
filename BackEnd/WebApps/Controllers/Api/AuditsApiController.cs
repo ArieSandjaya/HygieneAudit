@@ -70,9 +70,14 @@ namespace WebApps.Controllers.Api
         // Non-admin auditors may only read/modify their own audits (matches GetAll's scoping).
         private (int userId, bool isAdmin) CurrentUser()
         {
-            var identity = User.Identity as ClaimsIdentity;
+            // Prefer the OWIN cookie identity from HttpContext (more reliable in hybrid MVC+WebApi
+            // setups than Thread.CurrentPrincipal which can lag in async continuations).
+            var identity = System.Web.HttpContext.Current?.User?.Identity as ClaimsIdentity
+                           ?? User.Identity as ClaimsIdentity;
             var userId = int.Parse(identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var isAdmin = User.IsInRole("Admin") || User.IsInRole("SuperAdmin");
+            // Read role from the claim directly — avoids IPrincipal.IsInRole() ambiguity.
+            var role = identity?.FindFirst(ClaimTypes.Role)?.Value ?? "";
+            var isAdmin = role == "Admin" || role == "SuperAdmin";
             return (userId, isAdmin);
         }
 
