@@ -12,6 +12,11 @@
                     <span class="ha-badge" style="font-weight:700;"
                           data-bind="text: status(),
                                      css: { 'ha-badge--green': status() === 'COMPLETED', 'ha-badge--amber': status() === 'DRAFT' }"></span>
+                    <!-- ko ifnot: canEdit() -->
+                    <span class="ha-badge" style="background:rgba(255,255,255,.25);color:#fff;font-weight:600;">
+                        <i class="bx bx-lock-alt me-1"></i>View Only
+                    </span>
+                    <!-- /ko -->
                 </div>
                 <h5 class="fw-bold mb-1" style="font-size:1.1rem;" data-bind="text: tenantName()"></h5>
                 <p style="font-size:13px;opacity:.85;margin:0;">
@@ -28,11 +33,11 @@
                     <i class="bx bx-arrow-back me-1"></i> Kembali
                 </a>
                 <button style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:10px;font-size:13px;font-weight:600;padding:7px 14px;cursor:pointer;"
-                        data-bind="click: saveDraft, visible: status() !== 'COMPLETED'">
+                        data-bind="click: saveDraft, visible: status() !== 'COMPLETED' && canEdit()">
                     <i class="bx bx-save me-1"></i> Draft
                 </button>
                 <button style="background:#fff;color:#696cff;border:none;border-radius:10px;font-size:13px;font-weight:700;padding:7px 16px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.12);"
-                        data-bind="click: submitAudit, visible: status() !== 'COMPLETED', disable: submitting()">
+                        data-bind="click: submitAudit, visible: status() !== 'COMPLETED' && canEdit(), disable: submitting()">
                     <!-- ko if: submitting() -->
                     <i class="bx bx-loader-circle bx-spin me-1"></i> Menyimpan...
                     <!-- /ko -->
@@ -89,12 +94,14 @@
                         <div class="d-flex gap-2 flex-shrink-0" style="margin-top:2px;">
                             <button type="button" class="ha-verdict-btn ha-verdict-btn--pass"
                                     data-bind="click: function(){ $root.setItemStatus($data, 'PASS') },
-                                               css: { active: status() === 'PASS' }">
+                                               css: { active: status() === 'PASS' },
+                                               enable: $root.canEdit() && $root.status() !== 'COMPLETED'">
                                 &#128522; Pass
                             </button>
                             <button type="button" class="ha-verdict-btn ha-verdict-btn--fail"
                                     data-bind="click: function(){ $root.setItemStatus($data, 'FAIL') },
-                                               css: { active: status() === 'FAIL' }">
+                                               css: { active: status() === 'FAIL' },
+                                               enable: $root.canEdit() && $root.status() !== 'COMPLETED'">
                                 &#128545; Fail
                             </button>
                         </div>
@@ -104,14 +111,15 @@
                     <textarea class="ha-note"
                               placeholder="Tambahkan catatan..."
                               data-bind="value: note, valueUpdate: 'afterkeydown',
-                                         css: { 'is-invalid': status() === 'FAIL' && !note().trim() },
+                                         css: { 'is-invalid': $root.canEdit() && status() === 'FAIL' && !note().trim() },
+                                         attr: { readonly: !$root.canEdit() },
                                          event: { change: $root.onItemChange.bind($root, $data) }"></textarea>
-                    <div style="font-size:11px;color:#ef4444;margin-top:4px;" data-bind="visible: status() === 'FAIL' && !note().trim()">
+                    <div style="font-size:11px;color:#ef4444;margin-top:4px;" data-bind="visible: $root.canEdit() && status() === 'FAIL' && !note().trim()">
                         Catatan wajib diisi untuk item yang Fail
                     </div>
 
-                    <!-- Photo upload (only when not completed) -->
-                    <div data-bind="visible: $root.status() !== 'COMPLETED'">
+                    <!-- Photo upload (only when not completed and user can edit) -->
+                    <div data-bind="visible: $root.canEdit() && $root.status() !== 'COMPLETED'">
                         <div class="ha-photo-btns">
                             <label class="ha-photo-btn" style="flex:1;">
                                 <div style="font-size:22px;line-height:1.2;">&#128247;</div>
@@ -134,7 +142,7 @@
                         <div class="position-relative flex-shrink-0">
                             <img data-bind="attr: { src: $data }"
                                  style="width:64px;height:64px;object-fit:cover;border-radius:10px;border:2px solid var(--ha-border);" />
-                            <!-- ko if: $root.status() !== 'COMPLETED' -->
+                            <!-- ko if: $root.canEdit() && $root.status() !== 'COMPLETED' -->
                             <button type="button"
                                     style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#ef4444;color:#fff;border:none;font-size:13px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;"
                                     data-bind="click: function(){ $root.removePhoto($parent, $data) }">
@@ -156,8 +164,8 @@
         Memuat data audit...
     </div>
 
-    <!-- Sticky footer actions (mobile) -->
-    <div data-bind="visible: status() !== 'COMPLETED'"
+    <!-- Sticky footer actions (mobile, only for PIC/Admin) -->
+    <div data-bind="visible: canEdit() && status() !== 'COMPLETED'"
          style="position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:#fff;border-top:1px solid var(--ha-border);display:flex;gap:10px;z-index:1040;"
          class="d-md-none">
         <button class="btn btn-warning flex-fill" style="border-radius:12px;font-weight:700;" data-bind="click: saveDraft">
@@ -169,14 +177,16 @@
         </button>
     </div>
     <!-- Spacer for sticky footer on mobile -->
-    <div class="d-md-none" style="height:72px;" data-bind="visible: status() !== 'COMPLETED'"></div>
+    <div class="d-md-none" style="height:72px;" data-bind="visible: canEdit() && status() !== 'COMPLETED'"></div>
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/knockout")
     <script src="~/Scripts/app/audits.viewmodel.js"></script>
     <script>
-        var auditId = '@Html.Raw(ViewBag.AuditId)';
-        ko.applyBindings(new AuditDetailViewModel(auditId), document.getElementById('audit-detail-page'));
+        var auditId       = '@Html.Raw(ViewBag.AuditId)';
+        var currentUserId = @(ViewBag.CurrentUserId ?? 0);
+        var isAdmin       = @(ViewBag.IsAdmin == true ? "true" : "false");
+        ko.applyBindings(new AuditDetailViewModel(auditId, currentUserId, isAdmin), document.getElementById('audit-detail-page'));
     </script>
 }

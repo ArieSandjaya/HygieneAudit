@@ -30,6 +30,10 @@ namespace WebApps.Controllers
         {
             ViewBag.AuditId = id;
             ViewBag.Title = "Detail Audit";
+            var identity = User.Identity as ClaimsIdentity;
+            var userIdStr = identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            ViewBag.CurrentUserId = int.TryParse(userIdStr, out var uid) ? uid : 0;
+            ViewBag.IsAdmin = User.IsInRole("Admin") || User.IsInRole("SuperAdmin");
             return View();
         }
 

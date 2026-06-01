@@ -140,11 +140,12 @@ function AuditsViewModel(currentUserId, isAdmin) {
 }
 
 // Audit detail viewmodel
-function AuditDetailViewModel(auditId) {
+function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     var self = this;
     self.audit      = ko.observable(null);
     self.categories = ko.observableArray([]);
     self.submitting = ko.observable(false);
+    self.canEdit    = ko.observable(false); // resolved after audit loads
 
     // Flattened header props
     self.tenantName = ko.computed(function () { return self.audit() ? self.audit().tenantName : ''; });
@@ -170,6 +171,7 @@ function AuditDetailViewModel(auditId) {
     self.init = function () {
         $.getJSON('/api/audits/' + auditId).done(function (audit) {
             self.audit(audit);
+            self.canEdit(isAdmin || audit.picId === currentUserId);
 
             var grouped = {};
             (audit.items || []).forEach(function (item) {
@@ -222,6 +224,7 @@ function AuditDetailViewModel(auditId) {
     };
 
     self.onItemChange = function (item) {
+        if (!self.canEdit()) return;
         var data = { status: item.status(), note: item.note(), photos: item.photos() };
         $.ajax({
             url: '/api/audits/' + auditId + '/items/' + item.templateId,
