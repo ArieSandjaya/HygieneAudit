@@ -106,7 +106,7 @@ function AuditsViewModel(currentUserId, isAdmin) {
 
         $.getJSON('/api/tenants').done(function (d) { self.tenants(d); })
             .fail(function () { showToast('Gagal memuat daftar tenant.', 'error'); });
-        $.getJSON('/api/users').done(function (d) {
+        $.getJSON('/api/users/auditors').done(function (d) {
             self.users(d);
             if (!isAdmin && currentUserId) {
                 self.newAudit.picId(currentUserId);
