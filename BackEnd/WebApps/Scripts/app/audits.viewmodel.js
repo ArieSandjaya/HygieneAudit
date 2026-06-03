@@ -230,13 +230,16 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     self.toggleCategory = function (cat) { cat.collapsed(!cat.collapsed()); };
 
     self.addPhoto = function (item, event) {
-        var files = event.target.files;
-        if (!files || !files.length) return;
-        event.target.value = ''; // reset input so the same file can be picked again
+        var fileList = event.target.files;
+        if (!fileList || !fileList.length) return;
 
-        // Each file is compressed to a Blob, then POSTed directly via multipart —
-        // no base64 encoding, no JSON bloat, no AppDomain-recycle trigger.
-        Array.prototype.forEach.call(files, function (f) {
+        // Snapshot into a plain Array BEFORE resetting the input.
+        // Browsers invalidate the live FileList when input.value is cleared;
+        // a plain Array is unaffected by that reset.
+        var files = Array.prototype.slice.call(fileList);
+        event.target.value = ''; // reset so the same file can be picked again
+
+        files.forEach(function (f) {
             compressImage(f, 1280, 0.82).then(function (blob) {
                 var fd = new FormData();
                 fd.append('photo', blob, 'photo.jpg');
@@ -249,8 +252,11 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
                 });
             }).then(function (result) {
                 item.photos.push(result.url); // reference URL from server
-            }).catch(function () {
-                showToast('Gagal mengunggah foto.', 'error');
+            }).catch(function (err) {
+                var msg = (err && err.responseJSON && err.responseJSON.message)
+                    ? err.responseJSON.message
+                    : 'Gagal mengunggah foto.';
+                showToast(msg, 'error');
             });
         });
     };
