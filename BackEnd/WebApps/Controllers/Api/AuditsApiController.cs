@@ -95,6 +95,55 @@ namespace WebApps.Controllers.Api
             return resp;
         }
 
+        [HttpPost, Route("{id}/items/{templateId}/photos")]
+        public async Task<IHttpActionResult> UploadPhoto(string id, int templateId)
+        {
+            if (!await CanAccessAsync(id)) return NotFound();
+
+            if (!Request.Content.IsMimeMultipartContent())
+                return BadRequest("Multipart form data diharapkan.");
+
+            var provider = new MultipartMemoryStreamProvider();
+            await Request.Content.ReadAsMultipartAsync(provider);
+
+            HttpContent photoPart = null;
+            foreach (var part in provider.Contents)
+            {
+                var name = part.Headers.ContentDisposition?.Name?.Trim('"');
+                if (string.Equals(name, "photo", StringComparison.OrdinalIgnoreCase))
+                {
+                    photoPart = part;
+                    break;
+                }
+            }
+
+            if (photoPart == null) return BadRequest("Field 'photo' tidak ditemukan.");
+
+            var bytes = await photoPart.ReadAsByteArrayAsync();
+            if (bytes.Length == 0) return BadRequest("File kosong.");
+
+            // Persist to disk outside the web root so the file monitor is never triggered.
+            var uploadsPath = PhotoStorage.UploadsFolder;
+            Directory.CreateDirectory(uploadsPath);
+            var filename = Guid.NewGuid().ToString("N") + ".jpg";
+            File.WriteAllBytes(Path.Combine(uploadsPath, filename), bytes);
+
+            int photoId;
+            try
+            {
+                photoId = await _auditService.AddPhotoAsync(id, templateId, filename);
+            }
+            catch
+            {
+                // Roll back the orphaned file if the DB insert failed.
+                try { File.Delete(Path.Combine(uploadsPath, filename)); } catch { }
+                return Content(HttpStatusCode.InternalServerError,
+                    new { message = "Gagal menyimpan foto ke database." });
+            }
+
+            return Ok(new { url = $"/api/audits/photos/{photoId}" });
+        }
+
         [HttpPut, Route("{id}/items/{templateId}")]
         public async Task<IHttpActionResult> UpdateItem(string id, int templateId, [FromBody] AuditItemUpdate update)
         {

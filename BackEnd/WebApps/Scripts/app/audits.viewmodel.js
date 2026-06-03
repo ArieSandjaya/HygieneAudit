@@ -129,7 +129,8 @@ function AuditsViewModel(currentUserId, isAdmin) {
     self.init();
 }
 
-// Compress an image File to a JPEG data-URL no larger than maxSide × maxSide px.
+// Compress an image File to a JPEG Blob no larger than maxSide × maxSide px.
+// Returns a Promise<Blob>. Falls back to the original File if Canvas is unavailable.
 function compressImage(file, maxSide, quality) {
     return new Promise(function (resolve) {
         var objectUrl = URL.createObjectURL(file);
@@ -147,14 +148,13 @@ function compressImage(file, maxSide, quality) {
             canvas.height = h;
             canvas.getContext('2d').drawImage(img, 0, 0, w, h);
             URL.revokeObjectURL(objectUrl);
-            resolve(canvas.toDataURL('image/jpeg', quality));
+            canvas.toBlob(function (blob) {
+                resolve(blob || file); // fall back to original if toBlob fails
+            }, 'image/jpeg', quality);
         };
         img.onerror = function () {
             URL.revokeObjectURL(objectUrl);
-            // fallback: send original without compression
-            var reader = new FileReader();
-            reader.onload = function (e) { resolve(e.target.result); };
-            reader.readAsDataURL(file);
+            resolve(file); // fallback: send original without compression
         };
         img.src = objectUrl;
     });
@@ -190,6 +190,17 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
         return self.categories().reduce(function (n, cat) { return n + cat.items.length; }, 0);
     });
 
+    // Progress-bar style values (kept here so the view's data-bind stays a
+    // simple single-line attribute — avoids VS's HTML-validator false positives).
+    self.progressWidth = ko.computed(function () {
+        var t = self.totalCount();
+        return (t > 0 ? Math.round(self.passCount() / t * 100) : 0) + '%';
+    });
+    self.progressColor = ko.computed(function () {
+        var t = self.totalCount();
+        return (t > 0 && self.passCount() / t >= 0.7) ? '#22c55e' : '#ef4444';
+    });
+
     self.init = function () {
         $.getJSON('/api/audits/' + auditId).done(function (audit) {
             self.audit(audit);
@@ -221,6 +232,7 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     self.addPhoto = function (item, event) {
         var files = event.target.files;
         if (!files || !files.length) return;
+<<<<<<< HEAD
 
         // Batasi maksimal 10 gambar di sisi client
         if ((item.photos().length + files.length) > 10) {
@@ -238,6 +250,29 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
             // self.onItemChange(item); // <--- HAPUS ATAU KOMENTARI BARIS INI!
         });
         event.target.value = '';
+=======
+        event.target.value = ''; // reset input so the same file can be picked again
+
+        // Each file is compressed to a Blob, then POSTed directly via multipart —
+        // no base64 encoding, no JSON bloat, no AppDomain-recycle trigger.
+        Array.prototype.forEach.call(files, function (f) {
+            compressImage(f, 1280, 0.82).then(function (blob) {
+                var fd = new FormData();
+                fd.append('photo', blob, 'photo.jpg');
+                return $.ajax({
+                    url: '/api/audits/' + auditId + '/items/' + item.templateId + '/photos',
+                    type: 'POST',
+                    data: fd,
+                    processData: false,
+                    contentType: false
+                });
+            }).then(function (result) {
+                item.photos.push(result.url); // reference URL from server
+            }).catch(function () {
+                showToast('Gagal mengunggah foto.', 'error');
+            });
+        });
+>>>>>>> 666a9d534b140a93b32e08721be0fdbf6dced6fe
     };
 
     self.removePhoto = function (item, url) {
