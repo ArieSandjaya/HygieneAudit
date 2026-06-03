@@ -221,13 +221,21 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     self.addPhoto = function (item, event) {
         var files = event.target.files;
         if (!files || !files.length) return;
-        // Compress each image to max 1280 px on longest side, JPEG 82% quality.
+
+        // Batasi maksimal 10 gambar di sisi client
+        if ((item.photos().length + files.length) > 10) {
+            showToast('Maksimal hanya boleh 10 gambar per item!', 'error');
+            return;
+        }
+
         var reads = Array.prototype.map.call(files, function (f) {
             return compressImage(f, 1280, 0.82);
         });
+
         Promise.all(reads).then(function (dataUrls) {
             dataUrls.forEach(function (url) { item.photos.push(url); });
-            self.onItemChange(item);
+
+            // self.onItemChange(item); // <--- HAPUS ATAU KOMENTARI BARIS INI!
         });
         event.target.value = '';
     };
