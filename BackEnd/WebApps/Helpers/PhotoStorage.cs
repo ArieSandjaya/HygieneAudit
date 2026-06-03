@@ -14,6 +14,12 @@ namespace WebApps.Helpers
 
         public static string SaveFromDataUrl(string dataUrl, string uploadsPath)
         {
+            if (string.IsNullOrEmpty(uploadsPath))
+                throw new InvalidOperationException("Uploads path could not be resolved.");
+
+            // Safety net: ensure the folder exists right before writing.
+            Directory.CreateDirectory(uploadsPath);
+
             var base64 = dataUrl;
             var comma  = dataUrl.IndexOf(',');
             if (dataUrl.StartsWith("data:") && comma > 0)
