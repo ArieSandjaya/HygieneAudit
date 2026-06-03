@@ -88,8 +88,11 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
 
         if (!string.IsNullOrEmpty(type) && type != "all")
         {
+            // Filter on Audit.IsGas (the value recorded at audit creation time),
+            // not Tenant.UsesGas (the current master record). This preserves correct
+            // historical filtering even when a tenant's gas setup changes later.
             bool isGas = type == "gas";
-            query = query.Where(a => a.Tenant.UsesGas == isGas);
+            query = query.Where(a => a.IsGas == isGas);
         }
 
         if (!string.IsNullOrEmpty(search))
@@ -128,6 +131,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
         {
             var total = a.Items.Count;
             var pass = a.Items.Count(i => i.Status == AuditItemStatus.Pass);
+            var fail = a.Items.Count(i => i.Status == AuditItemStatus.Fail);
             return new RecentAuditDto
             {
                 Id = a.Id,
@@ -135,7 +139,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
                 PicName = a.Pic?.Name ?? "Unknown",
                 TotalItems = total,
                 PassItems = pass,
-                FailItems = total - pass,
+                FailItems = fail, // explicit count — excludes null-status (unchecked) items
                 PassRate = total > 0 ? Math.Round((double)pass / total * 100, 0) : 0
             };
         }).ToList();

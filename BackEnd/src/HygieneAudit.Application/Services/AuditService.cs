@@ -147,6 +147,8 @@ public class AuditService : IAuditService
     {
         var audit = await _unitOfWork.Audits.GetByIdWithItemsAsync(id);
         if (audit == null) throw new NotFoundException("Audit not found");
+        if (audit.Status == AuditStatus.Completed)
+            throw new ValidationException("Audit sudah selesai dan tidak dapat diubah kembali ke draft.");
 
         audit.Status = AuditStatus.Draft;
         await _unitOfWork.SaveChangesAsync();
