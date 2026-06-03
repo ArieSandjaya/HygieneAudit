@@ -129,6 +129,37 @@ function AuditsViewModel(currentUserId, isAdmin) {
     self.init();
 }
 
+// Compress an image File to a JPEG data-URL no larger than maxSide × maxSide px.
+function compressImage(file, maxSide, quality) {
+    return new Promise(function (resolve) {
+        var objectUrl = URL.createObjectURL(file);
+        var img = new Image();
+        img.onload = function () {
+            var w = img.naturalWidth  || img.width;
+            var h = img.naturalHeight || img.height;
+            if (w > maxSide || h > maxSide) {
+                var ratio = Math.min(maxSide / w, maxSide / h);
+                w = Math.round(w * ratio);
+                h = Math.round(h * ratio);
+            }
+            var canvas = document.createElement('canvas');
+            canvas.width  = w;
+            canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            URL.revokeObjectURL(objectUrl);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = function () {
+            URL.revokeObjectURL(objectUrl);
+            // fallback: send original without compression
+            var reader = new FileReader();
+            reader.onload = function (e) { resolve(e.target.result); };
+            reader.readAsDataURL(file);
+        };
+        img.src = objectUrl;
+    });
+}
+
 // Audit detail viewmodel
 function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     var self = this;
@@ -189,12 +220,9 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     self.addPhoto = function (item, event) {
         var files = event.target.files;
         if (!files || !files.length) return;
+        // Compress each image to max 1280 px on longest side, JPEG 82% quality.
         var reads = Array.prototype.map.call(files, function (f) {
-            return new Promise(function (resolve) {
-                var reader = new FileReader();
-                reader.onload = function (e) { resolve(e.target.result); };
-                reader.readAsDataURL(f);
-            });
+            return compressImage(f, 1280, 0.82);
         });
         Promise.all(reads).then(function (dataUrls) {
             dataUrls.forEach(function (url) { item.photos.push(url); });
