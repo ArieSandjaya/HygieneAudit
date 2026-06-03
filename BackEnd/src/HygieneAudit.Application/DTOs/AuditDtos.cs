@@ -75,6 +75,8 @@ public class AuditItemResponse
         Name = item.Name,
         Status = item.Status?.ToString().ToUpper(),
         Note = item.Note,
-        Photos = item.Photos.Select(p => p.PhotoUrl).ToList()
+        // Return lightweight photo references; the browser fetches each image
+        // lazily from the photo endpoint instead of receiving base64 inline.
+        Photos = item.Photos.Select(p => $"/api/audits/photos/{p.Id}").ToList()
     };
 }

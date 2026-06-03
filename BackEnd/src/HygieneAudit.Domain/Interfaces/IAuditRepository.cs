@@ -11,4 +11,5 @@ public interface IAuditRepository : IRepository<Audit>
     Task<IEnumerable<Audit>> GetFilteredAsync(string? status, string? type, string? search);
     Task<TenantHistory> GetTenantHistoryAsync(int tenantId);
     Task<IEnumerable<Audit>> GetRecentAsync(int picId, bool isAdmin, int limit = 100);
+    Task<string?> GetPhotoUrlAsync(int photoId);
 }

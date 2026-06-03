@@ -152,4 +152,10 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
             .Take(limit)
             .ToListAsync();
     }
+
+    public async Task<string?> GetPhotoUrlAsync(int photoId)
+    {
+        var photo = await _context.Set<AuditItemPhoto>().FindAsync(photoId);
+        return photo?.PhotoUrl;
+    }
 }

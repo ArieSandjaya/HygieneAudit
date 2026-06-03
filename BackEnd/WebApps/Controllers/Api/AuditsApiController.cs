@@ -1,6 +1,9 @@
 using HygieneAudit.Application.DTOs;
 using HygieneAudit.Application.Services;
+using System;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -39,6 +42,42 @@ namespace WebApps.Controllers.Api
             var audit = await _auditService.GetAuditAsync(id);
             if (audit == null) return NotFound();
             return Ok(audit);
+        }
+
+        // Streams a single photo's bytes so the detail page can load images lazily
+        // instead of receiving every photo as inline base64 in the audit JSON.
+        [HttpGet, Route("photos/{photoId:int}")]
+        public async Task<HttpResponseMessage> GetPhoto(int photoId)
+        {
+            var dataUrl = await _auditService.GetPhotoUrlAsync(photoId);
+            if (string.IsNullOrEmpty(dataUrl))
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+
+            var contentType = "image/jpeg";
+            var base64 = dataUrl;
+            var comma = dataUrl.IndexOf(',');
+            if (dataUrl.StartsWith("data:") && comma > 0)
+            {
+                var meta = dataUrl.Substring(5, comma - 5); // e.g. "image/jpeg;base64"
+                var semi = meta.IndexOf(';');
+                contentType = semi > 0 ? meta.Substring(0, semi) : meta;
+                base64 = dataUrl.Substring(comma + 1);
+            }
+
+            byte[] bytes;
+            try { bytes = Convert.FromBase64String(base64); }
+            catch { return Request.CreateResponse(HttpStatusCode.NotFound); }
+
+            var resp = Request.CreateResponse(HttpStatusCode.OK);
+            resp.Content = new ByteArrayContent(bytes);
+            resp.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+            // Photo content is immutable for a given id — cache aggressively.
+            resp.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                Public = true,
+                MaxAge = TimeSpan.FromDays(365)
+            };
+            return resp;
         }
 
         [HttpPut, Route("{id}/items/{templateId}")]

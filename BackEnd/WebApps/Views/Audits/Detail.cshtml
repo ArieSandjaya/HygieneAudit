@@ -140,7 +140,7 @@
                     <div class="d-flex flex-wrap gap-2 mt-2" data-bind="visible: photos().length > 0">
                         <!-- ko foreach: photos -->
                         <div class="position-relative flex-shrink-0">
-                            <img data-bind="attr: { src: $data }"
+                            <img loading="lazy" decoding="async" data-bind="attr: { src: $data }"
                                  style="width:64px;height:64px;object-fit:cover;border-radius:10px;border:2px solid var(--ha-border);" />
                             <!-- ko if: $root.canEdit() && $root.status() !== 'COMPLETED' -->
                             <button type="button"

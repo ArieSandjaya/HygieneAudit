@@ -76,14 +76,35 @@ public class AuditService : IAuditService
 
         if (update.Photos != null)
         {
-            var existing = item.Photos.ToList();
-            foreach (var p in existing) item.Photos.Remove(p);
-            foreach (var url in update.Photos)
+            // Incoming entries are a mix of references to already-saved photos
+            // (".../api/audits/photos/{id}") and brand-new base64 data URLs.
+            // Keep referenced photos, add new ones, drop the rest — never re-store
+            // a reference URL as if it were image data.
+            var keepIds = new HashSet<int>();
+            var newPhotos = new List<string>();
+            foreach (var entry in update.Photos)
+            {
+                if (string.IsNullOrWhiteSpace(entry)) continue;
+                var idx = entry.LastIndexOf("/photos/", StringComparison.OrdinalIgnoreCase);
+                if (idx >= 0 && int.TryParse(entry.Substring(idx + "/photos/".Length), out var pid))
+                    keepIds.Add(pid);
+                else
+                    newPhotos.Add(entry);
+            }
+
+            foreach (var p in item.Photos.ToList())
+                if (!keepIds.Contains(p.Id))
+                    item.Photos.Remove(p);
+
+            foreach (var url in newPhotos)
                 item.Photos.Add(new AuditItemPhoto { PhotoUrl = url });
         }
 
         await _unitOfWork.SaveChangesAsync();
     }
+
+    public async Task<string?> GetPhotoUrlAsync(int photoId)
+        => await _unitOfWork.Audits.GetPhotoUrlAsync(photoId);
 
     public async Task SubmitAuditAsync(string id)
     {
