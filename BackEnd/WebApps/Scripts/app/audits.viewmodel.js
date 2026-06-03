@@ -190,6 +190,17 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
         return self.categories().reduce(function (n, cat) { return n + cat.items.length; }, 0);
     });
 
+    // Progress-bar style values (kept here so the view's data-bind stays a
+    // simple single-line attribute — avoids VS's HTML-validator false positives).
+    self.progressWidth = ko.computed(function () {
+        var t = self.totalCount();
+        return (t > 0 ? Math.round(self.passCount() / t * 100) : 0) + '%';
+    });
+    self.progressColor = ko.computed(function () {
+        var t = self.totalCount();
+        return (t > 0 && self.passCount() / t >= 0.7) ? '#22c55e' : '#ef4444';
+    });
+
     self.init = function () {
         $.getJSON('/api/audits/' + auditId).done(function (audit) {
             self.audit(audit);
