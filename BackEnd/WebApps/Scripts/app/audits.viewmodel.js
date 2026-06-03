@@ -166,6 +166,7 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     self.audit      = ko.observable(null);
     self.categories = ko.observableArray([]);
     self.submitting = ko.observable(false);
+    self.savingDraft = ko.observable(false);
     self.canEdit    = ko.observable(false); // resolved after audit loads
 
     // Flattened header props
@@ -255,9 +256,12 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     };
 
     self.saveDraft = function () {
+        if (self.savingDraft()) return;
+        self.savingDraft(true);
         $.ajax({ url: '/api/audits/' + auditId + '/draft', type: 'POST' })
             .done(function () { showToast('Draft disimpan!'); })
-            .fail(function () { showToast('Gagal menyimpan draft.', 'error'); });
+            .fail(function () { showToast('Gagal menyimpan draft.', 'error'); })
+            .always(function () { self.savingDraft(false); });
     };
 
     self.submitAudit = function () {
