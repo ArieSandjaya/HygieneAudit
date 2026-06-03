@@ -7,7 +7,7 @@ namespace WebApps.Helpers
     public static class PhotoStorage
     {
         public static string UploadsFolder =>
-            HostingEnvironment.MapPath("~/Uploads");
+            HostingEnvironment.MapPath("~/App_Data/Uploads");
 
         public static string SaveFromDataUrl(string dataUrl) =>
             SaveFromDataUrl(dataUrl, UploadsFolder);
