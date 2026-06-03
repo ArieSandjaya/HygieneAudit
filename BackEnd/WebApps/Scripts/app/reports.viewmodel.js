@@ -10,8 +10,8 @@ function ReportsViewModel() {
     };
 
     self.exportUrl = ko.computed(function () {
-        return '/api/reports/export-excel?status=' + self.filter.status() +
-            '&type=' + self.filter.type() +
+        return '/api/reports/export-excel?status=' + encodeURIComponent(self.filter.status()) +
+            '&type=' + encodeURIComponent(self.filter.type()) +
             '&search=' + encodeURIComponent(self.filter.search());
     });
 

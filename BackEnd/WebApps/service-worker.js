@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE_NAME = 'hygiene-audit-v2';
+const CACHE_NAME = 'hygiene-audit-v3';
 const STATIC_ASSETS = [
     '/Content/sneat/vendor/css/core.css',
     '/Content/sneat/vendor/css/theme-default.css',
@@ -53,11 +53,18 @@ self.addEventListener('fetch', function (event) {
     if (url.pathname.startsWith('/Scripts/app/')) {
         event.respondWith(
             fetch(event.request).then(function (response) {
-                var clone = response.clone();
-                caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, clone); });
+                // Only cache successful responses — never cache 4xx/5xx errors.
+                if (response.ok) {
+                    var clone = response.clone();
+                    caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, clone); });
+                }
                 return response;
             }).catch(function () {
-                return caches.match(event.request);
+                return caches.match(event.request).then(function (cached) {
+                    // Return cached version if available; otherwise a 503 so the SW
+                    // resolves to a valid Response (respondWith(undefined) throws TypeError).
+                    return cached || new Response('Service unavailable offline.', { status: 503 });
+                });
             })
         );
         return;
@@ -74,8 +81,10 @@ self.addEventListener('fetch', function (event) {
         event.respondWith(
             caches.match(event.request).then(function (cached) {
                 return cached || fetch(event.request).then(function (response) {
-                    var clone = response.clone();
-                    caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, clone); });
+                    if (response.ok) {
+                        var clone = response.clone();
+                        caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, clone); });
+                    }
                     return response;
                 });
             })
@@ -86,11 +95,15 @@ self.addEventListener('fetch', function (event) {
     // HTML pages: network-first, fall back to cache
     event.respondWith(
         fetch(event.request).then(function (response) {
-            var clone = response.clone();
-            caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, clone); });
+            if (response.ok) {
+                var clone = response.clone();
+                caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, clone); });
+            }
             return response;
         }).catch(function () {
-            return caches.match(event.request);
+            return caches.match(event.request).then(function (cached) {
+                return cached || new Response('Service unavailable offline.', { status: 503 });
+            });
         })
     );
 });

@@ -304,6 +304,8 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
         $.ajax({ url: '/api/audits/' + auditId + '/submit', type: 'POST' })
             .done(function () {
                 showToast('Audit berhasil diselesaikan!');
+                // Reset before navigating so a blocked redirect (beforeunload) doesn't lock the button.
+                self.submitting(false);
                 setTimeout(function () { window.location.href = '/Audits'; }, 1500);
             })
             .fail(function (xhr) {
