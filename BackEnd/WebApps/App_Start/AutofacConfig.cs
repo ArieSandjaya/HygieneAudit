@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 
@@ -70,16 +71,40 @@ namespace WebApps
         }
     }
 
-    // Custom MVC IDependencyResolver backed by Autofac (replaces Autofac.Mvc5)
+    // Custom MVC IDependencyResolver backed by Autofac (replaces Autofac.Mvc5).
+    // Creates a child lifetime scope per HTTP request so IDisposable components
+    // (DbContext, UnitOfWork) are properly disposed at request end.
     public sealed class AutofacMvcDependencyResolver : System.Web.Mvc.IDependencyResolver
     {
         private readonly IContainer _container;
+        internal const string RequestScopeKey = "AutofacMvcRequestScope";
 
         public AutofacMvcDependencyResolver(IContainer container) => _container = container;
 
+        private ILifetimeScope GetRequestScope()
+        {
+            var ctx = HttpContext.Current;
+            if (ctx == null) return _container;
+            if (ctx.Items[RequestScopeKey] is ILifetimeScope scope) return scope;
+            scope = _container.BeginLifetimeScope();
+            ctx.Items[RequestScopeKey] = scope;
+            return scope;
+        }
+
+        // Called from Global.asax Application_EndRequest to dispose the per-request scope.
+        public static void DisposeRequestScope()
+        {
+            var ctx = HttpContext.Current;
+            if (ctx?.Items[RequestScopeKey] is ILifetimeScope scope)
+            {
+                ctx.Items.Remove(RequestScopeKey);
+                scope.Dispose();
+            }
+        }
+
         public object GetService(Type serviceType)
         {
-            try { return _container.ResolveOptional(serviceType); }
+            try { return GetRequestScope().ResolveOptional(serviceType); }
             catch { return null; }
         }
 
@@ -88,7 +113,7 @@ namespace WebApps
             try
             {
                 var collectionType = typeof(IEnumerable<>).MakeGenericType(serviceType);
-                var result = _container.ResolveOptional(collectionType);
+                var result = GetRequestScope().ResolveOptional(collectionType);
                 return result != null ? (IEnumerable<object>)result : Enumerable.Empty<object>();
             }
             catch { return Enumerable.Empty<object>(); }

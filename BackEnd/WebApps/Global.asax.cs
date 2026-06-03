@@ -67,6 +67,13 @@ namespace WebApps
             }
         }
 
+        protected void Application_EndRequest()
+        {
+            // Dispose the per-request Autofac lifetime scope created by the MVC resolver,
+            // ensuring DbContext and other IDisposable services are released after each request.
+            AutofacMvcDependencyResolver.DisposeRequestScope();
+        }
+
         private static void EnsureUploadsFolder()
         {
             var path = WebApps.Helpers.PhotoStorage.UploadsFolder;
