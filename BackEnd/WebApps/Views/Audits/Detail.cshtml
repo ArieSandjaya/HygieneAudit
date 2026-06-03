@@ -108,7 +108,7 @@
                               placeholder="Tambahkan catatan..."
                               data-bind="value: note, valueUpdate: 'afterkeydown',
                                          css: { 'is-invalid': $root.canEdit() && status() === 'FAIL' && !note().trim() },
-                                         attr: { readonly: !$root.canEdit() },
+                                         attr: { readonly: !$root.canEdit() || $root.status() === 'COMPLETED' },
                                          event: { change: $root.onItemChange.bind($root, $data) }"></textarea>
                     <div style="font-size:11px;color:#ef4444;margin-top:4px;" data-bind="visible: $root.canEdit() && status() === 'FAIL' && !note().trim()">
                         Catatan wajib diisi untuk item yang Fail
