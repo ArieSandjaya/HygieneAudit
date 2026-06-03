@@ -6,3 +6,6 @@
 /BackEnd/src/HygieneAudit.API/appsettings.json
 /BackEnd/src/HygieneAudit.API/appsettings.Development.json
 /BackEnd/.vs/HygieneAudit/FileContentIndex
+
+# Web.config files — tidak di-commit (berisi kredensial / dibuat ulang oleh VS saat publish)
+**/Web.config
