@@ -15,5 +15,5 @@ public interface IAuditService
     Task SaveDraftAsync(string id);
     Task<TenantHistory> GetTenantHistoryAsync(int tenantId);
     Task<ExcelReportDto> GetExcelReportAsync(string? status, string? type, string? search);
-    Task<byte[]> ExportExcelAsync(string? status, string? type, string? search);
+    Task<byte[]> ExportExcelAsync(string? status, string? type, string? search, string? uploadsFolder = null);
 }

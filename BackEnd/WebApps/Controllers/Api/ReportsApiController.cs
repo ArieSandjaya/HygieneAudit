@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
+using WebApps.Helpers;
 
 namespace WebApps.Controllers.Api
 {
@@ -35,7 +36,7 @@ namespace WebApps.Controllers.Api
             [FromUri] string type = "all",
             [FromUri] string search = "")
         {
-            var bytes = await _auditService.ExportExcelAsync(status, type, search);
+            var bytes = await _auditService.ExportExcelAsync(status, type, search, PhotoStorage.UploadsFolder);
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new ByteArrayContent(bytes)

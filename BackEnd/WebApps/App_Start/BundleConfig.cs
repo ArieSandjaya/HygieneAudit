@@ -22,14 +22,6 @@ namespace WebApps
                 "~/Scripts/knockout.validation.js",
                 "~/Scripts/app/paged-sorted.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/app").Include(
-                "~/Scripts/sammy-{version}.js",
-                "~/Scripts/app/common.js",
-                "~/Scripts/app/app.datamodel.js",
-                "~/Scripts/app/app.viewmodel.js",
-                "~/Scripts/app/home.viewmodel.js",
-                "~/Scripts/app/_run.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/audits").Include(
                 "~/Scripts/app/audits.viewmodel.js"));
 

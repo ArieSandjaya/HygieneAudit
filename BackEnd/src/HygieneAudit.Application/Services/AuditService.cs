@@ -210,9 +210,9 @@ public class AuditService : IAuditService
         };
     }
 
-    public async Task<byte[]> ExportExcelAsync(string? status, string? type, string? search)
+    public async Task<byte[]> ExportExcelAsync(string? status, string? type, string? search, string? uploadsFolder = null)
     {
         var audits = await _unitOfWork.Audits.GetFilteredAsync(status, type, search);
-        return ExcelBuilder.Build(audits);
+        return ExcelBuilder.Build(audits, uploadsFolder);
     }
 }

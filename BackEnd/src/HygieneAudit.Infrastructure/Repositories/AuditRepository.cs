@@ -26,7 +26,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
         var audit = await _context.Audits
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
-            .Include(a => a.Items)
+            .Include(a => a.Items.OrderBy(i => i.Category).ThenBy(i => i.Name))
             .FirstOrDefaultAsync(a => a.Id == id);
 
         if (audit == null) return null;
@@ -79,7 +79,8 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
         var query = _context.Audits
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
-            .Include(a => a.Items)  // no photos — list view only needs counts
+            .Include(a => a.Items)
+                .ThenInclude(i => i.Photos)  // filenames needed for Excel photo embedding
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(status) && status != "all" &&

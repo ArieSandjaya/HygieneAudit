@@ -25,13 +25,13 @@ public static class ExcelBuilder
 
     // ── Public entry point ────────────────────────────────────────────────────────
 
-    public static byte[] Build(IEnumerable<Audit> audits)
+    public static byte[] Build(IEnumerable<Audit> audits, string? uploadsFolder = null)
     {
         var list   = audits.OrderByDescending(a => a.Date).ToList();
         var imgs   = new List<Img>();
         var pins   = new List<Pin>();
         var merges = new List<string>();
-        var detail = BuildDetailRows(list, imgs, pins, merges);
+        var detail = BuildDetailRows(list, imgs, pins, merges, uploadsFolder);
 
         using var ms = new MemoryStream();
         using (var zip = new ZipArchive(ms, ZipArchiveMode.Create, leaveOpen: true))
@@ -256,7 +256,7 @@ public static class ExcelBuilder
 
     // ── Detail sheet (sheet2) ─────────────────────────────────────────────────────
 
-    static string BuildDetailRows(List<Audit> list, List<Img> imgs, List<Pin> pins, List<string> merges)
+    static string BuildDetailRows(List<Audit> list, List<Img> imgs, List<Pin> pins, List<string> merges, string? uploadsFolder = null)
     {
         var sb     = new StringBuilder(16384);
         int row    = 1;
@@ -315,7 +315,7 @@ public static class ExcelBuilder
                 // Collect image anchors
                 for (int pi = 0; pi < photos.Count; pi++)
                 {
-                    var (ext, data) = ParseDataUrl(photos[pi].PhotoUrl);
+                    var (ext, data) = ResolvePhoto(photos[pi].PhotoUrl, uploadsFolder);
                     if (data.Length == 0) continue;
                     imgs.Add(new Img { File = $"image{imgId}.{ext}", Ext = ext, Data = data });
                     pins.Add(new Pin { Col = PhotoStartCol + pi, Row = row - 1, Rid = $"rId{imgId}", Id = imgId });
@@ -400,23 +400,46 @@ public static class ExcelBuilder
         return sb.ToString();
     }
 
-    // ── Data-URL parser ───────────────────────────────────────────────────────────
+    // ── Photo resolver ────────────────────────────────────────────────────────────
 
-    static (string ext, byte[] data) ParseDataUrl(string? url)
+    // Handles both legacy base64 data URLs and current filename storage.
+    static (string ext, byte[] data) ResolvePhoto(string? url, string? uploadsFolder)
     {
-        if (string.IsNullOrEmpty(url) || !url.StartsWith("data:"))
-            return ("jpg", Array.Empty<byte>());
-        try
+        if (string.IsNullOrEmpty(url)) return ("jpg", Array.Empty<byte>());
+
+        // Legacy: base64 data URL
+        if (url.StartsWith("data:"))
         {
-            int semi  = url.IndexOf(';');
-            if (semi < 0) return ("jpg", Array.Empty<byte>());
-            string mime = url.Substring(5, semi - 5);
-            int comma = url.IndexOf(',', semi);
-            if (comma < 0) return ("jpg", Array.Empty<byte>());
-            byte[] data = Convert.FromBase64String(url.Substring(comma + 1));
-            string ext  = mime.Contains("png") ? "png" : mime.Contains("gif") ? "gif" : "jpg";
-            return (ext, data);
+            try
+            {
+                int semi  = url.IndexOf(';');
+                if (semi < 0) return ("jpg", Array.Empty<byte>());
+                string mime = url.Substring(5, semi - 5);
+                int comma = url.IndexOf(',', semi);
+                if (comma < 0) return ("jpg", Array.Empty<byte>());
+                byte[] bytes = Convert.FromBase64String(url.Substring(comma + 1));
+                string ext   = mime.Contains("png") ? "png" : mime.Contains("gif") ? "gif" : "jpg";
+                return (ext, bytes);
+            }
+            catch { return ("jpg", Array.Empty<byte>()); }
         }
-        catch { return ("jpg", Array.Empty<byte>()); }
+
+        // Current: filename stored on disk
+        if (!string.IsNullOrEmpty(uploadsFolder))
+        {
+            try
+            {
+                var safeName = System.IO.Path.GetFileName(url); // guard path traversal
+                var path     = System.IO.Path.Combine(uploadsFolder, safeName);
+                if (!System.IO.File.Exists(path)) return ("jpg", Array.Empty<byte>());
+                var data = System.IO.File.ReadAllBytes(path);
+                var ext  = safeName.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ? "png"
+                         : safeName.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) ? "gif" : "jpg";
+                return (ext, data);
+            }
+            catch { return ("jpg", Array.Empty<byte>()); }
+        }
+
+        return ("jpg", Array.Empty<byte>());
     }
 }
