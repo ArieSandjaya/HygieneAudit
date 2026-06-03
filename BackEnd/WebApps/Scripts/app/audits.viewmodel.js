@@ -256,7 +256,7 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     };
 
     self.saveDraft = function () {
-        if (self.savingDraft()) return;
+        if (self.savingDraft() || !self.canEdit()) return;
         self.savingDraft(true);
         $.ajax({ url: '/api/audits/' + auditId + '/draft', type: 'POST' })
             .done(function () { showToast('Draft disimpan!'); })
