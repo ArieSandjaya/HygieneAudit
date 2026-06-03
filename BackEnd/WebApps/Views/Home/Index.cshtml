@@ -121,7 +121,7 @@
             var completed = audits.filter(function (a) { return a.status === 'COMPLETED'; }).length;
             var draft     = audits.filter(function (a) { return a.status === 'DRAFT'; }).length;
             var failItems = audits.reduce(function (n, a) {
-                return n + (a.items || []).filter(function (i) { return i.status === 'FAIL'; }).length;
+                return n + (a.failCount || 0);
             }, 0);
 
             document.getElementById('statTotal').textContent     = total;
@@ -139,15 +139,13 @@
 
             var html = '';
             recent.forEach(function (a) {
-                var items    = a.items || [];
-                var pass     = items.filter(function (i) { return i.status === 'PASS'; }).length;
-                var rate     = items.length > 0 ? Math.round(pass / items.length * 100) : 0;
-                var barColor = rate >= 70 ? '#22c55e' : '#ef4444';
+                var rate      = a.totalItems > 0 ? Math.round(a.passCount / a.totalItems * 100) : 0;
+                var barColor  = rate >= 70 ? '#22c55e' : '#ef4444';
                 var sideColor = a.status === 'COMPLETED' ? '#22c55e' : '#f59e0b';
                 var statusClass = a.status === 'COMPLETED' ? 'ha-badge--green' : 'ha-badge--amber';
                 var date = new Date(a.date).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
 
-                html += '<a href="/Audits/Detail/' + parseInt(a.id, 10) + '" class="ha-audit-item">' +
+                html += '<a href="/Audits/Detail/' + escHtml(a.id) + '" class="ha-audit-item">' +
                     '<div class="ha-audit-item__bar" style="background:' + sideColor + ';"></div>' +
                     '<div style="flex:1;min-width:0;">' +
                         '<div class="d-flex justify-content-between align-items-center gap-2 mb-1">' +
