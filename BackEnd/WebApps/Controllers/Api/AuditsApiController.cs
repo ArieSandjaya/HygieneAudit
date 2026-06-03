@@ -1,12 +1,15 @@
 using HygieneAudit.Application.DTOs;
 using HygieneAudit.Application.Services;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
+using WebApps.Helpers;
 
 namespace WebApps.Controllers.Api
 {
@@ -44,34 +47,46 @@ namespace WebApps.Controllers.Api
             return Ok(audit);
         }
 
-        // Streams a single photo's bytes so the detail page can load images lazily
-        // instead of receiving every photo as inline base64 in the audit JSON.
         [HttpGet, Route("photos/{photoId:int}")]
         public async Task<HttpResponseMessage> GetPhoto(int photoId)
         {
-            var dataUrl = await _auditService.GetPhotoUrlAsync(photoId);
-            if (string.IsNullOrEmpty(dataUrl))
+            var storedValue = await _auditService.GetPhotoUrlAsync(photoId);
+            if (string.IsNullOrEmpty(storedValue))
                 return Request.CreateResponse(HttpStatusCode.NotFound);
 
-            var contentType = "image/jpeg";
-            var base64 = dataUrl;
-            var comma = dataUrl.IndexOf(',');
-            if (dataUrl.StartsWith("data:") && comma > 0)
-            {
-                var meta = dataUrl.Substring(5, comma - 5); // e.g. "image/jpeg;base64"
-                var semi = meta.IndexOf(';');
-                contentType = semi > 0 ? meta.Substring(0, semi) : meta;
-                base64 = dataUrl.Substring(comma + 1);
-            }
-
             byte[] bytes;
-            try { bytes = Convert.FromBase64String(base64); }
-            catch { return Request.CreateResponse(HttpStatusCode.NotFound); }
+            var contentType = "image/jpeg";
+
+            if (PhotoStorage.IsFileName(storedValue))
+            {
+                // New path: value is a filename — read from disk
+                var filePath = Path.Combine(PhotoStorage.UploadsFolder,
+                                   Path.GetFileName(storedValue));
+                if (!File.Exists(filePath))
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                bytes = File.ReadAllBytes(filePath);
+                if (storedValue.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                    contentType = "image/png";
+            }
+            else
+            {
+                // Legacy path: full base64 data URL still in DB
+                var base64 = storedValue;
+                var comma = storedValue.IndexOf(',');
+                if (storedValue.StartsWith("data:") && comma > 0)
+                {
+                    var meta = storedValue.Substring(5, comma - 5);
+                    var semi = meta.IndexOf(';');
+                    contentType = semi > 0 ? meta.Substring(0, semi) : meta;
+                    base64 = storedValue.Substring(comma + 1);
+                }
+                try { bytes = Convert.FromBase64String(base64); }
+                catch { return Request.CreateResponse(HttpStatusCode.NotFound); }
+            }
 
             var resp = Request.CreateResponse(HttpStatusCode.OK);
             resp.Content = new ByteArrayContent(bytes);
             resp.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-            // Photo content is immutable for a given id — cache aggressively.
             resp.Headers.CacheControl = new CacheControlHeaderValue
             {
                 Public = true,
@@ -84,6 +99,22 @@ namespace WebApps.Controllers.Api
         public async Task<IHttpActionResult> UpdateItem(string id, int templateId, [FromBody] AuditItemUpdate update)
         {
             if (!await CanAccessAsync(id)) return NotFound();
+
+            // Save any incoming base64 photos to disk before the service layer sees them.
+            if (update?.Photos != null && update.Photos.Count > 0)
+            {
+                var uploadsPath = PhotoStorage.UploadsFolder;
+                var processed = new List<string>();
+                foreach (var entry in update.Photos)
+                {
+                    if (string.IsNullOrWhiteSpace(entry)) continue;
+                    processed.Add(entry.StartsWith("data:")
+                        ? PhotoStorage.SaveFromDataUrl(entry, uploadsPath)
+                        : entry);
+                }
+                update.Photos = processed;
+            }
+
             await _auditService.SaveAuditItemAsync(id, templateId, update);
             return StatusCode(HttpStatusCode.NoContent);
         }
