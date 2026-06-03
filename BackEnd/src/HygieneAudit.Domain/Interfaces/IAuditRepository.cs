@@ -6,6 +6,8 @@ namespace HygieneAudit.Domain.Interfaces;
 public interface IAuditRepository : IRepository<Audit>
 {
     Task<Audit?> GetByIdWithItemsAsync(string id);
+    // Lightweight variant for display: loads items + photo IDs only, never the photo blobs.
+    Task<Audit?> GetByIdForDisplayAsync(string id);
     Task<IEnumerable<Audit>> GetByTenantIdAsync(int tenantId);
     Task<IEnumerable<Audit>> GetLatestPerTenantAsync();
     Task<IEnumerable<Audit>> GetFilteredAsync(string? status, string? type, string? search);

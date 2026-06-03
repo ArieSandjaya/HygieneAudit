@@ -46,7 +46,7 @@ public class AuditService : IAuditService
 
     public async Task<AuditResponse?> GetAuditAsync(string id)
     {
-        var audit = await _unitOfWork.Audits.GetByIdWithItemsAsync(id);
+        var audit = await _unitOfWork.Audits.GetByIdForDisplayAsync(id);
         return audit == null ? null : AuditResponse.FromEntity(audit);
     }
 

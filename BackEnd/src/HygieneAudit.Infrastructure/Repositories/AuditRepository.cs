@@ -20,6 +20,34 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
+    // Used by the display endpoint: loads items but only fetches photo IDs, never the blobs.
+    public async Task<Audit?> GetByIdForDisplayAsync(string id)
+    {
+        var audit = await _context.Audits
+            .Include(a => a.Tenant)
+            .Include(a => a.Pic)
+            .Include(a => a.Items)
+            .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (audit == null) return null;
+
+        // Fetch just id + itemId — the blob column (PhotoUrl) is not selected.
+        var photoIds = await _context.Set<AuditItemPhoto>()
+            .Where(p => p.AuditItem.AuditId == id)
+            .Select(p => new { p.AuditItemId, p.Id })
+            .ToListAsync();
+
+        var byItem = photoIds.ToLookup(p => p.AuditItemId);
+        foreach (var item in audit.Items)
+        {
+            item.Photos = byItem[item.Id]
+                .Select(p => new AuditItemPhoto { Id = p.Id })
+                .ToList();
+        }
+
+        return audit;
+    }
+
     public async Task<IEnumerable<Audit>> GetByTenantIdAsync(int tenantId)
     {
         return await _context.Audits
