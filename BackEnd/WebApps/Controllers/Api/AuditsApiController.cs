@@ -108,9 +108,23 @@ namespace WebApps.Controllers.Api
                 foreach (var entry in update.Photos)
                 {
                     if (string.IsNullOrWhiteSpace(entry)) continue;
-                    processed.Add(entry.StartsWith("data:")
-                        ? PhotoStorage.SaveFromDataUrl(entry, uploadsPath)
-                        : entry);
+                    if (entry.StartsWith("data:"))
+                    {
+                        try
+                        {
+                            processed.Add(PhotoStorage.SaveFromDataUrl(entry, uploadsPath));
+                        }
+                        catch (Exception ex)
+                        {
+                            // Surface a clean 500 instead of an unhandled crash.
+                            return Content(HttpStatusCode.InternalServerError,
+                                new { message = "Gagal menyimpan foto: " + ex.Message });
+                        }
+                    }
+                    else
+                    {
+                        processed.Add(entry); // existing reference URL — pass through
+                    }
                 }
                 update.Photos = processed;
             }
