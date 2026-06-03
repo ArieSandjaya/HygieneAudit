@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Helpers;
@@ -28,9 +29,42 @@ namespace WebApps
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            DisableFileMonitoringWhileDebugging();
             MigrateDatabase();
             EnsureUploadsFolder();
             MigratePhotosToDisk();
+        }
+
+        /// <summary>
+        /// While a debugger is attached (F5), turn off ASP.NET's directory
+        /// FileChangesMonitor. Writing an uploaded photo would otherwise be
+        /// seen as an app change and recycle the AppDomain, which tears down
+        /// IIS Express mid-request and "stops" the debugger. Only runs under
+        /// the debugger, so production keeps its normal auto-restart behaviour.
+        /// </summary>
+        private static void DisableFileMonitoringWhileDebugging()
+        {
+            if (!System.Diagnostics.Debugger.IsAttached) return;
+            try
+            {
+                var fcmProp = typeof(HttpRuntime).GetProperty("FileChangesMonitor",
+                    BindingFlags.NonPublic | BindingFlags.Static);
+                var fcm = fcmProp?.GetValue(null, null);
+                if (fcm == null) return;
+
+                var subDirsField = fcm.GetType().GetField("_dirMonSubdirs",
+                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase);
+                var monitor = subDirsField?.GetValue(fcm);
+                if (monitor == null) return;
+
+                var stop = monitor.GetType().GetMethod("StopMonitoring",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                stop?.Invoke(monitor, Array.Empty<object>());
+            }
+            catch
+            {
+                // Best-effort dev convenience — never let it break startup.
+            }
         }
 
         private static void EnsureUploadsFolder()
