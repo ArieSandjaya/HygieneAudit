@@ -106,6 +106,22 @@ public class AuditService : IAuditService
     public async Task<string?> GetPhotoUrlAsync(int photoId)
         => await _unitOfWork.Audits.GetPhotoUrlAsync(photoId);
 
+    public async Task<int> AddPhotoAsync(string auditId, int templateId, string filename)
+    {
+        var audit = await _unitOfWork.Audits.GetByIdWithItemsAsync(auditId);
+        if (audit == null) throw new NotFoundException("Audit not found");
+        if (audit.Status == AuditStatus.Completed)
+            throw new ValidationException("Audit sudah selesai dan tidak dapat diedit.");
+
+        var item = audit.Items.FirstOrDefault(i => i.TemplateId == templateId);
+        if (item == null) throw new NotFoundException("Item not found");
+
+        var photo = new AuditItemPhoto { PhotoUrl = filename };
+        item.Photos.Add(photo);
+        await _unitOfWork.SaveChangesAsync();
+        return photo.Id;
+    }
+
     public async Task SubmitAuditAsync(string id)
     {
         var audit = await _unitOfWork.Audits.GetByIdWithItemsAsync(id);

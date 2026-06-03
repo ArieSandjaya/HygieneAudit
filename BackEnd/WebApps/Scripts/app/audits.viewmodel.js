@@ -129,7 +129,8 @@ function AuditsViewModel(currentUserId, isAdmin) {
     self.init();
 }
 
-// Compress an image File to a JPEG data-URL no larger than maxSide × maxSide px.
+// Compress an image File to a JPEG Blob no larger than maxSide × maxSide px.
+// Returns a Promise<Blob>. Falls back to the original File if Canvas is unavailable.
 function compressImage(file, maxSide, quality) {
     return new Promise(function (resolve) {
         var objectUrl = URL.createObjectURL(file);
@@ -147,14 +148,13 @@ function compressImage(file, maxSide, quality) {
             canvas.height = h;
             canvas.getContext('2d').drawImage(img, 0, 0, w, h);
             URL.revokeObjectURL(objectUrl);
-            resolve(canvas.toDataURL('image/jpeg', quality));
+            canvas.toBlob(function (blob) {
+                resolve(blob || file); // fall back to original if toBlob fails
+            }, 'image/jpeg', quality);
         };
         img.onerror = function () {
             URL.revokeObjectURL(objectUrl);
-            // fallback: send original without compression
-            var reader = new FileReader();
-            reader.onload = function (e) { resolve(e.target.result); };
-            reader.readAsDataURL(file);
+            resolve(file); // fallback: send original without compression
         };
         img.src = objectUrl;
     });
@@ -232,15 +232,27 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     self.addPhoto = function (item, event) {
         var files = event.target.files;
         if (!files || !files.length) return;
-        // Compress each image to max 1280 px on longest side, JPEG 82% quality.
-        var reads = Array.prototype.map.call(files, function (f) {
-            return compressImage(f, 1280, 0.82);
+        event.target.value = ''; // reset input so the same file can be picked again
+
+        // Each file is compressed to a Blob, then POSTed directly via multipart —
+        // no base64 encoding, no JSON bloat, no AppDomain-recycle trigger.
+        Array.prototype.forEach.call(files, function (f) {
+            compressImage(f, 1280, 0.82).then(function (blob) {
+                var fd = new FormData();
+                fd.append('photo', blob, 'photo.jpg');
+                return $.ajax({
+                    url: '/api/audits/' + auditId + '/items/' + item.templateId + '/photos',
+                    type: 'POST',
+                    data: fd,
+                    processData: false,
+                    contentType: false
+                });
+            }).then(function (result) {
+                item.photos.push(result.url); // reference URL from server
+            }).catch(function () {
+                showToast('Gagal mengunggah foto.', 'error');
+            });
         });
-        Promise.all(reads).then(function (dataUrls) {
-            dataUrls.forEach(function (url) { item.photos.push(url); });
-            self.onItemChange(item);
-        });
-        event.target.value = '';
     };
 
     self.removePhoto = function (item, url) {
