@@ -29,22 +29,32 @@ public class AuditResponse
     public string Status { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public DateTime? CompletedAt { get; set; }
+    public int TotalItems { get; set; }
+    public int PassCount  { get; set; }
+    public int FailCount  { get; set; }
     public List<AuditItemResponse> Items { get; set; } = new();
 
-    public static AuditResponse FromEntity(Audit audit) => new()
+    public static AuditResponse FromEntity(Audit audit)
     {
-        Id = audit.Id,
-        Date = audit.Date,
-        TenantId = audit.TenantId,
-        TenantName = audit.Tenant?.Name ?? string.Empty,
-        PicId = audit.PicId,
-        PicName = audit.Pic?.Name ?? string.Empty,
-        IsGas = audit.IsGas,
-        Status = audit.Status.ToString().ToUpper(),
-        CreatedAt = audit.CreatedAt,
-        CompletedAt = audit.CompletedAt,
-        Items = (audit.Items ?? Enumerable.Empty<AuditItem>()).Select(AuditItemResponse.FromEntity).ToList()
-    };
+        var items = audit.Items ?? Enumerable.Empty<AuditItem>();
+        return new AuditResponse
+        {
+            Id          = audit.Id,
+            Date        = audit.Date,
+            TenantId    = audit.TenantId,
+            TenantName  = audit.Tenant?.Name ?? string.Empty,
+            PicId       = audit.PicId,
+            PicName     = audit.Pic?.Name ?? string.Empty,
+            IsGas       = audit.IsGas,
+            Status      = audit.Status.ToString().ToUpper(),
+            CreatedAt   = audit.CreatedAt,
+            CompletedAt = audit.CompletedAt,
+            TotalItems  = items.Count(),
+            PassCount   = items.Count(i => i.Status == AuditItemStatus.Pass),
+            FailCount   = items.Count(i => i.Status == AuditItemStatus.Fail),
+            Items       = items.Select(AuditItemResponse.FromEntity).ToList()
+        };
+    }
 }
 
 public class AuditItemResponse

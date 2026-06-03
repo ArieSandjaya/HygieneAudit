@@ -38,9 +38,7 @@ function AuditsViewModel(currentUserId, isAdmin) {
         var h = self.tenantHistoryAudits();
         if (!h.length) return 0;
         var sum = h.reduce(function (n, a) {
-            var items = a.items || [];
-            var pass = items.filter(function (i) { return i.status === 'PASS'; }).length;
-            return n + (items.length ? pass / items.length : 0);
+            return n + (a.totalItems > 0 ? a.passCount / a.totalItems : 0);
         }, 0);
         return Math.round(sum / h.length * 100);
     });
@@ -52,9 +50,7 @@ function AuditsViewModel(currentUserId, isAdmin) {
     });
     self.tenantTrendBars = ko.computed(function () {
         return self.tenantHistoryAudits().slice(0, 6).reverse().map(function (a) {
-            var items = a.items || [];
-            var pass = items.filter(function (i) { return i.status === 'PASS'; }).length;
-            var rate = items.length ? Math.round(pass / items.length * 100) : 0;
+            var rate = a.totalItems > 0 ? Math.round(a.passCount / a.totalItems * 100) : 0;
             var dt = new Date(a.date);
             return {
                 height: Math.max(rate * 0.48, 4) + 'px',
@@ -64,14 +60,10 @@ function AuditsViewModel(currentUserId, isAdmin) {
         });
     });
     self.passRateLabel = function (a) {
-        var items = a.items || [];
-        var pass = items.filter(function (i) { return i.status === 'PASS'; }).length;
-        return items.length ? Math.round(pass / items.length * 100) + '%' : '-';
+        return a.totalItems > 0 ? Math.round(a.passCount / a.totalItems * 100) + '%' : '-';
     };
     self.passRateCss = function (a) {
-        var items = a.items || [];
-        var pass = items.filter(function (i) { return i.status === 'PASS'; }).length;
-        var rate = items.length ? pass / items.length * 100 : 0;
+        var rate = a.totalItems > 0 ? a.passCount / a.totalItems * 100 : 0;
         return rate >= 70 ? 'bg-label-success' : 'bg-label-danger';
     };
 
@@ -97,10 +89,8 @@ function AuditsViewModel(currentUserId, isAdmin) {
     self.init = function () {
         $.getJSON('/api/audits').done(function (data) {
             data.forEach(function (audit) {
-                var items = audit.items || [];
-                var passed = items.filter(function (i) { return i.status === 'PASS'; });
-                // Pass rate over TOTAL items (matches the history label, dashboard, and backend).
-                audit.passRate = items.length > 0 ? passed.length / items.length : 0;
+                // passCount/totalItems pre-computed by server — no need to iterate items client-side.
+                audit.passRate = audit.totalItems > 0 ? audit.passCount / audit.totalItems : 0;
             });
             self.audits(data);
         }).fail(function () { showToast('Gagal memuat daftar audit.', 'error'); });

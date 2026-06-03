@@ -40,8 +40,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
         return await _context.Audits
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
-            .Include(a => a.Items)
-                .ThenInclude(i => i.Photos)
+            .Include(a => a.Items)  // no photos — list view only needs counts
             .Where(a => latestIds.Contains(a.Id))
             .OrderByDescending(a => a.Date)
             .ToListAsync();
@@ -52,8 +51,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
         var query = _context.Audits
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
-            .Include(a => a.Items)
-                .ThenInclude(i => i.Photos)
+            .Include(a => a.Items)  // no photos — list view only needs counts
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(status) && status != "all" &&
@@ -143,8 +141,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
         var query = _context.Audits
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
-            .Include(a => a.Items)
-                .ThenInclude(i => i.Photos)
+            .Include(a => a.Items)  // no photos — list view only needs counts
             .AsQueryable();
 
         if (!isAdmin)
