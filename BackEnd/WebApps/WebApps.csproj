@@ -435,16 +435,14 @@
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Scripts\knockout.validation.min.js.map" />
+    <Content Include="Web.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -663,7 +661,6 @@
     <Copy SourceFiles="..\libs\x86\SNI.dll" DestinationFolder="$(ProjectDir)bin\x86\" ContinueOnError="true" />
     <Copy SourceFiles="..\libs\x64\SNI.dll" DestinationFolder="$(ProjectDir)bin\x64\" ContinueOnError="true" />
   </Target>
-
   <!-- Ensure SNI native DLLs land in bin\x64\ and bin\x86\ on publish/package -->
   <ItemGroup>
     <FilesForPackagingFromProject Include="..\libs\x64\SNI.dll">
