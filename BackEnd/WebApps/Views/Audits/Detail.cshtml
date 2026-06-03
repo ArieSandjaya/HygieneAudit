@@ -181,7 +181,7 @@
     @Scripts.Render("~/bundles/knockout")
     <script src="~/Scripts/app/audits.viewmodel.js"></script>
     <script>
-        var auditId       = '@Html.Raw(ViewBag.AuditId)';
+        var auditId       = '@Html.JavaScriptStringEncode(ViewBag.AuditId.ToString())';
         var currentUserId = @(ViewBag.CurrentUserId ?? 0);
         var isAdmin       = @(ViewBag.IsAdmin == true ? "true" : "false");
         ko.applyBindings(new AuditDetailViewModel(auditId, currentUserId, isAdmin), document.getElementById('audit-detail-page'));

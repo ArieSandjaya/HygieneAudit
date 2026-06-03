@@ -18,6 +18,7 @@ namespace WebApps.Controllers.Api
         [HttpPost, Route("change-password")]
         public async Task<IHttpActionResult> ChangePassword([FromBody] ChangePasswordRequest req)
         {
+            if (req == null) return Content(HttpStatusCode.BadRequest, new { message = "Data permintaan tidak boleh kosong." });
             if (string.IsNullOrWhiteSpace(req.OldPassword) || string.IsNullOrWhiteSpace(req.NewPassword))
                 return Content(HttpStatusCode.BadRequest, new { message = "Password lama dan baru wajib diisi." });
 

@@ -40,6 +40,7 @@ namespace WebApps.Controllers.Api
         [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IHttpActionResult> Create([FromBody] CreateTemplateRequest req)
         {
+            if (req == null) return Content(HttpStatusCode.BadRequest, new { message = "Data template tidak boleh kosong." });
             if (string.IsNullOrWhiteSpace(req.Category) || string.IsNullOrWhiteSpace(req.Name))
                 return Content(HttpStatusCode.BadRequest, new { message = "Kategori dan nama wajib diisi." });
 
@@ -63,6 +64,7 @@ namespace WebApps.Controllers.Api
         [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IHttpActionResult> Update(int id, [FromBody] UpdateTemplateRequest req)
         {
+            if (req == null) return Content(HttpStatusCode.BadRequest, new { message = "Data update tidak boleh kosong." });
             var template = await _uow.Templates.GetByIdAsync(id);
             if (template == null) return NotFound();
 
