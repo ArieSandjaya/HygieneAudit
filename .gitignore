@@ -19,3 +19,7 @@ package-lock.json
 /BackEnd/WebApps/Web.Debug.config
 # Web.Release.config dikecualikan dari ignore agar template placeholder bisa di-commit.
 # Jangan commit setelah Anda mengisi kredensial SQL Server yang sebenarnya.
+
+# Uploaded photos — tidak di-commit, tahan re-publish (DeleteExistingFiles=false)
+/BackEnd/WebApps/Uploads/*
+!/BackEnd/WebApps/Uploads/.gitkeep
