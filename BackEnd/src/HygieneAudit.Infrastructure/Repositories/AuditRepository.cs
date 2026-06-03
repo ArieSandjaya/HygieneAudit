@@ -26,7 +26,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
         var audit = await _context.Audits
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
-            .Include(a => a.Items.OrderBy(i => i.Category).ThenBy(i => i.Name))
+            .Include(a => a.Items.OrderBy(i => i.Category).ThenBy(i => i.Id))
             .FirstOrDefaultAsync(a => a.Id == id);
 
         if (audit == null) return null;

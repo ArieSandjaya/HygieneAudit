@@ -290,7 +290,7 @@ public static class ExcelBuilder
             row++;
 
             bool alt = false;
-            foreach (var item in a.Items.OrderBy(i => i.Category).ThenBy(i => i.Name))
+            foreach (var item in a.Items.OrderBy(i => i.Category).ThenBy(i => i.Id))
             {
                 var photos  = item.Photos.Take(MaxPhotos).ToList();
                 bool hasImg = photos.Count > 0;

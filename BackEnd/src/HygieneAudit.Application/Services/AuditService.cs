@@ -21,6 +21,9 @@ public class AuditService : IAuditService
         var filteredTemplates = templates
             .Where(t => t.IsActive)
             .Where(t => !t.RequiresGas || (t.RequiresGas && request.IsGas))
+            .OrderBy(t => t.Category)
+            .ThenBy(t => t.DisplayOrder)
+            .ThenBy(t => t.Name)
             .ToList();
 
         var audit = new Audit

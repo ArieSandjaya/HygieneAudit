@@ -41,7 +41,7 @@ namespace WebApps.Controllers.Api
         {
             var users = await _uow.Users.GetAllAsync();
             var result = users
-                .Where(u => u.IsActive && u.Role == UserRole.Auditor)
+                .Where(u => u.IsActive)
                 .Select(u => new { u.Id, u.Name })
                 .OrderBy(u => u.Name);
             return Ok(result);
