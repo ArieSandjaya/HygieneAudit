@@ -19,3 +19,6 @@ package-lock.json
 /BackEnd/WebApps/Web.Debug.config
 # Web.Release.config dikecualikan dari ignore agar template placeholder bisa di-commit.
 # Jangan commit setelah Anda mengisi kredensial SQL Server yang sebenarnya.
+/BackEnd/WebApps/Web.config
+/BackEnd/WebApps/Web.Debug.config
+/BackEnd/WebApps/Web.Release.config
