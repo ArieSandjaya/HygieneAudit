@@ -59,10 +59,10 @@ namespace WebApps.Controllers.Api
 
             if (PhotoStorage.IsFileName(storedValue))
             {
-                // New path: value is a filename — read from disk
-                var filePath = Path.Combine(PhotoStorage.UploadsFolder,
-                                   Path.GetFileName(storedValue));
-                if (!File.Exists(filePath))
+                // New path: value is a filename — read from disk (current folder,
+                // then legacy App_Data location for photos saved before the move).
+                var filePath = PhotoStorage.ResolveExistingPath(storedValue);
+                if (filePath == null)
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 bytes = File.ReadAllBytes(filePath);
                 if (storedValue.EndsWith(".png", StringComparison.OrdinalIgnoreCase))

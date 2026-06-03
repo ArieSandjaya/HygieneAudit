@@ -35,7 +35,7 @@ namespace WebApps
 
         private static void EnsureUploadsFolder()
         {
-            var path = HostingEnvironment.MapPath("~/App_Data/Uploads");
+            var path = WebApps.Helpers.PhotoStorage.UploadsFolder;
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
         }
@@ -46,7 +46,7 @@ namespace WebApps
                 .ConnectionStrings["HygieneAuditConnection"]?.ConnectionString;
             if (string.IsNullOrEmpty(connStr)) return;
 
-            var uploadsPath = HostingEnvironment.MapPath("~/App_Data/Uploads");
+            var uploadsPath = WebApps.Helpers.PhotoStorage.UploadsFolder;
 
             var options = new DbContextOptionsBuilder<HygieneAuditDbContext>()
                 .UseSqlServer(connStr).Options;
