@@ -20,15 +20,40 @@ namespace WebApps.Helpers
             get
             {
                 var configured = ConfigurationManager.AppSettings["PhotoUploadPath"];
-                if (!string.IsNullOrWhiteSpace(configured))
-                    return Environment.ExpandEnvironmentVariables(configured);
+                string path = !string.IsNullOrWhiteSpace(configured)
+                    ? Environment.ExpandEnvironmentVariables(configured)
+                    // Default: %ProgramData%\HygieneAudit\Uploads — persistent, writable,
+                    // outside the monitored web root, survives re-deploys.
+                    : Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                        "HygieneAudit", "Uploads");
 
-                // Default: %ProgramData%\HygieneAudit\Uploads — persistent, writable,
-                // outside the monitored web root, survives re-deploys.
-                return Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                    "HygieneAudit", "Uploads");
+                // HARD SAFETY: the upload folder must never live inside the web root.
+                // Writing a file there trips ASP.NET's FileChangesMonitor → AppDomain
+                // recycle → IIS Express tears down the request/debugger ("IIS langsung
+                // mati saat upload"). If the resolved path is empty, relative, or under
+                // the application directory (e.g. CommonApplicationData returned "" or
+                // PhotoUploadPath points inside the app), fall back to a guaranteed-safe
+                // absolute location in the OS temp area, outside the monitored tree.
+                if (string.IsNullOrWhiteSpace(path) || !Path.IsPathRooted(path) || IsUnderWebRoot(path))
+                    path = Path.Combine(Path.GetTempPath(), "HygieneAudit", "Uploads");
+
+                return path;
             }
+        }
+
+        /// <summary>True if <paramref name="path"/> resolves inside the deployed web app directory.</summary>
+        private static bool IsUnderWebRoot(string path)
+        {
+            try
+            {
+                var appRoot = HostingEnvironment.ApplicationPhysicalPath;
+                if (string.IsNullOrEmpty(appRoot)) return false;
+                var full    = Path.GetFullPath(path).TrimEnd('\\', '/') + "\\";
+                var rootEnd = Path.GetFullPath(appRoot).TrimEnd('\\', '/') + "\\";
+                return full.StartsWith(rootEnd, StringComparison.OrdinalIgnoreCase);
+            }
+            catch { return false; }
         }
 
         /// <summary>
