@@ -192,7 +192,9 @@ namespace WebApps.Controllers.Api
                 update.Photos = processed;
             }
 
-            await _auditService.SaveAuditItemAsync(id, templateId, update);
+            var removedPhotos = await _auditService.SaveAuditItemAsync(id, templateId, update);
+            // Delete the physical files for any photos that were removed.
+            PhotoStorage.DeleteFiles(removedPhotos);
             return StatusCode(HttpStatusCode.NoContent);
         }
 

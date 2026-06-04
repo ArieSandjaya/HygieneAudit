@@ -59,7 +59,7 @@ public class AuditService : IAuditService
         return audits.Select(AuditResponse.FromEntity);
     }
 
-    public async Task SaveAuditItemAsync(string auditId, int templateId, AuditItemUpdate update)
+    public async Task<IReadOnlyList<string>> SaveAuditItemAsync(string auditId, int templateId, AuditItemUpdate update)
     {
         var audit = await _unitOfWork.Audits.GetByIdWithItemsAsync(auditId);
         if (audit == null) throw new NotFoundException("Audit not found");
@@ -77,6 +77,7 @@ public class AuditService : IAuditService
         };
         item.Note = update.Note;
 
+        var removed = new List<string>();
         if (update.Photos != null)
         {
             // Incoming entries are a mix of references to already-saved photos
@@ -97,13 +98,17 @@ public class AuditService : IAuditService
 
             foreach (var p in item.Photos.ToList())
                 if (!keepIds.Contains(p.Id))
+                {
+                    removed.Add(p.PhotoUrl);
                     item.Photos.Remove(p);
+                }
 
             foreach (var url in newPhotos)
                 item.Photos.Add(new AuditItemPhoto { PhotoUrl = url });
         }
 
         await _unitOfWork.SaveChangesAsync();
+        return removed;
     }
 
     public async Task<string?> GetPhotoUrlAsync(int photoId)

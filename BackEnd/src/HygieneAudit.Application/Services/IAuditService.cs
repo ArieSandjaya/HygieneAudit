@@ -9,7 +9,9 @@ public interface IAuditService
     Task<AuditResponse?> GetAuditAsync(string id);
     Task<string?> GetPhotoUrlAsync(int photoId);
     Task<IEnumerable<AuditResponse>> GetAuditsAsync(int picId, bool isAdmin);
-    Task SaveAuditItemAsync(string auditId, int templateId, AuditItemUpdate update);
+    // Returns the stored values (filenames / data URLs) of any photos that were
+    // removed, so the caller can delete the corresponding files from disk.
+    Task<IReadOnlyList<string>> SaveAuditItemAsync(string auditId, int templateId, AuditItemUpdate update);
     Task<int> AddPhotoAsync(string auditId, int templateId, string filename);
     Task SubmitAuditAsync(string id);
     Task SaveDraftAsync(string id);
