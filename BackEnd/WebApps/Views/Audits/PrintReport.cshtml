@@ -187,7 +187,7 @@
                         }
                         @if (item.Photos != null && item.Photos.Any())
                         {
-                            <div class="item-photos">
+                            <div class="item-photos@(item.Photos.Count == 1 ? " single" : "")">
                                 @foreach (var photo in item.Photos)
                                 {
                                     <img src="@photo" alt="foto" />

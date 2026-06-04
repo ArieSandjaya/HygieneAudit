@@ -33,6 +33,7 @@ namespace WebApps
             MigrateDatabase();
             EnsureUploadsFolder();
             MigratePhotosToDisk();
+            SeedDevData();
         }
 
         /// <summary>
@@ -65,6 +66,13 @@ namespace WebApps
             {
                 // Best-effort dev convenience — never let it break startup.
             }
+        }
+
+        protected void Application_EndRequest()
+        {
+            // Dispose the per-request Autofac lifetime scope created by the MVC resolver,
+            // ensuring DbContext and other IDisposable services are released after each request.
+            AutofacMvcDependencyResolver.DisposeRequestScope();
         }
 
         private static void EnsureUploadsFolder()
@@ -120,6 +128,21 @@ namespace WebApps
                 // Throws if migration fails — surfaced as 500 on first request,
                 // which is better than silently connecting to the wrong database.
                 db.Database.Migrate();
+            }
+        }
+
+        private static void SeedDevData()
+        {
+            var connStr = System.Configuration.ConfigurationManager
+                .ConnectionStrings["HygieneAuditConnection"]?.ConnectionString;
+            if (string.IsNullOrEmpty(connStr)) return;
+            try
+            {
+                WebApps.Helpers.DevDataSeeder.Seed(connStr, WebApps.Helpers.PhotoStorage.UploadsFolder);
+            }
+            catch
+            {
+                // Seeding is best-effort — never crash startup.
             }
         }
     }

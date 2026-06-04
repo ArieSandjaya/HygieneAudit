@@ -35,6 +35,10 @@ namespace WebApps.Controllers.Api
         [HttpPost, Route("")]
         public async Task<IHttpActionResult> Create([FromBody] CreateAuditRequest request)
         {
+            if (request == null) return BadRequest("Data audit tidak boleh kosong.");
+            var (userId, isAdmin) = CurrentUser();
+            // Non-admins can only create audits assigned to themselves.
+            if (!isAdmin) request.PicId = userId;
             var audit = await _auditService.CreateAuditAsync(request);
             return Created(new System.Uri($"api/audits/{audit.Id}", System.UriKind.Relative), audit);
         }
@@ -77,7 +81,12 @@ namespace WebApps.Controllers.Api
                 {
                     var meta = storedValue.Substring(5, comma - 5);
                     var semi = meta.IndexOf(';');
-                    contentType = semi > 0 ? meta.Substring(0, semi) : meta;
+                    var rawMime = semi > 0 ? meta.Substring(0, semi) : meta;
+                    // Only serve known-safe image MIME types to prevent stored-XSS via crafted
+                    // data URLs with a text/html or image/svg+xml content type.
+                    contentType = (rawMime == "image/jpeg" || rawMime == "image/png" ||
+                                   rawMime == "image/gif"  || rawMime == "image/webp")
+                        ? rawMime : "image/jpeg";
                     base64 = storedValue.Substring(comma + 1);
                 }
                 try { bytes = Convert.FromBase64String(base64); }
@@ -87,10 +96,12 @@ namespace WebApps.Controllers.Api
             var resp = Request.CreateResponse(HttpStatusCode.OK);
             resp.Content = new ByteArrayContent(bytes);
             resp.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+            // Private: the endpoint requires authentication; public caching would allow
+            // proxies/CDNs to serve protected photos to unauthenticated clients.
             resp.Headers.CacheControl = new CacheControlHeaderValue
             {
-                Public = true,
-                MaxAge = TimeSpan.FromDays(365)
+                Private = true,
+                MaxAge = TimeSpan.FromDays(30)
             };
             return resp;
         }
@@ -121,6 +132,9 @@ namespace WebApps.Controllers.Api
 
             var bytes = await photoPart.ReadAsByteArrayAsync();
             if (bytes.Length == 0) return BadRequest("File kosong.");
+            const int MaxPhotoBytes = 10 * 1024 * 1024; // 10 MB
+            if (bytes.Length > MaxPhotoBytes)
+                return Content(HttpStatusCode.RequestEntityTooLarge, new { message = "Ukuran foto maksimal 10 MB." });
 
             // Persist to disk outside the web root so the file monitor is never triggered.
             var uploadsPath = PhotoStorage.UploadsFolder;
@@ -178,7 +192,9 @@ namespace WebApps.Controllers.Api
                 update.Photos = processed;
             }
 
-            await _auditService.SaveAuditItemAsync(id, templateId, update);
+            var removedPhotos = await _auditService.SaveAuditItemAsync(id, templateId, update);
+            // Delete the physical files for any photos that were removed.
+            PhotoStorage.DeleteFiles(removedPhotos);
             return StatusCode(HttpStatusCode.NoContent);
         }
 

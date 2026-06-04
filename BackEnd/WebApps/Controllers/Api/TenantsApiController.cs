@@ -50,6 +50,7 @@ namespace WebApps.Controllers.Api
         [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IHttpActionResult> Create([FromBody] CreateTenantRequest req)
         {
+            if (req == null) return Content(HttpStatusCode.BadRequest, new { message = "Data tenant tidak boleh kosong." });
             if (string.IsNullOrWhiteSpace(req.Name))
                 return Content(HttpStatusCode.BadRequest, new { message = "Nama tenant wajib diisi." });
 

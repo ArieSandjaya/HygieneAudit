@@ -16,6 +16,10 @@ namespace WebApps
                 LoginPath = new PathString("/Account/Login"),
                 ExpireTimeSpan = TimeSpan.FromMinutes(480),
                 SlidingExpiration = true,
+                // Send cookie only over HTTPS in production; also over HTTP in development.
+                CookieSecure = CookieSecureOption.SameAsRequest,
+                // Restrict cookie to same-site requests to mitigate CSRF.
+                CookieSameSite = SameSiteMode.Lax,
                 Provider = new CookieAuthenticationProvider()
             });
         }

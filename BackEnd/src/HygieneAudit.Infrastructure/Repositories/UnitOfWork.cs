@@ -55,7 +55,8 @@ public class UnitOfWork : IUnitOfWork
 
     public void Dispose()
     {
-        _context.Dispose();
+        // Dispose transaction first so it rolls back cleanly before the context closes.
         _transaction?.Dispose();
+        _context.Dispose();
     }
 }

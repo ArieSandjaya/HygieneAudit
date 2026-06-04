@@ -3,7 +3,9 @@ using HygieneAudit.Domain.Entities;
 using HygieneAudit.Domain.Interfaces;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 namespace WebApps.Controllers.Api
@@ -39,7 +41,7 @@ namespace WebApps.Controllers.Api
         {
             var users = await _uow.Users.GetAllAsync();
             var result = users
-                .Where(u => u.IsActive && u.Role == UserRole.Auditor)
+                .Where(u => u.IsActive)
                 .Select(u => new { u.Id, u.Name })
                 .OrderBy(u => u.Name);
             return Ok(result);
@@ -49,6 +51,7 @@ namespace WebApps.Controllers.Api
         [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IHttpActionResult> Create([FromBody] CreateUserRequest req)
         {
+            if (req == null) return Content(HttpStatusCode.BadRequest, new { message = "Data pengguna tidak boleh kosong." });
             if (string.IsNullOrWhiteSpace(req.Username) || string.IsNullOrWhiteSpace(req.Password))
                 return Content(HttpStatusCode.BadRequest, new { message = "Username dan password wajib diisi." });
 
@@ -79,13 +82,23 @@ namespace WebApps.Controllers.Api
         [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IHttpActionResult> Update(int id, [FromBody] UpdateUserRequest req)
         {
+            if (req == null) return Content(HttpStatusCode.BadRequest, new { message = "Data update tidak boleh kosong." });
             var user = await _uow.Users.GetByIdAsync(id);
             if (user == null) return NotFound();
 
             if (req.Name != null) user.Name = req.Name;
             if (req.IsActive != null) user.IsActive = req.IsActive.Value;
             if (req.Role != null && System.Enum.TryParse<UserRole>(req.Role, true, out var role))
+            {
+                // Prevent privilege escalation: an Admin cannot assign a role higher than their own.
+                var callerRole = (HttpContext.Current?.User?.Identity as ClaimsIdentity
+                                  ?? User.Identity as ClaimsIdentity)
+                    ?.FindFirst(ClaimTypes.Role)?.Value ?? "";
+                var isSuperAdmin = callerRole == "SuperAdmin";
+                if (role == UserRole.SuperAdmin && !isSuperAdmin)
+                    return Content(HttpStatusCode.Forbidden, new { message = "Hanya SuperAdmin yang dapat memberikan role SuperAdmin." });
                 user.Role = role;
+            }
             if (!string.IsNullOrWhiteSpace(req.Password))
                 user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(req.Password);
 

@@ -23,7 +23,18 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
     // Used by the display endpoint: loads items but only fetches photo IDs, never the blobs.
     public async Task<Audit?> GetByIdForDisplayAsync(string id)
     {
+        // Read-only display query: AsNoTracking so the stub photo objects we
+        // attach below (id-only, no blob) never enter the change tracker. This
+        // also keeps the request's other DbContext operations clean — e.g. an
+        // access check followed by a write must not be polluted with phantom
+        // photo rows.
+        //
+        // NOTE: EF Core 3.1 does not support filtered/ordered Include
+        // (e.g. .Include(a => a.Items.OrderBy(...))) — that is an EF Core 5.0+
+        // feature and throws InvalidOperationException at runtime here. Load the
+        // items unordered and sort in memory after materialization instead.
         var audit = await _context.Audits
+            .AsNoTracking()
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
             .Include(a => a.Items)
@@ -45,6 +56,9 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
                 .ToList();
         }
 
+        // Apply display ordering client-side (Category, then Id).
+        audit.Items = audit.Items.OrderBy(i => i.Category).ThenBy(i => i.Id).ToList();
+
         return audit;
     }
 
@@ -60,18 +74,21 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
 
     public async Task<IEnumerable<Audit>> GetLatestPerTenantAsync()
     {
-        var latestIds = await _context.Audits
-            .GroupBy(a => a.TenantId)
-            .Select(g => g.OrderByDescending(a => a.Date).First().Id)
-            .ToListAsync();
-
-        return await _context.Audits
+        // EF Core 3.1 cannot translate a server-side GroupBy that projects a
+        // non-aggregate (g.OrderByDescending(...).First()). Materialize first,
+        // then group/pick the latest per tenant in memory (same pattern as
+        // GetFilteredAsync below).
+        var audits = await _context.Audits
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
             .Include(a => a.Items)  // no photos — list view only needs counts
-            .Where(a => latestIds.Contains(a.Id))
-            .OrderByDescending(a => a.Date)
             .ToListAsync();
+
+        return audits
+            .GroupBy(a => a.TenantId)
+            .Select(g => g.OrderByDescending(a => a.Date).First())
+            .OrderByDescending(a => a.Date)
+            .ToList();
     }
 
     public async Task<IEnumerable<Audit>> GetFilteredAsync(string? status, string? type, string? search)
@@ -79,7 +96,8 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
         var query = _context.Audits
             .Include(a => a.Tenant)
             .Include(a => a.Pic)
-            .Include(a => a.Items)  // no photos — list view only needs counts
+            .Include(a => a.Items)
+                .ThenInclude(i => i.Photos)  // filenames needed for Excel photo embedding
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(status) && status != "all" &&
@@ -88,8 +106,11 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
 
         if (!string.IsNullOrEmpty(type) && type != "all")
         {
+            // Filter on Audit.IsGas (the value recorded at audit creation time),
+            // not Tenant.UsesGas (the current master record). This preserves correct
+            // historical filtering even when a tenant's gas setup changes later.
             bool isGas = type == "gas";
-            query = query.Where(a => a.Tenant.UsesGas == isGas);
+            query = query.Where(a => a.IsGas == isGas);
         }
 
         if (!string.IsNullOrEmpty(search))
@@ -128,6 +149,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
         {
             var total = a.Items.Count;
             var pass = a.Items.Count(i => i.Status == AuditItemStatus.Pass);
+            var fail = a.Items.Count(i => i.Status == AuditItemStatus.Fail);
             return new RecentAuditDto
             {
                 Id = a.Id,
@@ -135,7 +157,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
                 PicName = a.Pic?.Name ?? "Unknown",
                 TotalItems = total,
                 PassItems = pass,
-                FailItems = total - pass,
+                FailItems = fail, // explicit count — excludes null-status (unchecked) items
                 PassRate = total > 0 ? Math.Round((double)pass / total * 100, 0) : 0
             };
         }).ToList();

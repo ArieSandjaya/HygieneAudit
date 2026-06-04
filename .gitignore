@@ -17,6 +17,8 @@ package-lock.json
 /BackEnd/WebApps/appsettings.json
 /BackEnd/WebApps/Web.config
 /BackEnd/WebApps/Web.Debug.config
+# Semua Web.config di subfolder Views (konfigurasi Razor view engine, tidak perlu di-commit)
+BackEnd/**/Views/Web.config
 # Web.Release.config dikecualikan dari ignore agar template placeholder bisa di-commit.
 # Jangan commit setelah Anda mengisi kredensial SQL Server yang sebenarnya.
 <<<<<<< HEAD

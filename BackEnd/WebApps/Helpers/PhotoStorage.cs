@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Web.Hosting;
@@ -60,6 +61,27 @@ namespace WebApps.Helpers
 
         public static bool IsFileName(string v) =>
             !string.IsNullOrWhiteSpace(v) && !v.StartsWith("data:") && !v.StartsWith("/");
+
+        /// <summary>
+        /// Deletes the physical files backing the given stored photo values.
+        /// Legacy base64 data URLs (and anything not a plain filename) are ignored.
+        /// Best-effort: failures are swallowed so a missing/locked file never
+        /// breaks the request that removed the photo from the database.
+        /// </summary>
+        public static void DeleteFiles(IEnumerable<string> storedValues)
+        {
+            if (storedValues == null) return;
+            foreach (var value in storedValues)
+            {
+                if (!IsFileName(value)) continue;
+                try
+                {
+                    var path = ResolveExistingPath(value);
+                    if (path != null) File.Delete(path);
+                }
+                catch { /* best-effort cleanup */ }
+            }
+        }
 
         /// <summary>
         /// Resolves a stored filename to an existing path, checking the current
