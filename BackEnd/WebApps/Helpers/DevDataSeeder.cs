@@ -3,9 +3,6 @@ using HygieneAudit.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
 
 namespace WebApps.Helpers
@@ -14,8 +11,9 @@ namespace WebApps.Helpers
     /// Seeds baseline data (admin user, sample tenants, checklist templates)
     /// when the app starts and the database is empty. Only runs once; safe to
     /// call on every startup — all operations are guarded by existence checks.
-    /// Also creates one completed demo audit with photos so the UI has content
-    /// to show right out of the box.
+    /// Also creates one completed demo audit so the UI has content out of the box.
+    /// (No demo photos are generated: System.Drawing/GDI+ is unsupported under
+    /// ASP.NET and can crash the worker process with an AccessViolationException.)
     /// </summary>
     public static class DevDataSeeder
     {
@@ -25,13 +23,12 @@ namespace WebApps.Helpers
                 .UseSqlServer(connectionString)
                 .Options;
 
-                // Replace C# 8.0 using declaration with explicit using statement for C# 7.3 compatibility
             using (var db = new HygieneAuditDbContext(options))
             {
                 SeedUsers(db);
                 SeedTenants(db);
                 SeedTemplates(db);
-                SeedDemoAudit(db, uploadsFolder);
+                SeedDemoAudit(db);
             }
         }
 
@@ -148,7 +145,7 @@ namespace WebApps.Helpers
 
         // ── Demo Audit ────────────────────────────────────────────────────────
 
-        static void SeedDemoAudit(HygieneAuditDbContext db, string uploadsFolder)
+        static void SeedDemoAudit(HygieneAuditDbContext db)
         {
             // Hanya buat 1 demo audit
             if (db.Set<Audit>().Any()) return;
@@ -188,70 +185,12 @@ namespace WebApps.Helpers
                     Photos = new List<AuditItemPhoto>(),
                 };
 
-                // Buat foto demo
-                var filename = SaveDemoPhoto(uploadsFolder, t.Name, status, idx);
-                if (filename != null)
-                    item.Photos.Add(new AuditItemPhoto { PhotoUrl = filename });
-
                 audit.Items.Add(item);
                 idx++;
             }
 
             db.Set<Audit>().Add(audit);
             db.SaveChanges();
-        }
-
-        // ── Photo generation (GDI+ / System.Drawing) ─────────────────────────
-
-        static readonly (int R, int G, int B)[] PassColors =
-        {
-            (22, 197, 94), (16, 185, 129), (52, 211, 153), (5, 150, 105),
-        };
-        static readonly (int R, int G, int B)[] FailColors =
-        {
-            (239, 68, 68), (220, 38, 38), (248, 113, 113), (185, 28, 28),
-        };
-
-        static string SaveDemoPhoto(string uploadsFolder, string itemName, AuditItemStatus status, int index)
-        {
-            if (string.IsNullOrEmpty(uploadsFolder)) return null;
-            try
-            {
-                Directory.CreateDirectory(uploadsFolder);
-                var colors = status == AuditItemStatus.Pass ? PassColors : FailColors;
-                var (r, g, b) = colors[index % colors.Length];
-
-                using (var bmp = new Bitmap(320, 240))
-                using (var g2 = Graphics.FromImage(bmp))
-                using (var white = new SolidBrush(Color.White))
-                using (var fntBig = new Font("Arial", 22f, FontStyle.Bold))
-                using (var fntSmall = new Font("Arial", 12f, FontStyle.Regular))
-                using (var fntTiny = new Font("Arial", 9f, FontStyle.Regular))
-                {
-                    g2.Clear(Color.FromArgb(r, g, b));
-
-                    var statusLabel = status == AuditItemStatus.Pass ? "✓  PASS" : "✗  FAIL";
-                    var sf = new StringFormat { Alignment = StringAlignment.Center };
-
-                    // Status label
-                    g2.DrawString(statusLabel, fntBig, white, new RectangleF(0, 20, 320, 50), sf);
-
-                    // Item name (wrapped)
-                    g2.DrawString(itemName, fntSmall, white, new RectangleF(16, 85, 288, 80), sf);
-
-                    // Timestamp
-                    var ts = $"Demo — {DateTime.Now:dd/MM/yyyy HH:mm}";
-                    g2.DrawString(ts, fntTiny, white, new RectangleF(0, 210, 320, 20), sf);
-
-                    var filename = Guid.NewGuid().ToString("N") + ".jpg";
-                    bmp.Save(Path.Combine(uploadsFolder, filename), ImageFormat.Jpeg);
-                    return filename;
-                }
-            }
-            catch
-            {
-                return null;
-            }
         }
     }
 }
