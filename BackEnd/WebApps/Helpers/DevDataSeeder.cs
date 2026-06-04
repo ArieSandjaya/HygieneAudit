@@ -25,12 +25,14 @@ namespace WebApps.Helpers
                 .UseSqlServer(connectionString)
                 .Options;
 
-            using var db = new HygieneAuditDbContext(options);
-
-            SeedUsers(db);
-            SeedTenants(db);
-            SeedTemplates(db);
-            SeedDemoAudit(db, uploadsFolder);
+                // Replace C# 8.0 using declaration with explicit using statement for C# 7.3 compatibility
+            using (var db = new HygieneAuditDbContext(options))
+            {
+                SeedUsers(db);
+                SeedTenants(db);
+                SeedTemplates(db);
+                SeedDemoAudit(db, uploadsFolder);
+            }
         }
 
         // ── Users ────────────────────────────────────────────────────────────
@@ -219,32 +221,32 @@ namespace WebApps.Helpers
                 var colors = status == AuditItemStatus.Pass ? PassColors : FailColors;
                 var (r, g, b) = colors[index % colors.Length];
 
-                using var bmp = new Bitmap(320, 240);
-                using var g2 = Graphics.FromImage(bmp);
+                using (var bmp = new Bitmap(320, 240))
+                using (var g2 = Graphics.FromImage(bmp))
+                using (var white = new SolidBrush(Color.White))
+                using (var fntBig = new Font("Arial", 22f, FontStyle.Bold))
+                using (var fntSmall = new Font("Arial", 12f, FontStyle.Regular))
+                using (var fntTiny = new Font("Arial", 9f, FontStyle.Regular))
+                {
+                    g2.Clear(Color.FromArgb(r, g, b));
 
-                g2.Clear(Color.FromArgb(r, g, b));
+                    var statusLabel = status == AuditItemStatus.Pass ? "✓  PASS" : "✗  FAIL";
+                    var sf = new StringFormat { Alignment = StringAlignment.Center };
 
-                using var white = new SolidBrush(Color.White);
-                using var fntBig = new Font("Arial", 22f, FontStyle.Bold);
-                using var fntSmall = new Font("Arial", 12f, FontStyle.Regular);
-                using var fntTiny = new Font("Arial", 9f, FontStyle.Regular);
+                    // Status label
+                    g2.DrawString(statusLabel, fntBig, white, new RectangleF(0, 20, 320, 50), sf);
 
-                var statusLabel = status == AuditItemStatus.Pass ? "✓  PASS" : "✗  FAIL";
-                var sf = new StringFormat { Alignment = StringAlignment.Center };
+                    // Item name (wrapped)
+                    g2.DrawString(itemName, fntSmall, white, new RectangleF(16, 85, 288, 80), sf);
 
-                // Status label
-                g2.DrawString(statusLabel, fntBig, white, new RectangleF(0, 20, 320, 50), sf);
+                    // Timestamp
+                    var ts = $"Demo — {DateTime.Now:dd/MM/yyyy HH:mm}";
+                    g2.DrawString(ts, fntTiny, white, new RectangleF(0, 210, 320, 20), sf);
 
-                // Item name (wrapped)
-                g2.DrawString(itemName, fntSmall, white, new RectangleF(16, 85, 288, 80), sf);
-
-                // Timestamp
-                var ts = $"Demo — {DateTime.Now:dd/MM/yyyy HH:mm}";
-                g2.DrawString(ts, fntTiny, white, new RectangleF(0, 210, 320, 20), sf);
-
-                var filename = Guid.NewGuid().ToString("N") + ".jpg";
-                bmp.Save(Path.Combine(uploadsFolder, filename), ImageFormat.Jpeg);
-                return filename;
+                    var filename = Guid.NewGuid().ToString("N") + ".jpg";
+                    bmp.Save(Path.Combine(uploadsFolder, filename), ImageFormat.Jpeg);
+                    return filename;
+                }
             }
             catch
             {
