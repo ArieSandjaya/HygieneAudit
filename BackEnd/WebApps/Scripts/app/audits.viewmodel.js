@@ -230,33 +230,8 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     self.toggleCategory = function (cat) { cat.collapsed(!cat.collapsed()); };
 
     self.addPhoto = function (item, event) {
-<<<<<<< HEAD
-        var files = event.target.files;
-        if (!files || !files.length) return;
-<<<<<<< HEAD
-
-        // Batasi maksimal 10 gambar di sisi client
-        if ((item.photos().length + files.length) > 10) {
-            showToast('Maksimal hanya boleh 10 gambar per item!', 'error');
-            return;
-        }
-
-        var reads = Array.prototype.map.call(files, function (f) {
-            return compressImage(f, 1280, 0.82);
-        });
-
-        Promise.all(reads).then(function (dataUrls) {
-            dataUrls.forEach(function (url) { item.photos.push(url); });
-
-            // self.onItemChange(item); // <--- HAPUS ATAU KOMENTARI BARIS INI!
-        });
-        event.target.value = '';
-=======
-        event.target.value = ''; // reset input so the same file can be picked again
-=======
         var fileList = event.target.files;
         if (!fileList || !fileList.length) return;
->>>>>>> e21df53db2fa8c24162e238b46fe0c0ea0f228ed
 
         // Snapshot into a plain Array BEFORE resetting the input.
         // Browsers invalidate the live FileList when input.value is cleared;
@@ -284,7 +259,6 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
                 showToast(msg, 'error');
             });
         });
->>>>>>> 666a9d534b140a93b32e08721be0fdbf6dced6fe
     };
 
     self.removePhoto = function (item, url) {
