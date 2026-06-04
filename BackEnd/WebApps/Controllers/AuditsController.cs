@@ -28,6 +28,12 @@ namespace WebApps.Controllers
 
         public ActionResult Detail(string id)
         {
+            // Guard: tanpa id, view (Detail.cshtml) memanggil ViewBag.AuditId.ToString()
+            // pada nilai null → Microsoft.CSharp.RuntimeBinder.RuntimeBinderException
+            // ("Cannot perform runtime binding on a null reference"). Alihkan ke daftar.
+            if (string.IsNullOrWhiteSpace(id))
+                return RedirectToAction("Index");
+
             ViewBag.AuditId = id;
             ViewBag.Title = "Detail Audit";
             var identity = User.Identity as ClaimsIdentity;
