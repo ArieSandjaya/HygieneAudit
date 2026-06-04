@@ -29,7 +29,7 @@ namespace WebApps
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            DisableFileMonitoringWhileDebugging();
+            DisableFileChangeMonitoring();
             MigrateDatabase();
             EnsureUploadsFolder();
             MigratePhotosToDisk();
@@ -37,15 +37,21 @@ namespace WebApps
         }
 
         /// <summary>
-        /// While a debugger is attached (F5), turn off ASP.NET's directory
-        /// FileChangesMonitor. Writing an uploaded photo would otherwise be
-        /// seen as an app change and recycle the AppDomain, which tears down
-        /// IIS Express mid-request and "stops" the debugger. Only runs under
-        /// the debugger, so production keeps its normal auto-restart behaviour.
+        /// Turn off ASP.NET's recursive subdirectory FileChangesMonitor.
+        /// Saving an uploaded photo — or any file written under the app tree —
+        /// would otherwise be seen as an application change and recycle the
+        /// AppDomain, which under IIS Express tears the worker process down
+        /// mid-request (the "IIS Express dies on photo upload" symptom).
+        ///
+        /// Runs UNCONDITIONALLY (not just under the debugger): the previous
+        /// debugger-only guard meant that running without F5 — or any case where
+        /// the monitor was still active — recycled on upload again. Uploads are
+        /// stored outside the web root anyway, so the only thing we trade away is
+        /// auto-restart-on-file-change; recycle the app pool manually after
+        /// changing Web.config or deploying new binaries.
         /// </summary>
-        private static void DisableFileMonitoringWhileDebugging()
+        private static void DisableFileChangeMonitoring()
         {
-            if (!System.Diagnostics.Debugger.IsAttached) return;
             try
             {
                 var fcmProp = typeof(HttpRuntime).GetProperty("FileChangesMonitor",
@@ -64,7 +70,7 @@ namespace WebApps
             }
             catch
             {
-                // Best-effort dev convenience — never let it break startup.
+                // Best-effort — never let it break startup.
             }
         }
 
