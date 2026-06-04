@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE_NAME = 'hygiene-audit-v3';
+const CACHE_NAME = 'hygiene-audit-v4';
 const STATIC_ASSETS = [
     '/Content/sneat/vendor/css/core.css',
     '/Content/sneat/vendor/css/theme-default.css',

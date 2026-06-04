@@ -178,10 +178,12 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/knockout")
+    <script src="~/Scripts/knockout-3.5.0.js"></script>
+    <script src="~/Scripts/knockout.validation.js"></script>
+    <script src="~/Scripts/app/paged-sorted.js"></script>
     <script src="~/Scripts/app/audits.viewmodel.js"></script>
     <script>
-        var auditId       = '@Html.JavaScriptStringEncode(ViewBag.AuditId.ToString())';
+        var auditId       = '@System.Web.HttpUtility.JavaScriptStringEncode(ViewBag.AuditId.ToString())';
         var currentUserId = @(ViewBag.CurrentUserId ?? 0);
         var isAdmin       = @(ViewBag.IsAdmin == true ? "true" : "false");
         ko.applyBindings(new AuditDetailViewModel(auditId, currentUserId, isAdmin), document.getElementById('audit-detail-page'));
