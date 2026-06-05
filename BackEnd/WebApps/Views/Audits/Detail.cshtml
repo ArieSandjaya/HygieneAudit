@@ -47,7 +47,7 @@
                     <i class="bx bx-file me-1"></i> Export PDF
                 </button>
                 <button type="button" style="background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.45);border-radius:10px;font-size:13px;font-weight:600;padding:7px 14px;cursor:pointer;"
-                        data-bind="click: deleteAudit, visible: status() === 'DRAFT' && canEdit(), disable: deleting()">
+                        data-bind="click: deleteAudit, visible: canDelete(), disable: deleting()">
                     <i class="bx bx-trash me-1"></i> Hapus
                 </button>
             </div>

@@ -67,9 +67,9 @@ function AuditsViewModel(currentUserId, isAdmin) {
         return rate >= 70 ? 'bg-label-success' : 'bg-label-danger';
     };
 
-    // Only the assigned PIC (or an admin) may modify/delete an audit.
-    self.canEditAudit = function (a) {
-        return isAdmin || a.picId === currentUserId;
+    // Hanya PIC yang melakukan audit yang boleh menghapus (admin pun tidak).
+    self.canDeleteAudit = function (a) {
+        return a.picId === currentUserId;
     };
     // Delete a DRAFT audit from the list. Lives inside the row's <a>, so we stop
     // the click from navigating to the detail page first.
@@ -201,6 +201,11 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     self.picName    = ko.computed(function () { return self.audit() ? self.audit().picName : ''; });
     self.status     = ko.computed(function () { return self.audit() ? self.audit().status : ''; });
     self.isGas      = ko.computed(function () { return self.audit() ? self.audit().isGas : false; });
+    // Hanya PIC yang melakukan audit yang boleh menghapus draft (admin pun tidak).
+    self.canDelete  = ko.computed(function () {
+        var a = self.audit();
+        return self.status() === 'DRAFT' && a != null && a.picId === currentUserId;
+    });
 
     self.passCount  = ko.computed(function () {
         return self.categories().reduce(function (n, cat) {
@@ -321,7 +326,7 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
 
     self.deleting = ko.observable(false);
     self.deleteAudit = function () {
-        if (self.deleting() || self.status() !== 'DRAFT' || !self.canEdit()) return;
+        if (self.deleting() || !self.canDelete()) return;
         showConfirm({
             title: 'Hapus Draft Audit',
             message: 'Hapus draft audit ini?\nTindakan ini tidak dapat dibatalkan.',

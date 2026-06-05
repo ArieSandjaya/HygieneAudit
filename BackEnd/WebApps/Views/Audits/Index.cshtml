@@ -179,7 +179,7 @@
                           data-bind="text: (passRate * 100).toFixed(0) + '%', style: { color: passRate >= 0.7 ? '#22c55e' : '#ef4444' }"></span>
                 </div>
             </div>
-            <!-- ko if: status === 'DRAFT' && $root.canEditAudit($data) -->
+            <!-- ko if: status === 'DRAFT' && $root.canDeleteAudit($data) -->
             <button type="button" class="flex-shrink-0" title="Hapus draft"
                     style="color:#ef4444;background:transparent;border:none;padding:4px 6px;cursor:pointer;line-height:1;"
                     data-bind="click: $root.deleteAudit, clickBubble: false">

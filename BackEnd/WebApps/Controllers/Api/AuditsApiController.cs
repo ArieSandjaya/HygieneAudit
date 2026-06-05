@@ -217,10 +217,18 @@ namespace WebApps.Controllers.Api
         [HttpDelete, Route("{id}")]
         public async Task<IHttpActionResult> Delete(string id)
         {
-            if (!await CanAccessAsync(id)) return NotFound();
-            // Only DRAFT audits can be deleted; the service enforces this and throws
-            // a ValidationException (→ 400) otherwise. Photo files are removed after
-            // the rows are deleted.
+            var audit = await _auditService.GetAuditAsync(id);
+            if (audit == null) return NotFound();
+
+            // Hanya PIC yang melakukan audit yang boleh menghapus — admin sekalipun
+            // tidak, kecuali dia memang PIC audit tsb.
+            var (userId, _) = CurrentUser();
+            if (audit.PicId != userId)
+                return Content(HttpStatusCode.Forbidden,
+                    new { message = "Hanya PIC yang melakukan audit ini yang dapat menghapusnya." });
+
+            // Hanya DRAFT yang bisa dihapus; service menegakkan ini (→ 400) bila bukan.
+            // File foto dihapus setelah baris terhapus.
             var removedPhotos = await _auditService.DeleteDraftAuditAsync(id);
             PhotoStorage.DeleteFiles(removedPhotos);
             return StatusCode(HttpStatusCode.NoContent);
