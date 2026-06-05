@@ -421,6 +421,48 @@ window.showToast = function(msg, type) {
 };
 </script>
 
+<!-- Reusable Confirm Dialog -->
+<div class="modal fade" id="ha-confirm-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bx bx-error-circle me-2 text-danger"></i><span id="ha-confirm-title">Konfirmasi</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0" id="ha-confirm-message" style="white-space:pre-line;"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="ha-confirm-cancel">Batal</button>
+                <button type="button" class="btn btn-danger" id="ha-confirm-ok">Ya</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+// Pengganti window.confirm() bawaan dengan dialog Bootstrap yang rapi.
+// Pemakaian: showConfirm('Pesan', fnOnConfirm) atau showConfirm({ title, message,
+// confirmText, cancelText, variant, onConfirm }).
+window.showConfirm = function (opts, onConfirm) {
+    if (typeof opts === 'string') opts = { message: opts, onConfirm: onConfirm };
+    opts = opts || {};
+    var modalEl = document.getElementById('ha-confirm-modal');
+    var okBtn   = document.getElementById('ha-confirm-ok');
+    document.getElementById('ha-confirm-title').textContent   = opts.title || 'Konfirmasi';
+    document.getElementById('ha-confirm-message').textContent = opts.message || 'Anda yakin?';
+    document.getElementById('ha-confirm-cancel').textContent  = opts.cancelText || 'Batal';
+    okBtn.textContent = opts.confirmText || 'Ya';
+    okBtn.className   = 'btn btn-' + (opts.variant || 'danger');
+
+    var modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    var onOk = function () { modal.hide(); if (typeof opts.onConfirm === 'function') opts.onConfirm(); };
+    okBtn.addEventListener('click', onOk, { once: true });
+    // Kalau ditutup tanpa konfirmasi, buang handler yg belum sempat jalan.
+    modalEl.addEventListener('hidden.bs.modal', function () { okBtn.removeEventListener('click', onOk); }, { once: true });
+    modal.show();
+};
+</script>
+
 <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {
