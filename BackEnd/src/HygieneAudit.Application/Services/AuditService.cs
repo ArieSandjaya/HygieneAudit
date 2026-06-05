@@ -162,6 +162,26 @@ public class AuditService : IAuditService
         await _unitOfWork.SaveChangesAsync();
     }
 
+    public async Task<IReadOnlyList<string>> DeleteDraftAuditAsync(string id)
+    {
+        var audit = await _unitOfWork.Audits.GetByIdWithItemsAsync(id);
+        if (audit == null) throw new NotFoundException("Audit not found");
+        if (audit.Status != AuditStatus.Draft)
+            throw new ValidationException("Hanya audit berstatus draft yang dapat dihapus.");
+
+        // Collect photo files so the caller can remove them from disk after the
+        // database rows are gone (items & photos cascade-delete with the audit).
+        var photos = audit.Items
+            .SelectMany(i => i.Photos)
+            .Select(p => p.PhotoUrl)
+            .Where(u => !string.IsNullOrWhiteSpace(u))
+            .ToList();
+
+        await _unitOfWork.Audits.DeleteAsync(audit);
+        await _unitOfWork.SaveChangesAsync();
+        return photos;
+    }
+
     public async Task<TenantHistory> GetTenantHistoryAsync(int tenantId)
     {
         return await _unitOfWork.Audits.GetTenantHistoryAsync(tenantId);

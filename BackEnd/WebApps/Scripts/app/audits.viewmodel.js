@@ -67,6 +67,26 @@ function AuditsViewModel(currentUserId, isAdmin) {
         return rate >= 70 ? 'bg-label-success' : 'bg-label-danger';
     };
 
+    // Only the assigned PIC (or an admin) may modify/delete an audit.
+    self.canEditAudit = function (a) {
+        return isAdmin || a.picId === currentUserId;
+    };
+    // Delete a DRAFT audit from the list. Lives inside the row's <a>, so we stop
+    // the click from navigating to the detail page first.
+    self.deleteAudit = function (a, event) {
+        if (event) { event.preventDefault(); event.stopPropagation(); }
+        if (a.status !== 'DRAFT') return;
+        if (!confirm('Hapus draft audit "' + (a.tenantName || '') + '"? Tindakan ini tidak dapat dibatalkan.')) return;
+        $.ajax({ url: '/api/audits/' + a.id, type: 'DELETE' })
+            .done(function () {
+                self.audits.remove(a);
+                showToast('Draft audit dihapus.');
+            })
+            .fail(function (xhr) {
+                showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal menghapus audit.', 'error');
+            });
+    };
+
     self.selectTenant = function (tenant) {
         self.newAudit.tenantId(tenant.id);
         self.tenantSearch('');
@@ -291,6 +311,22 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
             .done(function () { showToast('Draft disimpan!'); })
             .fail(function () { showToast('Gagal menyimpan draft.', 'error'); })
             .always(function () { self.savingDraft(false); });
+    };
+
+    self.deleting = ko.observable(false);
+    self.deleteAudit = function () {
+        if (self.deleting() || self.status() !== 'DRAFT' || !self.canEdit()) return;
+        if (!confirm('Hapus draft audit ini? Tindakan ini tidak dapat dibatalkan.')) return;
+        self.deleting(true);
+        $.ajax({ url: '/api/audits/' + auditId, type: 'DELETE' })
+            .done(function () {
+                showToast('Draft audit dihapus.');
+                setTimeout(function () { window.location.href = '/Audits'; }, 800);
+            })
+            .fail(function (xhr) {
+                self.deleting(false);
+                showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal menghapus audit.', 'error');
+            });
     };
 
     self.submitAudit = function () {
