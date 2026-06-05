@@ -318,6 +318,7 @@
     <Compile Include="Controllers\TenantsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\Api\AccountApiController.cs" />
+    <Compile Include="Helpers\Asset.cs" />
     <Compile Include="Helpers\PhotoStorage.cs" />
     <Compile Include="Helpers\DevDataSeeder.cs" />
     <Compile Include="Controllers\Api\AuditsApiController.cs" />

@@ -179,6 +179,13 @@
                           data-bind="text: (passRate * 100).toFixed(0) + '%', style: { color: passRate >= 0.7 ? '#22c55e' : '#ef4444' }"></span>
                 </div>
             </div>
+            <!-- ko if: status === 'DRAFT' && $root.canEditAudit($data) -->
+            <button type="button" class="flex-shrink-0" title="Hapus draft"
+                    style="color:#ef4444;background:transparent;border:none;padding:4px 6px;cursor:pointer;line-height:1;"
+                    data-bind="click: $root.deleteAudit, clickBubble: false">
+                <i class="bx bx-trash" style="font-size:19px;"></i>
+            </button>
+            <!-- /ko -->
             <i class="bx bx-chevron-right" style="color:#c0c4cc;font-size:20px;flex-shrink:0;"></i>
         </a>
         <!-- /ko -->
@@ -218,7 +225,7 @@
 @section Scripts {
     <script src="~/Scripts/knockout-3.5.0.js"></script>
     <script src="~/Scripts/knockout.validation.js"></script>
-    <script src="~/Scripts/app/paged-sorted.js"></script>
-    <script src="~/Scripts/app/audits.viewmodel.js"></script>
+    <script src="@Asset.V("~/Scripts/app/paged-sorted.js")"></script>
+    <script src="@Asset.V("~/Scripts/app/audits.viewmodel.js")"></script>
     <script>ko.applyBindings(new AuditsViewModel(@ViewBag.CurrentUserId, @(ViewBag.IsAdmin ? "true" : "false")), document.getElementById('audits-page'));</script>
 }

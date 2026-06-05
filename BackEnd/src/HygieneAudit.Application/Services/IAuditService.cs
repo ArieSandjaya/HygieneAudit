@@ -15,6 +15,9 @@ public interface IAuditService
     Task<int> AddPhotoAsync(string auditId, int templateId, string filename);
     Task SubmitAuditAsync(string id);
     Task SaveDraftAsync(string id);
+    // Deletes a DRAFT audit (with its items/photos). Returns the stored photo
+    // values so the caller can delete the files from disk. Throws if not a draft.
+    Task<IReadOnlyList<string>> DeleteDraftAuditAsync(string id);
     Task<TenantHistory> GetTenantHistoryAsync(int tenantId);
     Task<ExcelReportDto> GetExcelReportAsync(string? status, string? type, string? search);
     Task<byte[]> ExportExcelAsync(string? status, string? type, string? search, string? uploadsFolder = null);

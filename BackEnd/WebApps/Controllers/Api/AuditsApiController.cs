@@ -214,6 +214,18 @@ namespace WebApps.Controllers.Api
             return Ok(new { message = "Draft berhasil disimpan!" });
         }
 
+        [HttpDelete, Route("{id}")]
+        public async Task<IHttpActionResult> Delete(string id)
+        {
+            if (!await CanAccessAsync(id)) return NotFound();
+            // Only DRAFT audits can be deleted; the service enforces this and throws
+            // a ValidationException (→ 400) otherwise. Photo files are removed after
+            // the rows are deleted.
+            var removedPhotos = await _auditService.DeleteDraftAuditAsync(id);
+            PhotoStorage.DeleteFiles(removedPhotos);
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
         private (int userId, bool isAdmin) CurrentUser()
         {
             var identity = System.Web.HttpContext.Current?.User?.Identity as ClaimsIdentity
