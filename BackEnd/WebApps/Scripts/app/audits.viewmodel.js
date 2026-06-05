@@ -76,21 +76,14 @@ function AuditsViewModel(currentUserId, isAdmin) {
     self.deleteAudit = function (a, event) {
         if (event) { event.preventDefault(); event.stopPropagation(); }
         if (a.status !== 'DRAFT') return;
-        showConfirm({
-            title: 'Hapus Draft Audit',
-            message: 'Hapus draft audit "' + (a.tenantName || '') + '"?\nTindakan ini tidak dapat dibatalkan.',
-            confirmText: 'Hapus',
-            onConfirm: function () {
-                $.ajax({ url: '/api/audits/' + a.id, type: 'DELETE' })
-                    .done(function () {
-                        self.audits.remove(a);
-                        showToast('Draft audit dihapus.');
-                    })
-                    .fail(function (xhr) {
-                        showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal menghapus audit.', 'error');
-                    });
-            }
-        });
+        $.ajax({ url: '/api/audits/' + a.id, type: 'DELETE' })
+            .done(function () {
+                self.audits.remove(a);
+                showToast('Draft audit dihapus.');
+            })
+            .fail(function (xhr) {
+                showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal menghapus audit.', 'error');
+            });
     };
 
     self.selectTenant = function (tenant) {
@@ -322,23 +315,16 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     self.deleting = ko.observable(false);
     self.deleteAudit = function () {
         if (self.deleting() || self.status() !== 'DRAFT' || !self.canEdit()) return;
-        showConfirm({
-            title: 'Hapus Draft Audit',
-            message: 'Hapus draft audit ini?\nTindakan ini tidak dapat dibatalkan.',
-            confirmText: 'Hapus',
-            onConfirm: function () {
-                self.deleting(true);
-                $.ajax({ url: '/api/audits/' + auditId, type: 'DELETE' })
-                    .done(function () {
-                        showToast('Draft audit dihapus.');
-                        setTimeout(function () { window.location.href = '/Audits'; }, 800);
-                    })
-                    .fail(function (xhr) {
-                        self.deleting(false);
-                        showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal menghapus audit.', 'error');
-                    });
-            }
-        });
+        self.deleting(true);
+        $.ajax({ url: '/api/audits/' + auditId, type: 'DELETE' })
+            .done(function () {
+                showToast('Draft audit dihapus.');
+                setTimeout(function () { window.location.href = '/Audits'; }, 800);
+            })
+            .fail(function (xhr) {
+                self.deleting(false);
+                showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal menghapus audit.', 'error');
+            });
     };
 
     self.submitAudit = function () {
