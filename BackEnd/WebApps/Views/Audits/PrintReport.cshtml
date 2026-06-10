@@ -113,8 +113,8 @@
                 <div>Diselesaikan: <strong>@Model.CompletedAt.Value.ToLocalTime().ToString("dd MMM yyyy HH:mm", new System.Globalization.CultureInfo("id-ID"))</strong></div>
             }
             <div style="margin-top:4px;">
-                <span style="background:@(passRate >= 70 ? "#d1fae5" : "#fee2e2");color:@(passRate >= 70 ? "#065f46" : "#991b1b");padding:2px 10px;border-radius:20px;font-weight:700;font-size:12px;">
-                    @(passRate >= 70 ? "LULUS" : "TIDAK LULUS")
+                <span style="background:@(passRate == 100 ? "#d1fae5" : "#fee2e2");color:@(passRate == 100 ? "#065f46" : "#991b1b");padding:2px 10px;border-radius:20px;font-weight:700;font-size:12px;">
+                    @(passRate == 100 ? "LULUS" : "TIDAK LULUS")
                 </span>
             </div>
         </div>
