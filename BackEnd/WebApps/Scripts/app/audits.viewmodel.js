@@ -54,7 +54,7 @@ function AuditsViewModel(currentUserId, isAdmin) {
             var dt = new Date(a.date);
             return {
                 height: Math.max(rate * 0.48, 4) + 'px',
-                color: rate >= 70 ? '#22c55e' : '#ef4444',
+                color: rate >= 100 ? '#22c55e' : '#ef4444',
                 label: dt.getDate() + '/' + (dt.getMonth() + 1)
             };
         });
@@ -64,7 +64,7 @@ function AuditsViewModel(currentUserId, isAdmin) {
     };
     self.passRateCss = function (a) {
         var rate = a.totalItems > 0 ? a.passCount / a.totalItems * 100 : 0;
-        return rate >= 70 ? 'bg-label-success' : 'bg-label-danger';
+        return rate >= 100 ? 'bg-label-success' : 'bg-label-danger';
     };
 
     // Hanya PIC yang melakukan audit yang boleh menghapus (admin pun tidak).
