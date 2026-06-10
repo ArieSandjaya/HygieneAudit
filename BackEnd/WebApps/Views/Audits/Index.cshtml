@@ -173,10 +173,10 @@
                 <div class="d-flex align-items-center gap-2">
                     <div class="progress flex-grow-1" style="height:5px;border-radius:4px;background:#ebebf0;">
                         <div class="progress-bar" style="border-radius:4px;"
-                             data-bind="style: { width: (passRate * 100).toFixed(0) + '%', background: passRate >= 0.7 ? '#22c55e' : '#ef4444' }"></div>
+                             data-bind="style: { width: (passRate * 100).toFixed(0) + '%', background: passRate >= 1 ? '#22c55e' : '#ef4444' }"></div>
                     </div>
                     <span class="ha-audit-item__rate"
-                          data-bind="text: (passRate * 100).toFixed(0) + '%', style: { color: passRate >= 0.7 ? '#22c55e' : '#ef4444' }"></span>
+                          data-bind="text: (passRate * 100).toFixed(0) + '%', style: { color: passRate >= 1 ? '#22c55e' : '#ef4444' }"></span>
                 </div>
             </div>
             <!-- ko if: status === 'DRAFT' && $root.canDeleteAudit($data) -->
