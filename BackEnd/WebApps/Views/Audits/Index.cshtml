@@ -33,6 +33,11 @@
         </div>
     </div>
 
+    <!-- Search -->
+    <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Cari tenant, PIC, atau status..." data-bind="textInput: searchTerm" />
+    </div>
+
     <!-- Audit List -->
     <div class="table-responsive">
         <table class="table table-hover">
@@ -45,7 +50,7 @@
                     <th>Aksi</th>
                 </tr>
             </thead>
-            <tbody data-bind="foreach: audits">
+            <tbody data-bind="foreach: filteredAudits">
                 <tr>
                     <td data-bind="text: new Date(date).toLocaleDateString('id-ID')"></td>
                     <td data-bind="text: tenantName"></td>
@@ -61,6 +66,7 @@
         </table>
     </div>
     <div data-bind="visible: audits().length === 0" class="text-muted text-center py-4">Belum ada data audit.</div>
+    <div data-bind="visible: audits().length > 0 && filteredAudits().length === 0" class="text-muted text-center py-4">Tidak ada audit yang cocok dengan pencarian.</div>
 </div>
 
 @section Scripts {

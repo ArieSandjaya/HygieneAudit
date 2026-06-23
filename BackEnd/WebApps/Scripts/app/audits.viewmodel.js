@@ -5,6 +5,16 @@ function AuditsViewModel() {
     self.tenants = ko.observableArray([]);
     self.users = ko.observableArray([]);
     self.showForm = ko.observable(false);
+    self.searchTerm = ko.observable('');
+    self.filteredAudits = ko.computed(function () {
+        var term = (self.searchTerm() || '').trim().toLowerCase();
+        if (!term) return self.audits();
+        return self.audits().filter(function (audit) {
+            return (audit.tenantName || '').toLowerCase().indexOf(term) !== -1 ||
+                (audit.picName || '').toLowerCase().indexOf(term) !== -1 ||
+                (audit.status || '').toLowerCase().indexOf(term) !== -1;
+        });
+    });
     self.form = {
         date: ko.observable(new Date().toISOString().split('T')[0]),
         tenantId: ko.observable(null),
