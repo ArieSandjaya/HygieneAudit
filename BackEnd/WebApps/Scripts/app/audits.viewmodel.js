@@ -102,9 +102,27 @@ function AuditsViewModel(currentUserId, isAdmin) {
         self.tenantHistoryVisible(true);
     };
 
+    // Search tenant yang sudah/sedang di-audit (filter client-side pada daftar audit).
+    self.auditSearch = ko.observable('');
+    self.hasSearch = ko.computed(function () { return self.auditSearch().trim().length > 0; });
+    self.clearSearch = function () { self.auditSearch(''); };
+    self.searchedAudits = ko.computed(function () {
+        var q = self.auditSearch().trim().toLowerCase();
+        if (!q) return self.audits();
+        return self.audits().filter(function (a) {
+            return (a.tenantName || '').toLowerCase().indexOf(q) >= 0;
+        });
+    });
+    self.activeCount  = ko.computed(function () {
+        return self.searchedAudits().filter(function (a) { return a.status !== 'COMPLETED'; }).length;
+    });
+    self.historyCount = ko.computed(function () {
+        return self.searchedAudits().filter(function (a) { return a.status === 'COMPLETED'; }).length;
+    });
+
     self.filteredAudits = ko.computed(function () {
         var tab = self.activeTab();
-        return self.audits().filter(function (a) {
+        return self.searchedAudits().filter(function (a) {
             if (tab === 'active')  return a.status !== 'COMPLETED';
             if (tab === 'history') return a.status === 'COMPLETED';
             return true;

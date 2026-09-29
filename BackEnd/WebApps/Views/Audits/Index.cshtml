@@ -122,16 +122,30 @@
         </div>
     </div>
 
+    <!-- Search Tenant -->
+    <div class="mb-3">
+        <div class="input-group" style="max-width:420px;">
+            <span class="input-group-text" style="border-radius:10px 0 0 10px;background:#fff;"><i class="bx bx-search"></i></span>
+            <input type="text" class="form-control" placeholder="Cari tenant yang sudah diaudit..."
+                   data-bind="value: auditSearch, valueUpdate: 'input'" autocomplete="off"
+                   aria-label="Cari tenant" />
+            <button type="button" class="btn btn-outline-secondary" title="Hapus pencarian"
+                    style="border-radius:0 10px 10px 0;" data-bind="visible: hasSearch, click: clearSearch">
+                <i class="bx bx-x"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- Pill Tabs -->
     <div class="ha-tabs mb-3">
         <button class="ha-tab" data-bind="click: function(){ activeTab('all') }, css: { active: activeTab() === 'all' }">
-            Semua <span style="font-size:11px;opacity:.7;" data-bind="text: '(' + audits().length + ')'"></span>
+            Semua <span style="font-size:11px;opacity:.7;" data-bind="text: '(' + searchedAudits().length + ')'"></span>
         </button>
         <button class="ha-tab" data-bind="click: function(){ activeTab('active') }, css: { active: activeTab() === 'active' }">
-            Aktif <span style="font-size:11px;opacity:.7;" data-bind="text: '(' + audits().filter(function(a){ return a.status !== 'COMPLETED'; }).length + ')'"></span>
+            Aktif <span style="font-size:11px;opacity:.7;" data-bind="text: '(' + activeCount() + ')'"></span>
         </button>
         <button class="ha-tab" data-bind="click: function(){ activeTab('history') }, css: { active: activeTab() === 'history' }">
-            Selesai <span style="font-size:11px;opacity:.7;" data-bind="text: '(' + audits().filter(function(a){ return a.status === 'COMPLETED'; }).length + ')'"></span>
+            Selesai <span style="font-size:11px;opacity:.7;" data-bind="text: '(' + historyCount() + ')'"></span>
         </button>
     </div>
 
@@ -212,7 +226,12 @@
 
         <div data-bind="visible: filteredAudits().length === 0" class="text-center text-muted py-5">
             <i class="bx bx-clipboard bx-lg d-block mb-2"></i>
+            <!-- ko if: hasSearch -->
+            Tidak ada audit untuk tenant "<span data-bind="text: auditSearch().trim()"></span>".
+            <!-- /ko -->
+            <!-- ko ifnot: hasSearch -->
             Belum ada data audit.
+            <!-- /ko -->
         </div>
     </div>
 
