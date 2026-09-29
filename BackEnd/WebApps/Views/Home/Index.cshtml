@@ -140,7 +140,7 @@
             var html = '';
             recent.forEach(function (a) {
                 var rate      = a.totalItems > 0 ? Math.round(a.passCount / a.totalItems * 100) : 0;
-                var barColor  = rate >= 70 ? '#22c55e' : '#ef4444';
+                var barColor  = rate >= 100 ? '#22c55e' : '#ef4444';
                 var sideColor = a.status === 'COMPLETED' ? '#22c55e' : '#f59e0b';
                 var statusClass = a.status === 'COMPLETED' ? 'ha-badge--green' : 'ha-badge--amber';
                 var date = new Date(a.date).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
