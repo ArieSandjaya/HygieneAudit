@@ -20,5 +20,12 @@ public interface IAuditService
     Task<IReadOnlyList<string>> DeleteDraftAuditAsync(string id);
     Task<TenantHistory> GetTenantHistoryAsync(int tenantId);
     Task<ExcelReportDto> GetExcelReportAsync(string? status, string? type, string? search);
+    // ---- Follow up ----
+    Task<IEnumerable<FollowUpAuditSummary>> GetFollowUpAuditsAsync();
+    Task<FollowUpDetailResponse?> GetFollowUpDetailAsync(string auditId);
+    // Mencatat follow up untuk satu item FAIL. Bila hasilnya Pass, status item berubah jadi Pass
+    // (nilai audit ikut ter-update); riwayat selalu tersimpan.
+    Task<FollowUpResponse> AddFollowUpAsync(string auditId, int auditItemId, int picId, AddFollowUpRequest request);
+    Task<string?> GetFollowUpPhotoUrlAsync(int photoId);
     Task<byte[]> ExportExcelAsync(string? status, string? type, string? search, string? uploadsFolder = null);
 }

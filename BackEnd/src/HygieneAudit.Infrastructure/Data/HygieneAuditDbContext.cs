@@ -13,6 +13,8 @@ public class HygieneAuditDbContext : DbContext
     public DbSet<Audit> Audits { get; set; } = null!;
     public DbSet<AuditItem> AuditItems { get; set; } = null!;
     public DbSet<AuditItemPhoto> AuditItemPhotos { get; set; } = null!;
+    public DbSet<AuditFollowUp> AuditFollowUps { get; set; } = null!;
+    public DbSet<AuditFollowUpPhoto> AuditFollowUpPhotos { get; set; } = null!;
     public DbSet<SyncQueueItem> SyncQueue { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,6 +33,18 @@ public class HygieneAuditDbContext : DbContext
         {
             entity.HasKey(e => e.Id);
             entity.HasMany(e => e.Photos).WithOne(p => p.AuditItem).HasForeignKey(p => p.AuditItemId);
+        });
+
+        modelBuilder.Entity<AuditFollowUp>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.AuditItem).WithMany(i => i.FollowUps).HasForeignKey(e => e.AuditItemId)
+                  .OnDelete(DeleteBehavior.Cascade);
+            // Restrict: hindari multiple cascade path di SQL Server (User -> Audit -> Item -> FollowUp).
+            entity.HasOne(e => e.Pic).WithMany().HasForeignKey(e => e.PicId)
+                  .OnDelete(DeleteBehavior.Restrict);
+            entity.HasMany(e => e.Photos).WithOne(p => p.AuditFollowUp).HasForeignKey(p => p.AuditFollowUpId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         // Seed Users

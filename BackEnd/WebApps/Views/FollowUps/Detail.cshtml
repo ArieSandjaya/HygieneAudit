@@ -1,0 +1,230 @@
+﻿@{
+    ViewBag.Title = "Follow Up Audit";
+}
+
+<div id="followup-detail-page">
+    <!-- Header -->
+    <div class="ha-hero mb-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+            <div style="flex:1;min-width:0;">
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                    <span class="ha-badge ha-badge--blue" data-bind="text: isGas() ? 'Dengan Gas' : 'Tanpa Gas'"></span>
+                    <!-- ko ifnot: canFollowUp -->
+                    <span class="ha-badge" style="background:rgba(255,255,255,.25);color:#fff;font-weight:600;">
+                        <i class="bx bx-lock-alt me-1"></i>View Only
+                    </span>
+                    <!-- /ko -->
+                </div>
+                <h5 class="fw-bold mb-1" style="font-size:1.1rem;" data-bind="text: tenantName"></h5>
+                <p style="font-size:13px;opacity:.85;margin:0;">
+                    <i class="bx bx-calendar-alt me-1"></i><span data-bind="text: auditDate"></span>
+                    &nbsp;&bull;&nbsp;
+                    <i class="bx bx-user me-1"></i><span data-bind="text: picName"></span>
+                </p>
+            </div>
+            <div class="d-flex flex-wrap gap-2" style="flex-shrink:0;">
+                <a href="@Url.Action("Index", "FollowUps")"
+                   style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:10px;font-size:13px;font-weight:600;padding:7px 14px;text-decoration:none;display:inline-flex;align-items:center;">
+                    <i class="bx bx-arrow-back me-1"></i> Kembali
+                </a>
+                <a href="@Url.Action("Detail", "Audits", new { id = ViewBag.AuditId })"
+                   style="background:#fff;color:#696cff;border-radius:10px;font-size:13px;font-weight:700;padding:7px 14px;text-decoration:none;display:inline-flex;align-items:center;">
+                    <i class="bx bx-clipboard me-1"></i> Lihat Audit
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skor -->
+    <div class="ha-card mb-4 p-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span style="font-size:13px;font-weight:600;color:var(--ha-muted);">Nilai Audit Saat Ini</span>
+            <span style="font-size:13px;font-weight:800;color:var(--ha-primary);" data-bind="text: passRate() + '% (' + passCount() + '/' + totalCount() + ' Pass)'"></span>
+        </div>
+        <div style="height:8px;border-radius:6px;background:#ebebf0;overflow:hidden;">
+            <div style="height:100%;border-radius:6px;transition:width .4s;"
+                 data-bind="style: { width: progressWidth, background: progressColor }"></div>
+        </div>
+        <div class="d-flex justify-content-between mt-2" style="font-size:11.5px;color:var(--ha-muted);">
+            <span><span class="fw-bold text-success" data-bind="text: passCount()"></span> Pass</span>
+            <span><span class="fw-bold text-danger" data-bind="text: failCount()"></span> Fail (perlu follow up)</span>
+        </div>
+    </div>
+
+    <div data-bind="visible: loading" class="text-center text-muted py-5">
+        <i class="bx bx-loader-circle bx-spin bx-lg d-block mb-2"></i> Memuat...
+    </div>
+
+    <!-- Selesai 100% -->
+    <div class="ha-card mb-4 p-4 text-center" data-bind="visible: !loading() && failCount() === 0 && detail()">
+        <i class="bx bx-check-circle text-success" style="font-size:42px;"></i>
+        <div class="fw-bold mt-1">Semua item sudah lulus (100%)</div>
+        <div class="text-muted" style="font-size:12.5px;">Riwayat follow up tetap tersimpan di bawah.</div>
+    </div>
+
+    <!-- Item yang masih Fail -->
+    <div data-bind="visible: openItems().length > 0" class="ha-section-label">
+        Perlu Follow Up (<span data-bind="text: openItems().length"></span>)
+    </div>
+    <div data-bind="foreach: openItems">
+        <div class="ha-card mb-3 p-3">
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                <span class="ha-badge ha-badge--gray" style="font-size:10.5px;" data-bind="text: category"></span>
+                <span class="ha-badge bg-label-danger" style="font-weight:700;">FAIL</span>
+            </div>
+            <div class="fw-bold" style="font-size:14px;" data-bind="text: name"></div>
+
+            <!-- Temuan audit awal -->
+            <div class="mt-2 p-2" style="background:#fef2f2;border-radius:10px;font-size:12.5px;" data-bind="visible: hasNote">
+                <span class="fw-semibold text-danger">Temuan audit:</span>
+                <span style="white-space:pre-wrap;" data-bind="text: note"></span>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mt-2" data-bind="visible: hasPhotos, foreach: photos">
+                <a target="_blank" rel="noopener" data-bind="attr: { href: $data }">
+                    <img loading="lazy" decoding="async" data-bind="attr: { src: $data }"
+                         style="width:64px;height:64px;object-fit:cover;border-radius:10px;border:2px solid var(--ha-border);" />
+                </a>
+            </div>
+
+            <!-- Riwayat follow up sebelumnya -->
+            <div class="mt-3" data-bind="visible: hasHistory">
+                <button type="button" class="btn btn-sm btn-outline-secondary" style="border-radius:8px;"
+                        data-bind="click: $root.toggleHistory">
+                    <i class="bx bx-history me-1"></i><span data-bind="text: $root.historyTitle($data)"></span>
+                </button>
+                <div class="mt-2" data-bind="visible: showHistory, foreach: followUps">
+                    <div class="p-2 mb-2" style="background:#f8f8ff;border-radius:10px;border:1px solid var(--ha-border);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted" style="font-size:11.5px;" data-bind="text: $root.historyMeta($data)"></span>
+                            <span class="ha-badge" style="font-weight:700;" data-bind="text: $root.resultText($data), css: $root.resultCss($data)"></span>
+                        </div>
+                        <div style="font-size:12.5px;white-space:pre-wrap;" data-bind="text: note"></div>
+                        <div class="d-flex flex-wrap gap-2 mt-1" data-bind="foreach: photos">
+                            <a target="_blank" rel="noopener" data-bind="attr: { href: $data }">
+                                <img loading="lazy" decoding="async" data-bind="attr: { src: $data }"
+                                     style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:2px solid var(--ha-border);" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tombol / form follow up -->
+            <div class="mt-3" data-bind="visible: $root.canFollowUp">
+                <button type="button" class="btn btn-primary btn-sm" style="border-radius:10px;font-weight:600;"
+                        data-bind="click: $root.toggleForm, visible: !formOpen()">
+                    <i class="bx bx-plus me-1"></i> Tambah Follow Up
+                </button>
+
+                <div data-bind="visible: formOpen" style="border-top:1px solid var(--ha-border);padding-top:12px;">
+                    <div class="row g-2 mb-2">
+                        <div class="col-sm-5 col-12">
+                            <label class="form-label fw-semibold" style="font-size:12px;">Tanggal Follow Up</label>
+                            <input type="date" class="form-control" style="border-radius:10px;"
+                                   data-bind="value: fDate, attr: { min: $root.minDate(), max: $root.maxDate }" />
+                        </div>
+                        <div class="col-sm-7 col-12">
+                            <label class="form-label fw-semibold" style="font-size:12px;">Hasil</label>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn flex-fill" style="border-radius:10px;font-weight:600;"
+                                        data-bind="css: fResult() === 'PASS' ? 'btn-success' : 'btn-outline-success', click: function () { $root.setResult($data, 'PASS'); }">
+                                    &#128077; Pass
+                                </button>
+                                <button type="button" class="btn flex-fill" style="border-radius:10px;font-weight:600;"
+                                        data-bind="css: fResult() === 'FAIL' ? 'btn-danger' : 'btn-outline-danger', click: function () { $root.setResult($data, 'FAIL'); }">
+                                    &#128545; Masih Fail
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <textarea class="ha-note" placeholder="Catatan follow up (wajib)..."
+                              data-bind="value: fNote, valueUpdate: 'afterkeydown', css: { 'is-invalid': noteInvalid }"></textarea>
+                    <div style="font-size:11px;color:#ef4444;margin-top:4px;" data-bind="visible: noteInvalid">
+                        Catatan follow up wajib diisi
+                    </div>
+
+                    <div class="ha-photo-btns mt-2">
+                        <label class="ha-photo-btn" style="flex:1;">
+                            <span style="display:block;font-size:22px;line-height:1.2;">&#128247;</span>
+                            <span style="display:block;font-size:11.5px;color:var(--ha-muted);font-weight:600;">Kamera</span>
+                            <input type="file" accept="image/*" class="d-none"
+                                   data-bind="attr: { capture: 'environment' }, event: { change: function (d, e) { $root.addPhoto($data, e); } }" />
+                        </label>
+                        <label class="ha-photo-btn" style="flex:1;">
+                            <span style="display:block;font-size:22px;line-height:1.2;">&#128444;&#65039;</span>
+                            <span style="display:block;font-size:11.5px;color:var(--ha-muted);font-weight:600;">Galeri</span>
+                            <input type="file" accept="image/*" multiple class="d-none"
+                                   data-bind="event: { change: function (d, e) { $root.addPhoto($data, e); } }" />
+                        </label>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 mt-2" data-bind="foreach: fPhotos">
+                        <div class="position-relative flex-shrink-0">
+                            <img data-bind="attr: { src: $data }"
+                                 style="width:64px;height:64px;object-fit:cover;border-radius:10px;border:2px solid var(--ha-border);" />
+                            <button type="button"
+                                    style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#ef4444;color:#fff;border:none;font-size:13px;line-height:1;cursor:pointer;"
+                                    data-bind="click: function () { $root.removePhoto($parent, $data); }">&times;</button>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 d-flex gap-2">
+                        <button type="button" class="btn btn-primary" style="border-radius:10px;font-weight:600;"
+                                data-bind="click: $root.submit, enable: canSubmit">
+                            <span data-bind="visible: saving"><i class="bx bx-loader-circle bx-spin me-1"></i> Menyimpan...</span>
+                            <span data-bind="visible: !saving()"><i class="bx bx-save me-1"></i> Simpan Follow Up</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" style="border-radius:10px;"
+                                data-bind="click: $root.toggleForm, disable: saving">Batal</button>
+                    </div>
+                    <div class="text-muted mt-2" style="font-size:11.5px;">
+                        Hasil <b>Pass</b> mengubah item ini menjadi Pass dan memperbarui nilai audit. Riwayat follow up selalu tersimpan.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item yang sudah lulus lewat follow up -->
+    <div data-bind="visible: resolvedItems().length > 0" class="ha-section-label mt-4">
+        Sudah Lulus via Follow Up (<span data-bind="text: resolvedItems().length"></span>)
+    </div>
+    <div data-bind="foreach: resolvedItems">
+        <div class="ha-card mb-3 p-3">
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                <span class="ha-badge ha-badge--gray" style="font-size:10.5px;" data-bind="text: category"></span>
+                <span class="ha-badge ha-badge--green" style="font-weight:700;">PASS</span>
+            </div>
+            <div class="fw-bold" style="font-size:14px;" data-bind="text: name"></div>
+            <div class="mt-2 p-2" style="background:#fef2f2;border-radius:10px;font-size:12.5px;" data-bind="visible: hasNote">
+                <span class="fw-semibold text-danger">Temuan audit awal:</span>
+                <span style="white-space:pre-wrap;" data-bind="text: note"></span>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-secondary mt-2" style="border-radius:8px;"
+                    data-bind="click: $root.toggleHistory">
+                <i class="bx bx-history me-1"></i><span data-bind="text: $root.historyTitle($data)"></span>
+            </button>
+            <div class="mt-2" data-bind="visible: showHistory, foreach: followUps">
+                <div class="p-2 mb-2" style="background:#f8f8ff;border-radius:10px;border:1px solid var(--ha-border);">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted" style="font-size:11.5px;" data-bind="text: $root.historyMeta($data)"></span>
+                        <span class="ha-badge" style="font-weight:700;" data-bind="text: $root.resultText($data), css: $root.resultCss($data)"></span>
+                    </div>
+                    <div style="font-size:12.5px;white-space:pre-wrap;" data-bind="text: note"></div>
+                    <div class="d-flex flex-wrap gap-2 mt-1" data-bind="foreach: photos">
+                        <a target="_blank" rel="noopener" data-bind="attr: { href: $data }">
+                            <img loading="lazy" decoding="async" data-bind="attr: { src: $data }"
+                                 style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:2px solid var(--ha-border);" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/knockout-3.5.0.js"></script>
+    <script src="@Asset.V("~/Scripts/app/followups.viewmodel.js")"></script>
+    <script>ko.applyBindings(new FollowUpDetailViewModel('@ViewBag.AuditId.ToString()', @ViewBag.CurrentUserId, @(ViewBag.IsAdmin ? "true" : "false")), document.getElementById('followup-detail-page'));</script>
+}

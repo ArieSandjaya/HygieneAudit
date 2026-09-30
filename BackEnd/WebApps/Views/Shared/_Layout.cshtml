@@ -282,6 +282,12 @@
                             <div>Audit</div>
                         </a>
                     </li>
+                    <li class="menu-item @(currentController == "FollowUps" ? "active" : "")">
+                        <a href="@Url.Action("Index", "FollowUps")" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-task"></i>
+                            <div>Follow Up</div>
+                        </a>
+                    </li>
                     @if (isAdmin)
                     {
                         <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span></li>

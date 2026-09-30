@@ -29,6 +29,7 @@ public class AuditItem
     public AuditItemStatus? Status { get; set; }
     public string? Note { get; set; }
     public ICollection<AuditItemPhoto> Photos { get; set; } = new List<AuditItemPhoto>();
+    public ICollection<AuditFollowUp> FollowUps { get; set; } = new List<AuditFollowUp>();
 }
 
 public enum AuditItemStatus { Pass, Fail }

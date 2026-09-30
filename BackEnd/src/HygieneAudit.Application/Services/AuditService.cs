@@ -243,4 +243,140 @@ public class AuditService : IAuditService
         var audits = await _unitOfWork.Audits.GetFilteredAsync(status, type, search);
         return ExcelBuilder.Build(audits, uploadsFolder);
     }
+
+    // ---------------------------------------------------------------- Follow up
+
+    private static double Rate(int pass, int total) => total > 0 ? Math.Round((double)pass / total * 100, 0) : 0;
+
+    public async Task<IEnumerable<FollowUpAuditSummary>> GetFollowUpAuditsAsync()
+    {
+        var audits = await _unitOfWork.Audits.GetCompletedForFollowUpAsync();
+        var stats = (await _unitOfWork.Audits.GetFollowUpStatsAsync()).ToDictionary(s => s.AuditId);
+
+        var rows = new List<FollowUpAuditSummary>();
+        foreach (var a in audits)
+        {
+            var total = a.Items.Count;
+            var pass = a.Items.Count(i => i.Status == AuditItemStatus.Pass);
+            var fail = a.Items.Count(i => i.Status == AuditItemStatus.Fail);
+            stats.TryGetValue(a.Id, out var st);
+
+            // Tampilkan hanya audit yang belum 100% atau sudah pernah di-follow up (untuk riwayat).
+            if (fail == 0 && st == null) continue;
+
+            rows.Add(new FollowUpAuditSummary
+            {
+                Id = a.Id,
+                Date = a.Date,
+                TenantId = a.TenantId,
+                TenantName = a.Tenant?.Name ?? string.Empty,
+                PicName = a.Pic?.Name ?? string.Empty,
+                IsGas = a.IsGas,
+                TotalItems = total,
+                PassCount = pass,
+                FailCount = fail,
+                PassRate = Rate(pass, total),
+                FollowUpCount = st?.Count ?? 0,
+                LastFollowUpAt = st?.LastAt
+            });
+        }
+        return rows.OrderByDescending(r => r.Date).ToList();
+    }
+
+    public async Task<FollowUpDetailResponse?> GetFollowUpDetailAsync(string auditId)
+    {
+        var audit = await _unitOfWork.Audits.GetByIdForFollowUpAsync(auditId);
+        if (audit == null) return null;
+
+        var total = audit.Items.Count;
+        var pass = audit.Items.Count(i => i.Status == AuditItemStatus.Pass);
+        var fail = audit.Items.Count(i => i.Status == AuditItemStatus.Fail);
+
+        return new FollowUpDetailResponse
+        {
+            Id = audit.Id,
+            Date = audit.Date,
+            TenantId = audit.TenantId,
+            TenantName = audit.Tenant?.Name ?? string.Empty,
+            PicId = audit.PicId,
+            PicName = audit.Pic?.Name ?? string.Empty,
+            IsGas = audit.IsGas,
+            TotalItems = total,
+            PassCount = pass,
+            FailCount = fail,
+            PassRate = Rate(pass, total),
+            // Item yang masih FAIL, serta item yang pernah di-follow up (riwayat tetap terlihat).
+            Items = audit.Items
+                .Where(i => i.Status == AuditItemStatus.Fail || i.FollowUps.Any())
+                .Select(i => new FollowUpItemResponse
+                {
+                    Id = i.Id,
+                    TemplateId = i.TemplateId,
+                    Category = i.Category,
+                    Name = i.Name,
+                    Status = i.Status?.ToString().ToUpper() ?? string.Empty,
+                    Note = i.Note,
+                    Photos = i.Photos.Select(p => $"/api/audits/photos/{p.Id}").ToList(),
+                    FollowUps = i.FollowUps.Select(FollowUpResponse.FromEntity).ToList()
+                })
+                .ToList()
+        };
+    }
+
+    public async Task<FollowUpResponse> AddFollowUpAsync(string auditId, int auditItemId, int picId, AddFollowUpRequest request)
+    {
+        if (request == null) throw new ValidationException("Data follow up tidak boleh kosong.");
+
+        var audit = await _unitOfWork.Audits.GetByIdWithItemsAsync(auditId);
+        if (audit == null) throw new NotFoundException("Audit not found");
+        if (audit.Status != AuditStatus.Completed)
+            throw new ValidationException("Follow up hanya dapat dilakukan pada audit yang sudah selesai.");
+
+        var item = audit.Items.FirstOrDefault(i => i.Id == auditItemId);
+        if (item == null) throw new NotFoundException("Item not found");
+        if (item.Status != AuditItemStatus.Fail)
+            throw new ValidationException("Item ini sudah lulus, tidak memerlukan follow up.");
+
+        AuditItemStatus result;
+        switch (request.Result?.Trim().ToLowerInvariant())
+        {
+            case "pass": result = AuditItemStatus.Pass; break;
+            case "fail": result = AuditItemStatus.Fail; break;
+            default: throw new ValidationException("Hasil follow up harus Pass atau Fail.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Note))
+            throw new ValidationException("Catatan follow up wajib diisi.");
+
+        var date = request.Date ?? DateTime.Now;
+        if (date.Date < audit.Date.Date)
+            throw new ValidationException("Tanggal follow up tidak boleh sebelum tanggal audit.");
+
+        var pic = await _unitOfWork.Users.GetByIdAsync(picId);
+        if (pic == null) throw new ValidationException("PIC follow up tidak ditemukan.");
+
+        var followUp = new AuditFollowUp
+        {
+            AuditItemId = item.Id,
+            Date = date,
+            PicId = picId,
+            Result = result,
+            Note = request.Note.Trim()
+        };
+        foreach (var photo in (request.Photos ?? new List<string>()).Where(p => !string.IsNullOrWhiteSpace(p)))
+            followUp.Photos.Add(new AuditFollowUpPhoto { PhotoUrl = photo });
+
+        // Riwayat selalu tersimpan; bila lulus, nilai item (dan skor audit) ikut berubah.
+        item.FollowUps.Add(followUp);
+        if (result == AuditItemStatus.Pass)
+            item.Status = AuditItemStatus.Pass;
+
+        await _unitOfWork.SaveChangesAsync();
+
+        followUp.Pic = pic;
+        return FollowUpResponse.FromEntity(followUp);
+    }
+
+    public async Task<string?> GetFollowUpPhotoUrlAsync(int photoId)
+        => await _unitOfWork.Audits.GetFollowUpPhotoUrlAsync(photoId);
 }

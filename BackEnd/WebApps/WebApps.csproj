@@ -310,6 +310,7 @@
     <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuditsController.cs" />
+    <Compile Include="Controllers\FollowUpsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeController.cs" />
@@ -322,6 +323,7 @@
     <Compile Include="Helpers\PhotoStorage.cs" />
     <Compile Include="Helpers\DevDataSeeder.cs" />
     <Compile Include="Controllers\Api\AuditsApiController.cs" />
+    <Compile Include="Controllers\Api\FollowUpsApiController.cs" />
     <Compile Include="Controllers\Api\ReportsApiController.cs" />
     <Compile Include="Controllers\Api\SyncApiController.cs" />
     <Compile Include="Controllers\Api\TenantsApiController.cs" />
@@ -539,11 +541,14 @@
   <ItemGroup>
     <Content Include="Views\Audits\Index.cshtml" />
     <Content Include="Views\Audits\Detail.cshtml" />
+    <Content Include="Views\FollowUps\Index.cshtml" />
+    <Content Include="Views\FollowUps\Detail.cshtml" />
     <Content Include="Views\Templates\Index.cshtml" />
     <Content Include="Views\Tenants\Index.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Scripts\app\audits.viewmodel.js" />
+    <Content Include="Scripts\app\followups.viewmodel.js" />
     <Content Include="Scripts\app\templates.viewmodel.js" />
     <Content Include="Scripts\app\tenants.viewmodel.js" />
     <Content Include="Scripts\app\users.viewmodel.js" />

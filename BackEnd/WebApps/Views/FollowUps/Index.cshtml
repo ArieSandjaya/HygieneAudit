@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Follow Up";
+}
+
+<div id="followups-page">
+    <!-- Header -->
+    <div class="mb-4">
+        <h4 class="fw-bold mb-1">Follow Up</h4>
+        <p class="text-muted mb-0" style="font-size:13px;">Tindak lanjut item audit yang belum lulus (Fail) sampai 100%</p>
+    </div>
+
+    <!-- Search Tenant -->
+    <div class="mb-3">
+        <div class="input-group" style="max-width:420px;">
+            <span class="input-group-text" style="border-radius:10px 0 0 10px;background:#fff;"><i class="bx bx-search"></i></span>
+            <input type="text" class="form-control" placeholder="Cari tenant..."
+                   data-bind="value: search, valueUpdate: 'input'" autocomplete="off" aria-label="Cari tenant" />
+            <button type="button" class="btn btn-outline-secondary" title="Hapus pencarian"
+                    style="border-radius:0 10px 10px 0;" data-bind="visible: hasSearch, click: clearSearch">
+                <i class="bx bx-x"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Pill Tabs -->
+    <div class="ha-tabs mb-3">
+        <button type="button" class="ha-tab" data-bind="css: { active: activeTab() === 'pending' }, click: function () { setTab('pending'); }">
+            Belum 100% <span data-bind="text: '(' + pendingCount() + ')'"></span>
+        </button>
+        <button type="button" class="ha-tab" data-bind="css: { active: activeTab() === 'done' }, click: function () { setTab('done'); }">
+            Sudah 100% <span data-bind="text: '(' + doneCount() + ')'"></span>
+        </button>
+    </div>
+
+    <div data-bind="visible: loading" class="text-center text-muted py-5">
+        <i class="bx bx-loader-circle bx-spin bx-lg d-block mb-2"></i> Memuat...
+    </div>
+
+    <!-- List -->
+    <div data-bind="foreach: filtered">
+        <a class="ha-card mb-3 p-3 d-block text-decoration-none" style="color:inherit;" data-bind="attr: { href: $root.detailUrl($data) }">
+            <div class="d-flex justify-content-between align-items-start gap-2">
+                <div style="min-width:0;">
+                    <div class="fw-bold" style="font-size:15px;" data-bind="text: tenantName"></div>
+                    <div class="text-muted" style="font-size:12px;">
+                        <i class="bx bx-calendar-alt me-1"></i><span data-bind="text: $root.dateLabel($data)"></span>
+                        &nbsp;&bull;&nbsp;
+                        <i class="bx bx-user me-1"></i><span data-bind="text: picName"></span>
+                    </div>
+                </div>
+                <span class="ha-badge" style="font-weight:700;" data-bind="text: $root.rateLabel($data), css: $root.rateCss($data)"></span>
+            </div>
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-2">
+                <div style="font-size:12px;">
+                    <span class="fw-semibold text-danger" data-bind="visible: failCount > 0, text: $root.failLabel($data)"></span>
+                    <span class="fw-semibold text-success" data-bind="visible: failCount === 0">Semua item sudah lulus</span>
+                    <span class="text-muted d-block" data-bind="text: $root.followUpLabel($data)"></span>
+                </div>
+                <span class="text-primary fw-semibold" style="font-size:13px;">
+                    <span data-bind="text: failCount > 0 ? 'Follow Up' : 'Lihat Riwayat'"></span> <i class="bx bx-chevron-right"></i>
+                </span>
+            </div>
+        </a>
+    </div>
+
+    <div data-bind="visible: !loading() && filtered().length === 0" class="text-center text-muted py-5">
+        <i class="bx bx-check-shield bx-lg d-block mb-2"></i>
+        <!-- ko if: hasSearch -->
+        Tidak ada audit untuk tenant "<span data-bind="text: search().trim()"></span>".
+        <!-- /ko -->
+        <!-- ko ifnot: hasSearch -->
+        <!-- ko if: activeTab() === 'pending' -->
+        Tidak ada audit yang perlu di-follow up.
+        <!-- /ko -->
+        <!-- ko if: activeTab() === 'done' -->
+        Belum ada audit yang mencapai 100% lewat follow up.
+        <!-- /ko -->
+        <!-- /ko -->
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/knockout-3.5.0.js"></script>
+    <script src="@Asset.V("~/Scripts/app/followups.viewmodel.js")"></script>
+    <script>ko.applyBindings(new FollowUpsViewModel(), document.getElementById('followups-page'));</script>
+}

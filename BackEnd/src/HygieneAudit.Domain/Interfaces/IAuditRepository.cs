@@ -14,4 +14,12 @@ public interface IAuditRepository : IRepository<Audit>
     Task<TenantHistory> GetTenantHistoryAsync(int tenantId);
     Task<IEnumerable<Audit>> GetRecentAsync(int picId, bool isAdmin, int limit = 100);
     Task<string?> GetPhotoUrlAsync(int photoId);
+
+    // ---- Follow up ----
+    // Audit COMPLETED beserta items (tanpa foto) untuk daftar Follow Up.
+    Task<IEnumerable<Audit>> GetCompletedForFollowUpAsync();
+    Task<IReadOnlyList<FollowUpStat>> GetFollowUpStatsAsync();
+    // Detail read-only: items + riwayat follow up (+PIC, +foto) + foto audit (id saja).
+    Task<Audit?> GetByIdForFollowUpAsync(string id);
+    Task<string?> GetFollowUpPhotoUrlAsync(int photoId);
 }

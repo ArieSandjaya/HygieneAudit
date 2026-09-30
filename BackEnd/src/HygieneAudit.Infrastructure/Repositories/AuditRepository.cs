@@ -208,4 +208,79 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
         var photo = await _context.Set<AuditItemPhoto>().FindAsync(photoId);
         return photo?.PhotoUrl;
     }
+
+    // ---- Follow up ----
+
+    public async Task<IEnumerable<Audit>> GetCompletedForFollowUpAsync()
+    {
+        return await _context.Audits
+            .AsNoTracking()
+            .Include(a => a.Tenant)
+            .Include(a => a.Pic)
+            .Include(a => a.Items)   // tanpa foto — list hanya butuh hitungan
+            .Where(a => a.Status == AuditStatus.Completed)
+            .OrderByDescending(a => a.Date)
+            .ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<FollowUpStat>> GetFollowUpStatsAsync()
+    {
+        // Materialize dulu, group di memori (EF Core 3.1 rapuh untuk GroupBy dengan navigasi).
+        var rows = await _context.Set<AuditFollowUp>()
+            .AsNoTracking()
+            .Select(f => new { f.AuditItem.AuditId, f.CreatedAt })
+            .ToListAsync();
+
+        return rows
+            .GroupBy(r => r.AuditId)
+            .Select(g => new FollowUpStat
+            {
+                AuditId = g.Key,
+                Count = g.Count(),
+                LastAt = g.Max(x => x.CreatedAt)
+            })
+            .ToList();
+    }
+
+    public async Task<Audit?> GetByIdForFollowUpAsync(string id)
+    {
+        // Sama seperti GetByIdForDisplayAsync: AsNoTracking + foto audit hanya id (bukan blob),
+        // dan tanpa filtered Include (tidak didukung EF Core 3.1) — urutkan di memori.
+        var audit = await _context.Audits
+            .AsNoTracking()
+            .Include(a => a.Tenant)
+            .Include(a => a.Pic)
+            .Include(a => a.Items)
+                .ThenInclude(i => i.FollowUps)
+                    .ThenInclude(f => f.Pic)
+            .Include(a => a.Items)
+                .ThenInclude(i => i.FollowUps)
+                    .ThenInclude(f => f.Photos)
+            .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (audit == null) return null;
+
+        var photoIds = await _context.Set<AuditItemPhoto>()
+            .Where(p => p.AuditItem.AuditId == id)
+            .Select(p => new { p.AuditItemId, p.Id })
+            .ToListAsync();
+
+        var byItem = photoIds.ToLookup(p => p.AuditItemId);
+        foreach (var item in audit.Items)
+        {
+            item.Photos = byItem[item.Id].Select(p => new AuditItemPhoto { Id = p.Id }).ToList();
+            item.FollowUps = item.FollowUps
+                .OrderByDescending(f => f.CreatedAt)
+                .ToList();
+        }
+
+        audit.Items = audit.Items.OrderBy(i => i.Category).ThenBy(i => i.Id).ToList();
+        return audit;
+    }
+
+    public async Task<string?> GetFollowUpPhotoUrlAsync(int photoId)
+    {
+        var photo = await _context.Set<AuditFollowUpPhoto>().FindAsync(photoId);
+        return photo?.PhotoUrl;
+    }
 }

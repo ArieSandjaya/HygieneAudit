@@ -91,6 +91,65 @@ namespace HygieneAudit.Infrastructure.Migrations
                     b.ToTable("AuditItems");
                 });
 
+            modelBuilder.Entity("HygieneAudit.Domain.Entities.AuditFollowUp", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AuditItemId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PicId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Result")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuditItemId");
+
+                    b.HasIndex("PicId");
+
+                    b.ToTable("AuditFollowUps");
+                });
+
+            modelBuilder.Entity("HygieneAudit.Domain.Entities.AuditFollowUpPhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AuditFollowUpId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhotoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuditFollowUpId");
+
+                    b.ToTable("AuditFollowUpPhotos");
+                });
+
             modelBuilder.Entity("HygieneAudit.Domain.Entities.AuditItemPhoto", b =>
                 {
                     b.Property<int>("Id")
@@ -309,6 +368,30 @@ namespace HygieneAudit.Infrastructure.Migrations
                     b.HasOne("HygieneAudit.Domain.Entities.Audit", "Audit")
                         .WithMany("Items")
                         .HasForeignKey("AuditId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HygieneAudit.Domain.Entities.AuditFollowUp", b =>
+                {
+                    b.HasOne("HygieneAudit.Domain.Entities.AuditItem", "AuditItem")
+                        .WithMany("FollowUps")
+                        .HasForeignKey("AuditItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HygieneAudit.Domain.Entities.User", "Pic")
+                        .WithMany()
+                        .HasForeignKey("PicId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HygieneAudit.Domain.Entities.AuditFollowUpPhoto", b =>
+                {
+                    b.HasOne("HygieneAudit.Domain.Entities.AuditFollowUp", "AuditFollowUp")
+                        .WithMany("Photos")
+                        .HasForeignKey("AuditFollowUpId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
