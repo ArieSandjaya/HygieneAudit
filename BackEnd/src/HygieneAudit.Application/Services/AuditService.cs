@@ -1,6 +1,7 @@
 ﻿using HygieneAudit.Application.DTOs;
 using HygieneAudit.Application.Exceptions;
 using HygieneAudit.Domain.DTOs;
+using HygieneAudit.Domain;
 using HygieneAudit.Domain.Entities;
 using HygieneAudit.Domain.Interfaces;
 
@@ -36,7 +37,8 @@ public class AuditService : IAuditService
             {
                 TemplateId = t.Id,
                 Category = t.Category,
-                Name = t.Name
+                Name = t.Name,
+                IsMandatory = t.IsMandatory
             }).ToList()
         };
 
@@ -135,7 +137,8 @@ public class AuditService : IAuditService
         var audit = await _unitOfWork.Audits.GetByIdWithItemsAsync(id);
         if (audit == null) throw new NotFoundException("Audit not found");
 
-        var uncheckedItems = audit.Items.Where(i => i.Status == null).ToList();
+        // Item opsional (tidak mandatori) boleh dikosongkan.
+        var uncheckedItems = audit.Items.Where(i => i.IsMandatory && i.Status == null).ToList();
         if (uncheckedItems.Any())
             throw new ValidationException($"{uncheckedItems.Count} items belum dicek!");
 
@@ -196,12 +199,10 @@ public class AuditService : IAuditService
 
         foreach (var audit in audits)
         {
-            var total = audit.Items.Count;
-            var pass = audit.Items.Count(i => i.Status == AuditItemStatus.Pass);
-            var fail = audit.Items.Count(i => i.Status == AuditItemStatus.Fail);
-            var rate = total > 0 ? Math.Round((double)pass / total * 100, 0) : 0;
+            var (total, pass, fail) = AuditScoring.Count(audit.Items);
+            var rate = AuditScoring.Rate(pass, total);
 
-            var failNotes = string.Join("; ", audit.Items
+            var failNotes = string.Join("; ", AuditScoring.Scored(audit.Items)
                 .Where(i => i.Status == AuditItemStatus.Fail && !string.IsNullOrEmpty(i.Note))
                 .Select(i => i.Note));
 
@@ -246,8 +247,6 @@ public class AuditService : IAuditService
 
     // ---------------------------------------------------------------- Follow up
 
-    private static double Rate(int pass, int total) => total > 0 ? Math.Round((double)pass / total * 100, 0) : 0;
-
     public async Task<IEnumerable<FollowUpAuditSummary>> GetFollowUpAuditsAsync()
     {
         var audits = await _unitOfWork.Audits.GetCompletedForFollowUpAsync();
@@ -256,9 +255,7 @@ public class AuditService : IAuditService
         var rows = new List<FollowUpAuditSummary>();
         foreach (var a in audits)
         {
-            var total = a.Items.Count;
-            var pass = a.Items.Count(i => i.Status == AuditItemStatus.Pass);
-            var fail = a.Items.Count(i => i.Status == AuditItemStatus.Fail);
+            var (total, pass, fail) = AuditScoring.Count(a.Items);
             stats.TryGetValue(a.Id, out var st);
 
             // Tampilkan hanya audit yang belum 100% atau sudah pernah di-follow up (untuk riwayat).
@@ -275,7 +272,7 @@ public class AuditService : IAuditService
                 TotalItems = total,
                 PassCount = pass,
                 FailCount = fail,
-                PassRate = Rate(pass, total),
+                PassRate = AuditScoring.Rate(pass, total),
                 FollowUpCount = st?.Count ?? 0,
                 LastFollowUpAt = st?.LastAt
             });
@@ -288,9 +285,7 @@ public class AuditService : IAuditService
         var audit = await _unitOfWork.Audits.GetByIdForFollowUpAsync(auditId);
         if (audit == null) return null;
 
-        var total = audit.Items.Count;
-        var pass = audit.Items.Count(i => i.Status == AuditItemStatus.Pass);
-        var fail = audit.Items.Count(i => i.Status == AuditItemStatus.Fail);
+        var (total, pass, fail) = AuditScoring.Count(audit.Items);
 
         return new FollowUpDetailResponse
         {
@@ -304,10 +299,10 @@ public class AuditService : IAuditService
             TotalItems = total,
             PassCount = pass,
             FailCount = fail,
-            PassRate = Rate(pass, total),
+            PassRate = AuditScoring.Rate(pass, total),
             // Item yang masih FAIL, serta item yang pernah di-follow up (riwayat tetap terlihat).
             Items = audit.Items
-                .Where(i => i.Status == AuditItemStatus.Fail || i.FollowUps.Any())
+                .Where(i => i.IsMandatory && (i.Status == AuditItemStatus.Fail || i.FollowUps.Any()))
                 .Select(i => new FollowUpItemResponse
                 {
                     Id = i.Id,
@@ -334,6 +329,8 @@ public class AuditService : IAuditService
 
         var item = audit.Items.FirstOrDefault(i => i.Id == auditItemId);
         if (item == null) throw new NotFoundException("Item not found");
+        if (!item.IsMandatory)
+            throw new ValidationException("Item opsional tidak masuk perhitungan nilai, tidak memerlukan follow up.");
         if (item.Status != AuditItemStatus.Fail)
             throw new ValidationException("Item ini sudah lulus, tidak memerlukan follow up.");
 

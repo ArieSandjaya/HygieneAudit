@@ -45,6 +45,7 @@ public class TemplateResponse
     public string Category     { get; set; } = string.Empty;
     public string Name         { get; set; } = string.Empty;
     public bool   RequiresGas  { get; set; }
+    public bool   IsMandatory  { get; set; } = true;
     public int    DisplayOrder { get; set; }
     public bool   IsActive     { get; set; }
 }
@@ -54,6 +55,7 @@ public class CreateTemplateRequest
     public string Category     { get; set; } = string.Empty;
     public string Name         { get; set; } = string.Empty;
     public bool   RequiresGas  { get; set; }
+    public bool   IsMandatory  { get; set; } = true;
     public int    DisplayOrder { get; set; }
 }
 
@@ -62,6 +64,7 @@ public class UpdateTemplateRequest
     public string? Category     { get; set; }
     public string? Name         { get; set; }
     public bool?   RequiresGas  { get; set; }
+    public bool?   IsMandatory  { get; set; }   // null = tidak diubah
     public int?    DisplayOrder { get; set; }
     public bool?   IsActive     { get; set; }
 }

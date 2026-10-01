@@ -30,6 +30,7 @@ namespace WebApps.Controllers.Api
                     Category = t.Category,
                     Name = t.Name,
                     RequiresGas = t.RequiresGas,
+                    IsMandatory = t.IsMandatory,
                     DisplayOrder = t.DisplayOrder,
                     IsActive = t.IsActive,
                 });
@@ -49,6 +50,7 @@ namespace WebApps.Controllers.Api
                 Category = req.Category,
                 Name = req.Name,
                 RequiresGas = req.RequiresGas,
+                IsMandatory = req.IsMandatory,
                 DisplayOrder = req.DisplayOrder,
             };
 
@@ -57,7 +59,7 @@ namespace WebApps.Controllers.Api
 
             return Created(
                 new System.Uri($"api/templates/{template.Id}", System.UriKind.Relative),
-                new TemplateResponse { Id = template.Id, Category = template.Category, Name = template.Name, RequiresGas = template.RequiresGas, DisplayOrder = template.DisplayOrder, IsActive = template.IsActive });
+                new TemplateResponse { Id = template.Id, Category = template.Category, Name = template.Name, RequiresGas = template.RequiresGas, IsMandatory = template.IsMandatory, DisplayOrder = template.DisplayOrder, IsActive = template.IsActive });
         }
 
         [HttpPut, Route("{id:int}")]
@@ -71,13 +73,14 @@ namespace WebApps.Controllers.Api
             if (req.Category != null) template.Category = req.Category;
             if (req.Name != null) template.Name = req.Name;
             if (req.RequiresGas != null) template.RequiresGas = req.RequiresGas.Value;
+            if (req.IsMandatory != null) template.IsMandatory = req.IsMandatory.Value;
             if (req.DisplayOrder != null) template.DisplayOrder = req.DisplayOrder.Value;
             if (req.IsActive != null) template.IsActive = req.IsActive.Value;
 
             await _uow.Templates.UpdateAsync(template);
             await _uow.SaveChangesAsync();
 
-            return Ok(new TemplateResponse { Id = template.Id, Category = template.Category, Name = template.Name, RequiresGas = template.RequiresGas, DisplayOrder = template.DisplayOrder, IsActive = template.IsActive });
+            return Ok(new TemplateResponse { Id = template.Id, Category = template.Category, Name = template.Name, RequiresGas = template.RequiresGas, IsMandatory = template.IsMandatory, DisplayOrder = template.DisplayOrder, IsActive = template.IsActive });
         }
 
         [HttpDelete, Route("{id:int}")]

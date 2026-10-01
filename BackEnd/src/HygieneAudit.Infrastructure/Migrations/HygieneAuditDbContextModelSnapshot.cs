@@ -71,6 +71,9 @@ namespace HygieneAudit.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsMandatory")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -191,6 +194,9 @@ namespace HygieneAudit.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsMandatory")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -203,33 +209,33 @@ namespace HygieneAudit.Infrastructure.Migrations
                     b.ToTable("ChecklistTemplates");
 
                     b.HasData(
-                        new { Id = 1, Category = "LIFE SAFETY", DisplayOrder = 1, IsActive = true, Name = "Kondisi Pipa Gas di Area Tenant", RequiresGas = true },
-                        new { Id = 2, Category = "LIFE SAFETY", DisplayOrder = 2, IsActive = true, Name = "Interkoneksi Gas dengan Exhaust Fan", RequiresGas = true },
-                        new { Id = 3, Category = "LIFE SAFETY", DisplayOrder = 3, IsActive = true, Name = "Sensor Kebocoran Gas", RequiresGas = true },
-                        new { Id = 4, Category = "LIFE SAFETY", DisplayOrder = 4, IsActive = true, Name = "Penutup Otomatis (Solenoid Valve)", RequiresGas = true },
-                        new { Id = 5, Category = "LIFE SAFETY", DisplayOrder = 5, IsActive = true, Name = "Alarm Warning System", RequiresGas = false },
-                        new { Id = 6, Category = "LIFE SAFETY", DisplayOrder = 6, IsActive = true, Name = "Sprinkler, Smoke/Heat Detector", RequiresGas = false },
-                        new { Id = 7, Category = "LIFE SAFETY", DisplayOrder = 7, IsActive = true, Name = "Alat Pemadam Api Ringan (APAR)", RequiresGas = false },
-                        new { Id = 8, Category = "LIFE SAFETY", DisplayOrder = 8, IsActive = true, Name = "Fire Suppression System", RequiresGas = false },
-                        new { Id = 9, Category = "LIFE SAFETY", DisplayOrder = 9, IsActive = true, Name = "Lampu Emergency", RequiresGas = false },
-                        new { Id = 10, Category = "LIFE SAFETY", DisplayOrder = 10, IsActive = true, Name = "Signage Exit", RequiresGas = false },
-                        new { Id = 11, Category = "LIFE SAFETY", DisplayOrder = 11, IsActive = true, Name = "Kotak P3K/First Aid", RequiresGas = false },
-                        new { Id = 12, Category = "SIRKULASI UDARA", DisplayOrder = 12, IsActive = true, Name = "Ducting & Filter Hood", RequiresGas = true },
-                        new { Id = 13, Category = "INSTALASI PIPA AIR BERSIH", DisplayOrder = 13, IsActive = true, Name = "Pipa Supply", RequiresGas = false },
-                        new { Id = 14, Category = "SALURAN PEMBUANGAN", DisplayOrder = 14, IsActive = true, Name = "Gutter & Floor Drain", RequiresGas = false },
-                        new { Id = 15, Category = "SALURAN PEMBUANGAN", DisplayOrder = 15, IsActive = true, Name = "Grease Trap", RequiresGas = true },
-                        new { Id = 16, Category = "SALURAN PEMBUANGAN", DisplayOrder = 16, IsActive = true, Name = "Pemilahan Minyak Bekas", RequiresGas = true },
-                        new { Id = 17, Category = "INSTALASI LISTRIK", DisplayOrder = 17, IsActive = true, Name = "Instalasi Listrik", RequiresGas = false },
-                        new { Id = 18, Category = "INSTALASI LISTRIK", DisplayOrder = 18, IsActive = true, Name = "Panel Listrik", RequiresGas = false },
-                        new { Id = 19, Category = "INSTALASI LISTRIK", DisplayOrder = 19, IsActive = true, Name = "Penerangan Area Kitchen", RequiresGas = true },
-                        new { Id = 20, Category = "KEBERSIHAN AREA", DisplayOrder = 20, IsActive = true, Name = "Kebersihan", RequiresGas = false },
-                        new { Id = 21, Category = "KEBERSIHAN AREA", DisplayOrder = 21, IsActive = true, Name = "Kerapihan", RequiresGas = false },
-                        new { Id = 22, Category = "KEBERSIHAN AREA", DisplayOrder = 22, IsActive = true, Name = "Sampah", RequiresGas = false },
-                        new { Id = 23, Category = "KEBERSIHAN AREA", DisplayOrder = 23, IsActive = true, Name = "General Cleaning", RequiresGas = false },
-                        new { Id = 24, Category = "PEST CONTROL", DisplayOrder = 24, IsActive = true, Name = "Vendor Pest Control", RequiresGas = false },
-                        new { Id = 25, Category = "PEST CONTROL", DisplayOrder = 25, IsActive = true, Name = "Tidak Ada Celah (Dinding/Ceiling)", RequiresGas = false },
-                        new { Id = 26, Category = "PERSONAL HYGIENE", DisplayOrder = 26, IsActive = true, Name = "Personal Hygiene SOP", RequiresGas = false },
-                        new { Id = 27, Category = "SERTIFIKASI", DisplayOrder = 27, IsActive = true, Name = "Sertifikasi Hygiene", RequiresGas = false });
+                        new { Id = 1, Category = "LIFE SAFETY", DisplayOrder = 1, IsActive = true, IsMandatory = true, Name = "Kondisi Pipa Gas di Area Tenant", RequiresGas = true },
+                        new { Id = 2, Category = "LIFE SAFETY", DisplayOrder = 2, IsActive = true, IsMandatory = true, Name = "Interkoneksi Gas dengan Exhaust Fan", RequiresGas = true },
+                        new { Id = 3, Category = "LIFE SAFETY", DisplayOrder = 3, IsActive = true, IsMandatory = true, Name = "Sensor Kebocoran Gas", RequiresGas = true },
+                        new { Id = 4, Category = "LIFE SAFETY", DisplayOrder = 4, IsActive = true, IsMandatory = true, Name = "Penutup Otomatis (Solenoid Valve)", RequiresGas = true },
+                        new { Id = 5, Category = "LIFE SAFETY", DisplayOrder = 5, IsActive = true, IsMandatory = true, Name = "Alarm Warning System", RequiresGas = false },
+                        new { Id = 6, Category = "LIFE SAFETY", DisplayOrder = 6, IsActive = true, IsMandatory = true, Name = "Sprinkler, Smoke/Heat Detector", RequiresGas = false },
+                        new { Id = 7, Category = "LIFE SAFETY", DisplayOrder = 7, IsActive = true, IsMandatory = true, Name = "Alat Pemadam Api Ringan (APAR)", RequiresGas = false },
+                        new { Id = 8, Category = "LIFE SAFETY", DisplayOrder = 8, IsActive = true, IsMandatory = true, Name = "Fire Suppression System", RequiresGas = false },
+                        new { Id = 9, Category = "LIFE SAFETY", DisplayOrder = 9, IsActive = true, IsMandatory = true, Name = "Lampu Emergency", RequiresGas = false },
+                        new { Id = 10, Category = "LIFE SAFETY", DisplayOrder = 10, IsActive = true, IsMandatory = true, Name = "Signage Exit", RequiresGas = false },
+                        new { Id = 11, Category = "LIFE SAFETY", DisplayOrder = 11, IsActive = true, IsMandatory = true, Name = "Kotak P3K/First Aid", RequiresGas = false },
+                        new { Id = 12, Category = "SIRKULASI UDARA", DisplayOrder = 12, IsActive = true, IsMandatory = true, Name = "Ducting & Filter Hood", RequiresGas = true },
+                        new { Id = 13, Category = "INSTALASI PIPA AIR BERSIH", DisplayOrder = 13, IsActive = true, IsMandatory = true, Name = "Pipa Supply", RequiresGas = false },
+                        new { Id = 14, Category = "SALURAN PEMBUANGAN", DisplayOrder = 14, IsActive = true, IsMandatory = true, Name = "Gutter & Floor Drain", RequiresGas = false },
+                        new { Id = 15, Category = "SALURAN PEMBUANGAN", DisplayOrder = 15, IsActive = true, IsMandatory = true, Name = "Grease Trap", RequiresGas = true },
+                        new { Id = 16, Category = "SALURAN PEMBUANGAN", DisplayOrder = 16, IsActive = true, IsMandatory = true, Name = "Pemilahan Minyak Bekas", RequiresGas = true },
+                        new { Id = 17, Category = "INSTALASI LISTRIK", DisplayOrder = 17, IsActive = true, IsMandatory = true, Name = "Instalasi Listrik", RequiresGas = false },
+                        new { Id = 18, Category = "INSTALASI LISTRIK", DisplayOrder = 18, IsActive = true, IsMandatory = true, Name = "Panel Listrik", RequiresGas = false },
+                        new { Id = 19, Category = "INSTALASI LISTRIK", DisplayOrder = 19, IsActive = true, IsMandatory = true, Name = "Penerangan Area Kitchen", RequiresGas = true },
+                        new { Id = 20, Category = "KEBERSIHAN AREA", DisplayOrder = 20, IsActive = true, IsMandatory = true, Name = "Kebersihan", RequiresGas = false },
+                        new { Id = 21, Category = "KEBERSIHAN AREA", DisplayOrder = 21, IsActive = true, IsMandatory = true, Name = "Kerapihan", RequiresGas = false },
+                        new { Id = 22, Category = "KEBERSIHAN AREA", DisplayOrder = 22, IsActive = true, IsMandatory = true, Name = "Sampah", RequiresGas = false },
+                        new { Id = 23, Category = "KEBERSIHAN AREA", DisplayOrder = 23, IsActive = true, IsMandatory = true, Name = "General Cleaning", RequiresGas = false },
+                        new { Id = 24, Category = "PEST CONTROL", DisplayOrder = 24, IsActive = true, IsMandatory = true, Name = "Vendor Pest Control", RequiresGas = false },
+                        new { Id = 25, Category = "PEST CONTROL", DisplayOrder = 25, IsActive = true, IsMandatory = true, Name = "Tidak Ada Celah (Dinding/Ceiling)", RequiresGas = false },
+                        new { Id = 26, Category = "PERSONAL HYGIENE", DisplayOrder = 26, IsActive = true, IsMandatory = true, Name = "Personal Hygiene SOP", RequiresGas = false },
+                        new { Id = 27, Category = "SERTIFIKASI", DisplayOrder = 27, IsActive = true, IsMandatory = true, Name = "Sertifikasi Hygiene", RequiresGas = false });
                 });
 
             modelBuilder.Entity("HygieneAudit.Domain.Entities.SyncQueueItem", b =>

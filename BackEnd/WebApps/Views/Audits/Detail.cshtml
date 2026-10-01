@@ -68,6 +68,7 @@
             <span><span class="fw-bold text-success" data-bind="text: passCount()"></span> Pass</span>
             <span><span class="fw-bold text-danger" data-bind="text: failCount()"></span> Fail</span>
             <span><span class="fw-bold text-muted" data-bind="text: totalCount() - passCount() - failCount()"></span> Belum</span>
+            <span data-bind="visible: optionalCount() > 0"><span class="fw-bold text-muted" data-bind="text: optionalCount()"></span> Opsional (tidak dihitung)</span>
         </div>
     </div>
 
@@ -80,7 +81,7 @@
                     <span class="ha-cat-name" data-bind="text: name"></span>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <span class="ha-cat-pill" data-bind="text: checkedCount() + '/' + items.length, css: { 'ha-cat-pill--done': checkedCount() === items.length && items.length > 0 }"></span>
+                    <span class="ha-cat-pill" data-bind="text: checkedCount() + '/' + scoredTotal, css: { 'ha-cat-pill--done': checkedCount() === scoredTotal && scoredTotal > 0 }"></span>
                     <i class="bx" style="color:var(--ha-muted);font-size:16px;" data-bind="css: { 'bx-chevron-up': !collapsed(), 'bx-chevron-down': collapsed() }"></i>
                 </div>
             </div>
@@ -90,7 +91,10 @@
                 <div class="ha-item" data-bind="css: { 'ha-item--pass': status() === 'PASS', 'ha-item--fail': status() === 'FAIL' }">
                     <!-- Item name + verdict buttons -->
                     <div class="d-flex justify-content-between align-items-start gap-3">
-                        <div class="ha-item__name" data-bind="text: name"></div>
+                        <div class="ha-item__name">
+                            <span data-bind="text: name"></span>
+                            <span class="ha-badge ha-badge--gray ms-1" style="font-size:10px;" data-bind="visible: isMandatory === false" title="Tidak wajib diisi dan tidak masuk perhitungan nilai">Opsional</span>
+                        </div>
                         <div class="d-flex gap-2 flex-shrink-0" style="margin-top:2px;">
                             <button type="button" class="ha-verdict-btn ha-verdict-btn--pass"
                                     data-bind="click: function(){ $root.setItemStatus($data, 'PASS') },

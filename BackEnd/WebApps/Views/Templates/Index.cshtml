@@ -39,6 +39,13 @@
                         <label class="form-check-label" for="reqGas">Butuh Gas</label>
                     </div>
                 </div>
+                <div class="col-md-12">
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input" id="isMandatory" data-bind="checked: form.isMandatory" />
+                        <label class="form-check-label" for="isMandatory">Mandatori</label>
+                    </div>
+                    <small class="text-muted">Jika dimatikan, item bersifat opsional: tidak wajib diisi saat audit dan tidak masuk perhitungan nilai. Berlaku untuk audit baru; audit yang sudah dibuat tidak berubah.</small>
+                </div>
             </div>
             <div class="mt-3">
                 <button class="btn btn-primary me-2" data-bind="click: saveTemplate"><i class="bx bx-check me-1"></i> Simpan</button>
@@ -64,6 +71,7 @@
                             Urutan <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'displayOrder', 'bx-sort-up': ps.sortField() === 'displayOrder' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'displayOrder' && !ps.sortAsc() }"></i>
                         </th>
                         <th class="text-center">Gas</th>
+                        <th class="text-center">Mandatori</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -74,6 +82,9 @@
                         <td class="text-center" data-bind="text: displayOrder"></td>
                         <td class="text-center">
                             <span class="badge" data-bind="text: requiresGas ? 'Ya' : 'Tidak', css: { 'bg-label-info': requiresGas, 'bg-label-secondary': !requiresGas }"></span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge" data-bind="text: isMandatory ? 'Ya' : 'Opsional', css: { 'bg-label-primary': isMandatory, 'bg-label-warning': !isMandatory }"></span>
                         </td>
                         <td class="text-center">
                             <button class="btn btn-sm btn-icon btn-outline-primary me-1" data-bind="click: $root.editTemplate" title="Edit">

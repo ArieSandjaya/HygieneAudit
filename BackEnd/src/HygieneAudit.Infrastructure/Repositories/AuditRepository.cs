@@ -1,4 +1,5 @@
 ﻿using HygieneAudit.Domain.DTOs;
+using HygieneAudit.Domain;
 using HygieneAudit.Domain.Entities;
 using HygieneAudit.Domain.Interfaces;
 using HygieneAudit.Infrastructure.Data;
@@ -147,9 +148,7 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
 
         var recent = audits.Take(6).Select(a =>
         {
-            var total = a.Items.Count;
-            var pass = a.Items.Count(i => i.Status == AuditItemStatus.Pass);
-            var fail = a.Items.Count(i => i.Status == AuditItemStatus.Fail);
+            var (total, pass, fail) = AuditScoring.Count(a.Items);
             return new RecentAuditDto
             {
                 Id = a.Id,
@@ -158,14 +157,13 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
                 TotalItems = total,
                 PassItems = pass,
                 FailItems = fail, // explicit count — excludes null-status (unchecked) items
-                PassRate = total > 0 ? Math.Round((double)pass / total * 100, 0) : 0
+                PassRate = AuditScoring.Rate(pass, total)
             };
         }).ToList();
 
         var avgPass = audits.Average(a =>
         {
-            var total = a.Items.Count;
-            var pass = a.Items.Count(i => i.Status == AuditItemStatus.Pass);
+            var (total, pass, _) = AuditScoring.Count(a.Items);
             return total > 0 ? (double)pass / total * 100 : 0;
         });
 

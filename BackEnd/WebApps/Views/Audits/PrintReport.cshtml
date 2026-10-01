@@ -2,9 +2,11 @@
 @model AuditResponse
 @{
     Layout = null;
-    var passCount  = Model.Items.Count(i => i.Status == "PASS");
-    var failCount  = Model.Items.Count(i => i.Status == "FAIL");
-    var totalCount = Model.Items.Count;
+    // Item opsional (IsMandatory = false) tidak masuk perhitungan nilai.
+    var scoredItems = Model.Items.Where(i => i.IsMandatory).ToList();
+    var passCount  = scoredItems.Count(i => i.Status == "PASS");
+    var failCount  = scoredItems.Count(i => i.Status == "FAIL");
+    var totalCount = scoredItems.Count;
     var passRate   = totalCount > 0 ? (int)Math.Round(passCount * 100.0 / totalCount) : 0;
     var categories = Model.Items.GroupBy(i => i.Category).OrderBy(g => g.Key);
 }
@@ -180,7 +182,13 @@
                         <span class="badge @badgeCss">@badgeText</span>
                     </div>
                     <div class="item-body">
-                        <div class="item-name">@item.Name</div>
+                        <div class="item-name">
+                            @item.Name
+                            @if (!item.IsMandatory)
+                            {
+                                <span style="font-size:10px;color:#6c757d;font-weight:600;">(opsional)</span>
+                            }
+                        </div>
                         @if (!string.IsNullOrWhiteSpace(item.Note))
                         {
                             <div class="item-note">Catatan: @item.Note</div>

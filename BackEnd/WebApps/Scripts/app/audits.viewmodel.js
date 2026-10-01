@@ -225,18 +225,24 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
         return self.status() === 'DRAFT' && a != null && a.picId === currentUserId;
     });
 
+    // Hanya item mandatori yang dihitung dan wajib diisi; item opsional tidak memengaruhi nilai.
+    function isScored(i) { return i.isMandatory !== false; }
+
     self.passCount  = ko.computed(function () {
         return self.categories().reduce(function (n, cat) {
-            return n + cat.items.filter(function (i) { return i.status() === 'PASS'; }).length;
+            return n + cat.items.filter(function (i) { return isScored(i) && i.status() === 'PASS'; }).length;
         }, 0);
     });
     self.failCount  = ko.computed(function () {
         return self.categories().reduce(function (n, cat) {
-            return n + cat.items.filter(function (i) { return i.status() === 'FAIL'; }).length;
+            return n + cat.items.filter(function (i) { return isScored(i) && i.status() === 'FAIL'; }).length;
         }, 0);
     });
     self.totalCount = ko.computed(function () {
-        return self.categories().reduce(function (n, cat) { return n + cat.items.length; }, 0);
+        return self.categories().reduce(function (n, cat) { return n + cat.items.filter(isScored).length; }, 0);
+    });
+    self.optionalCount = ko.computed(function () {
+        return self.categories().reduce(function (n, cat) { return n + cat.items.filter(function (i) { return !isScored(i); }).length; }, 0);
     });
 
     // Progress-bar style values (kept here so the view's data-bind stays a
@@ -266,8 +272,11 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
             self.categories(Object.keys(grouped).map(function (k) {
                 var catItems = grouped[k];
                 var cat = { name: k, items: catItems, collapsed: ko.observable(false) };
+                // Progress kategori hanya menghitung item mandatori.
+                var scoredItems = catItems.filter(isScored);
+                cat.scoredTotal = scoredItems.length;
                 cat.checkedCount = ko.computed(function () {
-                    return catItems.filter(function (i) { return i.status() !== ''; }).length;
+                    return scoredItems.filter(function (i) { return i.status() !== ''; }).length;
                 });
                 return cat;
             }));

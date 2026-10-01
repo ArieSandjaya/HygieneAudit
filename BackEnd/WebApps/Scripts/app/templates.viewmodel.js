@@ -8,7 +8,8 @@ function TemplatesViewModel() {
         category: ko.observable(''),
         name: ko.observable(''),
         displayOrder: ko.observable(0),
-        requiresGas: ko.observable(false)
+        requiresGas: ko.observable(false),
+        isMandatory: ko.observable(true)
     };
 
     self.init = function () {
@@ -22,6 +23,7 @@ function TemplatesViewModel() {
         self.form.name('');
         self.form.displayOrder(0);
         self.form.requiresGas(false);
+        self.form.isMandatory(true);
         self.showForm(true);
     };
 
@@ -31,6 +33,7 @@ function TemplatesViewModel() {
         self.form.name(item.name);
         self.form.displayOrder(item.displayOrder);
         self.form.requiresGas(item.requiresGas);
+        self.form.isMandatory(item.isMandatory !== false);
         self.showForm(true);
     };
 
@@ -41,7 +44,8 @@ function TemplatesViewModel() {
             category: self.form.category(),
             name: self.form.name(),
             displayOrder: parseInt(self.form.displayOrder(), 10) || 0,
-            requiresGas: self.form.requiresGas()
+            requiresGas: self.form.requiresGas(),
+            isMandatory: self.form.isMandatory()
         };
         var isEdit = !!self.editingId();
         var url = isEdit ? '/api/templates/' + self.editingId() : '/api/templates';

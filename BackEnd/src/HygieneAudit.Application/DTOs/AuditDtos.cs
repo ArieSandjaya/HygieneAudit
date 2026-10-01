@@ -1,3 +1,4 @@
+using HygieneAudit.Domain;
 using HygieneAudit.Domain.Entities;
 
 namespace HygieneAudit.Application.DTOs;
@@ -49,9 +50,10 @@ public class AuditResponse
             Status      = audit.Status.ToString().ToUpper(),
             CreatedAt   = audit.CreatedAt,
             CompletedAt = audit.CompletedAt,
-            TotalItems  = items.Count(),
-            PassCount   = items.Count(i => i.Status == AuditItemStatus.Pass),
-            FailCount   = items.Count(i => i.Status == AuditItemStatus.Fail),
+            // Hanya item mandatori yang dihitung; item opsional tetap ada di Items.
+            TotalItems  = AuditScoring.Count(items).Total,
+            PassCount   = AuditScoring.Count(items).Pass,
+            FailCount   = AuditScoring.Count(items).Fail,
             Items       = items.Select(AuditItemResponse.FromEntity).ToList()
         };
     }
@@ -63,6 +65,7 @@ public class AuditItemResponse
     public int TemplateId { get; set; }
     public string Category { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
+    public bool IsMandatory { get; set; } = true;
     public string? Status { get; set; }
     public string? Note { get; set; }
     public List<string> Photos { get; set; } = new();
@@ -73,6 +76,7 @@ public class AuditItemResponse
         TemplateId = item.TemplateId,
         Category = item.Category,
         Name = item.Name,
+        IsMandatory = item.IsMandatory,
         Status = item.Status?.ToString().ToUpper(),
         Note = item.Note,
         // Return lightweight photo references; the browser fetches each image

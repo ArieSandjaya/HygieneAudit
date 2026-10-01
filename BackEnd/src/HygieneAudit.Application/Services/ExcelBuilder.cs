@@ -1,3 +1,4 @@
+using HygieneAudit.Domain;
 using HygieneAudit.Domain.Entities;
 using System.IO.Compression;
 using System.Text;
@@ -223,11 +224,9 @@ public static class ExcelBuilder
         int no = 1;
         foreach (var a in list)
         {
-            var total = a.Items.Count;
-            var pass  = a.Items.Count(i => i.Status == AuditItemStatus.Pass);
-            var fail  = a.Items.Count(i => i.Status == AuditItemStatus.Fail);
-            var rate  = total > 0 ? Math.Round((double)pass / total * 100, 1) : 0.0;
-            var notes = string.Join("; ", a.Items
+            var (total, pass, fail) = AuditScoring.Count(a.Items);
+            var rate  = AuditScoring.Rate(pass, total, 1);
+            var notes = string.Join("; ", AuditScoring.Scored(a.Items)
                 .Where(i => i.Status == AuditItemStatus.Fail && !string.IsNullOrWhiteSpace(i.Note))
                 .Select(i => i.Note!));
             int s = alt ? 4 : 3;
@@ -304,7 +303,7 @@ public static class ExcelBuilder
                 sb.Append(Tc(1, row, s, a.Date.ToString("dd/MM/yyyy")));
                 sb.Append(Tc(2, row, s, a.Tenant?.Name));
                 sb.Append(Tc(3, row, s, item.Category));
-                sb.Append(Tc(4, row, s, item.Name));
+                sb.Append(Tc(4, row, s, item.IsMandatory ? item.Name : item.Name + " (opsional)"));
                 sb.Append(Tc(5, row, sSt, item.Status == AuditItemStatus.Pass ? "PASS"
                                           : item.Status == AuditItemStatus.Fail ? "FAIL" : "-"));
                 sb.Append(Tc(6, row, s, item.Note));

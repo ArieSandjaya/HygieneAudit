@@ -178,6 +178,7 @@ namespace WebApps.Helpers
                     TemplateId = t.Id,
                     Category = t.Category,
                     Name = t.Name,
+                    IsMandatory = t.IsMandatory,
                     Status = status,
                     Note = status == AuditItemStatus.Fail
                         ? "Ditemukan pelanggaran — perlu tindakan korektif segera."

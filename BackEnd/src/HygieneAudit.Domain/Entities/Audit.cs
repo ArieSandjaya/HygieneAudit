@@ -26,6 +26,8 @@ public class AuditItem
     public int TemplateId { get; set; }
     public string Category { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
+    // Snapshot dari template saat audit dibuat, sehingga mengubah template tidak mengubah audit lama.
+    public bool IsMandatory { get; set; } = true;
     public AuditItemStatus? Status { get; set; }
     public string? Note { get; set; }
     public ICollection<AuditItemPhoto> Photos { get; set; } = new List<AuditItemPhoto>();
