@@ -30,6 +30,10 @@
                     <input type="text" class="form-control" data-bind="value: form.username" placeholder="Username login" />
                 </div>
                 <div class="col-md-4">
+                    <label class="form-label">Email <span class="text-muted">(opsional)</span></label>
+                    <input type="email" class="form-control" data-bind="value: form.email" placeholder="nama@perusahaan.com" maxlength="256" autocomplete="off" />
+                </div>
+                <div class="col-md-4">
                     <label class="form-label">Role</label>
                     <select class="form-select" data-bind="value: form.role">
                         <option value="Auditor">Auditor</option>
@@ -90,6 +94,9 @@
                         <th style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('username') }">
                             Username <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'username', 'bx-sort-up': ps.sortField() === 'username' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'username' && !ps.sortAsc() }"></i>
                         </th>
+                        <th style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('email') }">
+                            Email <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'email', 'bx-sort-up': ps.sortField() === 'email' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'email' && !ps.sortAsc() }"></i>
+                        </th>
                         <th class="text-center" style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('role') }">
                             Role <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'role', 'bx-sort-up': ps.sortField() === 'role' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'role' && !ps.sortAsc() }"></i>
                         </th>
@@ -108,6 +115,7 @@
                             </div>
                         </td>
                         <td class="text-muted" data-bind="text: username"></td>
+                        <td class="text-muted" data-bind="text: email || '-'"></td>
                         <td class="text-center">
                             <span class="badge" data-bind="text: role, css: { 'bg-label-danger': role === 'SuperAdmin', 'bg-label-warning': role === 'Admin', 'bg-label-primary': role === 'Auditor' }"></span>
                         </td>

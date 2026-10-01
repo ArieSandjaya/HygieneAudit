@@ -47,6 +47,13 @@ public class HygieneAuditDbContext : DbContext
                   .OnDelete(DeleteBehavior.Cascade);
         });
 
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.Property(u => u.Email).HasMaxLength(256);
+            // Unik hanya untuk yang terisi — banyak user lama boleh tanpa email (NULL).
+            entity.HasIndex(u => u.Email).IsUnique().HasFilter("[Email] IS NOT NULL");
+        });
+
         // Seed Users
         modelBuilder.Entity<User>().HasData(
             new User { Id = 1, Username = "admin",    PasswordHash = "$2a$11$MlU7tuaJIbKYYSzk4nnE/ubbS8sqVdhcwPN523z4ZlSs6o6fVBLDO", Name = "Administrator", Role = UserRole.Admin },

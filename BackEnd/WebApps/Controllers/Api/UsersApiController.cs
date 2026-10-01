@@ -1,8 +1,10 @@
 using HygieneAudit.Application.DTOs;
 using HygieneAudit.Domain.Entities;
 using HygieneAudit.Domain.Interfaces;
+using System;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -23,16 +25,7 @@ namespace WebApps.Controllers.Api
         public async Task<IHttpActionResult> GetAll()
         {
             var users = await _uow.Users.GetAllAsync();
-            var result = users.Select(u => new UserResponse
-            {
-                Id = u.Id,
-                Username = u.Username,
-                Name = u.Name,
-                Role = u.Role.ToString(),
-                IsActive = u.IsActive,
-                CreatedAt = u.CreatedAt,
-            });
-            return Ok(result);
+            return Ok(users.Select(ToResponse));
         }
 
         // Accessible to all authenticated roles — used by the audit PIC dropdown.
@@ -62,20 +55,22 @@ namespace WebApps.Controllers.Api
             if (!System.Enum.TryParse<UserRole>(req.Role, true, out var role))
                 role = UserRole.Auditor;
 
+            var emailError = ValidateEmail(req.Email, all, null, out var email);
+            if (emailError != null) return emailError;
+
             var user = new User
             {
                 Username = req.Username,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(req.Password),
                 Name = req.Name,
+                Email = email,
                 Role = role,
             };
 
             await _uow.Users.AddAsync(user);
             await _uow.SaveChangesAsync();
 
-            return Created(
-                new System.Uri($"api/users/{user.Id}", System.UriKind.Relative),
-                new UserResponse { Id = user.Id, Username = user.Username, Name = user.Name, Role = user.Role.ToString(), IsActive = user.IsActive, CreatedAt = user.CreatedAt });
+            return Created(new System.Uri($"api/users/{user.Id}", System.UriKind.Relative), ToResponse(user));
         }
 
         [HttpPut, Route("{id:int}")]
@@ -85,6 +80,14 @@ namespace WebApps.Controllers.Api
             if (req == null) return Content(HttpStatusCode.BadRequest, new { message = "Data update tidak boleh kosong." });
             var user = await _uow.Users.GetByIdAsync(id);
             if (user == null) return NotFound();
+
+            if (req.Email != null)
+            {
+                var all = await _uow.Users.GetAllAsync();
+                var emailError = ValidateEmail(req.Email, all, user.Id, out var email);
+                if (emailError != null) return emailError;
+                user.Email = email;   // null bila dikosongkan
+            }
 
             if (req.Name != null) user.Name = req.Name;
             if (req.IsActive != null) user.IsActive = req.IsActive.Value;
@@ -105,7 +108,7 @@ namespace WebApps.Controllers.Api
             await _uow.Users.UpdateAsync(user);
             await _uow.SaveChangesAsync();
 
-            return Ok(new UserResponse { Id = user.Id, Username = user.Username, Name = user.Name, Role = user.Role.ToString(), IsActive = user.IsActive, CreatedAt = user.CreatedAt });
+            return Ok(ToResponse(user));
         }
 
         [HttpDelete, Route("{id:int}")]
@@ -120,6 +123,46 @@ namespace WebApps.Controllers.Api
             await _uow.SaveChangesAsync();
 
             return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        private static UserResponse ToResponse(User u) => new UserResponse
+        {
+            Id = u.Id,
+            Username = u.Username,
+            Name = u.Name,
+            Email = u.Email,
+            Role = u.Role.ToString(),
+            IsActive = u.IsActive,
+            CreatedAt = u.CreatedAt,
+        };
+
+        // Email opsional: kosong => null (dihapus). Bila diisi harus berformat valid, <= 256 karakter,
+        // dan belum dipakai user lain (tanpa membedakan huruf besar/kecil).
+        private IHttpActionResult ValidateEmail(string raw, System.Collections.Generic.IEnumerable<User> all, int? selfId, out string email)
+        {
+            email = null;
+            var value = raw?.Trim();
+            if (string.IsNullOrEmpty(value)) return null;
+
+            if (value.Length > 256 || !IsValidEmail(value))
+                return Content(HttpStatusCode.BadRequest, new { message = "Format email tidak valid." });
+
+            if (all.Any(u => u.Id != selfId && string.Equals(u.Email, value, StringComparison.OrdinalIgnoreCase)))
+                return Content(HttpStatusCode.Conflict, new { message = "Email sudah dipakai pengguna lain." });
+
+            email = value;
+            return null;
+        }
+
+        private static bool IsValidEmail(string value)
+        {
+            try
+            {
+                // MailAddress menerima bentuk "Nama <a@b.c>"; pastikan hanya alamat murni.
+                var addr = new MailAddress(value);
+                return addr.Address == value && addr.Host.Contains(".");
+            }
+            catch (FormatException) { return false; }
         }
     }
 }
