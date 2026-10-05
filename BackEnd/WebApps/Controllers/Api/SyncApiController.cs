@@ -68,7 +68,7 @@ namespace WebApps.Controllers.Api
                         await EnsureAccessAsync(d.AuditId);
                         var removedPhotos = await _auditService.SaveAuditItemAsync(
                             d.AuditId, d.TemplateId,
-                            new AuditItemUpdate { Status = d.Status, Note = d.Note, Photos = d.Photos });
+                            new AuditItemUpdate { Status = d.Status, Note = d.Note, FollowUpDate = d.FollowUpDate, Photos = d.Photos });
                         WebApps.Helpers.PhotoStorage.DeleteFiles(removedPhotos);
                     }
                     break;

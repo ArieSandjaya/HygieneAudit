@@ -73,6 +73,7 @@
                 <span class="ha-badge bg-label-danger" style="font-weight:700;">FAIL</span>
             </div>
             <div class="fw-bold" style="font-size:14px;" data-bind="text: name"></div>
+            <div style="font-size:12px;font-weight:600;" data-bind="text: $root.targetText($data), css: isOverdue ? 'text-danger' : 'text-muted'"></div>
 
             <!-- Temuan audit awal -->
             <div class="mt-2 p-2" style="background:#fef2f2;border-radius:10px;font-size:12.5px;" data-bind="visible: hasNote">

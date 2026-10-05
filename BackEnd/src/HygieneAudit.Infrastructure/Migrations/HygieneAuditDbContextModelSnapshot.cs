@@ -71,6 +71,9 @@ namespace HygieneAudit.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("FollowUpDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsMandatory")
                         .HasColumnType("bit");
 

@@ -15,6 +15,7 @@ public class AuditItemUpdate
 {
     public string? Status { get; set; }   // "Pass" / "Fail" / null
     public string? Note { get; set; }
+    public DateTime? FollowUpDate { get; set; }   // tanggal rencana follow up (untuk item FAIL)
     public List<string>? Photos { get; set; }
 }
 
@@ -68,6 +69,7 @@ public class AuditItemResponse
     public bool IsMandatory { get; set; } = true;
     public string? Status { get; set; }
     public string? Note { get; set; }
+    public DateTime? FollowUpDate { get; set; }
     public List<string> Photos { get; set; } = new();
 
     public static AuditItemResponse FromEntity(AuditItem item) => new()
@@ -79,6 +81,7 @@ public class AuditItemResponse
         IsMandatory = item.IsMandatory,
         Status = item.Status?.ToString().ToUpper(),
         Note = item.Note,
+        FollowUpDate = item.FollowUpDate,
         // Return lightweight photo references; the browser fetches each image
         // lazily from the photo endpoint instead of receiving base64 inline.
         Photos = item.Photos.Select(p => $"/api/audits/photos/{p.Id}").ToList()

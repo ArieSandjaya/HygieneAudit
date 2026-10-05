@@ -79,6 +79,10 @@ function FollowUpsViewModel() {
             : 'Belum pernah di-follow up';
     };
     self.detailUrl     = function (a) { return '/FollowUps/Detail/' + a.id; };
+    self.hasTarget     = function (a) { return a.failCount > 0 && !!a.nextTargetDate; };
+    self.targetLabel   = function (a) {
+        return 'Target follow up: ' + fuFormatDate(a.nextTargetDate) + (a.overdueCount > 0 ? ' (' + a.overdueCount + ' terlambat)' : '');
+    };
 
     self.init = function () {
         $.getJSON('/api/followups').done(function (data) {
@@ -122,6 +126,9 @@ function FollowUpDetailViewModel(auditId, currentUserId, isAdmin) {
     });
 
     self.dateText      = function (d) { return fuFormatDate(d); };
+    self.targetText   = function (item) {
+        return item.targetDate ? 'Target follow up: ' + fuFormatDate(item.targetDate) + (item.isOverdue ? ' (terlambat)' : '') : 'Target follow up: belum ditentukan';
+    };
     self.historyMeta   = function (h) { return fuFormatDate(h.date) + ' \u2022 ' + h.picName; };
     self.resultCss     = function (h) { return h.result === 'PASS' ? 'ha-badge--green' : 'bg-label-danger'; };
     self.resultText    = function (h) { return h.result === 'PASS' ? 'PASS' : 'FAIL'; };

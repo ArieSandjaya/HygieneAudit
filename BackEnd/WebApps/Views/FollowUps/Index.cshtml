@@ -55,6 +55,7 @@
                     <span class="fw-semibold text-danger" data-bind="visible: failCount > 0, text: $root.failLabel($data)"></span>
                     <span class="fw-semibold text-success" data-bind="visible: failCount === 0">Semua item sudah lulus</span>
                     <span class="text-muted d-block" data-bind="text: $root.followUpLabel($data)"></span>
+                    <span class="d-block" style="font-weight:600;" data-bind="visible: $root.hasTarget($data), text: $root.targetLabel($data), css: overdueCount > 0 ? 'text-danger' : 'text-muted'"></span>
                 </div>
                 <span class="text-primary fw-semibold" style="font-size:13px;">
                     <span data-bind="text: failCount > 0 ? 'Follow Up' : 'Lihat Riwayat'"></span> <i class="bx bx-chevron-right"></i>

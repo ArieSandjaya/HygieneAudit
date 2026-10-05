@@ -122,6 +122,21 @@
                         Catatan wajib diisi untuk item yang Fail
                     </div>
 
+                    <!-- Tanggal rencana follow up (wajib untuk temuan Fail pada item mandatori) -->
+                    <div class="mt-2" data-bind="visible: status() === 'FAIL' && isMandatory !== false">
+                        <label class="form-label fw-semibold mb-1" style="font-size:12px;">
+                            <i class="bx bx-calendar-check me-1"></i>Tanggal Follow Up <span class="text-danger">*</span>
+                        </label>
+                        <input type="date" class="form-control" style="max-width:220px;border-radius:10px;"
+                               data-bind="value: followUpDate,
+                                          attr: { min: $root.minFollowUpDate(), readonly: !$root.canEdit() || $root.status() === 'COMPLETED' },
+                                          css: { 'is-invalid': $root.canEdit() && $root.status() !== 'COMPLETED' && !followUpDate() },
+                                          event: { change: $root.onItemChange.bind($root, $data) }" />
+                        <div style="font-size:11px;color:#ef4444;margin-top:4px;" data-bind="visible: $root.canEdit() && $root.status() !== 'COMPLETED' && !followUpDate()">
+                            Tanggal follow up wajib diisi untuk item yang Fail
+                        </div>
+                    </div>
+
                     <!-- Photo upload (only when not completed and user can edit) -->
                     <div data-bind="visible: $root.canEdit() && $root.status() !== 'COMPLETED'">
                         <div class="ha-photo-btns">

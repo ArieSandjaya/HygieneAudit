@@ -193,6 +193,10 @@
                         {
                             <div class="item-note">Catatan: @item.Note</div>
                         }
+                        @if (item.Status == "FAIL" && item.FollowUpDate.HasValue)
+                        {
+                            <div class="item-note">Target follow up: @item.FollowUpDate.Value.ToString("dd/MM/yyyy")</div>
+                        }
                         @if (item.Photos != null && item.Photos.Any())
                         {
                             <div class="item-photos@(item.Photos.Count == 1 ? " single" : "")">

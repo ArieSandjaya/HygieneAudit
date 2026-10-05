@@ -17,6 +17,9 @@ public class FollowUpAuditSummary
     public double PassRate { get; set; }
     public int FollowUpCount { get; set; }
     public DateTime? LastFollowUpAt { get; set; }
+    // Tanggal rencana follow up terdekat di antara item yang masih FAIL, dan jumlah yang sudah lewat tanggal.
+    public DateTime? NextTargetDate { get; set; }
+    public int OverdueCount { get; set; }
 }
 
 public class AddFollowUpRequest
@@ -60,6 +63,8 @@ public class FollowUpItemResponse
     public string Name { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;   // FAIL = masih terbuka, PASS = sudah lulus lewat follow up
     public string? Note { get; set; }                     // catatan audit awal
+    public DateTime? TargetDate { get; set; }             // tanggal rencana follow up (dari audit)
+    public bool IsOverdue { get; set; }                   // masih FAIL dan tanggal rencana sudah lewat
     public List<string> Photos { get; set; } = new();     // foto audit awal
     public List<FollowUpResponse> FollowUps { get; set; } = new();   // riwayat, terbaru dulu
 }

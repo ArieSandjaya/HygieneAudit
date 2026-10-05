@@ -30,6 +30,8 @@ public class AuditItem
     public bool IsMandatory { get; set; } = true;
     public AuditItemStatus? Status { get; set; }
     public string? Note { get; set; }
+    // Tanggal rencana follow up untuk temuan FAIL (wajib diisi saat submit untuk item mandatori).
+    public DateTime? FollowUpDate { get; set; }
     public ICollection<AuditItemPhoto> Photos { get; set; } = new List<AuditItemPhoto>();
     public ICollection<AuditFollowUp> FollowUps { get; set; } = new List<AuditFollowUp>();
 }

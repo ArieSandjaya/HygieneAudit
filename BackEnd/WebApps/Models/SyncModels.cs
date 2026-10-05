@@ -8,6 +8,7 @@ namespace WebApps.Models
         public int TemplateId { get; set; }
         public string Status { get; set; }
         public string Note { get; set; }
+        public System.DateTime? FollowUpDate { get; set; }
         public List<string> Photos { get; set; }
     }
 

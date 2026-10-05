@@ -266,6 +266,8 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
                 if (!grouped[item.category]) grouped[item.category] = [];
                 item.status = ko.observable(item.status || '');
                 item.note   = ko.observable(item.note   || '');
+                // yyyy-mm-dd untuk <input type="date">; diambil dari string agar bebas geseran zona waktu.
+                item.followUpDate = ko.observable((item.followUpDate || '').substring(0, 10));
                 item.photos = ko.observableArray(item.photos || []);
                 grouped[item.category].push(item);
             });
@@ -331,7 +333,11 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
 
     self.onItemChange = function (item) {
         if (!self.canEdit()) return;
-        var data = { status: item.status(), note: item.note(), photos: item.photos() };
+        var data = {
+            status: item.status(), note: item.note(), photos: item.photos(),
+            // Tanggal rencana follow up hanya dikirim untuk temuan FAIL.
+            followUpDate: item.status() === 'FAIL' ? (item.followUpDate() || null) : null
+        };
         $.ajax({
             url: '/api/audits/' + auditId + '/items/' + item.templateId,
             type: 'PUT', contentType: 'application/json', data: JSON.stringify(data)
@@ -373,11 +379,29 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
         });
     };
 
+    // Item mandatori yang Fail dan belum punya tanggal rencana follow up.
+    self.failNoDateCount = ko.computed(function () {
+        return self.categories().reduce(function (n, cat) {
+            return n + cat.items.filter(function (i) {
+                return isScored(i) && i.status() === 'FAIL' && !i.followUpDate();
+            }).length;
+        }, 0);
+    });
+    // Batas bawah tanggal follow up = tanggal audit (yyyy-mm-dd).
+    self.minFollowUpDate = ko.computed(function () {
+        var a = self.audit();
+        return a && a.date ? String(a.date).substring(0, 10) : '';
+    });
+
     self.submitAudit = function () {
         if (self.submitting()) return;
         var unchecked = self.totalCount() - self.passCount() - self.failCount();
         if (unchecked > 0) {
             showToast(unchecked + ' item belum dicek!', 'error');
+            return;
+        }
+        if (self.failNoDateCount() > 0) {
+            showToast('Tanggal follow up wajib diisi untuk ' + self.failNoDateCount() + ' item Fail!', 'error');
             return;
         }
         self.submitting(true);

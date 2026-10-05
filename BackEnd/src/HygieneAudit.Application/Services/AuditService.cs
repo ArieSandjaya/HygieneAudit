@@ -79,6 +79,18 @@ public class AuditService : IAuditService
         };
         item.Note = update.Note;
 
+        // Tanggal rencana follow up hanya berarti untuk temuan FAIL; selain itu dikosongkan.
+        if (item.Status == AuditItemStatus.Fail && update.FollowUpDate.HasValue)
+        {
+            if (update.FollowUpDate.Value.Date < audit.Date.Date)
+                throw new ValidationException("Tanggal follow up tidak boleh sebelum tanggal audit.");
+            item.FollowUpDate = update.FollowUpDate.Value.Date;
+        }
+        else
+        {
+            item.FollowUpDate = null;
+        }
+
         var removed = new List<string>();
         if (update.Photos != null)
         {
@@ -147,6 +159,13 @@ public class AuditService : IAuditService
             .ToList();
         if (failWithoutNote.Any())
             throw new ValidationException("Catatan wajib diisi untuk item FAIL!");
+
+        // Setiap temuan FAIL (mandatori) harus punya tanggal rencana follow up.
+        var failWithoutDate = audit.Items
+            .Where(i => i.IsMandatory && i.Status == AuditItemStatus.Fail && !i.FollowUpDate.HasValue)
+            .ToList();
+        if (failWithoutDate.Any())
+            throw new ValidationException($"Tanggal follow up wajib diisi untuk {failWithoutDate.Count} item FAIL!");
 
         audit.Status = AuditStatus.Completed;
         audit.CompletedAt = DateTime.UtcNow;
@@ -261,6 +280,11 @@ public class AuditService : IAuditService
             // Tampilkan hanya audit yang belum 100% atau sudah pernah di-follow up (untuk riwayat).
             if (fail == 0 && st == null) continue;
 
+            var openDates = AuditScoring.Scored(a.Items)
+                .Where(i => i.Status == AuditItemStatus.Fail && i.FollowUpDate.HasValue)
+                .Select(i => i.FollowUpDate!.Value.Date)
+                .ToList();
+
             rows.Add(new FollowUpAuditSummary
             {
                 Id = a.Id,
@@ -274,7 +298,9 @@ public class AuditService : IAuditService
                 FailCount = fail,
                 PassRate = AuditScoring.Rate(pass, total),
                 FollowUpCount = st?.Count ?? 0,
-                LastFollowUpAt = st?.LastAt
+                LastFollowUpAt = st?.LastAt,
+                NextTargetDate = openDates.Count > 0 ? openDates.Min() : (DateTime?)null,
+                OverdueCount = openDates.Count(d => d < DateTime.Today)
             });
         }
         return rows.OrderByDescending(r => r.Date).ToList();
@@ -311,6 +337,8 @@ public class AuditService : IAuditService
                     Name = i.Name,
                     Status = i.Status?.ToString().ToUpper() ?? string.Empty,
                     Note = i.Note,
+                    TargetDate = i.FollowUpDate,
+                    IsOverdue = i.Status == AuditItemStatus.Fail && i.FollowUpDate.HasValue && i.FollowUpDate.Value.Date < DateTime.Today,
                     Photos = i.Photos.Select(p => $"/api/audits/photos/{p.Id}").ToList(),
                     FollowUps = i.FollowUps.Select(FollowUpResponse.FromEntity).ToList()
                 })
