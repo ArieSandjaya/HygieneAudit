@@ -27,5 +27,8 @@ public interface IAuditService
     // (nilai audit ikut ter-update); riwayat selalu tersimpan.
     Task<FollowUpResponse> AddFollowUpAsync(string auditId, int auditItemId, int picId, AddFollowUpRequest request);
     Task<string?> GetFollowUpPhotoUrlAsync(int photoId);
+    // Laporan follow up. status: all | unresolved | overdue | resolved.
+    Task<FollowUpReportDto> GetFollowUpReportAsync(string? status, string? type, string? search, DateTime? from, DateTime? to);
+    Task<byte[]> ExportFollowUpReportAsync(string? status, string? type, string? search, DateTime? from, DateTime? to);
     Task<byte[]> ExportExcelAsync(string? status, string? type, string? search, string? uploadsFolder = null);
 }

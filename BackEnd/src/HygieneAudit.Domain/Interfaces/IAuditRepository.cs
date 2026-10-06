@@ -22,4 +22,7 @@ public interface IAuditRepository : IRepository<Audit>
     // Detail read-only: items + riwayat follow up (+PIC, +foto) + foto audit (id saja).
     Task<Audit?> GetByIdForFollowUpAsync(string id);
     Task<string?> GetFollowUpPhotoUrlAsync(int photoId);
+    // Audit COMPLETED + items + riwayat follow up (+PIC) untuk laporan follow up. Tanpa foto.
+    // type: "gas" / "nogas" / null; search: nama tenant; from/to: tanggal audit (to inklusif).
+    Task<IEnumerable<Audit>> GetCompletedForFollowUpReportAsync(string? type, string? search, DateTime? from, DateTime? to);
 }

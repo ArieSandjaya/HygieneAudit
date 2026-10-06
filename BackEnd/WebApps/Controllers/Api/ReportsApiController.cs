@@ -49,5 +49,41 @@ namespace WebApps.Controllers.Api
             };
             return response;
         }
+
+        // Laporan follow up: satu baris per temuan (item mandatori yang pernah Fail).
+        // status: all | unresolved | overdue | resolved
+        [HttpGet, Route("followups")]
+        public async Task<IHttpActionResult> GetFollowUpReport(
+            [FromUri] string status = "all",
+            [FromUri] string type = "all",
+            [FromUri] string search = "",
+            [FromUri] DateTime? dateFrom = null,
+            [FromUri] DateTime? dateTo = null)
+        {
+            var report = await _auditService.GetFollowUpReportAsync(status, type, search, dateFrom, dateTo);
+            return Ok(report);
+        }
+
+        [HttpGet, Route("followups/export-excel")]
+        public async Task<HttpResponseMessage> ExportFollowUpExcel(
+            [FromUri] string status = "all",
+            [FromUri] string type = "all",
+            [FromUri] string search = "",
+            [FromUri] DateTime? dateFrom = null,
+            [FromUri] DateTime? dateTo = null)
+        {
+            var bytes = await _auditService.ExportFollowUpReportAsync(status, type, search, dateFrom, dateTo);
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(bytes)
+            };
+            response.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = $"Report_FollowUp_Hygiene_{DateTime.Now:yyyy-MM-dd}.xlsx"
+            };
+            return response;
+        }
     }
 }

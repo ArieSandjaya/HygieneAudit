@@ -281,4 +281,37 @@ public class AuditRepository : Repository<Audit>, IAuditRepository
         var photo = await _context.Set<AuditFollowUpPhoto>().FindAsync(photoId);
         return photo?.PhotoUrl;
     }
+
+    public async Task<IEnumerable<Audit>> GetCompletedForFollowUpReportAsync(string? type, string? search, DateTime? from, DateTime? to)
+    {
+        var query = _context.Audits
+            .AsNoTracking()
+            .Include(a => a.Tenant)
+            .Include(a => a.Pic)
+            .Include(a => a.Items)
+                .ThenInclude(i => i.FollowUps)
+                    .ThenInclude(f => f.Pic)
+            .Where(a => a.Status == AuditStatus.Completed);
+
+        if (!string.IsNullOrEmpty(type) && type != "all")
+        {
+            // Sama seperti GetFilteredAsync: pakai Audit.IsGas (nilai saat audit dibuat).
+            bool isGas = type == "gas";
+            query = query.Where(a => a.IsGas == isGas);
+        }
+
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.Where(a => a.Tenant.Name.Contains(search));
+
+        if (from.HasValue)
+            query = query.Where(a => a.Date >= from.Value.Date);
+
+        if (to.HasValue)
+        {
+            var end = to.Value.Date.AddDays(1);
+            query = query.Where(a => a.Date < end);
+        }
+
+        return await query.OrderByDescending(a => a.Date).ToListAsync();
+    }
 }

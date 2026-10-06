@@ -1,0 +1,247 @@
+﻿@{
+    ViewBag.Title = "Laporan Follow Up";
+}
+
+<div id="followup-report-page">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <div>
+            <h4 class="fw-bold mb-1">Laporan Follow Up</h4>
+            <p class="text-muted mb-0">Perkembangan tindak lanjut temuan Fail pada audit yang sudah selesai</p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-outline-primary" href="@Url.Action("Index", "Reports")">
+                <i class="bx bx-bar-chart-alt-2 me-1"></i> Laporan Audit
+            </a>
+            <a class="btn btn-success" data-bind="attr: { href: exportUrl }">
+                <i class="bx bx-spreadsheet me-1"></i> Export Excel
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-2 col-md-4 col-6">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" data-bind="value: filter.status, event: { change: loadReport }">
+                        <option value="all">Semua</option>
+                        <option value="unresolved">Belum Selesai</option>
+                        <option value="overdue">Terlambat</option>
+                        <option value="resolved">Selesai</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <label class="form-label">Tipe</label>
+                    <select class="form-select" data-bind="value: filter.type, event: { change: loadReport }">
+                        <option value="all">Semua</option>
+                        <option value="gas">Dengan Gas</option>
+                        <option value="nogas">Tanpa Gas</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <label class="form-label">Audit Dari</label>
+                    <input type="date" class="form-control" data-bind="value: filter.from, css: { 'is-invalid': rangeInvalid }, event: { change: loadReport }" />
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <label class="form-label">Sampai</label>
+                    <input type="date" class="form-control" data-bind="value: filter.to, css: { 'is-invalid': rangeInvalid }, event: { change: loadReport }" />
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <label class="form-label">Cari Tenant</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bx bx-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Nama tenant..." autocomplete="off"
+                               data-bind="value: filter.search, valueUpdate: 'input', event: { input: searchChanged }" />
+                    </div>
+                </div>
+                <div class="col-lg-1 col-md-6 col-12">
+                    <button type="button" class="btn btn-outline-secondary w-100" title="Reset filter" data-bind="click: clearFilters">
+                        <i class="bx bx-reset"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-2" data-bind="with: summary">
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-error-circle"></i></span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold" data-bind="text: totalFindings"></h4>
+                        <small class="text-muted">Total Temuan</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-success"><i class="bx bx-check-circle"></i></span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold" data-bind="text: resolved"></h4>
+                        <small class="text-muted">Selesai</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-secondary"><i class="bx bx-time-five"></i></span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold" data-bind="text: open"></h4>
+                        <small class="text-muted">Belum Selesai</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-danger"><i class="bx bx-alarm-exclamation"></i></span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold" data-bind="text: overdue"></h4>
+                        <small class="text-muted">Terlambat</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-warning"><i class="bx bx-trending-up"></i></span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold" data-bind="text: $root.rateText"></h4>
+                        <small class="text-muted">Tingkat Selesai</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-info"><i class="bx bx-calendar-check"></i></span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold" data-bind="text: $root.avgDaysText"></h4>
+                        <small class="text-muted">Rata-rata Durasi</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-muted small mb-4" data-bind="with: summary">
+        <i class="bx bx-info-circle me-1"></i>
+        <span data-bind="text: tenantCount"></span> tenant &bull;
+        <span data-bind="text: totalFollowUps"></span> follow up dicatat &bull;
+        <span data-bind="text: resolvedLate"></span> temuan selesai melewati target.
+        Hanya item mandatori yang dihitung; item opsional tidak masuk laporan.
+    </div>
+
+    <!-- Report Table -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Detail Temuan</h5>
+            <span data-bind="visible: loading" class="text-muted small"><i class="bx bx-loader-circle bx-spin me-1"></i>Memuat...</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-sm mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('tenantName') }">
+                            Tenant <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'tenantName', 'bx-sort-up': ps.sortField() === 'tenantName' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'tenantName' && !ps.sortAsc() }"></i>
+                        </th>
+                        <th>Item Checklist</th>
+                        <th>Temuan</th>
+                        <th style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('targetDate') }">
+                            Target <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'targetDate', 'bx-sort-up': ps.sortField() === 'targetDate' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'targetDate' && !ps.sortAsc() }"></i>
+                        </th>
+                        <th class="text-center" style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('status') }">
+                            Status <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'status', 'bx-sort-up': ps.sortField() === 'status' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'status' && !ps.sortAsc() }"></i>
+                        </th>
+                        <th style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('followUpCount') }">
+                            Follow Up <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'followUpCount', 'bx-sort-up': ps.sortField() === 'followUpCount' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'followUpCount' && !ps.sortAsc() }"></i>
+                        </th>
+                        <th>Selesai</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: ps.pagedItems">
+                    <tr>
+                        <td class="text-muted" data-bind="text: no"></td>
+                        <td style="min-width:150px;">
+                            <a class="fw-semibold" data-bind="text: tenantName, attr: { href: $root.detailUrl($data) }"></a>
+                            <div class="text-muted small">Audit <span data-bind="text: $root.auditDateText($data)"></span></div>
+                        </td>
+                        <td style="min-width:170px;white-space:normal;">
+                            <div data-bind="text: itemName"></div>
+                            <div class="text-muted small" data-bind="text: category"></div>
+                        </td>
+                        <td class="text-muted small" style="max-width:220px;white-space:normal;" data-bind="text: finding || '-'"></td>
+                        <td data-bind="text: $root.targetText($data)"></td>
+                        <td class="text-center">
+                            <span class="badge" data-bind="text: $root.statusText($data), css: $root.statusCss($data)"></span>
+                        </td>
+                        <td style="min-width:190px;white-space:normal;">
+                            <!-- ko if: $root.hasFollowUp($data) -->
+                            <div class="small">
+                                <span class="badge me-1" data-bind="text: lastFollowUpResult, css: $root.resultCss($data)"></span>
+                                <span data-bind="text: $root.followUpText($data)"></span>
+                            </div>
+                            <div class="text-muted small" data-bind="text: lastFollowUpNote"></div>
+                            <!-- /ko -->
+                            <!-- ko ifnot: $root.hasFollowUp($data) -->
+                            <span class="text-muted small">Belum di-follow up</span>
+                            <!-- /ko -->
+                        </td>
+                        <td class="small" data-bind="text: $root.resolvedText($data)"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex flex-wrap justify-content-between align-items-center px-3 py-2" style="border-top:1px solid #e9ecef;" data-bind="visible: rows().length > 0">
+            <small class="text-muted" data-bind="text: ps.infoText"></small>
+            <nav data-bind="visible: ps.totalPages() > 1">
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item" data-bind="css: { disabled: !ps.hasPrev() }">
+                        <a class="page-link" href="javascript:void(0)" data-bind="click: ps.prev">&#8249;</a>
+                    </li>
+                    <!-- ko foreach: ps.pageNumbers() -->
+                    <li class="page-item" data-bind="css: { active: $data === $root.ps.currentPage() }">
+                        <a class="page-link" href="javascript:void(0)" data-bind="text: $data, click: $root.ps.goTo"></a>
+                    </li>
+                    <!-- /ko -->
+                    <li class="page-item" data-bind="css: { disabled: !ps.hasNext() }">
+                        <a class="page-link" href="javascript:void(0)" data-bind="click: ps.next">&#8250;</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div data-bind="visible: !loading() && rows().length === 0" class="text-center text-muted py-5">
+            <i class="bx bx-task bx-lg d-block mb-2"></i>
+            Tidak ada temuan untuk filter ini.
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/knockout-3.5.0.js"></script>
+    <script src="@Asset.V("~/Scripts/app/paged-sorted.js")"></script>
+    <script src="@Asset.V("~/Scripts/app/followupreport.viewmodel.js")"></script>
+    <script>ko.applyBindings(new FollowUpReportViewModel(), document.getElementById('followup-report-page'));</script>
+}

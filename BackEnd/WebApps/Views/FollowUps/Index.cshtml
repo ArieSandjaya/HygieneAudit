@@ -4,9 +4,14 @@
 
 <div id="followups-page">
     <!-- Header -->
-    <div class="mb-4">
-        <h4 class="fw-bold mb-1">Follow Up</h4>
-        <p class="text-muted mb-0" style="font-size:13px;">Tindak lanjut item audit yang belum lulus (Fail) sampai 100%</p>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <div>
+            <h4 class="fw-bold mb-1">Follow Up</h4>
+            <p class="text-muted mb-0" style="font-size:13px;">Tindak lanjut item audit yang belum lulus (Fail) sampai 100%</p>
+        </div>
+        <a class="btn btn-outline-primary" style="border-radius:12px;font-weight:600;" href="@Url.Action("FollowUps", "Reports")">
+            <i class="bx bx-line-chart me-1"></i> Laporan Follow Up
+        </a>
     </div>
 
     <!-- Search Tenant -->

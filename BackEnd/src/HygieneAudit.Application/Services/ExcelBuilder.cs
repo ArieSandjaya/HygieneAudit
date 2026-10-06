@@ -58,7 +58,7 @@ public static class ExcelBuilder
 
     // ── ZIP helpers ───────────────────────────────────────────────────────────────
 
-    static void Txt(ZipArchive z, string path, string content)
+    internal static void Txt(ZipArchive z, string path, string content)
     {
         var e = z.CreateEntry(path, CompressionLevel.Fastest);
         using var w = new StreamWriter(e.Open(), new UTF8Encoding(false));
@@ -74,7 +74,7 @@ public static class ExcelBuilder
 
     // ── XML cell helpers ──────────────────────────────────────────────────────────
 
-    static string Esc(string? s) =>
+    internal static string Esc(string? s) =>
         string.IsNullOrEmpty(s) ? "" :
         s.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
 
@@ -114,7 +114,7 @@ public static class ExcelBuilder
         return sb.ToString();
     }
 
-    static string RootRels() =>
+    internal static string RootRels() =>
         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
         "<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">" +
         "<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument\" Target=\"xl/workbook.xml\"/>" +
@@ -143,7 +143,7 @@ public static class ExcelBuilder
         (hasImages ? "<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing\" Target=\"../drawings/drawing1.xml\"/>" : "") +
         "</Relationships>";
 
-    static string StyleSheet() =>
+    internal static string StyleSheet() =>
         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
         "<styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">" +
         "<fonts count=\"5\">" +

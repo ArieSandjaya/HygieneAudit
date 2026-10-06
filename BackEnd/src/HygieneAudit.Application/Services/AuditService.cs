@@ -404,4 +404,106 @@ public class AuditService : IAuditService
 
     public async Task<string?> GetFollowUpPhotoUrlAsync(int photoId)
         => await _unitOfWork.Audits.GetFollowUpPhotoUrlAsync(photoId);
+
+    // ---------------------------------------------------------------- Laporan follow up
+
+    public async Task<FollowUpReportDto> GetFollowUpReportAsync(string? status, string? type, string? search, DateTime? from, DateTime? to)
+    {
+        var audits = await _unitOfWork.Audits.GetCompletedForFollowUpReportAsync(type, search, from, to);
+        var today = DateTime.Today;
+
+        var rows = new List<FollowUpReportRow>();
+        foreach (var a in audits.OrderByDescending(a => a.Date))
+        {
+            // Temuan = item mandatori yang Fail, atau yang pernah di-follow up (kini sudah lulus).
+            var findings = a.Items
+                .Where(i => i.IsMandatory && (i.Status == AuditItemStatus.Fail || i.FollowUps.Any()))
+                .OrderBy(i => i.Category).ThenBy(i => i.Id);
+
+            foreach (var i in findings)
+            {
+                var fus = i.FollowUps.OrderBy(f => f.CreatedAt).ToList();
+                var last = fus.LastOrDefault();
+                var target = i.FollowUpDate?.Date;
+                var resolved = i.Status == AuditItemStatus.Pass;
+                var resolvedFu = resolved ? fus.LastOrDefault(f => f.Result == AuditItemStatus.Pass) : null;
+
+                DateTime? resolvedDate = resolvedFu?.Date.Date;
+                var overdue = !resolved && target.HasValue && target.Value < today;
+
+                rows.Add(new FollowUpReportRow
+                {
+                    AuditId = a.Id,
+                    TenantId = a.TenantId,
+                    TenantName = a.Tenant?.Name ?? string.Empty,
+                    IsGas = a.IsGas,
+                    AuditDate = a.Date,
+                    AuditPicName = a.Pic?.Name ?? string.Empty,
+                    Category = i.Category,
+                    ItemName = i.Name,
+                    Finding = i.Note ?? string.Empty,
+                    TargetDate = target,
+                    Status = resolved ? "RESOLVED" : overdue ? "OVERDUE" : "OPEN",
+                    DaysOverdue = overdue ? (today - target!.Value).Days : 0,
+                    FollowUpCount = fus.Count,
+                    LastFollowUpDate = last?.Date.Date,
+                    LastFollowUpBy = last?.Pic?.Name ?? string.Empty,
+                    LastFollowUpResult = last?.Result.ToString().ToUpper() ?? string.Empty,
+                    LastFollowUpNote = last?.Note ?? string.Empty,
+                    ResolvedDate = resolvedDate,
+                    DaysToResolve = resolvedDate.HasValue ? Math.Max(0, (resolvedDate.Value - a.Date.Date).Days) : (int?)null,
+                    ResolvedLate = resolvedDate.HasValue && target.HasValue && resolvedDate.Value > target.Value
+                });
+            }
+        }
+
+        switch (status?.Trim().ToLowerInvariant())
+        {
+            case "unresolved": rows = rows.Where(r => r.Status != "RESOLVED").ToList(); break;
+            case "overdue":    rows = rows.Where(r => r.Status == "OVERDUE").ToList(); break;
+            case "resolved":   rows = rows.Where(r => r.Status == "RESOLVED").ToList(); break;
+        }
+
+        for (int n = 0; n < rows.Count; n++) rows[n].No = n + 1;
+
+        var resolvedRows = rows.Where(r => r.Status == "RESOLVED").ToList();
+        var withDays = resolvedRows.Where(r => r.DaysToResolve.HasValue).ToList();
+
+        return new FollowUpReportDto
+        {
+            Rows = rows,
+            Summary = new FollowUpReportSummary
+            {
+                TotalFindings = rows.Count,
+                Resolved = resolvedRows.Count,
+                Open = rows.Count(r => r.Status == "OPEN"),
+                Overdue = rows.Count(r => r.Status == "OVERDUE"),
+                ResolvedLate = resolvedRows.Count(r => r.ResolvedLate),
+                ResolutionRate = rows.Count > 0 ? Math.Round((double)resolvedRows.Count / rows.Count * 100, 0) : 0,
+                AverageDaysToResolve = withDays.Count > 0 ? Math.Round(withDays.Average(r => r.DaysToResolve!.Value), 1) : 0,
+                TenantCount = rows.Select(r => r.TenantId).Distinct().Count(),
+                TotalFollowUps = rows.Sum(r => r.FollowUpCount)
+            }
+        };
+    }
+
+    public async Task<byte[]> ExportFollowUpReportAsync(string? status, string? type, string? search, DateTime? from, DateTime? to)
+    {
+        var report = await GetFollowUpReportAsync(status, type, search, from, to);
+
+        var statusText = status?.Trim().ToLowerInvariant() switch
+        {
+            "unresolved" => "Belum selesai",
+            "overdue"    => "Terlambat",
+            "resolved"   => "Selesai",
+            _            => "Semua"
+        };
+        var typeText = type == "gas" ? "Dengan Gas" : type == "nogas" ? "Tanpa Gas" : "Semua";
+        var parts = new List<string> { $"Status: {statusText}", $"Tipe: {typeText}" };
+        if (!string.IsNullOrWhiteSpace(search)) parts.Add($"Tenant: {search.Trim()}");
+        if (from.HasValue || to.HasValue)
+            parts.Add($"Tanggal audit: {(from.HasValue ? from.Value.ToString("dd/MM/yyyy") : "-")} s/d {(to.HasValue ? to.Value.ToString("dd/MM/yyyy") : "-")}");
+
+        return FollowUpReportExcelBuilder.Build(report, string.Join(" | ", parts));
+    }
 }

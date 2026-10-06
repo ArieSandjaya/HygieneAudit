@@ -4,6 +4,8 @@
     var userRole = (User.Identity as ClaimsIdentity)?.FindFirst(ClaimTypes.Role)?.Value ?? "";
     var isAdmin = userRole == "Admin" || userRole == "SuperAdmin";
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    var isFollowUpReport = currentController == "Reports" && currentAction == "FollowUps";
 }
 <!DOCTYPE html>
 <html lang="id" class="light-style layout-menu-fixed" dir="ltr"
@@ -288,10 +290,16 @@
                             <div>Follow Up</div>
                         </a>
                     </li>
-                    <li class="menu-item @(currentController == "Reports" ? "active" : "")">
+                    <li class="menu-item @(currentController == "Reports" && !isFollowUpReport ? "active" : "")">
                         <a href="@Url.Action("Index", "Reports")" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
-                            <div>Laporan</div>
+                            <div>Laporan Audit</div>
+                        </a>
+                    </li>
+                    <li class="menu-item @(isFollowUpReport ? "active" : "")">
+                        <a href="@Url.Action("FollowUps", "Reports")" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-line-chart"></i>
+                            <div>Laporan Follow Up</div>
                         </a>
                     </li>
                     @if (isAdmin)

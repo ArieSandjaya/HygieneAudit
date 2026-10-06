@@ -12,5 +12,11 @@ namespace WebApps.Controllers
             ViewBag.Title = "Laporan";
             return View();
         }
+
+        public ActionResult FollowUps()
+        {
+            ViewBag.Title = "Laporan Follow Up";
+            return View();
+        }
     }
 }
