@@ -11,6 +11,7 @@ namespace HygieneAudit.Application.Services;
 
 public class NotificationService : INotificationService
 {
+    private const string DefaultAlias = "Hygiene Audit";
     private static readonly Regex TimeRe = new Regex(@"^([01]\d|2[0-3]):[0-5]\d$", RegexOptions.Compiled);
 
     private readonly IUnitOfWork _uow;
@@ -63,7 +64,7 @@ public class NotificationService : INotificationService
         s.UseSsl = req.UseSsl;
         s.SmtpUsername = string.IsNullOrWhiteSpace(req.SmtpUsername) ? null : req.SmtpUsername!.Trim();
         s.FromAddress = from;
-        s.FromName = string.IsNullOrWhiteSpace(req.FromName) ? null : req.FromName!.Trim();
+        s.FromName = string.IsNullOrWhiteSpace(req.FromName) ? DefaultAlias : req.FromName!.Trim();
         s.SendTime = time;
         s.IncludeOverdue = req.IncludeOverdue;
         s.BaseUrl = baseUrl.Length == 0 ? null : baseUrl;
@@ -92,7 +93,7 @@ public class NotificationService : INotificationService
             await _sender.SendAsync(ToSmtp(s), new EmailMessage
             {
                 FromAddress = s.FromAddress,
-                FromName = s.FromName,
+                FromName = string.IsNullOrWhiteSpace(s.FromName) ? DefaultAlias : s.FromName,
                 To = toAddress,
                 Subject = "[Hygiene Audit] Tes notifikasi email",
                 HtmlBody = "<p>Ini adalah email uji dari sistem Hygiene Audit. Jika Anda menerima email ini, pengaturan SMTP sudah benar.</p>"
@@ -165,7 +166,7 @@ public class NotificationService : INotificationService
                         await _sender.SendAsync(smtp, new EmailMessage
                         {
                             FromAddress = s.FromAddress,
-                            FromName = s.FromName,
+                            FromName = string.IsNullOrWhiteSpace(s.FromName) ? DefaultAlias : s.FromName,
                             To = r.Email!,
                             Subject = FollowUpReminderEmail.Subject(due, today),
                             HtmlBody = FollowUpReminderEmail.Body(r.Name, due, today, s.BaseUrl)
@@ -248,7 +249,7 @@ public class NotificationService : INotificationService
             SmtpUsername = s.SmtpUsername,
             HasPassword = !string.IsNullOrEmpty(s.SmtpPasswordProtected),
             FromAddress = s.FromAddress,
-            FromName = s.FromName,
+            FromName = string.IsNullOrWhiteSpace(s.FromName) ? DefaultAlias : s.FromName,
             SendTime = s.SendTime,
             IncludeOverdue = s.IncludeOverdue,
             BaseUrl = s.BaseUrl,
