@@ -75,12 +75,33 @@
     </div>
 </div>
 
+<!-- Quick Links (semua role) -->
+<div class="mb-2" style="font-size:12px;font-weight:700;color:var(--ha-muted);letter-spacing:.5px;text-transform:uppercase;">Operasional</div>
+<div class="row g-2 mb-3">
+    <div class="col-6">
+        <a href="@Url.Action("Index", "FollowUps")" class="ha-card d-flex flex-column align-items-center text-center p-3 text-decoration-none" style="gap:8px;">
+            <div class="ha-stat__icon ha-stat--blue" style="width:40px;height:40px;font-size:18px;">
+                <i class="bx bx-task"></i>
+            </div>
+            <div style="font-size:12px;font-weight:600;color:var(--ha-text);">Follow Up</div>
+        </a>
+    </div>
+    <div class="col-6">
+        <a href="@Url.Action("Index", "Reports")" class="ha-card d-flex flex-column align-items-center text-center p-3 text-decoration-none" style="gap:8px;">
+            <div class="ha-stat__icon ha-stat--amber" style="width:40px;height:40px;font-size:18px;">
+                <i class="bx bx-bar-chart-alt-2"></i>
+            </div>
+            <div style="font-size:12px;font-weight:600;color:var(--ha-text);">Laporan</div>
+        </a>
+    </div>
+</div>
+
 @if (isAdmin)
 {
     <!-- Admin Quick Links -->
     <div class="mb-2" style="font-size:12px;font-weight:700;color:var(--ha-muted);letter-spacing:.5px;text-transform:uppercase;">Manajemen</div>
     <div class="row g-2">
-        <div class="col-4">
+        <div class="col-6">
             <a href="@Url.Action("Index", "Tenants")" class="ha-card d-flex flex-column align-items-center text-center p-3 text-decoration-none" style="gap:8px;">
                 <div class="ha-stat__icon ha-stat--blue" style="width:40px;height:40px;font-size:18px;">
                     <i class="bx bx-store"></i>
@@ -88,15 +109,7 @@
                 <div style="font-size:12px;font-weight:600;color:var(--ha-text);">Tenant</div>
             </a>
         </div>
-        <div class="col-4">
-            <a href="@Url.Action("Index", "Reports")" class="ha-card d-flex flex-column align-items-center text-center p-3 text-decoration-none" style="gap:8px;">
-                <div class="ha-stat__icon ha-stat--amber" style="width:40px;height:40px;font-size:18px;">
-                    <i class="bx bx-bar-chart-alt-2"></i>
-                </div>
-                <div style="font-size:12px;font-weight:600;color:var(--ha-text);">Laporan</div>
-            </a>
-        </div>
-        <div class="col-4">
+        <div class="col-6">
             <a href="@Url.Action("Index", "Templates")" class="ha-card d-flex flex-column align-items-center text-center p-3 text-decoration-none" style="gap:8px;">
                 <div class="ha-stat__icon ha-stat--green" style="width:40px;height:40px;font-size:18px;">
                     <i class="bx bx-list-check"></i>

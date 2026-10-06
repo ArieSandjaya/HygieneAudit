@@ -10,7 +10,7 @@ using WebApps.Helpers;
 namespace WebApps.Controllers.Api
 {
     [RoutePrefix("api/reports")]
-    [Authorize(Roles = "Admin,SuperAdmin")]
+    [Authorize]
     public class ReportsApiController : ApiController
     {
         private readonly IAuditService _auditService;
