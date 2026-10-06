@@ -97,7 +97,7 @@
                         <span class="avatar-initial rounded-circle bg-label-warning"><i class="bx bx-trending-up"></i></span>
                     </div>
                     <div>
-                        <h4 class="mb-0 fw-bold" data-bind="text: (averagePassRate * 100).toFixed(1) + '%'"></h4>
+                        <h4 class="mb-0 fw-bold" data-bind="text: averagePassRate.toFixed(1) + '%'"></h4>
                         <small class="text-muted">Rata-rata Pass</small>
                     </div>
                 </div>
@@ -145,9 +145,9 @@
                         <td style="min-width:110px;">
                             <div class="d-flex align-items-center gap-2">
                                 <div class="progress flex-grow-1" style="height:6px;">
-                                    <div class="progress-bar bg-success" data-bind="style: { width: (passRate * 100).toFixed(0) + '%' }"></div>
+                                    <div class="progress-bar bg-success" data-bind="style: { width: passRate.toFixed(0) + '%' }"></div>
                                 </div>
-                                <small data-bind="text: (passRate * 100).toFixed(1) + '%'"></small>
+                                <small data-bind="text: passRate.toFixed(1) + '%'"></small>
                             </div>
                         </td>
                         <td class="text-muted small" data-bind="text: failNotes || '-'" style="max-width:200px;white-space:normal;"></td>
