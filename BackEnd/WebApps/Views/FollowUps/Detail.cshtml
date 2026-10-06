@@ -9,11 +9,6 @@
             <div style="flex:1;min-width:0;">
                 <div class="d-flex flex-wrap gap-2 mb-2">
                     <span class="ha-badge ha-badge--blue" data-bind="text: isGas() ? 'Dengan Gas' : 'Tanpa Gas'"></span>
-                    <!-- ko ifnot: canFollowUp -->
-                    <span class="ha-badge" style="background:rgba(255,255,255,.25);color:#fff;font-weight:600;">
-                        <i class="bx bx-lock-alt me-1"></i>View Only
-                    </span>
-                    <!-- /ko -->
                 </div>
                 <h5 class="fw-bold mb-1" style="font-size:1.1rem;" data-bind="text: tenantName"></h5>
                 <p style="font-size:13px;opacity:.85;margin:0;">
@@ -111,7 +106,7 @@
             </div>
 
             <!-- Tombol / form follow up -->
-            <div class="mt-3" data-bind="visible: $root.canFollowUp">
+            <div class="mt-3">
                 <button type="button" class="btn btn-primary btn-sm" style="border-radius:10px;font-weight:600;"
                         data-bind="click: $root.toggleForm, visible: !formOpen()">
                     <i class="bx bx-plus me-1"></i> Tambah Follow Up
@@ -227,5 +222,5 @@
 @section Scripts {
     <script src="~/Scripts/knockout-3.5.0.js"></script>
     <script src="@Asset.V("~/Scripts/app/followups.viewmodel.js")"></script>
-    <script>ko.applyBindings(new FollowUpDetailViewModel('@ViewBag.AuditId.ToString()', @ViewBag.CurrentUserId, @(ViewBag.IsAdmin ? "true" : "false")), document.getElementById('followup-detail-page'));</script>
+    <script>ko.applyBindings(new FollowUpDetailViewModel('@ViewBag.AuditId.ToString()'), document.getElementById('followup-detail-page'));</script>
 }

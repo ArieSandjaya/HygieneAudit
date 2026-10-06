@@ -14,7 +14,7 @@ using WebApps.Helpers;
 namespace WebApps.Controllers.Api
 {
     // Follow up atas item audit yang FAIL. Semua role yang login boleh melihat;
-    // mencatat follow up hanya untuk admin atau PIC pelaksana audit tsb.
+    // mencatat follow up juga terbuka untuk semua role.
     [RoutePrefix("api/followups")]
     [Authorize]
     public class FollowUpsApiController : ApiController
@@ -48,13 +48,10 @@ namespace WebApps.Controllers.Api
         {
             if (request == null) return BadRequest("Data follow up tidak boleh kosong.");
 
-            var audit = await _auditService.GetAuditAsync(auditId);
-            if (audit == null) return NotFound();
+            if (await _auditService.GetAuditAsync(auditId) == null) return NotFound();
 
-            var (userId, isAdmin) = CurrentUser();
-            if (!isAdmin && audit.PicId != userId)
-                return Content(HttpStatusCode.Forbidden,
-                    new { message = "Hanya admin atau PIC yang melakukan audit ini yang dapat melakukan follow up." });
+            // Semua role yang login boleh mencatat follow up; PIC yang tercatat adalah user yang login.
+            var userId = CurrentUserId();
 
             // Simpan foto (data URL) ke disk lebih dulu; service hanya menyimpan nama file.
             var saved = new List<string>();
@@ -112,13 +109,11 @@ namespace WebApps.Controllers.Api
             return resp;
         }
 
-        private (int userId, bool isAdmin) CurrentUser()
+        private int CurrentUserId()
         {
             var identity = System.Web.HttpContext.Current?.User?.Identity as ClaimsIdentity
                            ?? User.Identity as ClaimsIdentity;
-            var userId = int.Parse(identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var role = identity?.FindFirst(ClaimTypes.Role)?.Value ?? "";
-            return (userId, role == "Admin" || role == "SuperAdmin");
+            return int.Parse(identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
         }
     }
 }

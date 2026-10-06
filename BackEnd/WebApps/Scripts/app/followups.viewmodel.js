@@ -95,7 +95,7 @@ function FollowUpsViewModel() {
 }
 
 // ---------------------------------------------------------------- Detail Follow Up
-function FollowUpDetailViewModel(auditId, currentUserId, isAdmin) {
+function FollowUpDetailViewModel(auditId) {
     var self = this;
     var MAX_PHOTOS = 4;
 
@@ -111,9 +111,6 @@ function FollowUpDetailViewModel(auditId, currentUserId, isAdmin) {
     self.failCount  = ko.computed(function () { return self.detail() ? self.detail().failCount : 0; });
     self.totalCount = ko.computed(function () { return self.detail() ? self.detail().totalItems : 0; });
     self.passRate   = ko.computed(function () { return self.detail() ? Math.round(self.detail().passRate) : 0; });
-    self.canFollowUp = ko.computed(function () {
-        return !!self.detail() && (isAdmin || self.detail().picId === currentUserId);
-    });
 
     self.progressWidth = ko.computed(function () { return self.passRate() + '%'; });
     self.progressColor = ko.computed(function () { return self.failCount() === 0 ? '#22c55e' : '#ef4444'; });

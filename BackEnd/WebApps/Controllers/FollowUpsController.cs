@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using WebApps.Filters;
 
 namespace WebApps.Controllers
@@ -21,10 +20,6 @@ namespace WebApps.Controllers
 
             ViewBag.AuditId = id;
             ViewBag.Title = "Follow Up Audit";
-            var identity = User.Identity as ClaimsIdentity;
-            var userIdStr = identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            ViewBag.CurrentUserId = int.TryParse(userIdStr, out var uid) ? uid : 0;
-            ViewBag.IsAdmin = User.IsInRole("Admin") || User.IsInRole("SuperAdmin");
             return View();
         }
     }
