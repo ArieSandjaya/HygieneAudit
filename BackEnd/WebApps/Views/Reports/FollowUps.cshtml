@@ -200,10 +200,10 @@
                         <td style="min-width:190px;white-space:normal;">
                             <!-- ko if: $root.hasFollowUp($data) -->
                             <div class="small">
-                                <span class="badge me-1" data-bind="text: lastFollowUpResult, css: $root.resultCss($data)"></span>
+                                <span class="badge me-1" data-bind="text: $data.lastFollowUpResult, css: $root.resultCss($data)"></span>
                                 <span data-bind="text: $root.followUpText($data)"></span>
                             </div>
-                            <div class="text-muted small" data-bind="text: lastFollowUpNote"></div>
+                            <div class="text-muted small" data-bind="text: $data.lastFollowUpNote"></div>
                             <!-- /ko -->
                             <!-- ko ifnot: $root.hasFollowUp($data) -->
                             <span class="text-muted small">Belum di-follow up</span>

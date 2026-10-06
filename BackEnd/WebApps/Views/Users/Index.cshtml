@@ -115,7 +115,7 @@
                             </div>
                         </td>
                         <td class="text-muted" data-bind="text: username"></td>
-                        <td class="text-muted" data-bind="text: email || '-'"></td>
+                        <td class="text-muted" data-bind="text: $data.email || '-'"></td>
                         <td class="text-center">
                             <span class="badge" data-bind="text: role, css: { 'bg-label-danger': role === 'SuperAdmin', 'bg-label-warning': role === 'Admin', 'bg-label-primary': role === 'Auditor' }"></span>
                         </td>

@@ -73,7 +73,7 @@
             <!-- Temuan audit awal -->
             <div class="mt-2 p-2" style="background:#fef2f2;border-radius:10px;font-size:12.5px;" data-bind="visible: hasNote">
                 <span class="fw-semibold text-danger">Temuan audit:</span>
-                <span style="white-space:pre-wrap;" data-bind="text: note"></span>
+                <span style="white-space:pre-wrap;" data-bind="text: $data.note"></span>
             </div>
             <div class="d-flex flex-wrap gap-2 mt-2" data-bind="visible: hasPhotos, foreach: photos">
                 <a target="_blank" rel="noopener" data-bind="attr: { href: $data }">
@@ -94,7 +94,7 @@
                             <span class="text-muted" style="font-size:11.5px;" data-bind="text: $root.historyMeta($data)"></span>
                             <span class="ha-badge" style="font-weight:700;" data-bind="text: $root.resultText($data), css: $root.resultCss($data)"></span>
                         </div>
-                        <div style="font-size:12.5px;white-space:pre-wrap;" data-bind="text: note"></div>
+                        <div style="font-size:12.5px;white-space:pre-wrap;" data-bind="text: $data.note"></div>
                         <div class="d-flex flex-wrap gap-2 mt-1" data-bind="foreach: photos">
                             <a target="_blank" rel="noopener" data-bind="attr: { href: $data }">
                                 <img loading="lazy" decoding="async" data-bind="attr: { src: $data }"
@@ -194,7 +194,7 @@
             <div class="fw-bold" style="font-size:14px;" data-bind="text: name"></div>
             <div class="mt-2 p-2" style="background:#fef2f2;border-radius:10px;font-size:12.5px;" data-bind="visible: hasNote">
                 <span class="fw-semibold text-danger">Temuan audit awal:</span>
-                <span style="white-space:pre-wrap;" data-bind="text: note"></span>
+                <span style="white-space:pre-wrap;" data-bind="text: $data.note"></span>
             </div>
             <button type="button" class="btn btn-sm btn-outline-secondary mt-2" style="border-radius:8px;"
                     data-bind="click: $root.toggleHistory">
@@ -206,7 +206,7 @@
                         <span class="text-muted" style="font-size:11.5px;" data-bind="text: $root.historyMeta($data)"></span>
                         <span class="ha-badge" style="font-weight:700;" data-bind="text: $root.resultText($data), css: $root.resultCss($data)"></span>
                     </div>
-                    <div style="font-size:12.5px;white-space:pre-wrap;" data-bind="text: note"></div>
+                    <div style="font-size:12.5px;white-space:pre-wrap;" data-bind="text: $data.note"></div>
                     <div class="d-flex flex-wrap gap-2 mt-1" data-bind="foreach: photos">
                         <a target="_blank" rel="noopener" data-bind="attr: { href: $data }">
                             <img loading="lazy" decoding="async" data-bind="attr: { src: $data }"
