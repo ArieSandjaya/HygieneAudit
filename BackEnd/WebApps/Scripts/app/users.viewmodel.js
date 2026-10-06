@@ -12,7 +12,8 @@ function UsersViewModel() {
         name:     ko.observable(''),
         email:    ko.observable(''),
         password: ko.observable(''),
-        role:     ko.observable('Auditor')
+        role:     ko.observable('Auditor'),
+        notify:   ko.observable(false)
     };
 
     self.resetPwd = {
@@ -34,6 +35,7 @@ function UsersViewModel() {
         self.form.email('');
         self.form.password('');
         self.form.role('Auditor');
+        self.form.notify(false);
         self.showResetForm(false);
         self.showForm(true);
     };
@@ -45,6 +47,7 @@ function UsersViewModel() {
         self.form.email(item.email || '');
         self.form.password('');
         self.form.role(item.role);
+        self.form.notify(!!item.receiveFollowUpNotification);
         self.showResetForm(false);
         self.showForm(true);
     };
@@ -61,10 +64,14 @@ function UsersViewModel() {
             showToast('Format email tidak valid.', 'error');
             return;
         }
+        if (self.form.notify() && !email) {
+            showToast('Isi email terlebih dahulu agar pengguna dapat menerima notifikasi.', 'error');
+            return;
+        }
         // Saat edit, email selalu dikirim: string kosong berarti menghapus email.
         var data = isEdit
-            ? { name: self.form.name(), email: email, password: self.form.password() || undefined, role: self.form.role() }
-            : { username: self.form.username(), name: self.form.name(), email: email || undefined, password: self.form.password(), role: self.form.role() };
+            ? { name: self.form.name(), email: email, password: self.form.password() || undefined, role: self.form.role(), receiveFollowUpNotification: self.form.notify() }
+            : { username: self.form.username(), name: self.form.name(), email: email || undefined, password: self.form.password(), role: self.form.role(), receiveFollowUpNotification: self.form.notify() };
         var url = isEdit ? '/api/users/' + self.editingId() : '/api/users';
         $.ajax({ url: url, type: isEdit ? 'PUT' : 'POST', contentType: 'application/json', data: JSON.stringify(data) })
             .done(function () { self.showForm(false); self.init(); })

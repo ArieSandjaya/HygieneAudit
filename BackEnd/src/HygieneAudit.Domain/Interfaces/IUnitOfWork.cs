@@ -9,6 +9,7 @@ public interface IUnitOfWork : IDisposable
     IRepository<User> Users { get; }
     IRepository<ChecklistTemplate> Templates { get; }
     IRepository<SyncQueueItem> SyncQueue { get; }
+    IRepository<NotificationSetting> NotificationSettings { get; }
 
     Task<int> SaveChangesAsync();
     Task BeginTransactionAsync();

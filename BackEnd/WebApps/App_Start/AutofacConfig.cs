@@ -1,4 +1,4 @@
-using Autofac;
+﻿using Autofac;
 using Autofac.Integration.WebApi;
 using HygieneAudit.Application.Services;
 using HygieneAudit.Domain.Interfaces;
@@ -49,6 +49,9 @@ namespace WebApps
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerDependency();
             builder.RegisterType<AuditService>().As<IAuditService>().InstancePerDependency();
             builder.RegisterType<AuthService>().As<IAuthService>().InstancePerDependency();
+            builder.RegisterType<NotificationService>().As<INotificationService>().InstancePerDependency();
+            builder.RegisterType<WebApps.Helpers.SmtpEmailSender>().As<IEmailSender>().SingleInstance();
+            builder.RegisterType<WebApps.Helpers.DpapiSecretProtector>().As<ISecretProtector>().SingleInstance();
 
             // Register MVC controllers (all Controller subclasses in this assembly)
             var assembly = typeof(MvcApplication).Assembly;

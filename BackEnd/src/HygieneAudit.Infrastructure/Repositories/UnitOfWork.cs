@@ -15,6 +15,7 @@ public class UnitOfWork : IUnitOfWork
     public IRepository<User> Users { get; }
     public IRepository<ChecklistTemplate> Templates { get; }
     public IRepository<SyncQueueItem> SyncQueue { get; }
+    public IRepository<NotificationSetting> NotificationSettings { get; }
 
     public UnitOfWork(HygieneAuditDbContext context)
     {
@@ -24,6 +25,7 @@ public class UnitOfWork : IUnitOfWork
         Users = new Repository<User>(context);
         Templates = new Repository<ChecklistTemplate>(context);
         SyncQueue = new Repository<SyncQueueItem>(context);
+        NotificationSettings = new Repository<NotificationSetting>(context);
     }
 
     public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();

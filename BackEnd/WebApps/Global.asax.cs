@@ -34,6 +34,7 @@ namespace WebApps
             EnsureUploadsFolder();
             MigratePhotosToDisk();
             SeedDevData();
+            WebApps.Helpers.FollowUpNotificationScheduler.Start();
         }
 
         /// <summary>

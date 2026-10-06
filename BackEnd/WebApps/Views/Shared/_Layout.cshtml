@@ -323,6 +323,12 @@
                                 <div>Pengguna</div>
                             </a>
                         </li>
+                        <li class="menu-item @(currentController == "Settings" ? "active" : "")">
+                            <a href="@Url.Action("Notifications", "Settings")" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-bell"></i>
+                                <div>Notifikasi Email</div>
+                            </a>
+                        </li>
                     }
                 </ul>
             </aside>

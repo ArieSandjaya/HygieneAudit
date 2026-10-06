@@ -65,7 +65,11 @@ namespace WebApps.Controllers.Api
                 Name = req.Name,
                 Email = email,
                 Role = role,
+                ReceiveFollowUpNotification = req.ReceiveFollowUpNotification,
             };
+
+            if (user.ReceiveFollowUpNotification && string.IsNullOrEmpty(user.Email))
+                return Content(HttpStatusCode.BadRequest, new { message = "Isi email terlebih dahulu agar pengguna dapat menerima notifikasi." });
 
             await _uow.Users.AddAsync(user);
             await _uow.SaveChangesAsync();
@@ -88,6 +92,10 @@ namespace WebApps.Controllers.Api
                 if (emailError != null) return emailError;
                 user.Email = email;   // null bila dikosongkan
             }
+
+            if (req.ReceiveFollowUpNotification != null) user.ReceiveFollowUpNotification = req.ReceiveFollowUpNotification.Value;
+            if (user.ReceiveFollowUpNotification && string.IsNullOrEmpty(user.Email))
+                return Content(HttpStatusCode.BadRequest, new { message = "Isi email terlebih dahulu agar pengguna dapat menerima notifikasi." });
 
             if (req.Name != null) user.Name = req.Name;
             if (req.IsActive != null) user.IsActive = req.IsActive.Value;
@@ -133,6 +141,7 @@ namespace WebApps.Controllers.Api
             Email = u.Email,
             Role = u.Role.ToString(),
             IsActive = u.IsActive,
+            ReceiveFollowUpNotification = u.ReceiveFollowUpNotification,
             CreatedAt = u.CreatedAt,
         };
 

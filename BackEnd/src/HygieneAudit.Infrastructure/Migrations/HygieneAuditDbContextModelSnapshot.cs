@@ -241,6 +241,68 @@ namespace HygieneAudit.Infrastructure.Migrations
                         new { Id = 27, Category = "SERTIFIKASI", DisplayOrder = 27, IsActive = true, IsMandatory = true, Name = "Sertifikasi Hygiene", RequiresGas = false });
                 });
 
+            modelBuilder.Entity("HygieneAudit.Domain.Entities.NotificationSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("BaseUrl")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("FromAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("FromName")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<bool>("IncludeOverdue")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastRunAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastRunDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastRunMessage")
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
+
+                    b.Property<string>("SendTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(5)")
+                        .HasMaxLength(5);
+
+                    b.Property<string>("SmtpHost")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("SmtpPasswordProtected")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SmtpPort")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SmtpUsername")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("UseSsl")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NotificationSettings");
+                });
+
             modelBuilder.Entity("HygieneAudit.Domain.Entities.SyncQueueItem", b =>
                 {
                     b.Property<int>("Id")
@@ -344,6 +406,9 @@ namespace HygieneAudit.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("ReceiveFollowUpNotification")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
@@ -360,9 +425,9 @@ namespace HygieneAudit.Infrastructure.Migrations
                     b.ToTable("Users");
 
                     b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7573), IsActive = true, Name = "Administrator", PasswordHash = "$2a$11$MlU7tuaJIbKYYSzk4nnE/ubbS8sqVdhcwPN523z4ZlSs6o6fVBLDO", Role = 1, Username = "admin" },
-                        new { Id = 2, CreatedAt = new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7578), IsActive = true, Name = "Budi Santoso", PasswordHash = "$2a$11$K7YLnOyngILPisuPnBSD.ObjSwl9hgAYjqH9C5Mh8ZuSsGPGU4njK", Role = 0, Username = "auditor1" },
-                        new { Id = 3, CreatedAt = new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7580), IsActive = true, Name = "Dewi Kusuma", PasswordHash = "$2a$11$K7YLnOyngILPisuPnBSD.ObjSwl9hgAYjqH9C5Mh8ZuSsGPGU4njK", Role = 0, Username = "auditor2" });
+                        new { Id = 1, CreatedAt = new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7573), IsActive = true, Name = "Administrator", PasswordHash = "$2a$11$MlU7tuaJIbKYYSzk4nnE/ubbS8sqVdhcwPN523z4ZlSs6o6fVBLDO", ReceiveFollowUpNotification = false, Role = 1, Username = "admin" },
+                        new { Id = 2, CreatedAt = new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7578), IsActive = true, Name = "Budi Santoso", PasswordHash = "$2a$11$K7YLnOyngILPisuPnBSD.ObjSwl9hgAYjqH9C5Mh8ZuSsGPGU4njK", ReceiveFollowUpNotification = false, Role = 0, Username = "auditor1" },
+                        new { Id = 3, CreatedAt = new DateTime(2026, 5, 19, 3, 38, 23, 618, DateTimeKind.Utc).AddTicks(7580), IsActive = true, Name = "Dewi Kusuma", PasswordHash = "$2a$11$K7YLnOyngILPisuPnBSD.ObjSwl9hgAYjqH9C5Mh8ZuSsGPGU4njK", ReceiveFollowUpNotification = false, Role = 0, Username = "auditor2" });
                 });
 
             modelBuilder.Entity("HygieneAudit.Domain.Entities.Audit", b =>

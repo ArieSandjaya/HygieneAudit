@@ -10,6 +10,7 @@ public class UserResponse
     public string? Email    { get; set; }
     public string Role      { get; set; } = string.Empty;
     public bool   IsActive  { get; set; }
+    public bool   ReceiveFollowUpNotification { get; set; }
     public DateTime CreatedAt { get; set; }
 }
 
@@ -20,6 +21,7 @@ public class CreateUserRequest
     public string Name     { get; set; } = string.Empty;
     public string? Email   { get; set; }   // opsional
     public string Role     { get; set; } = "Auditor";   // "Auditor" | "Admin"
+    public bool   ReceiveFollowUpNotification { get; set; }
 }
 
 public class UpdateUserRequest
@@ -29,6 +31,7 @@ public class UpdateUserRequest
     public string? Role     { get; set; }
     public string? Password { get; set; }   // null = keep existing
     public bool?   IsActive { get; set; }
+    public bool?   ReceiveFollowUpNotification { get; set; }   // null = tidak diubah
 }
 
 public class ChangePasswordRequest

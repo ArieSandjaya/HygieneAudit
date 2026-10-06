@@ -16,6 +16,7 @@ public class HygieneAuditDbContext : DbContext
     public DbSet<AuditFollowUp> AuditFollowUps { get; set; } = null!;
     public DbSet<AuditFollowUpPhoto> AuditFollowUpPhotos { get; set; } = null!;
     public DbSet<SyncQueueItem> SyncQueue { get; set; } = null!;
+    public DbSet<NotificationSetting> NotificationSettings { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -45,6 +46,19 @@ public class HygieneAuditDbContext : DbContext
                   .OnDelete(DeleteBehavior.Restrict);
             entity.HasMany(e => e.Photos).WithOne(p => p.AuditFollowUp).HasForeignKey(p => p.AuditFollowUpId)
                   .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<NotificationSetting>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.SmtpHost).HasMaxLength(256);
+            entity.Property(e => e.SmtpUsername).HasMaxLength(256);
+            entity.Property(e => e.FromAddress).HasMaxLength(256);
+            entity.Property(e => e.FromName).HasMaxLength(128);
+            entity.Property(e => e.SendTime).HasMaxLength(5);
+            entity.Property(e => e.BaseUrl).HasMaxLength(256);
+            entity.Property(e => e.LastRunMessage).HasMaxLength(1000);
         });
 
         modelBuilder.Entity<User>(entity =>

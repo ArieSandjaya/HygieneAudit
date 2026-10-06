@@ -11,6 +11,8 @@ public class User
     public UserRole Role { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public bool IsActive { get; set; } = true;
+    // Menerima email pengingat saat tanggal follow up tiba (butuh Email terisi).
+    public bool ReceiveFollowUpNotification { get; set; }
 }
 
 public enum UserRole { Auditor, Admin, SuperAdmin }

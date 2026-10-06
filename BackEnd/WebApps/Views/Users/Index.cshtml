@@ -45,6 +45,13 @@
                     <label class="form-label" data-bind="text: editingId() ? 'Password Baru (kosongkan jika tidak diubah)' : 'Password'"></label>
                     <input type="password" class="form-control" data-bind="value: form.password" placeholder="••••••••" />
                 </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="uNotify" data-bind="checked: form.notify" />
+                        <label class="form-check-label" for="uNotify">Terima notifikasi email saat tanggal follow up tiba</label>
+                    </div>
+                    <small class="text-muted">Wajib mengisi email. Jadwal dan SMTP diatur di menu Notifikasi Email.</small>
+                </div>
             </div>
             <div class="mt-3">
                 <button class="btn btn-primary me-2" data-bind="click: saveUser"><i class="bx bx-check me-1"></i> Simpan</button>
@@ -100,6 +107,7 @@
                         <th class="text-center" style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('role') }">
                             Role <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'role', 'bx-sort-up': ps.sortField() === 'role' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'role' && !ps.sortAsc() }"></i>
                         </th>
+                        <th class="text-center">Notifikasi</th>
                         <th class="text-center">Status</th>
                         <th class="text-center">Aksi</th>
                     </tr>
@@ -118,6 +126,9 @@
                         <td class="text-muted" data-bind="text: $data.email || '-'"></td>
                         <td class="text-center">
                             <span class="badge" data-bind="text: role, css: { 'bg-label-danger': role === 'SuperAdmin', 'bg-label-warning': role === 'Admin', 'bg-label-primary': role === 'Auditor' }"></span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge" data-bind="text: $data.receiveFollowUpNotification ? 'Ya' : 'Tidak', css: { 'bg-label-info': $data.receiveFollowUpNotification, 'bg-label-secondary': !$data.receiveFollowUpNotification }"></span>
                         </td>
                         <td class="text-center">
                             <span class="badge" data-bind="text: isActive ? 'Aktif' : 'Nonaktif', css: { 'bg-label-success': isActive, 'bg-label-secondary': !isActive }"></span>
