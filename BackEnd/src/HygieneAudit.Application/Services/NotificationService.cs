@@ -147,7 +147,8 @@ public class NotificationService : INotificationService
         var result = new NotificationRunResult();
         try
         {
-            var due = await GetDueAsync(today, s.IncludeOverdue);
+            var stats = new DueStats();
+            var due = await GetDueAsync(today, s.IncludeOverdue, stats);
             var recipients = (await _uow.Users.GetAllAsync())
                 .Where(u => u.IsActive && u.ReceiveFollowUpNotification && !string.IsNullOrWhiteSpace(u.Email))
                 .ToList();
@@ -157,11 +158,16 @@ public class NotificationService : INotificationService
 
             if (due.Count == 0)
             {
-                result.Message = "Tidak ada temuan yang jatuh tempo follow up.";
+                result.Message = "Tidak ada temuan yang jatuh tempo follow up. " +
+                    $"(Audit selesai: {stats.CompletedAudits}; temuan Fail wajib belum Pass: {stats.OpenFails}; " +
+                    $"yang punya tanggal follow up: {stats.WithDate}; tanggal paling awal: {(stats.EarliestDate.HasValue ? stats.EarliestDate.Value.ToString("dd MMM yyyy", CultureInfo.InvariantCulture) : "-")}; " +
+                    $"hari ini: {today.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)}{(s.IncludeOverdue ? string.Empty : "; hanya yang tepat hari ini")}.)";
             }
             else if (recipients.Count == 0)
             {
-                result.Message = $"{due.Count} temuan jatuh tempo, tetapi belum ada pengguna penerima notifikasi (dengan email) yang aktif.";
+                var total = (await _uow.Users.GetAllAsync()).Count();
+                result.Message = $"{due.Count} temuan jatuh tempo, tetapi belum ada pengguna penerima notifikasi (dengan email) yang aktif. " +
+                                 $"Centang 'Terima notifikasi' dan isi email di menu Pengguna (total pengguna: {total}).";
             }
             else
             {
@@ -188,7 +194,8 @@ public class NotificationService : INotificationService
                         errors.Add($"{r.Email}: {Short(ex)}");
                     }
                 }
-                result.Message = $"{due.Count} temuan, terkirim ke {result.Sent} dari {recipients.Count} penerima." +
+                result.Message = $"{due.Count} temuan, diserahkan ke server SMTP untuk {result.Sent} dari {recipients.Count} penerima " +
+                                 $"({string.Join(", ", recipients.Select(r => r.Email))})." +
                                  (errors.Count > 0 ? " Gagal: " + string.Join("; ", errors) : string.Empty);
             }
         }
@@ -206,16 +213,21 @@ public class NotificationService : INotificationService
     }
 
     // Temuan mandatori berstatus Fail (belum Pass) yang tanggal follow up-nya sudah tiba.
-    private async Task<List<DueFollowUp>> GetDueAsync(DateTime today, bool includeOverdue)
+    private async Task<List<DueFollowUp>> GetDueAsync(DateTime today, bool includeOverdue, DueStats stats)
     {
         var audits = await _uow.Audits.GetCompletedForFollowUpReportAsync(null, null, null, null);
         var list = new List<DueFollowUp>();
         foreach (var a in audits)
         {
+            stats.CompletedAudits++;
             foreach (var i in AuditScoring.Scored(a.Items))
             {
-                if (i.Status != AuditItemStatus.Fail || !i.FollowUpDate.HasValue) continue;
+                if (i.Status != AuditItemStatus.Fail) continue;
+                stats.OpenFails++;
+                if (!i.FollowUpDate.HasValue) continue;
+                stats.WithDate++;
                 var target = i.FollowUpDate.Value.Date;
+                if (!stats.EarliestDate.HasValue || target < stats.EarliestDate.Value) stats.EarliestDate = target;
                 if (target > today) continue;
                 var overdue = (today - target).Days;
                 if (!includeOverdue && overdue > 0) continue;
@@ -232,6 +244,12 @@ public class NotificationService : INotificationService
             }
         }
         return list;
+    }
+
+    private class DueStats
+    {
+        public int CompletedAudits, OpenFails, WithDate;
+        public DateTime? EarliestDate;
     }
 
     // ── Helper ───────────────────────────────────────────────────────────────

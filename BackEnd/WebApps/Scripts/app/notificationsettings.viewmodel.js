@@ -126,8 +126,8 @@ function NotificationSettingsViewModel() {
         self.running(true);
         $.ajax({ url: '/api/settings/notifications/run', type: 'POST' })
             .done(function (r) {
-                showToast((r && r.message) || 'Selesai.', r && r.failed > 0 ? 'error' : undefined);
-                self.load();
+                showToast((r && r.message) || 'Selesai.', r && (r.failed > 0 || !r.sent) ? 'error' : undefined);
+                self.load();   // pesan lengkap tampil di kartu Status
             })
             .fail(function (xhr) { showToast(errMsg(xhr, 'Gagal menjalankan pengiriman.'), 'error'); })
             .always(function () { self.running(false); });
