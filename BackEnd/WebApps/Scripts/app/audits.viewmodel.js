@@ -1,3 +1,10 @@
+// Persen bulat; kurang dari 100% tidak pernah dibulatkan naik menjadi 100%.
+function pct(pass, total) {
+    if (!(total > 0)) return 0;
+    var r = Math.round(pass / total * 100);
+    return (pass < total && r >= 100) ? 99 : r;
+}
+
 // Audits list viewmodel
 function AuditsViewModel(currentUserId, isAdmin) {
     var self = this;
@@ -60,12 +67,14 @@ function AuditsViewModel(currentUserId, isAdmin) {
         });
     });
     self.passRateLabel = function (a) {
-        return a.totalItems > 0 ? Math.round(a.passCount / a.totalItems * 100) + '%' : '-';
+        return a.totalItems > 0 ? pct(a.passCount, a.totalItems) + '%' : '-';
     };
     self.passRateCss = function (a) {
-        var rate = a.totalItems > 0 ? a.passCount / a.totalItems * 100 : 0;
-        return rate >= 100 ? 'bg-label-success' : 'bg-label-danger';
+        return a.totalItems > 0 && a.passCount >= a.totalItems ? 'bg-label-success' : 'bg-label-danger';
     };
+    // Persen untuk daftar audit (passRate 0..1): hijau hanya bila 100%.
+    self.rateText = function (a) { return pct(a.passCount, a.totalItems) + '%'; };
+    self.rateColor = function (a) { return a.totalItems > 0 && a.passCount >= a.totalItems ? '#22c55e' : '#ef4444'; };
 
     // Hanya PIC yang melakukan audit yang boleh menghapus (admin pun tidak).
     self.canDeleteAudit = function (a) {
@@ -248,12 +257,12 @@ function AuditDetailViewModel(auditId, currentUserId, isAdmin) {
     // Progress-bar style values (kept here so the view's data-bind stays a
     // simple single-line attribute — avoids VS's HTML-validator false positives).
     self.progressWidth = ko.computed(function () {
-        var t = self.totalCount();
-        return (t > 0 ? Math.round(self.passCount() / t * 100) : 0) + '%';
+        return pct(self.passCount(), self.totalCount()) + '%';
     });
+    // Hijau hanya bila 100%; kurang dari itu merah.
     self.progressColor = ko.computed(function () {
         var t = self.totalCount();
-        return (t > 0 && self.passCount() / t >= 0.7) ? '#22c55e' : '#ef4444';
+        return (t > 0 && self.passCount() >= t) ? '#22c55e' : '#ef4444';
     });
 
     self.init = function () {

@@ -145,7 +145,7 @@
                         <td style="min-width:110px;">
                             <div class="d-flex align-items-center gap-2">
                                 <div class="progress flex-grow-1" style="height:6px;">
-                                    <div class="progress-bar bg-success" data-bind="style: { width: passRate.toFixed(0) + '%' }"></div>
+                                    <div class="progress-bar" data-bind="style: { width: passRate.toFixed(0) + '%', background: passRate >= 100 ? '#22c55e' : '#ef4444' }"></div>
                                 </div>
                                 <small data-bind="text: passRate.toFixed(1) + '%'"></small>
                             </div>
