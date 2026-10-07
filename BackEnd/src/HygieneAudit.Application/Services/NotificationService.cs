@@ -122,7 +122,15 @@ public class NotificationService : INotificationService
         await _uow.NotificationSettings.UpdateAsync(s);
         await _uow.SaveChangesAsync();
 
-        return await RunCoreAsync(s, now);
+        try { return await RunCoreAsync(s, now); }
+        catch (Exception ex)
+        {
+            // Jangan hilang diam-diam: catat penyebabnya agar terlihat di halaman pengaturan.
+            s.LastRunAt = DateTime.Now;
+            s.LastRunMessage = Truncate("Pengiriman terjadwal gagal: " + Short(ex), 1000);
+            try { await _uow.NotificationSettings.UpdateAsync(s); await _uow.SaveChangesAsync(); } catch { }
+            return new NotificationRunResult { Failed = 1, Message = s.LastRunMessage };
+        }
     }
 
     public async Task<NotificationRunResult> RunNowAsync(DateTime today)
@@ -169,7 +177,8 @@ public class NotificationService : INotificationService
                             FromName = string.IsNullOrWhiteSpace(s.FromName) ? DefaultAlias : s.FromName,
                             To = r.Email!,
                             Subject = FollowUpReminderEmail.Subject(due, today),
-                            HtmlBody = FollowUpReminderEmail.Body(r.Name, due, today, s.BaseUrl)
+                            HtmlBody = FollowUpReminderEmail.Body(r.Name, due, today, s.BaseUrl),
+                            TextBody = FollowUpReminderEmail.Text(r.Name, due, today, s.BaseUrl)
                         });
                         result.Sent++;
                     }

@@ -64,6 +64,27 @@ public static class FollowUpReminderEmail
         return sb.ToString();
     }
 
+    public static string Text(string recipientName, IReadOnlyList<DueFollowUp> items, DateTime today, string? baseUrl)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("Halo " + recipientName + ",").AppendLine();
+        sb.AppendLine($"Per {today.ToString("dddd, dd MMMM yyyy", Id)} terdapat {items.Count} temuan audit kebersihan yang tanggal follow up-nya sudah tiba dan belum berstatus Pass.").AppendLine();
+        foreach (var g in items.GroupBy(i => i.TenantName).OrderBy(g => g.Key, StringComparer.OrdinalIgnoreCase))
+        {
+            sb.AppendLine(g.Key);
+            foreach (var i in g.OrderByDescending(x => x.DaysOverdue).ThenBy(x => x.Category).ThenBy(x => x.ItemName))
+            {
+                var st = i.DaysOverdue > 0 ? $"terlambat {i.DaysOverdue} hari" : "hari ini";
+                sb.AppendLine($" - [{i.Category}] {i.ItemName}: {i.Finding ?? "-"} (target {i.TargetDate.ToString("dd MMM yyyy", Id)}, {st})");
+                var link = BuildLink(baseUrl, i.AuditId);
+                if (link != null) sb.AppendLine("   " + link);
+            }
+            sb.AppendLine();
+        }
+        sb.AppendLine("Email ini dikirim otomatis oleh sistem Hygiene Audit.");
+        return sb.ToString();
+    }
+
     private static string? BuildLink(string? baseUrl, string auditId)
     {
         if (string.IsNullOrWhiteSpace(baseUrl)) return null;

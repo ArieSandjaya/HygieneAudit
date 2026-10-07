@@ -24,6 +24,14 @@ namespace WebApps.Helpers
                 mail.Body = message.HtmlBody;
                 mail.BodyEncoding = Encoding.UTF8;
                 mail.IsBodyHtml = true;
+                // Bagian teks polos + HTML (multipart/alternative) dan penanda email otomatis.
+                if (!string.IsNullOrEmpty(message.TextBody))
+                {
+                    mail.IsBodyHtml = false;
+                    mail.Body = message.TextBody;
+                    mail.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(message.HtmlBody, Encoding.UTF8, "text/html"));
+                }
+                mail.Headers["Auto-Submitted"] = "auto-generated";
 
                 client.EnableSsl = config.UseSsl;
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
