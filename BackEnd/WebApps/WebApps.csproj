@@ -556,9 +556,11 @@
     <Content Include="Scripts\app\notificationsettings.viewmodel.js" />
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\Reports\FollowUps.cshtml" />
+    <Content Include="Views\Reports\AuditFollowUps.cshtml" />
     <Content Include="Scripts\app\audits.viewmodel.js" />
     <Content Include="Scripts\app\followups.viewmodel.js" />
     <Content Include="Scripts\app\followupreport.viewmodel.js" />
+    <Content Include="Scripts\app\auditfollowupreport.viewmodel.js" />
     <Content Include="Scripts\app\templates.viewmodel.js" />
     <Content Include="Scripts\app\tenants.viewmodel.js" />
     <Content Include="Scripts\app\users.viewmodel.js" />

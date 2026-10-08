@@ -31,4 +31,9 @@ public interface IAuditService
     Task<FollowUpReportDto> GetFollowUpReportAsync(string? status, string? type, string? search, DateTime? from, DateTime? to);
     Task<byte[]> ExportFollowUpReportAsync(string? status, string? type, string? search, DateTime? from, DateTime? to);
     Task<byte[]> ExportExcelAsync(string? status, string? type, string? search, string? uploadsFolder = null);
+
+    // Laporan gabungan hasil audit + follow up per audit.
+    // status: all | findings | unresolved | overdue | clean
+    Task<AuditFollowUpReportDto> GetAuditFollowUpReportAsync(string? status, string? type, string? search, DateTime? from, DateTime? to);
+    Task<byte[]> ExportAuditFollowUpReportAsync(string? status, string? type, string? search, DateTime? from, DateTime? to);
 }

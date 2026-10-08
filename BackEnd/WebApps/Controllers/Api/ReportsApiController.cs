@@ -85,5 +85,40 @@ namespace WebApps.Controllers.Api
             };
             return response;
         }
+
+        // Laporan gabungan: hasil audit (nilai awal) + hasil follow up (nilai kini) per audit.
+        // status: all | findings | unresolved | overdue | clean
+        [HttpGet, Route("audit-followups")]
+        public async Task<IHttpActionResult> GetAuditFollowUpReport(
+            [FromUri] string status = "all",
+            [FromUri] string type = "all",
+            [FromUri] string search = "",
+            [FromUri] DateTime? dateFrom = null,
+            [FromUri] DateTime? dateTo = null)
+        {
+            return Ok(await _auditService.GetAuditFollowUpReportAsync(status, type, search, dateFrom, dateTo));
+        }
+
+        [HttpGet, Route("audit-followups/export-excel")]
+        public async Task<HttpResponseMessage> ExportAuditFollowUpExcel(
+            [FromUri] string status = "all",
+            [FromUri] string type = "all",
+            [FromUri] string search = "",
+            [FromUri] DateTime? dateFrom = null,
+            [FromUri] DateTime? dateTo = null)
+        {
+            var bytes = await _auditService.ExportAuditFollowUpReportAsync(status, type, search, dateFrom, dateTo);
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(bytes)
+            };
+            response.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = $"Report_Audit_FollowUp_Hygiene_{DateTime.Now:yyyy-MM-dd}.xlsx"
+            };
+            return response;
+        }
     }
 }

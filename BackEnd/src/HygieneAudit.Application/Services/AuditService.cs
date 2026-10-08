@@ -506,4 +506,129 @@ public class AuditService : IAuditService
 
         return FollowUpReportExcelBuilder.Build(report, string.Join(" | ", parts));
     }
+
+    // ── Laporan gabungan: hasil audit + follow up ────────────────────────────────
+
+    public async Task<AuditFollowUpReportDto> GetAuditFollowUpReportAsync(string? status, string? type, string? search, DateTime? from, DateTime? to)
+    {
+        var audits = await _unitOfWork.Audits.GetCompletedForFollowUpReportAsync(type, search, from, to);
+        var today = DateTime.Today;
+        var rows = new List<AuditFollowUpReportRow>();
+
+        foreach (var a in audits.OrderByDescending(a => a.Date))
+        {
+            var scored = AuditScoring.Scored(a.Items).ToList();
+            // Temuan = item mandatori yang Fail saat audit: masih Fail, atau sudah Pass karena follow up.
+            var findingItems = scored
+                .Where(i => i.Status == AuditItemStatus.Fail || i.FollowUps.Any())
+                .OrderBy(i => i.Category).ThenBy(i => i.Id).ToList();
+
+            var items = new List<AuditFollowUpFinding>();
+            foreach (var i in findingItems)
+            {
+                var fus = i.FollowUps.OrderBy(f => f.CreatedAt).ToList();
+                var target = i.FollowUpDate?.Date;
+                var resolved = i.Status == AuditItemStatus.Pass;
+                var resolvedFu = resolved ? fus.LastOrDefault(f => f.Result == AuditItemStatus.Pass) : null;
+                var resolvedDate = resolvedFu?.Date.Date;
+                var overdue = !resolved && target.HasValue && target.Value < today;
+
+                items.Add(new AuditFollowUpFinding
+                {
+                    Category = i.Category,
+                    ItemName = i.Name,
+                    Finding = i.Note ?? string.Empty,
+                    TargetDate = target,
+                    Status = resolved ? "RESOLVED" : overdue ? "OVERDUE" : "OPEN",
+                    DaysOverdue = overdue ? (today - target!.Value).Days : 0,
+                    ResolvedLate = resolvedDate.HasValue && target.HasValue && resolvedDate.Value > target.Value,
+                    FollowUps = fus.Select(f => new AuditFollowUpEvent
+                    {
+                        Date = f.Date.Date,
+                        By = f.Pic?.Name ?? string.Empty,
+                        Result = f.Result.ToString().ToUpper(),
+                        Note = f.Note ?? string.Empty
+                    }).ToList()
+                });
+            }
+
+            var total = scored.Count;
+            var passNow = scored.Count(i => i.Status == AuditItemStatus.Pass);
+            var findings = items.Count;
+            var resolvedCount = items.Count(f => f.Status == "RESOLVED");
+            var overdueCount = items.Count(f => f.Status == "OVERDUE");
+            var openCount = items.Count(f => f.Status == "OPEN");
+            var lastFu = items.SelectMany(f => f.FollowUps).Select(f => (DateTime?)f.Date).OrderByDescending(d => d).FirstOrDefault();
+
+            rows.Add(new AuditFollowUpReportRow
+            {
+                AuditId = a.Id,
+                TenantId = a.TenantId,
+                TenantName = a.Tenant?.Name ?? string.Empty,
+                IsGas = a.IsGas,
+                AuditDate = a.Date,
+                PicName = a.Pic?.Name ?? string.Empty,
+                TotalItems = total,
+                Findings = findings,
+                InitialRate = AuditScoring.Rate(total - findings, total, 1),
+                CurrentRate = AuditScoring.Rate(passNow, total, 1),
+                Resolved = resolvedCount,
+                Open = openCount,
+                Overdue = overdueCount,
+                FollowUpCount = items.Sum(f => f.FollowUps.Count),
+                LastFollowUpDate = lastFu,
+                Status = findings == 0 ? "CLEAN" : overdueCount > 0 ? "OVERDUE" : openCount > 0 ? "OPEN" : "RESOLVED",
+                Items = items
+            });
+        }
+
+        switch (status?.Trim().ToLowerInvariant())
+        {
+            case "findings":   rows = rows.Where(r => r.Findings > 0).ToList(); break;
+            case "unresolved": rows = rows.Where(r => r.Open + r.Overdue > 0).ToList(); break;
+            case "overdue":    rows = rows.Where(r => r.Overdue > 0).ToList(); break;
+            case "clean":      rows = rows.Where(r => r.Findings == 0).ToList(); break;
+        }
+
+        for (int n = 0; n < rows.Count; n++) rows[n].No = n + 1;
+
+        var rated = rows.Where(r => r.TotalItems > 0).ToList();
+        return new AuditFollowUpReportDto
+        {
+            Rows = rows,
+            Summary = new AuditFollowUpReportSummary
+            {
+                Audits = rows.Count,
+                CleanAudits = rows.Count(r => r.Findings == 0),
+                AuditsWithFindings = rows.Count(r => r.Findings > 0),
+                Findings = rows.Sum(r => r.Findings),
+                Resolved = rows.Sum(r => r.Resolved),
+                Open = rows.Sum(r => r.Open),
+                Overdue = rows.Sum(r => r.Overdue),
+                AverageInitialRate = rated.Count > 0 ? Math.Round(rated.Average(r => r.InitialRate), 1) : 0,
+                AverageCurrentRate = rated.Count > 0 ? Math.Round(rated.Average(r => r.CurrentRate), 1) : 0
+            }
+        };
+    }
+
+    public async Task<byte[]> ExportAuditFollowUpReportAsync(string? status, string? type, string? search, DateTime? from, DateTime? to)
+    {
+        var report = await GetAuditFollowUpReportAsync(status, type, search, from, to);
+
+        var statusText = status?.Trim().ToLowerInvariant() switch
+        {
+            "findings"   => "Ada temuan",
+            "unresolved" => "Temuan belum selesai",
+            "overdue"    => "Ada yang terlambat",
+            "clean"      => "Tanpa temuan",
+            _            => "Semua"
+        };
+        var typeText = type == "gas" ? "Dengan Gas" : type == "nogas" ? "Tanpa Gas" : "Semua";
+        var parts = new List<string> { $"Status: {statusText}", $"Tipe: {typeText}" };
+        if (!string.IsNullOrWhiteSpace(search)) parts.Add($"Tenant: {search.Trim()}");
+        if (from.HasValue || to.HasValue)
+            parts.Add($"Tanggal audit: {(from.HasValue ? from.Value.ToString("dd/MM/yyyy") : "-")} s/d {(to.HasValue ? to.Value.ToString("dd/MM/yyyy") : "-")}");
+
+        return AuditFollowUpReportExcelBuilder.Build(report, string.Join(" | ", parts));
+    }
 }

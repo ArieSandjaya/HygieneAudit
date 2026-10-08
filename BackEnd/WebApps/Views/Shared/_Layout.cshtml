@@ -6,6 +6,7 @@
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
     var isFollowUpReport = currentController == "Reports" && currentAction == "FollowUps";
+    var isAuditFollowUpReport = currentController == "Reports" && currentAction == "AuditFollowUps";
 }
 <!DOCTYPE html>
 <html lang="id" class="light-style layout-menu-fixed" dir="ltr"
@@ -290,7 +291,7 @@
                             <div>Follow Up</div>
                         </a>
                     </li>
-                    <li class="menu-item @(currentController == "Reports" && !isFollowUpReport ? "active" : "")">
+                    <li class="menu-item @(currentController == "Reports" && !isFollowUpReport && !isAuditFollowUpReport ? "active" : "")">
                         <a href="@Url.Action("Index", "Reports")" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
                             <div>Laporan Audit</div>
@@ -300,6 +301,12 @@
                         <a href="@Url.Action("FollowUps", "Reports")" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-line-chart"></i>
                             <div>Laporan Follow Up</div>
+                        </a>
+                    </li>
+                    <li class="menu-item @(isAuditFollowUpReport ? "active" : "")">
+                        <a href="@Url.Action("AuditFollowUps", "Reports")" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-link"></i>
+                            <div>Audit &amp; Follow Up</div>
                         </a>
                     </li>
                     @if (isAdmin)

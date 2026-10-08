@@ -1,0 +1,291 @@
+﻿@{
+    ViewBag.Title = "Laporan Audit & Follow Up";
+}
+
+<div id="audit-followup-report-page">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <div>
+            <h4 class="fw-bold mb-1">Laporan Audit &amp; Follow Up</h4>
+            <p class="text-muted mb-0">Hasil audit dan hasil follow up-nya dalam satu laporan: nilai awal, nilai setelah follow up, temuan, dan riwayat tindak lanjut</p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-outline-primary" href="@Url.Action("Index", "Reports")">
+                <i class="bx bx-bar-chart-alt-2 me-1"></i> Laporan Audit
+            </a>
+            <a class="btn btn-outline-primary" href="@Url.Action("FollowUps", "Reports")">
+                <i class="bx bx-line-chart me-1"></i> Laporan Follow Up
+            </a>
+            <a class="btn btn-success" data-bind="attr: { href: exportUrl }">
+                <i class="bx bx-spreadsheet me-1"></i> Export Excel
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-2 col-md-4 col-6">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" data-bind="value: filter.status, event: { change: loadReport }">
+                        <option value="all">Semua</option>
+                        <option value="findings">Ada Temuan</option>
+                        <option value="unresolved">Temuan Belum Selesai</option>
+                        <option value="overdue">Ada yang Terlambat</option>
+                        <option value="clean">Tanpa Temuan (Lulus)</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <label class="form-label">Tipe</label>
+                    <select class="form-select" data-bind="value: filter.type, event: { change: loadReport }">
+                        <option value="all">Semua</option>
+                        <option value="gas">Dengan Gas</option>
+                        <option value="nogas">Tanpa Gas</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <label class="form-label">Audit Dari</label>
+                    <input type="date" class="form-control" data-bind="value: filter.from, css: { 'is-invalid': rangeInvalid }, event: { change: loadReport }" />
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <label class="form-label">Sampai</label>
+                    <input type="date" class="form-control" data-bind="value: filter.to, css: { 'is-invalid': rangeInvalid }, event: { change: loadReport }" />
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <label class="form-label">Cari Tenant</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bx bx-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Nama tenant..." autocomplete="off"
+                               data-bind="value: filter.search, valueUpdate: 'input', event: { input: searchChanged }" />
+                    </div>
+                </div>
+                <div class="col-lg-1 col-md-6 col-12">
+                    <button type="button" class="btn btn-outline-secondary w-100" title="Reset filter" data-bind="click: clearFilters">
+                        <i class="bx bx-reset"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Summary Cards -->
+    <div class="row mb-2" data-bind="with: summary">
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-clipboard"></i></span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold" data-bind="text: audits"></h4>
+                        <small class="text-muted">Audit Selesai</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-success"><i class="bx bx-check-shield"></i></span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold" data-bind="text: cleanAudits"></h4>
+                        <small class="text-muted">Lulus Tanpa Temuan</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-warning"><i class="bx bx-error-circle"></i></span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold" data-bind="text: findings"></h4>
+                        <small class="text-muted">Total Temuan</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-success"><i class="bx bx-check-circle"></i></span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold" data-bind="text: resolved"></h4>
+                        <small class="text-muted">Temuan Selesai</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-danger"><i class="bx bx-time-five"></i></span>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold" data-bind="text: overdue"></h4>
+                        <small class="text-muted">Temuan Terlambat</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-info"><i class="bx bx-trending-up"></i></span>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 fw-bold"><span data-bind="text: $root.avgInitialText"></span> &rarr; <span data-bind="text: $root.avgCurrentText"></span></h5>
+                        <small class="text-muted">Rata-rata Nilai Awal &rarr; Kini</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Hasil Audit &amp; Follow Up</h5>
+            <span data-bind="visible: loading" class="text-muted small"><i class="bx bx-loader-circle bx-spin me-1"></i>Memuat...</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-sm mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:32px;"></th>
+                        <th style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('tenantName') }">
+                            Tenant <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'tenantName', 'bx-sort-up': ps.sortField() === 'tenantName' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'tenantName' && !ps.sortAsc() }"></i>
+                        </th>
+                        <th style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('auditDate') }">
+                            Tgl Audit <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'auditDate', 'bx-sort-up': ps.sortField() === 'auditDate' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'auditDate' && !ps.sortAsc() }"></i>
+                        </th>
+                        <th class="text-center" style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('initialRate') }">
+                            Nilai Awal <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'initialRate', 'bx-sort-up': ps.sortField() === 'initialRate' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'initialRate' && !ps.sortAsc() }"></i>
+                        </th>
+                        <th class="text-center" style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('currentRate') }">
+                            Nilai Kini <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'currentRate', 'bx-sort-up': ps.sortField() === 'currentRate' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'currentRate' && !ps.sortAsc() }"></i>
+                        </th>
+                        <th>Temuan &amp; Follow Up</th>
+                        <th class="text-center" style="cursor:pointer;user-select:none;white-space:nowrap;" data-bind="click: function(){ ps.sortBy('status') }">
+                            Status <i class="bx ms-1" data-bind="css: { 'bx-sort': ps.sortField() !== 'status', 'bx-sort-up': ps.sortField() === 'status' && ps.sortAsc(), 'bx-sort-down': ps.sortField() === 'status' && !ps.sortAsc() }"></i>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- ko foreach: ps.pagedItems -->
+                    <tr style="cursor:pointer;" data-bind="click: $root.toggle">
+                        <td class="text-center">
+                            <i class="bx" data-bind="css: { 'bx-chevron-down': $root.isOpen($data), 'bx-chevron-right': !$root.isOpen($data), 'text-muted': !$root.hasItems($data) }"></i>
+                        </td>
+                        <td style="min-width:150px;">
+                            <span class="fw-semibold" data-bind="text: tenantName"></span>
+                            <div class="text-muted small">PIC <span data-bind="text: picName"></span> &bull; <span data-bind="text: isGas ? 'Gas' : 'Non-gas'"></span></div>
+                        </td>
+                        <td data-bind="text: $root.auditDateText($data)"></td>
+                        <td class="text-center fw-semibold" data-bind="text: $root.initialText($data), css: $root.rateCss($data.initialRate, $data.totalItems)"></td>
+                        <td class="text-center">
+                            <span class="fw-semibold" data-bind="text: $root.currentText($data), css: $root.rateCss($data.currentRate, $data.totalItems)"></span>
+                            <div class="small text-muted" data-bind="text: $root.deltaText($data)"></div>
+                        </td>
+                        <td class="small" style="min-width:170px;">
+                            <div data-bind="text: $root.findingsText($data)"></div>
+                            <div class="text-muted" data-bind="visible: $data.followUpCount > 0, text: followUpCount + ' follow up \u2022 terakhir ' + $root.dateText($data.lastFollowUpDate)"></div>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge" data-bind="text: $root.statusText($data), css: $root.statusCss($data)"></span>
+                        </td>
+                        <td class="text-nowrap">
+                            <a class="btn btn-sm btn-outline-primary" title="Buka follow up audit ini"
+                               data-bind="attr: { href: $root.detailUrl($data) }, click: function(){ return true; }, clickBubble: false">
+                                <i class="bx bx-link-external"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <!-- ko if: $root.isOpen($data) -->
+                    <tr class="table-light">
+                        <td></td>
+                        <td colspan="7" style="white-space:normal;">
+                            <!-- ko if: $root.hasItems($data) -->
+                            <div class="py-2">
+                                <!-- ko foreach: $data.items -->
+                                <div class="border rounded p-2 mb-2 bg-white">
+                                    <div class="d-flex flex-wrap justify-content-between gap-2">
+                                        <div>
+                                            <span class="fw-semibold" data-bind="text: itemName"></span>
+                                            <span class="text-muted small ms-1" data-bind="text: category"></span>
+                                            <div class="small text-muted" data-bind="visible: $data.finding, text: 'Temuan: ' + $data.finding"></div>
+                                        </div>
+                                        <div class="text-end small">
+                                            <span class="badge" data-bind="text: $root.findingStatusText($data), css: $root.findingStatusCss($data)"></span>
+                                            <div class="text-muted mt-1">Target: <span data-bind="text: $root.targetText($data)"></span></div>
+                                        </div>
+                                    </div>
+                                    <!-- ko if: $data.followUps && $data.followUps.length -->
+                                    <div class="mt-2 ps-2" style="border-left:3px solid #e2e8f0;">
+                                        <!-- ko foreach: $data.followUps -->
+                                        <div class="small mb-1">
+                                            <span class="badge me-1" data-bind="text: result, css: $root.resultCss($data)"></span>
+                                            <span data-bind="text: $root.dateText($data.date)"></span>
+                                            <span class="text-muted" data-bind="visible: $data.by, text: '\u2022 ' + $data.by"></span>
+                                            <div class="text-muted" data-bind="visible: $data.note, text: $data.note"></div>
+                                        </div>
+                                        <!-- /ko -->
+                                    </div>
+                                    <!-- /ko -->
+                                    <!-- ko ifnot: $data.followUps && $data.followUps.length -->
+                                    <div class="mt-2 small text-muted">Belum di-follow up.</div>
+                                    <!-- /ko -->
+                                </div>
+                                <!-- /ko -->
+                            </div>
+                            <!-- /ko -->
+                            <!-- ko ifnot: $root.hasItems($data) -->
+                            <div class="py-2 small text-success"><i class="bx bx-check-circle me-1"></i>Semua item wajib lulus pada audit ini. Tidak ada temuan.</div>
+                            <!-- /ko -->
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex flex-wrap justify-content-between align-items-center px-3 py-2" style="border-top:1px solid #e9ecef;" data-bind="visible: rows().length > 0">
+            <small class="text-muted" data-bind="text: ps.infoText"></small>
+            <nav data-bind="visible: ps.totalPages() > 1">
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item" data-bind="css: { disabled: !ps.hasPrev() }">
+                        <a class="page-link" href="javascript:void(0)" data-bind="click: ps.prev">&#8249;</a>
+                    </li>
+                    <!-- ko foreach: ps.pageNumbers() -->
+                    <li class="page-item" data-bind="css: { active: $data === $root.ps.currentPage() }">
+                        <a class="page-link" href="javascript:void(0)" data-bind="text: $data, click: $root.ps.goTo"></a>
+                    </li>
+                    <!-- /ko -->
+                    <li class="page-item" data-bind="css: { disabled: !ps.hasNext() }">
+                        <a class="page-link" href="javascript:void(0)" data-bind="click: ps.next">&#8250;</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div data-bind="visible: !loading() && rows().length === 0" class="text-center text-muted py-5">
+            <i class="bx bx-task bx-lg d-block mb-2"></i>
+            Tidak ada audit untuk filter ini.
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/knockout-3.5.0.js"></script>
+    <script src="@Asset.V("~/Scripts/app/paged-sorted.js")"></script>
+    <script src="@Asset.V("~/Scripts/app/auditfollowupreport.viewmodel.js")"></script>
+    <script>ko.applyBindings(new AuditFollowUpReportViewModel(), document.getElementById('audit-followup-report-page'));</script>
+}

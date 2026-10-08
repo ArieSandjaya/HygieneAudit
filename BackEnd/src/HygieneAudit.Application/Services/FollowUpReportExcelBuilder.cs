@@ -29,10 +29,10 @@ public static class FollowUpReportExcelBuilder
 
     // ── cell helpers (kolom A..Z) ─────────────────────────────────────────────────
 
-    static string Col(int i) => ((char)('A' + i)).ToString();
+    internal static string Col(int i) => ((char)('A' + i)).ToString();
 
     // Hapus karakter kontrol yang tidak valid di XML 1.0 (mis. hasil copy-paste).
-    static string Clean(string? s)
+    internal static string Clean(string? s)
     {
         if (string.IsNullOrEmpty(s)) return string.Empty;
         var sb = new StringBuilder(s.Length);
@@ -41,7 +41,7 @@ public static class FollowUpReportExcelBuilder
         return sb.ToString();
     }
 
-    static string Tc(int col, int row, int style, string? text)
+    internal static string Tc(int col, int row, int style, string? text)
     {
         var clean = Clean(text);
         var r = Col(col) + row;
@@ -50,10 +50,10 @@ public static class FollowUpReportExcelBuilder
             : $"<c r=\"{r}\" s=\"{style}\" t=\"inlineStr\"><is><t xml:space=\"preserve\">{ExcelBuilder.Esc(clean)}</t></is></c>";
     }
 
-    static string Nc(int col, int row, int style, object n)
+    internal static string Nc(int col, int row, int style, object n)
         => $"<c r=\"{Col(col)}{row}\" s=\"{style}\"><v>{Convert.ToString(n, System.Globalization.CultureInfo.InvariantCulture)}</v></c>";
 
-    static string D(DateTime? d) => d.HasValue ? d.Value.ToString("dd/MM/yyyy") : "";
+    internal static string D(DateTime? d) => d.HasValue ? d.Value.ToString("dd/MM/yyyy") : "";
 
     // ── workbook parts ────────────────────────────────────────────────────────────
 
