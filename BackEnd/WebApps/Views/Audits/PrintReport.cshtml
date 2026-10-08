@@ -48,8 +48,8 @@
         .progress-fill { height: 100%; border-radius: 4px; }
 
         /* Category */
-        .category { margin-bottom: 18px; page-break-inside: avoid; }
-        .category-header { display: flex; justify-content: space-between; align-items: center; background: #696cff; color: #fff; padding: 6px 12px; border-radius: 6px 6px 0 0; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+        .category { margin-bottom: 18px; }
+        .category-header { page-break-after: avoid; break-after: avoid; display: flex; justify-content: space-between; align-items: center; background: #696cff; color: #fff; padding: 6px 12px; border-radius: 6px 6px 0 0; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
         .category-header .pill { background: rgba(255,255,255,.25); border-radius: 20px; padding: 1px 8px; font-size: 10px; }
 
         /* Items */
@@ -63,15 +63,15 @@
         .item-body { flex: 1; }
         .item-name { font-weight: 600; font-size: 12px; margin-bottom: 2px; }
         .item-note { font-size: 11px; color: #6c757d; font-style: italic; }
-        .item-photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-top: 8px; }
-        .item-photos img { width: 100%; height: auto; max-height: 280px; object-fit: contain; border-radius: 6px; border: 1px solid #e5e7eb; background: #f9fafb; display: block; }
-        .item-photos.single img { max-height: 420px; max-width: 100%; }
+        /* Semua foto tampil dengan kotak berukuran sama (4:3); foto utuh, tidak terpotong. */
+        .item-photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin-top: 8px; }
+        .item-photos img { width: 100%; height: 150px; object-fit: contain; border-radius: 6px; border: 1px solid #e5e7eb; background: #f3f4f6; display: block; }
 
         @@media print {
-            .item-photos { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; }
-            .item-photos img { max-height: 260px; }
-            .item-photos.single img { max-height: 400px; }
-            .item { page-break-inside: avoid; }
+            .item-photos { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+            .item-photos img { height: 130px; }
+            .item { page-break-inside: avoid; break-inside: avoid; }
+            .item-photos img { page-break-inside: avoid; break-inside: avoid; }
         }
 
         /* Category bg for pass/fail rows */
@@ -199,7 +199,7 @@
                         }
                         @if (item.Photos != null && item.Photos.Any())
                         {
-                            <div class="item-photos@(item.Photos.Count == 1 ? " single" : "")">
+                            <div class="item-photos">
                                 @foreach (var photo in item.Photos)
                                 {
                                     <img src="@photo" alt="foto" />

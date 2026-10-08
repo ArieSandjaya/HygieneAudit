@@ -191,15 +191,18 @@ function compressImage(file, maxSide, quality) {
         img.onload = function () {
             var w = img.naturalWidth  || img.width;
             var h = img.naturalHeight || img.height;
-            if (w > maxSide || h > maxSide) {
-                var ratio = Math.min(maxSide / w, maxSide / h);
-                w = Math.round(w * ratio);
-                h = Math.round(h * ratio);
-            }
+            // Semua foto dinormalisasi ke kanvas 4:3 berukuran sama (lebar = maxSide).
+            // Foto diskalakan agar muat penuh (tidak terpotong, tidak diperbesar) dan diletakkan di tengah.
+            var cw = maxSide, ch = Math.round(maxSide * 3 / 4);
+            var scale = Math.min(cw / w, ch / h, 1);
+            var dw = Math.round(w * scale), dh = Math.round(h * scale);
             var canvas = document.createElement('canvas');
-            canvas.width  = w;
-            canvas.height = h;
-            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            canvas.width  = cw;
+            canvas.height = ch;
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#f3f4f6';
+            ctx.fillRect(0, 0, cw, ch);
+            ctx.drawImage(img, Math.round((cw - dw) / 2), Math.round((ch - dh) / 2), dw, dh);
             URL.revokeObjectURL(objectUrl);
             canvas.toBlob(function (blob) {
                 resolve(blob || file); // fall back to original if toBlob fails
