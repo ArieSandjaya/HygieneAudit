@@ -3,15 +3,15 @@
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\arie.sandjaya\Desktop\publish</_PublishTargetUrl>
-    <History>True|2026-10-06T09:25:39.0008125Z||;True|2026-10-06T15:59:41.6852387+07:00||;True|2026-10-06T14:42:58.3786313+07:00||;True|2026-06-05T18:29:41.1283103+07:00||;True|2026-06-04T14:50:22.8822121+07:00||;True|2026-06-03T12:37:14.9140803+07:00||;False|2026-06-03T12:36:18.3079146+07:00||;False|2026-06-03T12:35:13.8814447+07:00||;</History>
+    <History>True|2026-10-08T06:37:17.6281754Z||;True|2026-10-08T13:24:57.5321911+07:00||;True|2026-10-07T18:30:58.6449537+07:00||;True|2026-10-06T16:25:39.0008125+07:00||;True|2026-10-06T15:59:41.6852387+07:00||;True|2026-10-06T14:42:58.3786313+07:00||;True|2026-06-05T18:29:41.1283103+07:00||;True|2026-06-04T14:50:22.8822121+07:00||;True|2026-06-03T12:37:14.9140803+07:00||;False|2026-06-03T12:36:18.3079146+07:00||;False|2026-06-03T12:35:13.8814447+07:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
     <File Include="appsettings.json">
-      <publishTime>06/02/2026 11:28:14</publishTime>
+      <publishTime>09/29/2026 15:54:08</publishTime>
     </File>
     <File Include="appsettings.Production.json">
-      <publishTime>06/02/2026 11:28:14</publishTime>
+      <publishTime>09/29/2026 15:59:23</publishTime>
     </File>
     <File Include="App_Data/Uploads/.gitkeep">
       <publishTime>06/03/2026 11:49:32</publishTime>
@@ -101,25 +101,25 @@
       <publishTime>04/17/2020 03:38:56</publishTime>
     </File>
     <File Include="bin/HygieneAudit.Application.dll">
-      <publishTime>06/05/2026 18:29:34</publishTime>
+      <publishTime>10/07/2026 18:30:40</publishTime>
     </File>
     <File Include="bin/HygieneAudit.Application.pdb">
-      <publishTime>06/05/2026 18:29:34</publishTime>
+      <publishTime>10/07/2026 18:30:40</publishTime>
     </File>
     <File Include="bin/HygieneAudit.Domain.dll">
-      <publishTime>06/03/2026 12:36:47</publishTime>
+      <publishTime>10/07/2026 18:30:38</publishTime>
     </File>
     <File Include="bin/HygieneAudit.Domain.pdb">
-      <publishTime>06/03/2026 12:36:47</publishTime>
+      <publishTime>10/07/2026 18:30:38</publishTime>
     </File>
     <File Include="bin/HygieneAudit.Infrastructure.dll">
-      <publishTime>06/05/2026 18:29:35</publishTime>
+      <publishTime>10/07/2026 18:30:46</publishTime>
     </File>
     <File Include="bin/HygieneAudit.Infrastructure.dll.config">
       <publishTime>06/03/2026 12:36:49</publishTime>
     </File>
     <File Include="bin/HygieneAudit.Infrastructure.pdb">
-      <publishTime>06/05/2026 18:29:35</publishTime>
+      <publishTime>10/07/2026 18:30:46</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNet.Identity.Core.dll">
       <publishTime>06/21/2023 17:16:52</publishTime>
@@ -440,7 +440,7 @@
       <publishTime>06/02/2026 11:17:51</publishTime>
     </File>
     <File Include="bin/System.Threading.Tasks.Extensions.dll">
-      <publishTime>06/02/2026 11:17:51</publishTime>
+      <publishTime>07/27/2026 10:32:55</publishTime>
     </File>
     <File Include="bin/System.ValueTuple.dll">
       <publishTime>06/03/2026 18:36:47</publishTime>
@@ -476,10 +476,10 @@
       <publishTime>05/28/2022 06:42:50</publishTime>
     </File>
     <File Include="bin/WebApps.dll">
-      <publishTime>06/05/2026 18:29:37</publishTime>
+      <publishTime>10/08/2026 13:24:55</publishTime>
     </File>
     <File Include="bin/WebApps.pdb">
-      <publishTime>06/05/2026 18:29:37</publishTime>
+      <publishTime>10/08/2026 13:24:55</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>01/23/2014 20:57:34</publishTime>
@@ -809,13 +809,22 @@
       <publishTime>06/02/2026 11:17:49</publishTime>
     </File>
     <File Include="Scripts/app/audits.viewmodel.js">
-      <publishTime>06/05/2026 18:26:06</publishTime>
+      <publishTime>10/07/2026 14:23:49</publishTime>
     </File>
     <File Include="Scripts/app/common.js">
       <publishTime>06/02/2026 11:17:49</publishTime>
     </File>
+    <File Include="Scripts/app/followupreport.viewmodel.js">
+      <publishTime>10/06/2026 15:20:50</publishTime>
+    </File>
+    <File Include="Scripts/app/followups.viewmodel.js">
+      <publishTime>10/06/2026 09:22:31</publishTime>
+    </File>
     <File Include="Scripts/app/home.viewmodel.js">
       <publishTime>06/02/2026 11:17:49</publishTime>
+    </File>
+    <File Include="Scripts/app/notificationsettings.viewmodel.js">
+      <publishTime>10/07/2026 11:26:09</publishTime>
     </File>
     <File Include="Scripts/app/paged-sorted.js">
       <publishTime>06/02/2026 11:17:49</publishTime>
@@ -824,13 +833,13 @@
       <publishTime>06/04/2026 09:33:53</publishTime>
     </File>
     <File Include="Scripts/app/templates.viewmodel.js">
-      <publishTime>06/02/2026 11:17:49</publishTime>
+      <publishTime>10/05/2026 16:17:52</publishTime>
     </File>
     <File Include="Scripts/app/tenants.viewmodel.js">
       <publishTime>06/02/2026 11:17:49</publishTime>
     </File>
     <File Include="Scripts/app/users.viewmodel.js">
-      <publishTime>06/02/2026 11:17:49</publishTime>
+      <publishTime>10/07/2026 11:26:09</publishTime>
     </File>
     <File Include="Scripts/app/_run.js">
       <publishTime>06/02/2026 11:17:49</publishTime>
@@ -953,16 +962,22 @@
       <publishTime>06/02/2026 11:17:50</publishTime>
     </File>
     <File Include="Views/Audits/Detail.cshtml">
-      <publishTime>06/05/2026 18:26:06</publishTime>
+      <publishTime>10/06/2026 09:22:31</publishTime>
     </File>
     <File Include="Views/Audits/Index.cshtml">
-      <publishTime>06/05/2026 18:26:06</publishTime>
+      <publishTime>10/07/2026 14:23:49</publishTime>
     </File>
     <File Include="Views/Audits/PrintReport.cshtml">
-      <publishTime>06/04/2026 09:33:53</publishTime>
+      <publishTime>10/06/2026 09:22:31</publishTime>
+    </File>
+    <File Include="Views/FollowUps/Detail.cshtml">
+      <publishTime>10/07/2026 11:26:09</publishTime>
+    </File>
+    <File Include="Views/FollowUps/Index.cshtml">
+      <publishTime>10/06/2026 15:20:50</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>06/04/2026 09:33:53</publishTime>
+      <publishTime>10/06/2026 09:22:31</publishTime>
     </File>
     <File Include="Views/Home/_Home.cshtml">
       <publishTime>06/02/2026 11:17:50</publishTime>
@@ -985,8 +1000,14 @@
     <File Include="Views/Manage/VerifyPhoneNumber.cshtml">
       <publishTime>06/02/2026 11:17:50</publishTime>
     </File>
+    <File Include="Views/Reports/FollowUps.cshtml">
+      <publishTime>10/07/2026 11:26:09</publishTime>
+    </File>
     <File Include="Views/Reports/Index.cshtml">
-      <publishTime>06/05/2026 16:37:12</publishTime>
+      <publishTime>10/07/2026 14:23:49</publishTime>
+    </File>
+    <File Include="Views/Settings/Notifications.cshtml">
+      <publishTime>10/07/2026 11:26:09</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>06/02/2026 11:17:50</publishTime>
@@ -995,19 +1016,19 @@
       <publishTime>06/02/2026 11:17:50</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>06/05/2026 16:59:49</publishTime>
+      <publishTime>10/07/2026 11:26:09</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>06/02/2026 11:17:50</publishTime>
     </File>
     <File Include="Views/Templates/Index.cshtml">
-      <publishTime>06/05/2026 16:37:12</publishTime>
+      <publishTime>10/05/2026 16:17:52</publishTime>
     </File>
     <File Include="Views/Tenants/Index.cshtml">
       <publishTime>06/05/2026 16:37:12</publishTime>
     </File>
     <File Include="Views/Users/Index.cshtml">
-      <publishTime>06/05/2026 16:37:12</publishTime>
+      <publishTime>10/07/2026 11:26:09</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>06/05/2026 16:37:12</publishTime>
@@ -1016,7 +1037,7 @@
       <publishTime>06/02/2026 11:17:50</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>06/04/2026 14:50:21</publishTime>
+      <publishTime>10/06/2026 16:25:27</publishTime>
     </File>
   </ItemGroup>
 </Project>
