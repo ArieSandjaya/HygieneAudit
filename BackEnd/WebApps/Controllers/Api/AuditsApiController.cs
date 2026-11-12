@@ -37,8 +37,9 @@ namespace WebApps.Controllers.Api
         {
             if (request == null) return BadRequest("Data audit tidak boleh kosong.");
             var (userId, isAdmin) = CurrentUser();
-            // Non-admins can only create audits assigned to themselves.
-            if (!isAdmin) request.PicId = userId;
+            // PIC mengikuti pilihan di form (semua role boleh memilih). Bila tidak diisi, pakai user yang login.
+            // Service memvalidasi bahwa PIC adalah pengguna aktif.
+            if (request.PicId <= 0) request.PicId = userId;
             var audit = await _auditService.CreateAuditAsync(request);
             return Created(new System.Uri($"api/audits/{audit.Id}", System.UriKind.Relative), audit);
         }

@@ -175,7 +175,16 @@ function AuditsViewModel(currentUserId, isAdmin) {
             isGas:    self.newAudit.includeGas() === 'true'
         };
         $.ajax({ url: '/api/audits', type: 'POST', contentType: 'application/json', data: JSON.stringify(data) })
-            .done(function (audit) { window.location.href = '/Audits/Detail/' + audit.id; })
+            .done(function (audit) {
+                // Non-admin yang menunjuk PIC lain tidak punya akses edit; kembali ke daftar.
+                if (!isAdmin && audit.picId !== currentUserId) {
+                    showToast('Audit dibuat dengan PIC ' + (audit.picName || '') + '.');
+                    self.cancelForm();
+                    self.init();
+                    return;
+                }
+                window.location.href = '/Audits/Detail/' + audit.id;
+            })
             .fail(function (xhr)   { showToast((xhr.responseJSON && xhr.responseJSON.message) || 'Gagal membuat audit.', 'error'); });
     };
 

@@ -18,6 +18,10 @@ public class AuditService : IAuditService
 
     public async Task<AuditResponse> CreateAuditAsync(CreateAuditRequest request)
     {
+        var pic = (await _unitOfWork.Users.GetAllAsync()).FirstOrDefault(u => u.Id == request.PicId);
+        if (pic == null || !pic.IsActive)
+            throw new ValidationException("PIC yang dipilih tidak valid atau tidak aktif.");
+
         var templates = await _unitOfWork.Templates.GetAllAsync();
         var filteredTemplates = templates
             .Where(t => t.IsActive)
